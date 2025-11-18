@@ -1,0 +1,116 @@
+# ==========================================
+# SCOPSY - .gitignore
+# ==========================================
+# Previne envio de dados sensíveis para GitHub
+
+# ==========================================
+# SECRETS (NUNCA COMMITAR!)
+# ==========================================
+.env
+.env.local
+.env.production
+.env.*.local
+*.env
+
+# ==========================================
+# NODE
+# ==========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json  # Opcional (alguns preferem versionar)
+
+# ==========================================
+# LOGS
+# ==========================================
+logs/
+*.log
+log/
+scopsy.log
+
+# ==========================================
+# SISTEMA OPERACIONAL
+# ==========================================
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# ==========================================
+# IDEs E EDITORES
+# ==========================================
+# VSCode
+.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains (WebStorm, IntelliJ)
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ==========================================
+# TEMPORÁRIOS
+# ==========================================
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# ==========================================
+# BUILD/DIST (se adicionar build step futuro)
+# ==========================================
+dist/
+build/
+out/
+.cache/
+
+# ==========================================
+# TESTES
+# ==========================================
+coverage/
+.nyc_output/
+*.lcov
+
+# ==========================================
+# OUTROS
+# ==========================================
+# Arquivos de debug
+debug/
+*.debug
+
+# Arquivos de backup do editor
+*.orig
+
+# Certificados SSL (se tiver localmente)
+*.pem
+*.key
+*.crt
+
+# ==========================================
+# SCOPSY ESPECÍFICO
+# ==========================================
+# Dados de usuários (se salvar localmente)
+data/users/
+uploads/temp/
+
+# Scripts de migração com dados sensíveis
+migrations/*_seed_data.sql

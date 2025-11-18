@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Scopsy</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>Scopsy<span class="registered">®</span></h1>
+            </div>
+            <nav class="nav">
+                <span class="user-name" id="userName">Carregando...</span>
+                <button class="btn-logout" id="logoutBtn">Sair</button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Bem-vindo ao Scopsy<span class="registered">®</span></h1>
+            <p class="hero-subtitle">Escolha uma modalidade de treino e comece a evoluir suas habilidades clínicas</p>
+        </section>
+
+        <!-- Cards dos 3 Assistentes (MVP v1.0) -->
+        <section class="assistants-section">
+            <h2>Assistentes de Treino</h2>
+            
+            <div class="assistants-grid">
+                <!-- 1. Scopsy Case - Treino de Olhar Clínico -->
+                <a href="chat.html?assistant=case" class="assistant-card featured">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <span class="card-badge">Interativo</span>
+                    </div>
+                    <h3>Treino de Olhar Clínico</h3>
+                    <p class="card-description">Desenvolva seu raciocínio clínico através de simulações interativas com feedback formativo em tempo real</p>
+                    <div class="card-features">
+                        <span class="feature-tag">✅ Feedback formativo</span>
+                        <span class="feature-tag">✅ Simulação de reação</span>
+                        <span class="feature-tag">✅ Reflexão metacognitiva</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="skill-level">🟢 🟡 🔴 Todos os níveis</span>
+                    </div>
+                </a>
+
+                <!-- 2. Diagnostic Training - Treino DSM-5 -->
+                <a href="chat.html?assistant=diagnostic" class="assistant-card">
+                    <div class="card-header">
+                        <div class="card-icon">🎲</div>
+                        <span class="card-badge">Repetição Espaçada</span>
+                    </div>
+                    <h3>Diagnostic Training</h3>
+                    <p class="card-description">Pratique diagnósticos DSM-5 com metodologia de repetição espaçada e feedback imediato</p>
+                    <div class="card-features">
+                        <span class="feature-tag">📊 Progressão adaptativa</span>
+                        <span class="feature-tag">🎯 Casos focados</span>
+                        <span class="feature-tag">⚡ Feedback instantâneo</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="skill-level">Treino sistemático DSM-5</span>
+                    </div>
+                </a>
+
+                <!-- 3. Clinical Journey - Tratamento Completo -->
+                <a href="chat.html?assistant=journey" class="assistant-card">
+                    <div class="card-header">
+                        <div class="card-icon">🗺️</div>
+                        <span class="card-badge">12 Sessões</span>
+                    </div>
+                    <h3>Clinical Journey</h3>
+                    <p class="card-description">Simule um tratamento completo de 12 sessões e acompanhe a evolução longitudinal do paciente</p>
+                    <div class="card-features">
+                        <span class="feature-tag">📈 Evolução realista</span>
+                        <span class="feature-tag">🔄 CBT, ACT ou DBT</span>
+                        <span class="feature-tag">📝 Sessão por sessão</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="skill-level">Jornada terapêutica completa</span>
+                    </div>
+                </a>
+
+                <!-- 
+                    ASSISTENTE REMOVIDO (v4.0):
+                    - Content Generator: Descontinuado (integrado no Orchestrator)
+                    
+                    ASSISTENTES FUTUROS (Fase 3):
+                    - Documents Generator (materiais terapêuticos)
+                    - Clinical Supervision (supervisão clínica)
+                -->
+            </div>
+        </section>
+
+        <!-- Seu Progresso -->
+        <section class="progress-section">
+            <h2>Seu Progresso</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">💬</div>
+                    <div class="stat-number" id="totalConversations">0</div>
+                    <div class="stat-label">Conversas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-number" id="casesCompleted">0</div>
+                    <div class="stat-label">Casos Praticados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎲</div>
+                    <div class="stat-number" id="diagnosticsCompleted">0</div>
+                    <div class="stat-label">Diagnósticos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-number" id="badgesEarned">0</div>
+                    <div class="stat-label">Badges</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <style>
+    /* Container */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    /* Hero Section */
+    .hero {
+        text-align: center;
+        margin-bottom: 60px;
+        padding: 40px 20px;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    .registered {
+        font-size: 18px;
+        vertical-align: super;
+    }
+
+    .hero-subtitle {
+        font-size: 18px;
+        color: #7f8c8d;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px 0;
+    }
+
+    .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header .logo h1 {
+        font-size: 28px;
+        color: #667eea;
+        margin: 0;
+    }
+
+    .header .nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .user-name {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .btn-logout {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .btn-logout:hover {
+        background: #5568d3;
+    }
+
+    /* Assistants Section */
+    .assistants-section {
+        margin-bottom: 60px;
+    }
+
+    .assistants-section h2 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .assistants-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+    }
+
+    /* Assistant Card */
+    .assistant-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+        border: 2px solid #e1e8ed;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .assistant-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(102, 126, 234, 0.25);
+        border-color: #667eea;
+    }
+
+    .assistant-card.featured {
+        border-color: #667eea;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .card-icon {
+        font-size: 52px;
+    }
+
+    .card-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .assistant-card h3 {
+        font-size: 22px;
+        color: #2c3e50;
+        margin-bottom: 12px;
+        font-weight: 700;
+    }
+
+    .card-description {
+        font-size: 15px;
+        color: #5a6c7d;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .card-features {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .feature-tag {
+        font-size: 13px;
+        color: #667eea;
+        background: rgba(102, 126, 234, 0.1);
+        padding: 6px 12px;
+        border-radius: 6px;
+    }
+
+    .card-footer {
+        margin-top: auto;
+        padding-top: 20px;
+        border-top: 1px solid #e1e8ed;
+    }
+
+    .skill-level {
+        font-size: 13px;
+        color: #7f8c8d;
+        font-weight: 500;
+    }
+
+    /* Progress Section */
+    .progress-section h2 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 25px;
+    }
+
+    .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .stat-icon {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+
+    .stat-number {
+        font-size: 48px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        font-size: 15px;
+        opacity: 0.9;
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 32px;
+        }
+        .assistants-grid,
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    </style>
+
+    <script src="js/dashboard.js"></script>
+    
+    <!-- Script adicional para garantir logout -->
+    <script>
+        // Garantir que logout funciona mesmo se dashboard.js falhar
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const logoutBtn = document.getElementById('logoutBtn');
+                
+                if (logoutBtn) {
+                    // Remover qualquer listener antigo e adicionar novo
+                    logoutBtn.onclick = function() {
+                        console.log('🔴 Logout clicado!');
+                        
+                        try {
+                            // Limpar localStorage
+                            localStorage.removeItem('token');
+                            localStorage.removeItem('user');
+                            
+                            console.log('✅ localStorage limpo');
+                            
+                            // Redirecionar
+                            window.location.href = 'index.html';
+                        } catch (error) {
+                            console.error('❌ Erro no logout:', error);
+                            // Tentar redirecionar mesmo assim
+                            window.location.href = 'index.html';
+                        }
+                    };
+                    
+                    console.log('✅ Event listener do logout adicionado');
+                } else {
+                    console.error('❌ Botão #logoutBtn não encontrado no DOM!');
+                    console.log('Procurando botões disponíveis...');
+                    document.querySelectorAll('button').forEach(btn => {
+                        console.log('  -', btn.id || btn.className, ':', btn.textContent);
+                    });
+                }
+            } catch (error) {
+                console.error('❌ Erro ao configurar logout:', error);
+            }
+        });
+    </script>
+</body>
+</html>
