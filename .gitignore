@@ -10,6 +10,9 @@
 .env.local
 .env.production
 .env.*.local
+start.ps1
+config/*.ps1
+*.secret.*
 *.env
 
 # ==========================================
