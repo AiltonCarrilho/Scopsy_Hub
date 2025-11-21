@@ -1,0 +1,273 @@
+// ========================================
+// CHAT ROUTES - SCOPSY BACKEND
+// ========================================
+
+const express = require('express');
+const router = express.Router();
+const { authenticateRequest } = require('../middleware/auth');
+const logger = require('../config/logger');
+const OpenAI = require('openai');
+
+// Inicializar OpenAI
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+});
+
+// IDs dos assistentes (configurar no .env)
+const ASSISTANT_IDS = {
+    orchestrator: process.env.ORCHESTRATOR_ID || 'asst_orchestrator',
+    case: process.env.CASE_ID || 'asst_case',
+    diagnostic: process.env.DIAGNOSTIC_ID || 'asst_diagnostic',
+    journey: process.env.JOURNEY_ID || 'asst_journey',
+    generator: process.env.GENERATOR_ID || 'asst_generator'
+};
+
+// Thread cache (em produção, usar Redis ou database)
+const threadCache = new Map();
+
+// ========================================
+// POST /api/chat/message
+// Enviar mensagem para assistente
+// ========================================
+
+router.post('/message', authenticateRequest, async (req, res) => {
+    try {
+        const { message, assistantType = 'orchestrator' } = req.body;
+        const userId = req.userId; // ← CORRETO
+
+        // Validações
+        if (!message || message.trim().length === 0) {
+            return res.status(400).json({ error: 'Mensagem não pode estar vazia' });
+        }
+
+        if (message.length > 2000) {
+            return res.status(400).json({ error: 'Mensagem muito longa (máximo 2000 caracteres)' });
+        }
+
+        if (!ASSISTANT_IDS[assistantType]) {
+            return res.status(400).json({ error: 'Tipo de assistente inválido' }); 
+        }
+
+        logger.info(`📨 Nova mensagem de usuário ${userId} para ${assistantType}: ${message.substring(0, 50)}...`);
+
+        // Obter ou criar thread
+        let threadId = threadCache.get(`${userId}_${assistantType}`);
+        
+        if (!threadId) {
+            logger.info(`🆕 Criando nova thread para usuário ${userId} - ${assistantType}`);
+            const thread = await openai.beta.threads.create();
+            threadId = thread.id;
+            threadCache.set(`${userId}_${assistantType}`, threadId);
+            logger.info(`✅ Thread criada: ${threadId}`);
+        }
+
+        // Adicionar mensagem à thread
+        await openai.beta.threads.messages.create(threadId, {
+            role: 'user',
+            content: message
+        });
+
+        logger.info(`✅ Mensagem adicionada à thread ${threadId}`);
+
+        // Executar assistente
+        const run = await openai.beta.threads.runs.create(threadId, {
+            assistant_id: ASSISTANT_IDS[assistantType]
+        });
+
+        logger.info(`🤖 Assistente ${assistantType} iniciado (run: ${run.id})`);
+
+        // Polling para aguardar resposta
+        let runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
+        let attempts = 0;
+        const maxAttempts = 30; // 30 segundos timeout
+
+        while (runStatus.status !== 'completed' && attempts < maxAttempts) {
+            if (runStatus.status === 'failed' || runStatus.status === 'cancelled' || runStatus.status === 'expired') {
+                throw new Error(`Assistente falhou com status: ${runStatus.status}`);
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Aguardar 1 segundo
+            runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
+            attempts++;
+
+            if (attempts % 5 === 0) {
+                logger.info(`⏳ Aguardando resposta... (${attempts}s) - Status: ${runStatus.status}`);
+            }
+        }
+
+        if (runStatus.status !== 'completed') {
+            throw new Error('Timeout: Assistente demorou muito para responder');
+        }
+
+        logger.info(`✅ Assistente completou execução`);
+
+        // Obter resposta
+        const messages = await openai.beta.threads.messages.list(threadId, {
+            limit: 1,
+            order: 'desc'
+        });
+
+        const assistantMessage = messages.data[0];
+        const responseText = assistantMessage.content[0].text.value;
+
+        logger.info(`📤 Resposta do assistente: ${responseText.substring(0, 100)}...`);
+
+        // Retornar resposta
+        res.json({
+            success: true,
+            response: responseText,
+            assistantUsed: assistantType,
+            threadId: threadId,
+            timestamp: new Date().toISOString()
+        });
+
+    } catch (error) {
+        logger.error('❌ Erro ao processar mensagem:', error);
+        res.status(500).json({
+            error: 'Erro ao processar mensagem',
+            details: error.message
+        });
+    }
+});
+
+// ========================================
+// GET /api/chat/history/:assistantType
+// Obter histórico de conversas
+// ========================================
+
+router.get('/history/:assistantType', authenticateRequest, async (req, res) => {
+    try {
+        const { assistantType } = req.params;
+        const userId = req.user.id;
+
+        if (!ASSISTANT_IDS[assistantType]) {
+            return res.status(400).json({ error: 'Tipo de assistente inválido' });
+        }
+
+        const threadId = threadCache.get(`${userId}_${assistantType}`);
+
+        if (!threadId) {
+            return res.json({
+                success: true,
+                messages: [],
+                message: 'Nenhuma conversa encontrada'
+            });
+        }
+
+        // Obter mensagens da thread
+        const messages = await openai.beta.threads.messages.list(threadId, {
+            limit: 50,
+            order: 'asc'
+        });
+
+        const formattedMessages = messages.data.map(msg => ({
+            role: msg.role,
+            content: msg.content[0].text.value,
+            timestamp: new Date(msg.created_at * 1000).toISOString()
+        }));
+
+        res.json({
+            success: true,
+            messages: formattedMessages,
+            threadId: threadId
+        });
+
+    } catch (error) {
+        logger.error('❌ Erro ao obter histórico:', error);
+        res.status(500).json({
+            error: 'Erro ao obter histórico',
+            details: error.message
+        });
+    }
+});
+
+// ========================================
+// DELETE /api/chat/thread/:assistantType
+// Limpar conversa (deletar thread)
+// ========================================
+
+router.delete('/thread/:assistantType', authenticateRequest, async (req, res) => {
+    try {
+        const { assistantType } = req.params;
+        const userId = req.user.id;
+
+        const threadId = threadCache.get(`${userId}_${assistantType}`);
+
+        if (!threadId) {
+            return res.json({
+                success: true,
+                message: 'Nenhuma conversa para limpar'
+            });
+        }
+
+        // Deletar thread do OpenAI
+        await openai.beta.threads.del(threadId);
+
+        // Remover do cache
+        threadCache.delete(`${userId}_${assistantType}`);
+
+        logger.info(`🗑️ Thread ${threadId} deletada para usuário ${userId}`);
+
+        res.json({
+            success: true,
+            message: 'Conversa limpa com sucesso'
+        });
+
+    } catch (error) {
+        logger.error('❌ Erro ao limpar conversa:', error);
+        res.status(500).json({
+            error: 'Erro ao limpar conversa',
+            details: error.message
+        });
+    }
+});
+
+// ========================================
+// GET /api/chat/assistants
+// Listar assistentes disponíveis
+// ========================================
+
+router.get('/assistants', authenticateRequest, (req, res) => {
+    const assistants = Object.keys(ASSISTANT_IDS).map(key => ({
+        id: key,
+        name: key.charAt(0).toUpperCase() + key.slice(1),
+        assistantId: ASSISTANT_IDS[key]
+    }));
+
+    res.json({
+        success: true,
+        assistants: assistants
+    });
+});
+
+// ========================================
+// POST /api/chat/test
+// Rota de teste simples (SEM OpenAI)
+// ========================================
+
+router.post('/test', authenticateRequest, async (req, res) => {
+    try {
+        const { message } = req.body;
+
+        logger.info(`🧪 Teste de mensagem: ${message}`);
+
+        // Simular resposta rápida
+        setTimeout(() => {
+            res.json({
+                success: true,
+                response: `Recebi sua mensagem: "${message}". Esta é uma resposta de teste sem usar OpenAI!`,
+                assistantUsed: 'test',
+                timestamp: new Date().toISOString()
+            });
+        }, 2000); // 2 segundos de delay
+
+    } catch (error) {
+        logger.error('❌ Erro no teste:', error);
+        res.status(500).json({
+            error: 'Erro no teste',
+            details: error.message
+        });
+    }
+});
+
+module.exports = router;
