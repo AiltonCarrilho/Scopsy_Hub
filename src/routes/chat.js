@@ -1,5 +1,5 @@
 // ========================================
-// CHAT ROUTES - SCOPSY BACKEND
+// CHAT ROUTES - SCOPSY BACKEND (COM SUPABASE)
 // ========================================
 
 const express = require('express');
@@ -7,13 +7,20 @@ const router = express.Router();
 const { authenticateRequest } = require('../middleware/auth');
 const logger = require('../config/logger');
 const OpenAI = require('openai');
+const { createClient } = require('@supabase/supabase-js');
 
 // Inicializar OpenAI
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
-// IDs dos assistentes (configurar no .env)
+// Inicializar Supabase
+const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
+// IDs dos assistentes
 const ASSISTANT_IDS = {
     orchestrator: process.env.ORCHESTRATOR_ID || 'asst_orchestrator',
     case: process.env.CASE_ID || 'asst_case',
@@ -22,18 +29,15 @@ const ASSISTANT_IDS = {
     generator: process.env.GENERATOR_ID || 'asst_generator'
 };
 
-// Thread cache (em produção, usar Redis ou database)
-const threadCache = new Map();
-
 // ========================================
 // POST /api/chat/message
-// Enviar mensagem para assistente
+// Enviar mensagem e salvar no Supabase
 // ========================================
 
 router.post('/message', authenticateRequest, async (req, res) => {
     try {
-        const { message, assistantType = 'orchestrator' } = req.body;
-        const userId = req.user.id;
+        const { message, assistantType = 'case', conversationId = null } = req.body;
+        const userId = req.userId;
 
         // Validações
         if (!message || message.trim().length === 0) {
@@ -50,18 +54,75 @@ router.post('/message', authenticateRequest, async (req, res) => {
 
         logger.info(`📨 Nova mensagem de usuário ${userId} para ${assistantType}: ${message.substring(0, 50)}...`);
 
-        // Obter ou criar thread
-        let threadId = threadCache.get(`${userId}_${assistantType}`);
+        // 1. OBTER OU CRIAR CONVERSA NO SUPABASE
+        let conversation;
         
+        if (conversationId) {
+            // Buscar conversa existente
+            const { data, error } = await supabase
+                .from('chat_conversations')
+                .select('*')
+                .eq('id', conversationId)
+                .eq('user_id', userId)
+                .single();
+
+            if (error || !data) {
+                return res.status(404).json({ error: 'Conversa não encontrada' });
+            }
+
+            conversation = data;
+        } else {
+            // Criar nova conversa
+            const { data, error } = await supabase
+                .from('chat_conversations')
+                .insert([{
+                    user_id: userId,
+                    assistant_type: assistantType,
+                    title: message.substring(0, 50) + (message.length > 50 ? '...' : '')
+                }])
+                .select()
+                .single();
+
+            if (error) {
+                logger.error('❌ Erro ao criar conversa:', error);
+                return res.status(500).json({ error: 'Erro ao criar conversa' });
+            }
+
+            conversation = data;
+            logger.info(`✅ Nova conversa criada: ${conversation.id}`);
+        }
+
+        // 2. SALVAR MENSAGEM DO USUÁRIO NO SUPABASE
+        const { error: userMsgError } = await supabase
+            .from('chat_messages')
+            .insert([{
+                conversation_id: conversation.id,
+                role: 'user',
+                content: message
+            }]);
+
+        if (userMsgError) {
+            logger.error('❌ Erro ao salvar mensagem do usuário:', userMsgError);
+        }
+
+        // 3. OBTER OU CRIAR THREAD DO OPENAI
+        let threadId = conversation.thread_id;
+
         if (!threadId) {
-            logger.info(`🆕 Criando nova thread para usuário ${userId} - ${assistantType}`);
+            logger.info(`🆕 Criando nova thread OpenAI`);
             const thread = await openai.beta.threads.create();
             threadId = thread.id;
-            threadCache.set(`${userId}_${assistantType}`, threadId);
+
+            // Atualizar thread_id na conversa
+            await supabase
+                .from('chat_conversations')
+                .update({ thread_id: threadId })
+                .eq('id', conversation.id);
+
             logger.info(`✅ Thread criada: ${threadId}`);
         }
 
-        // Adicionar mensagem à thread
+        // 4. ADICIONAR MENSAGEM À THREAD DO OPENAI
         await openai.beta.threads.messages.create(threadId, {
             role: 'user',
             content: message
@@ -69,24 +130,24 @@ router.post('/message', authenticateRequest, async (req, res) => {
 
         logger.info(`✅ Mensagem adicionada à thread ${threadId}`);
 
-        // Executar assistente
+        // 5. EXECUTAR ASSISTENTE
         const run = await openai.beta.threads.runs.create(threadId, {
             assistant_id: ASSISTANT_IDS[assistantType]
         });
 
         logger.info(`🤖 Assistente ${assistantType} iniciado (run: ${run.id})`);
 
-        // Polling para aguardar resposta
+        // 6. POLLING PARA AGUARDAR RESPOSTA
         let runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
         let attempts = 0;
-        const maxAttempts = 30; // 30 segundos timeout
+        const maxAttempts = 30;
 
         while (runStatus.status !== 'completed' && attempts < maxAttempts) {
-            if (runStatus.status === 'failed' || runStatus.status === 'cancelled' || runStatus.status === 'expired') {
+            if (['failed', 'cancelled', 'expired'].includes(runStatus.status)) {
                 throw new Error(`Assistente falhou com status: ${runStatus.status}`);
             }
 
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Aguardar 1 segundo
+            await new Promise(resolve => setTimeout(resolve, 1000));
             runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
             attempts++;
 
@@ -101,7 +162,7 @@ router.post('/message', authenticateRequest, async (req, res) => {
 
         logger.info(`✅ Assistente completou execução`);
 
-        // Obter resposta
+        // 7. OBTER RESPOSTA DO ASSISTENTE
         const messages = await openai.beta.threads.messages.list(threadId, {
             limit: 1,
             order: 'desc'
@@ -112,12 +173,31 @@ router.post('/message', authenticateRequest, async (req, res) => {
 
         logger.info(`📤 Resposta do assistente: ${responseText.substring(0, 100)}...`);
 
-        // Retornar resposta
+        // 8. SALVAR RESPOSTA DO ASSISTENTE NO SUPABASE
+        const { error: assistantMsgError } = await supabase
+            .from('chat_messages')
+            .insert([{
+                conversation_id: conversation.id,
+                role: 'assistant',
+                content: responseText
+            }]);
+
+        if (assistantMsgError) {
+            logger.error('❌ Erro ao salvar resposta do assistente:', assistantMsgError);
+        }
+
+        // 9. ATUALIZAR updated_at DA CONVERSA
+        await supabase
+            .from('chat_conversations')
+            .update({ updated_at: new Date().toISOString() })
+            .eq('id', conversation.id);
+
+        // 10. RETORNAR RESPOSTA
         res.json({
             success: true,
             response: responseText,
+            conversationId: conversation.id,
             assistantUsed: assistantType,
-            threadId: threadId,
             timestamp: new Date().toISOString()
         });
 
@@ -131,140 +211,163 @@ router.post('/message', authenticateRequest, async (req, res) => {
 });
 
 // ========================================
-// GET /api/chat/history/:assistantType
-// Obter histórico de conversas
+// GET /api/chat/conversations
+// Listar conversas do usuário
 // ========================================
 
-router.get('/history/:assistantType', authenticateRequest, async (req, res) => {
+router.get('/conversations', authenticateRequest, async (req, res) => {
     try {
-        const { assistantType } = req.params;
-        const userId = req.user.id;
+        const userId = req.userId;
+        const { assistantType } = req.query;
 
-        if (!ASSISTANT_IDS[assistantType]) {
-            return res.status(400).json({ error: 'Tipo de assistente inválido' });
+        let query = supabase
+            .from('chat_conversations')
+            .select('*')
+            .eq('user_id', userId)
+            .eq('is_archived', false)
+            .order('updated_at', { ascending: false });
+
+        if (assistantType) {
+            query = query.eq('assistant_type', assistantType);
         }
 
-        const threadId = threadCache.get(`${userId}_${assistantType}`);
+        const { data, error } = await query;
 
-        if (!threadId) {
-            return res.json({
-                success: true,
-                messages: [],
-                message: 'Nenhuma conversa encontrada'
-            });
+        if (error) {
+            logger.error('❌ Erro ao buscar conversas:', error);
+            return res.status(500).json({ error: 'Erro ao buscar conversas' });
         }
-
-        // Obter mensagens da thread
-        const messages = await openai.beta.threads.messages.list(threadId, {
-            limit: 50,
-            order: 'asc'
-        });
-
-        const formattedMessages = messages.data.map(msg => ({
-            role: msg.role,
-            content: msg.content[0].text.value,
-            timestamp: new Date(msg.created_at * 1000).toISOString()
-        }));
 
         res.json({
             success: true,
-            messages: formattedMessages,
-            threadId: threadId
+            conversations: data
         });
 
     } catch (error) {
-        logger.error('❌ Erro ao obter histórico:', error);
+        logger.error('❌ Erro ao buscar conversas:', error);
         res.status(500).json({
-            error: 'Erro ao obter histórico',
+            error: 'Erro ao buscar conversas',
             details: error.message
         });
     }
 });
 
 // ========================================
-// DELETE /api/chat/thread/:assistantType
-// Limpar conversa (deletar thread)
+// GET /api/chat/conversation/:id
+// Obter histórico de uma conversa
 // ========================================
 
-router.delete('/thread/:assistantType', authenticateRequest, async (req, res) => {
+router.get('/conversation/:id', authenticateRequest, async (req, res) => {
     try {
-        const { assistantType } = req.params;
-        const userId = req.user.id;
+        const userId = req.userId;
+        const { id } = req.params;
 
-        const threadId = threadCache.get(`${userId}_${assistantType}`);
+        // Buscar conversa
+        const { data: conversation, error: convError } = await supabase
+            .from('chat_conversations')
+            .select('*')
+            .eq('id', id)
+            .eq('user_id', userId)
+            .single();
 
-        if (!threadId) {
-            return res.json({
-                success: true,
-                message: 'Nenhuma conversa para limpar'
-            });
+        if (convError || !conversation) {
+            return res.status(404).json({ error: 'Conversa não encontrada' });
         }
 
-        // Deletar thread do OpenAI
-        await openai.beta.threads.del(threadId);
+        // Buscar mensagens
+        const { data: messages, error: msgError } = await supabase
+            .from('chat_messages')
+            .select('*')
+            .eq('conversation_id', id)
+            .order('created_at', { ascending: true });
 
-        // Remover do cache
-        threadCache.delete(`${userId}_${assistantType}`);
-
-        logger.info(`🗑️ Thread ${threadId} deletada para usuário ${userId}`);
+        if (msgError) {
+            logger.error('❌ Erro ao buscar mensagens:', msgError);
+            return res.status(500).json({ error: 'Erro ao buscar mensagens' });
+        }
 
         res.json({
             success: true,
-            message: 'Conversa limpa com sucesso'
+            conversation: conversation,
+            messages: messages
         });
 
     } catch (error) {
-        logger.error('❌ Erro ao limpar conversa:', error);
+        logger.error('❌ Erro ao buscar conversa:', error);
         res.status(500).json({
-            error: 'Erro ao limpar conversa',
+            error: 'Erro ao buscar conversa',
             details: error.message
         });
     }
 });
 
 // ========================================
-// GET /api/chat/assistants
-// Listar assistentes disponíveis
+// POST /api/chat/feedback
+// Salvar feedback de uma mensagem
 // ========================================
 
-router.get('/assistants', authenticateRequest, (req, res) => {
-    const assistants = Object.keys(ASSISTANT_IDS).map(key => ({
-        id: key,
-        name: key.charAt(0).toUpperCase() + key.slice(1),
-        assistantId: ASSISTANT_IDS[key]
-    }));
+router.post('/feedback', authenticateRequest, async (req, res) => {
+    try {
+        const { messageId, feedback } = req.body;
 
-    res.json({
-        success: true,
-        assistants: assistants
-    });
+        if (!['helpful', 'not_helpful'].includes(feedback)) {
+            return res.status(400).json({ error: 'Feedback inválido' });
+        }
+
+        const { error } = await supabase
+            .from('chat_messages')
+            .update({ feedback })
+            .eq('id', messageId);
+
+        if (error) {
+            logger.error('❌ Erro ao salvar feedback:', error);
+            return res.status(500).json({ error: 'Erro ao salvar feedback' });
+        }
+
+        res.json({
+            success: true,
+            message: 'Feedback salvo com sucesso'
+        });
+
+    } catch (error) {
+        logger.error('❌ Erro ao salvar feedback:', error);
+        res.status(500).json({
+            error: 'Erro ao salvar feedback',
+            details: error.message
+        });
+    }
 });
 
 // ========================================
-// POST /api/chat/test
-// Rota de teste simples (SEM OpenAI)
+// DELETE /api/chat/conversation/:id
+// Arquivar (deletar) conversa
 // ========================================
 
-router.post('/test', authenticateRequest, async (req, res) => {
+router.delete('/conversation/:id', authenticateRequest, async (req, res) => {
     try {
-        const { message } = req.body;
+        const userId = req.userId;
+        const { id } = req.params;
 
-        logger.info(`🧪 Teste de mensagem: ${message}`);
+        const { error } = await supabase
+            .from('chat_conversations')
+            .update({ is_archived: true })
+            .eq('id', id)
+            .eq('user_id', userId);
 
-        // Simular resposta rápida
-        setTimeout(() => {
-            res.json({
-                success: true,
-                response: `Recebi sua mensagem: "${message}". Esta é uma resposta de teste sem usar OpenAI!`,
-                assistantUsed: 'test',
-                timestamp: new Date().toISOString()
-            });
-        }, 2000); // 2 segundos de delay
+        if (error) {
+            logger.error('❌ Erro ao arquivar conversa:', error);
+            return res.status(500).json({ error: 'Erro ao arquivar conversa' });
+        }
+
+        res.json({
+            success: true,
+            message: 'Conversa arquivada com sucesso'
+        });
 
     } catch (error) {
-        logger.error('❌ Erro no teste:', error);
+        logger.error('❌ Erro ao arquivar conversa:', error);
         res.status(500).json({
-            error: 'Erro no teste',
+            error: 'Erro ao arquivar conversa',
             details: error.message
         });
     }

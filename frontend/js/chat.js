@@ -1,11 +1,12 @@
 // ========================================
-// CHAT.JS - SCOPSY CHAT LOGIC
+// CHAT.JS - SCOPSY CHAT (REST API)
 // ========================================
+
+const API_URL = 'http://localhost:3000';
 
 // Estado global
 const state = {
-    currentAssistant: 'orchestrator',
-    socket: null,
+    currentAssistant: 'case', // Iniciar com Case
     token: null,
     user: null,
     isTyping: false,
@@ -14,35 +15,23 @@ const state = {
 
 // Mapa de informações dos assistentes
 const assistantsInfo = {
-    orchestrator: {
-        name: 'Orchestrator',
-        description: 'Navegação e ajuda geral',
-        icon: '🎯',
-        welcome: 'Olá! Sou o Orchestrator. Como posso ajudar você hoje?'
-    },
     case: {
-        name: 'Case Generator',
-        description: 'Geração de casos clínicos realistas',
-        icon: '📋',
-        welcome: 'Olá! Vou te ajudar a criar casos clínicos. Sobre qual transtorno você quer trabalhar?'
+        name: 'Treino de Olhar Clínico',
+        description: 'Casos clínicos com feedback formativo',
+        icon: '🎯',
+        welcome: 'Olá! Pronto para treinar seu olhar clínico? Posso gerar casos de qualquer transtorno do DSM-5.'
     },
     diagnostic: {
         name: 'Diagnostic Training',
-        description: 'Treino de diagnóstico DSM-5',
-        icon: '🔍',
+        description: 'Treino de diagnóstico DSM-5-TR',
+        icon: '🎲',
         welcome: 'Bem-vindo ao treino diagnóstico! Vamos praticar identificação de transtornos. Pronto para começar?'
     },
     journey: {
         name: 'Clinical Journey',
-        description: 'Acompanhamento longitudinal',
+        description: 'Jornada de 12 sessões',
         icon: '🗺️',
         welcome: 'Olá! Vou te guiar em uma jornada clínica completa. Qual abordagem você quer usar? (CBT, ACT, DBT)'
-    },
-    generator: {
-        name: 'Content Generator',
-        description: 'Materiais terapêuticos',
-        icon: '✨',
-        welcome: 'Olá! Vou criar materiais terapêuticos para você. Que tipo de material precisa?'
     }
 };
 
@@ -57,18 +46,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     state.token = localStorage.getItem('token');
     if (!state.token) {
         console.log('❌ Token não encontrado, redirecionando...');
-        window.location.href = '/login.html';
+        window.location.href = 'login.html';
         return;
     }
 
     // Carregar dados do usuário
     await loadUserData();
 
-    // Inicializar Socket.io
-    initializeSocket();
-
     // Event listeners
     setupEventListeners();
+
+    // Mostrar mensagem de boas-vindas
+    showWelcomeMessage();
 
     console.log('✅ Chat inicializado com sucesso!');
 });
@@ -80,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadUserData() {
     try {
         console.log('📡 Carregando dados do usuário...');
-        const response = await fetch('http://localhost:3000/api/auth/me', {
+        const response = await fetch(`${API_URL}/api/auth/me`, {
             headers: {
                 'Authorization': `Bearer ${state.token}`
             }
@@ -94,68 +83,17 @@ async function loadUserData() {
         state.user = data.user;
 
         // Atualizar UI
-        document.getElementById('userName').textContent = state.user.name || state.user.email;
-        
+        const userNameElement = document.getElementById('userName');
+        if (userNameElement) {
+            userNameElement.textContent = state.user.name || state.user.email;
+        }
+
         console.log('✅ Dados do usuário carregados:', state.user);
     } catch (error) {
         console.error('❌ Erro ao carregar usuário:', error);
         localStorage.removeItem('token');
-        window.location.href = '/login.html';
+        window.location.href = 'login.html';
     }
-}
-
-// ========================================
-// SOCKET.IO INITIALIZATION
-// ========================================
-
-function initializeSocket() {
-    console.log('🔌 Conectando Socket.io...');
-
-    // Conectar ao servidor
-    state.socket = io('http://localhost:3000', {
-        auth: {
-            token: state.token
-        },
-        transports: ['websocket', 'polling']
-    });
-
-    // Event: Conectado
-    state.socket.on('connect', () => {
-        console.log('✅ Socket conectado:', state.socket.id);
-        updateConnectionStatus(true);
-    });
-
-    // Event: Desconectado
-    state.socket.on('disconnect', () => {
-        console.log('❌ Socket desconectado');
-        updateConnectionStatus(false);
-    });
-
-    // Event: Erro de conexão
-    state.socket.on('connect_error', (error) => {
-        console.error('❌ Erro de conexão:', error);
-        updateConnectionStatus(false);
-    });
-
-    // Event: Nova mensagem do assistente
-    state.socket.on('assistant_message', (data) => {
-        console.log('📨 Mensagem recebida:', data);
-        hideTypingIndicator();
-        addMessage('assistant', data.message, data.assistant || state.currentAssistant);
-    });
-
-    // Event: Assistente digitando
-    state.socket.on('assistant_typing', () => {
-        console.log('⌨️ Assistente digitando...');
-        showTypingIndicator();
-    });
-
-    // Event: Erro
-    state.socket.on('error', (data) => {
-        console.error('❌ Erro do servidor:', data);
-        hideTypingIndicator();
-        showError(data.message || 'Erro ao processar mensagem');
-    });
 }
 
 // ========================================
@@ -165,32 +103,35 @@ function initializeSocket() {
 function setupEventListeners() {
     // Formulário de envio
     const chatForm = document.getElementById('chatForm');
-    chatForm.addEventListener('submit', handleSubmit);
+    if (chatForm) {
+        chatForm.addEventListener('submit', handleSubmit);
+    }
 
-    // Textarea - Enter para enviar (Shift+Enter para nova linha)
+    // Enter no textarea (sem Shift)
     const messageInput = document.getElementById('messageInput');
-    messageInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSubmit(e);
-        }
-    });
-
-    // Contador de caracteres
-    messageInput.addEventListener('input', updateCharCount);
+    if (messageInput) {
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit(e);
+            }
+        });
+    }
 
     // Botões de assistentes
     const assistantButtons = document.querySelectorAll('.assistant-btn');
     assistantButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            const assistant = btn.dataset.assistant;
-            switchAssistant(assistant);
+            const assistantType = btn.getAttribute('data-assistant');
+            switchAssistant(assistantType);
         });
     });
 
-    // Logout
+    // Botão de logout
     const logoutBtn = document.getElementById('logoutBtn');
-    logoutBtn.addEventListener('click', handleLogout);
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
 }
 
 // ========================================
@@ -203,38 +144,25 @@ async function handleSubmit(e) {
     const messageInput = document.getElementById('messageInput');
     const message = messageInput.value.trim();
 
-    if (!message) {
-        return;
-    }
+    if (!message) return;
 
-    if (state.isTyping) {
-        console.log('⏳ Aguarde a resposta anterior...');
-        return;
-    }
-
-    console.log('📤 Enviando mensagem:', message);
+    // Limpar input
+    messageInput.value = '';
 
     // Adicionar mensagem do usuário
     addMessage('user', message);
 
-    // Limpar input
-    messageInput.value = '';
-    updateCharCount();
-
-    // Desabilitar botão
-    state.isTyping = true;
-    updateSendButton(false);
-
-    // Mostrar indicador de digitação
+    // Mostrar "digitando..."
     showTypingIndicator();
 
     try {
-        // Enviar via HTTP (mais confiável que Socket.io para mensagens)
-        const response = await fetch('http://localhost:3000/api/chat/message', {
+        console.log(`📤 Enviando para ${state.currentAssistant}:`, message);
+
+        const response = await fetch(`${API_URL}/api/chat/message`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${state.token}`
+                'Authorization': `Bearer ${state.token}`,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 message: message,
@@ -248,80 +176,63 @@ async function handleSubmit(e) {
         }
 
         const data = await response.json();
+        
         console.log('✅ Resposta recebida:', data);
 
-        // Esconder indicador
+        // Esconder "digitando..."
         hideTypingIndicator();
 
         // Adicionar resposta do assistente
-        addMessage('assistant', data.response, data.assistantUsed || state.currentAssistant);
+        addMessage('assistant', data.response);
 
     } catch (error) {
         console.error('❌ Erro ao enviar mensagem:', error);
+        
         hideTypingIndicator();
-        showError(error.message || 'Erro ao processar mensagem');
-    } finally {
-        state.isTyping = false;
-        updateSendButton(true);
+        
+        addMessage('system', `Erro: ${error.message}`);
     }
 }
 
 // ========================================
-// ADICIONAR MENSAGEM À UI
+// ADICIONAR MENSAGEM
 // ========================================
 
-function addMessage(type, content, assistant = null) {
-    const container = document.getElementById('messagesContainer');
-    
+function addMessage(role, content, assistant = state.currentAssistant) {
+    const messagesContainer = document.getElementById('messagesContainer');
+    if (!messagesContainer) return;
+
     const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type}-message`;
+    messageDiv.className = `message ${role}-message`;
 
-    const avatar = document.createElement('div');
-    avatar.className = 'message-avatar';
-    
-    if (type === 'assistant') {
-        const assistantData = assistantsInfo[assistant] || assistantsInfo[state.currentAssistant];
-        avatar.textContent = assistantData.icon;
-    } else {
-        avatar.textContent = '👤';
+    let avatar = '👤';
+    let senderName = 'Você';
+
+    if (role === 'assistant') {
+        avatar = assistantsInfo[assistant]?.icon || '🤖';
+        senderName = assistantsInfo[assistant]?.name || 'Assistente';
+    } else if (role === 'system') {
+        avatar = '⚠️';
+        senderName = 'Sistema';
     }
 
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
+    messageDiv.innerHTML = `
+        <div class="message-avatar">${avatar}</div>
+        <div class="message-content">
+            <strong>${senderName}</strong>
+            <p>${formatMessage(content)}</p>
+            <span class="message-time">${getCurrentTime()}</span>
+        </div>
+    `;
 
-    const strong = document.createElement('strong');
-    if (type === 'assistant') {
-        const assistantData = assistantsInfo[assistant] || assistantsInfo[state.currentAssistant];
-        strong.textContent = assistantData.name;
-    } else {
-        strong.textContent = 'Você';
-    }
+    messagesContainer.appendChild(messageDiv);
 
-    const p = document.createElement('p');
-    p.textContent = content;
-
-    const time = document.createElement('span');
-    time.className = 'message-time';
-    time.textContent = new Date().toLocaleTimeString('pt-BR', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-    });
-
-    contentDiv.appendChild(strong);
-    contentDiv.appendChild(p);
-    contentDiv.appendChild(time);
-
-    messageDiv.appendChild(avatar);
-    messageDiv.appendChild(contentDiv);
-
-    container.appendChild(messageDiv);
-
-    // Scroll para o final
-    scrollToBottom();
+    // Scroll automático
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
     // Salvar no histórico
     state.messageHistory.push({
-        type,
+        role,
         content,
         assistant,
         timestamp: new Date().toISOString()
@@ -329,34 +240,20 @@ function addMessage(type, content, assistant = null) {
 }
 
 // ========================================
-// TROCAR ASSISTENTE
+// FORMATAR MENSAGEM
 // ========================================
 
-function switchAssistant(assistant) {
-    if (assistant === state.currentAssistant) {
-        return;
-    }
+function formatMessage(text) {
+    // Quebras de linha
+    let formatted = text.replace(/\n/g, '<br>');
 
-    console.log(`🔄 Trocando para assistente: ${assistant}`);
+    // Bold **texto**
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-    // Atualizar estado
-    state.currentAssistant = assistant;
+    // Itálico *texto*
+    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
 
-    // Atualizar UI dos botões
-    document.querySelectorAll('.assistant-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.dataset.assistant === assistant) {
-            btn.classList.add('active');
-        }
-    });
-
-    // Atualizar info do assistente atual
-    const assistantData = assistantsInfo[assistant];
-    document.getElementById('currentAssistantName').textContent = assistantData.name;
-    document.getElementById('currentAssistantDesc').textContent = assistantData.description;
-
-    // Adicionar mensagem de boas-vindas
-    addMessage('assistant', assistantData.welcome, assistant);
+    return formatted;
 }
 
 // ========================================
@@ -365,77 +262,117 @@ function switchAssistant(assistant) {
 
 function showTypingIndicator() {
     const indicator = document.getElementById('typingIndicator');
-    indicator.style.display = 'flex';
-    scrollToBottom();
+    if (indicator) {
+        indicator.style.display = 'flex';
+        state.isTyping = true;
+    }
 }
 
 function hideTypingIndicator() {
     const indicator = document.getElementById('typingIndicator');
-    indicator.style.display = 'none';
-}
-
-// ========================================
-// HELPERS
-// ========================================
-
-function scrollToBottom() {
-    const container = document.getElementById('messagesContainer');
-    setTimeout(() => {
-        container.scrollTop = container.scrollHeight;
-    }, 100);
-}
-
-function updateCharCount() {
-    const messageInput = document.getElementById('messageInput');
-    const charCount = document.getElementById('charCount');
-    const count = messageInput.value.length;
-    charCount.textContent = `${count}/2000`;
-}
-
-function updateSendButton(enabled) {
-    const sendBtn = document.getElementById('sendBtn');
-    sendBtn.disabled = !enabled;
-}
-
-function updateConnectionStatus(connected) {
-    const statusElement = document.getElementById('connectionStatus');
-    if (connected) {
-        statusElement.innerHTML = '<span class="status-dot"></span> Conectado';
-        statusElement.classList.remove('disconnected');
-    } else {
-        statusElement.innerHTML = '<span class="status-dot"></span> Desconectado';
-        statusElement.classList.add('disconnected');
+    if (indicator) {
+        indicator.style.display = 'none';
+        state.isTyping = false;
     }
 }
 
-function showError(message) {
-    addMessage('assistant', `❌ Erro: ${message}`, state.currentAssistant);
+// ========================================
+// TROCAR ASSISTENTE
+// ========================================
+
+function switchAssistant(assistantType) {
+    console.log(`🔄 Trocando para assistente: ${assistantType}`);
+
+    state.currentAssistant = assistantType;
+
+    // Atualizar botões
+    document.querySelectorAll('.assistant-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-assistant') === assistantType) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Atualizar informações
+    const info = assistantsInfo[assistantType];
+    
+    const nameElement = document.getElementById('currentAssistantName');
+    if (nameElement) {
+        nameElement.textContent = info.name;
+    }
+
+    const descElement = document.getElementById('currentAssistantDesc');
+    if (descElement) {
+        descElement.textContent = info.description;
+    }
+
+    // Limpar mensagens e mostrar boas-vindas
+    clearMessages();
+    showWelcomeMessage();
+}
+
+// ========================================
+// MENSAGEM DE BOAS-VINDAS
+// ========================================
+
+function showWelcomeMessage() {
+    const info = assistantsInfo[state.currentAssistant];
+    
+    const messagesContainer = document.getElementById('messagesContainer');
+    if (!messagesContainer) return;
+
+    messagesContainer.innerHTML = `
+        <div class="message assistant-message">
+            <div class="message-avatar">${info.icon}</div>
+            <div class="message-content">
+                <strong>${info.name}</strong>
+                <p>${info.welcome}</p>
+                <span class="message-time">Agora</span>
+            </div>
+        </div>
+    `;
+}
+
+// ========================================
+// LIMPAR MENSAGENS
+// ========================================
+
+function clearMessages() {
+    const messagesContainer = document.getElementById('messagesContainer');
+    if (messagesContainer) {
+        messagesContainer.innerHTML = '';
+    }
+    state.messageHistory = [];
+}
+
+// ========================================
+// UTILIDADES
+// ========================================
+
+function getCurrentTime() {
+    return new Date().toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 }
 
 function handleLogout() {
     console.log('👋 Fazendo logout...');
-    
-    // Desconectar socket
-    if (state.socket) {
-        state.socket.disconnect();
-    }
-
-    // Limpar storage
     localStorage.removeItem('token');
-    
-    // Redirecionar
-    window.location.href = '/login.html';
+    localStorage.removeItem('user');
+    window.location.href = 'index.html';
 }
 
 // ========================================
-// EXPORT (para debug no console)
+// EXPORTAR (para debug no console)
 // ========================================
 
 window.chatDebug = {
     state,
-    assistantsInfo,
-    addMessage,
-    switchAssistant
+    sendTestMessage: (msg) => {
+        document.getElementById('messageInput').value = msg;
+        handleSubmit(new Event('submit'));
+    },
+    switchTo: (assistant) => switchAssistant(assistant),
+    clearChat: clearMessages
 };
-
-console.log('💡 Debug disponível: window.chatDebug');
