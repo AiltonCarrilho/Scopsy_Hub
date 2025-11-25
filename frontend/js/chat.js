@@ -4,6 +4,38 @@
 
 const API_URL = 'http://localhost:3000';
 
+// ========================================
+// CACHE DE REFERÊNCIAS DOM
+// ========================================
+
+/**
+ * Cache de elementos DOM para evitar queries repetidas
+ * Inicializado no DOMContentLoaded
+ */
+const DOMCache = {
+    messagesContainer: null,
+    messageInput: null,
+    typingIndicator: null,
+    chatForm: null,
+    userName: null,
+    logoutBtn: null,
+    assistantButtons: null,
+    currentAssistantName: null,
+    currentAssistantDesc: null,
+
+    init() {
+        this.messagesContainer = document.getElementById('messagesContainer');
+        this.messageInput = document.getElementById('messageInput');
+        this.typingIndicator = document.getElementById('typingIndicator');
+        this.chatForm = document.getElementById('chatForm');
+        this.userName = document.getElementById('userName');
+        this.logoutBtn = document.getElementById('logoutBtn');
+        this.assistantButtons = document.querySelectorAll('.assistant-btn');
+        this.currentAssistantName = document.getElementById('currentAssistantName');
+        this.currentAssistantDesc = document.getElementById('currentAssistantDesc');
+    }
+};
+
 // Estado global
 const state = {
     currentAssistant: 'case', // Iniciar com Case
@@ -36,11 +68,123 @@ const assistantsInfo = {
 };
 
 // ========================================
+// UTILITIES - THROTTLE
+// ========================================
+
+/**
+ * Throttle - Limita execução de função a uma vez por intervalo
+ * Garante que a última chamada sempre seja executada
+ * @param {Function} func - Função a ser executada
+ * @param {number} delay - Delay em ms
+ * @returns {Function}
+ */
+function throttle(func, delay) {
+    let lastCall = 0;
+    let timeoutId = null;
+
+    return function(...args) {
+        const now = Date.now();
+        const timeSinceLastCall = now - lastCall;
+
+        if (timeSinceLastCall >= delay) {
+            lastCall = now;
+            func.apply(this, args);
+        } else {
+            // Garantir que a última chamada seja executada
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                lastCall = Date.now();
+                func.apply(this, args);
+            }, delay - timeSinceLastCall);
+        }
+    };
+}
+
+// ========================================
+// UTILITIES - FETCH COM TIMEOUT
+// ========================================
+
+/**
+ * Fetch com timeout automático usando AbortController
+ * Previne requisições infinitas que travam a UI
+ * @param {string} url - URL da API
+ * @param {object} options - Opções do fetch
+ * @param {number} timeout - Timeout em ms (padrão: 60s)
+ * @returns {Promise<Response>}
+ */
+async function fetchWithTimeout(url, options = {}, timeout = 60000) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        return response;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        if (error.name === 'AbortError') {
+            throw new Error('Request timeout - O servidor demorou muito para responder (60s)');
+        }
+        throw error;
+    }
+}
+
+// ========================================
+// UTILITIES - SANITIZAÇÃO HTML
+// ========================================
+
+/**
+ * Sanitiza HTML para prevenir XSS
+ * Usa DOMPurify se disponível, senão fallback seguro
+ * @param {string} html - HTML a ser sanitizado
+ * @returns {string}
+ */
+function sanitizeHTML(html) {
+    // Se DOMPurify estiver disponível, usar ele (melhor opção)
+    if (typeof DOMPurify !== 'undefined') {
+        return DOMPurify.sanitize(html, {
+            ALLOWED_TAGS: ['br', 'strong', 'em', 'p', 'span'],
+            ALLOWED_ATTR: []
+        });
+    }
+
+    // Fallback: escape de caracteres perigosos
+    const temp = document.createElement('div');
+    temp.textContent = html;
+    return temp.innerHTML;
+}
+
+// ========================================
+// UTILITIES - SCROLL SUAVE
+// ========================================
+
+/**
+ * Scroll suave para o final das mensagens
+ */
+function scrollToBottomSmooth() {
+    if (!DOMCache.messagesContainer) return;
+
+    DOMCache.messagesContainer.scrollTo({
+        top: DOMCache.messagesContainer.scrollHeight,
+        behavior: 'smooth'
+    });
+}
+
+// Versão throttled para evitar chamadas excessivas (max 1x por 100ms)
+const scrollToBottom = throttle(scrollToBottomSmooth, 100);
+
+// ========================================
 // INICIALIZAÇÃO
 // ========================================
 
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('🚀 Chat inicializando...');
+
+    // Inicializar cache DOM primeiro (otimização)
+    DOMCache.init();
 
     // Verificar autenticação
     state.token = localStorage.getItem('token');
@@ -69,11 +213,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadUserData() {
     try {
         console.log('📡 Carregando dados do usuário...');
-        const response = await fetch(`${API_URL}/api/auth/me`, {
+
+        // Usar fetch com timeout de 10s para auth
+        const response = await fetchWithTimeout(`${API_URL}/api/auth/me`, {
             headers: {
                 'Authorization': `Bearer ${state.token}`
             }
-        });
+        }, 10000);
 
         if (!response.ok) {
             throw new Error('Falha ao carregar dados');
@@ -82,10 +228,9 @@ async function loadUserData() {
         const data = await response.json();
         state.user = data.user;
 
-        // Atualizar UI
-        const userNameElement = document.getElementById('userName');
-        if (userNameElement) {
-            userNameElement.textContent = state.user.name || state.user.email;
+        // Atualizar UI usando cache DOM
+        if (DOMCache.userName) {
+            DOMCache.userName.textContent = state.user.name || state.user.email;
         }
 
         console.log('✅ Dados do usuário carregados:', state.user);
@@ -102,15 +247,13 @@ async function loadUserData() {
 
 function setupEventListeners() {
     // Formulário de envio
-    const chatForm = document.getElementById('chatForm');
-    if (chatForm) {
-        chatForm.addEventListener('submit', handleSubmit);
+    if (DOMCache.chatForm) {
+        DOMCache.chatForm.addEventListener('submit', handleSubmit);
     }
 
     // Enter no textarea (sem Shift)
-    const messageInput = document.getElementById('messageInput');
-    if (messageInput) {
-        messageInput.addEventListener('keydown', (e) => {
+    if (DOMCache.messageInput) {
+        DOMCache.messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 handleSubmit(e);
@@ -118,19 +261,22 @@ function setupEventListeners() {
         });
     }
 
-    // Botões de assistentes
-    const assistantButtons = document.querySelectorAll('.assistant-btn');
-    assistantButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const assistantType = btn.getAttribute('data-assistant');
-            switchAssistant(assistantType);
+    // Event delegation para botões de assistentes (otimização)
+    // Um único listener no pai em vez de um por botão
+    const assistantsList = document.querySelector('.assistants-list');
+    if (assistantsList) {
+        assistantsList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.assistant-btn');
+            if (btn) {
+                const assistantType = btn.dataset.assistant;
+                switchAssistant(assistantType);
+            }
         });
-    });
+    }
 
     // Botão de logout
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', handleLogout);
+    if (DOMCache.logoutBtn) {
+        DOMCache.logoutBtn.addEventListener('click', handleLogout);
     }
 }
 
@@ -141,13 +287,12 @@ function setupEventListeners() {
 async function handleSubmit(e) {
     e.preventDefault();
 
-    const messageInput = document.getElementById('messageInput');
-    const message = messageInput.value.trim();
+    const message = DOMCache.messageInput.value.trim();
 
     if (!message) return;
 
     // Limpar input
-    messageInput.value = '';
+    DOMCache.messageInput.value = '';
 
     // Adicionar mensagem do usuário
     addMessage('user', message);
@@ -158,7 +303,8 @@ async function handleSubmit(e) {
     try {
         console.log(`📤 Enviando para ${state.currentAssistant}:`, message);
 
-        const response = await fetch(`${API_URL}/api/chat/message`, {
+        // Usar fetch com timeout de 60s para mensagens
+        const response = await fetchWithTimeout(`${API_URL}/api/chat/message`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${state.token}`,
@@ -168,7 +314,7 @@ async function handleSubmit(e) {
                 message: message,
                 assistantType: state.currentAssistant
             })
-        });
+        }, 60000);
 
         if (!response.ok) {
             const errorData = await response.json();
@@ -176,7 +322,7 @@ async function handleSubmit(e) {
         }
 
         const data = await response.json();
-        
+
         console.log('✅ Resposta recebida:', data);
 
         // Esconder "digitando..."
@@ -187,9 +333,9 @@ async function handleSubmit(e) {
 
     } catch (error) {
         console.error('❌ Erro ao enviar mensagem:', error);
-        
+
         hideTypingIndicator();
-        
+
         addMessage('system', `Erro: ${error.message}`);
     }
 }
@@ -199,8 +345,7 @@ async function handleSubmit(e) {
 // ========================================
 
 function addMessage(role, content, assistant = state.currentAssistant) {
-    const messagesContainer = document.getElementById('messagesContainer');
-    if (!messagesContainer) return;
+    if (!DOMCache.messagesContainer) return;
 
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${role}-message`;
@@ -225,10 +370,10 @@ function addMessage(role, content, assistant = state.currentAssistant) {
         </div>
     `;
 
-    messagesContainer.appendChild(messageDiv);
+    DOMCache.messagesContainer.appendChild(messageDiv);
 
-    // Scroll automático
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    // Scroll automático com throttle (otimização)
+    scrollToBottom();
 
     // Salvar no histórico
     state.messageHistory.push({
@@ -244,8 +389,11 @@ function addMessage(role, content, assistant = state.currentAssistant) {
 // ========================================
 
 function formatMessage(text) {
+    // Sanitizar primeiro para prevenir XSS
+    const safeText = sanitizeHTML(text);
+
     // Quebras de linha
-    let formatted = text.replace(/\n/g, '<br>');
+    let formatted = safeText.replace(/\n/g, '<br>');
 
     // Bold **texto**
     formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
@@ -261,17 +409,15 @@ function formatMessage(text) {
 // ========================================
 
 function showTypingIndicator() {
-    const indicator = document.getElementById('typingIndicator');
-    if (indicator) {
-        indicator.style.display = 'flex';
+    if (DOMCache.typingIndicator) {
+        DOMCache.typingIndicator.style.display = 'flex';
         state.isTyping = true;
     }
 }
 
 function hideTypingIndicator() {
-    const indicator = document.getElementById('typingIndicator');
-    if (indicator) {
-        indicator.style.display = 'none';
+    if (DOMCache.typingIndicator) {
+        DOMCache.typingIndicator.style.display = 'none';
         state.isTyping = false;
     }
 }
@@ -285,25 +431,23 @@ function switchAssistant(assistantType) {
 
     state.currentAssistant = assistantType;
 
-    // Atualizar botões
-    document.querySelectorAll('.assistant-btn').forEach(btn => {
+    // Atualizar botões usando cache
+    DOMCache.assistantButtons.forEach(btn => {
         btn.classList.remove('active');
-        if (btn.getAttribute('data-assistant') === assistantType) {
+        if (btn.dataset.assistant === assistantType) {
             btn.classList.add('active');
         }
     });
 
     // Atualizar informações
     const info = assistantsInfo[assistantType];
-    
-    const nameElement = document.getElementById('currentAssistantName');
-    if (nameElement) {
-        nameElement.textContent = info.name;
+
+    if (DOMCache.currentAssistantName) {
+        DOMCache.currentAssistantName.textContent = info.name;
     }
 
-    const descElement = document.getElementById('currentAssistantDesc');
-    if (descElement) {
-        descElement.textContent = info.description;
+    if (DOMCache.currentAssistantDesc) {
+        DOMCache.currentAssistantDesc.textContent = info.description;
     }
 
     // Limpar mensagens e mostrar boas-vindas
@@ -317,11 +461,10 @@ function switchAssistant(assistantType) {
 
 function showWelcomeMessage() {
     const info = assistantsInfo[state.currentAssistant];
-    
-    const messagesContainer = document.getElementById('messagesContainer');
-    if (!messagesContainer) return;
 
-    messagesContainer.innerHTML = `
+    if (!DOMCache.messagesContainer) return;
+
+    DOMCache.messagesContainer.innerHTML = `
         <div class="message assistant-message">
             <div class="message-avatar">${info.icon}</div>
             <div class="message-content">
@@ -338,9 +481,8 @@ function showWelcomeMessage() {
 // ========================================
 
 function clearMessages() {
-    const messagesContainer = document.getElementById('messagesContainer');
-    if (messagesContainer) {
-        messagesContainer.innerHTML = '';
+    if (DOMCache.messagesContainer) {
+        DOMCache.messagesContainer.innerHTML = '';
     }
     state.messageHistory = [];
 }
