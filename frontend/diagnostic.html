@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic Training - Scopsy</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .diagnostic-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .case-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .vignette {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #4A90E2;
+            margin: 20px 0;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .option-button {
+            padding: 16px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-size: 15px;
+        }
+
+        .option-button:hover {
+            border-color: #4A90E2;
+            background: #f0f7ff;
+        }
+
+        .option-button.selected {
+            border-color: #4A90E2;
+            background: #e3f2fd;
+        }
+
+        .option-button.correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+
+        .option-button.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .submit-btn {
+            background: #4A90E2;
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #357ABD;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .feedback-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .feedback-section {
+            margin: 20px 0;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .feedback-section h4 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .stats-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4A90E2;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .next-case-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            background: #666;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            background: #ffebee;
+            border: 1px solid #f44336;
+            color: #c62828;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagnostic-container">
+        <button class="back-btn" onclick="window.location.href='dashboard.html'">← Voltar ao Dashboard</button>
+
+        <h1>🎲 Diagnostic Training</h1>
+        <p>Treino de reconhecimento diagnóstico - repetição espaçada</p>
+
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item">
+                <div class="stat-value" id="totalCases">0</div>
+                <div class="stat-label">Casos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="accuracy">0%</div>
+                <div class="stat-label">Acurácia</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="xpPoints">0</div>
+                <div class="stat-label">XP</div>
+            </div>
+        </div>
+
+        <div id="caseContainer"></div>
+        <div id="feedbackContainer"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let currentCase = null;
+        let caseStartTime = null;
+        let selectedAnswer = null;
+
+        // Carregar stats ao iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStats();
+            generateNewCase();
+        });
+
+        // Carregar estatísticas
+        async function loadStats() {
+            try {
+                const token = localStorage.getItem('token');
+                
+                const response = await fetch(API_URL + '/diagnostic/stats', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('totalCases').textContent = data.progress.total_diagnoses || 0;
+                    document.getElementById('accuracy').textContent = 
+                        (data.progress.accuracy_rate || 0).toFixed(1) + '%';
+                    document.getElementById('xpPoints').textContent = data.progress.xp_points || 0;
+                }
+            } catch (error) {
+                console.error('Erro ao carregar stats:', error);
+            }
+        }
+
+        // Gerar novo caso
+        async function generateNewCase() {
+            try {
+                document.getElementById('caseContainer').innerHTML = '<div class="loading">⏳ Gerando caso diagnóstico...<br><small>Isso pode levar 10-15 segundos</small></div>';
+                document.getElementById('feedbackContainer').innerHTML = '';
+
+                const token = localStorage.getItem('token');
+                
+                const response = await fetch(API_URL + '/diagnostic/generate-case', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        level: 'intermediate',
+                        category: 'anxiety'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    currentCase = {
+                        ...data.case,
+                        case_id: data.case_id,
+                        from_cache: data.from_cache
+                    };
+                    caseStartTime = Date.now();
+                    selectedAnswer = null;
+                    renderCase(currentCase);
+                } else {
+                    document.getElementById('caseContainer').innerHTML = 
+                        '<div class="error-message">Erro ao gerar caso: ' + data.error + '</div>';
+                }
+            } catch (error) {
+                console.error('Erro ao gerar caso:', error);
+                document.getElementById('caseContainer').innerHTML = 
+                    '<div class="error-message">Erro ao conectar com o servidor. Verifique se o backend está rodando.</div>';
+            }
+        }
+
+        // Renderizar caso
+        function renderCase(caseData) {
+            const container = document.getElementById('caseContainer');
+            
+            const vignette = caseData.clinical_content?.vignette || 'Vinheta não disponível';
+            const options = caseData.question_format?.options || [];
+
+            let optionsHTML = '';
+            options.forEach(function(option, index) {
+                optionsHTML += '<button class="option-button" data-answer="' + option + '" onclick="selectOption(\'' + option.replace(/'/g, "\\'") + '\', this)">' +
+                    String.fromCharCode(65 + index) + '. ' + option +
+                    '</button>';
+            });
+
+            container.innerHTML = 
+                '<div class="case-card">' +
+                    '<h3>📋 Caso Clínico</h3>' +
+                    '<div class="vignette">' + vignette + '</div>' +
+                    '<h4>Qual é o diagnóstico mais provável?</h4>' +
+                    '<div class="options-grid" id="optionsGrid">' + optionsHTML + '</div>' +
+                    '<button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Enviar Resposta</button>' +
+                '</div>';
+        }
+
+        // Selecionar opção
+        function selectOption(answer, button) {
+            // Remover seleção anterior
+            const buttons = document.querySelectorAll('.option-button');
+            buttons.forEach(function(btn) {
+                btn.classList.remove('selected');
+            });
+
+            // Adicionar seleção
+            button.classList.add('selected');
+            selectedAnswer = answer;
+
+            // Habilitar botão
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        // Enviar resposta
+        async function submitAnswer() {
+            if (!selectedAnswer) return;
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processando...';
+
+            const timeSpent = Math.floor((Date.now() - caseStartTime) / 1000);
+
+            try {
+                const token = localStorage.getItem('token');
+                
+                const response = await fetch(API_URL + '/diagnostic/submit-answer', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        case_id: currentCase.case_id,
+                        user_answer: selectedAnswer,
+                        correct_diagnosis: currentCase.diagnostic_structure?.correct_diagnosis,
+                        time_spent_seconds: timeSpent,
+                        case_data: currentCase
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showResult(data.is_correct, data.feedback);
+                    loadStats();
+                } else {
+                    alert('Erro ao processar resposta');
+                }
+            } catch (error) {
+                console.error('Erro ao enviar resposta:', error);
+                alert('Erro ao conectar com o servidor');
+            }
+
+            submitBtn.textContent = 'Enviar Resposta';
+        }
+
+        // Mostrar resultado
+        function showResult(isCorrect, feedback) {
+            // Marcar opções
+            const buttons = document.querySelectorAll('.option-button');
+            buttons.forEach(function(btn) {
+                btn.disabled = true;
+                const answer = btn.getAttribute('data-answer');
+                
+                if (answer === currentCase.diagnostic_structure?.correct_diagnosis) {
+                    btn.classList.add('correct');
+                } else if (answer === selectedAnswer && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            // Mostrar feedback
+            if (feedback && feedback.feedback_eco) {
+                const feedbackContainer = document.getElementById('feedbackContainer');
+                
+                feedbackContainer.innerHTML = 
+                    '<div class="feedback-card">' +
+                        '<h3>' + (isCorrect ? '✅ Correto!' : '❌ Incorreto') + '</h3>' +
+                        '<div class="feedback-section">' +
+                            '<h4>📝 Explicação</h4>' +
+                            '<p>' + (feedback.feedback_eco.explicar?.what_happened || '') + '</p>' +
+                        '</div>' +
+                        '<div class="feedback-section">' +
+                            '<h4>🔗 Conexão Teórica</h4>' +
+                            '<p>' + (feedback.feedback_eco.conectar?.theory_connection || '') + '</p>' +
+                        '</div>' +
+                        '<div class="feedback-section">' +
+                            '<h4>🎯 Orientação</h4>' +
+                            '<p>' + (feedback.feedback_eco.orientar?.what_to_focus_next || '') + '</p>' +
+                        '</div>' +
+                        '<button class="next-case-btn" onclick="generateNewCase()">Próximo Caso →</button>' +
+                    '</div>';
+            } else {
+                document.getElementById('feedbackContainer').innerHTML = 
+                    '<div class="feedback-card">' +
+                        '<h3>' + (isCorrect ? '✅ Correto!' : '❌ Incorreto') + '</h3>' +
+                        '<p>Diagnóstico correto: ' + (currentCase.diagnostic_structure?.correct_diagnosis || '') + '</p>' +
+                        '<button class="next-case-btn" onclick="generateNewCase()">Próximo Caso →</button>' +
+                    '</div>';
+            }
+        }
+    </script>
+</body>
+</html>

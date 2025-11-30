@@ -1,0 +1,322 @@
+const express = require('express');
+const router = express.Router();
+const OpenAI = require('openai');
+const { createClient } = require('@supabase/supabase-js');
+const { authenticateRequest } = require('../middleware/auth');
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
+// ========================================
+// POST /api/diagnostic/generate-case
+// Gera um novo caso diagnóstico
+// ========================================
+router.post('/generate-case', authenticateRequest, async (req, res) => {
+  try {
+    const { level = 'intermediate', category = 'anxiety' } = req.body;
+    
+    // Verificação de autenticação
+    if (!req.user || !req.user.userId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Usuário não autenticado'
+      });
+    }
+    
+    const userId = req.user.userId;
+
+    console.log(`[Diagnostic] Gerando caso: level=${level}, category=${category}, user=${userId}`);
+
+    // Tentar buscar caso do cache primeiro
+    const { data: cachedCase, error: cacheError } = await supabase
+      .from('cases')
+      .select('*')
+      .eq('status', 'active')
+      .eq('difficulty_level', level)
+      .eq('category', category)
+      .order('times_used', { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
+    if (cachedCase) {
+      console.log(`[Diagnostic] ✅ Caso do cache (id: ${cachedCase.id})`);
+      
+      // Incrementar times_used
+      await supabase
+        .from('cases')
+        .update({ 
+          times_used: cachedCase.times_used + 1,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', cachedCase.id);
+
+      return res.json({
+        success: true,
+        case: cachedCase.case_content,
+        case_id: cachedCase.id,
+        from_cache: true
+      });
+    }
+
+    // Gerar novo caso com Diagnostic Assistant
+    console.log('[Diagnostic] ⚠️ Gerando caso novo...');
+
+    const thread = await openai.beta.threads.create();
+
+    await openai.beta.threads.messages.create(thread.id, {
+      role: 'user',
+      content: JSON.stringify({
+        action: 'generate_case',
+        level,
+        category,
+        format: 'multiple_choice'
+      })
+    });
+
+    const run = await openai.beta.threads.runs.createAndPoll(thread.id, {
+      assistant_id: process.env.DIAGNOSTIC_ID,
+      response_format: { type: "json_object" }
+    });
+
+    if (run.status !== 'completed') {
+      throw new Error(`Run failed: ${run.status}`);
+    }
+
+    const messages = await openai.beta.threads.messages.list(thread.id);
+    const assistantMessage = messages.data[0];
+    const caseData = JSON.parse(assistantMessage.content[0].text.value);
+
+    // Salvar caso no banco
+    const { data: newCase, error: insertError } = await supabase
+      .from('cases')
+      .insert({
+        disorder: caseData.metadata?.disorder || 'Unknown',
+        difficulty_level: level,
+        category: category,
+        case_content: caseData,
+        vignette: caseData.clinical_content?.vignette || '',
+        correct_diagnosis: caseData.diagnostic_structure?.correct_diagnosis || '',
+        status: 'pending',
+        times_used: 1,
+        created_by: 'diagnostic_assistant'
+      })
+      .select()
+      .single();
+
+    if (insertError) {
+      console.error('[Diagnostic] Erro ao salvar caso:', insertError);
+      throw insertError;
+    }
+
+    console.log(`[Diagnostic] ✅ Novo caso salvo (id: ${newCase.id})`);
+
+    res.json({
+      success: true,
+      case: caseData,
+      case_id: newCase.id,
+      from_cache: false
+    });
+
+  } catch (error) {
+    console.error('[Diagnostic] Erro ao gerar caso:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ========================================
+// POST /api/diagnostic/submit-answer
+// Registra resposta e retorna feedback
+// ========================================
+router.post('/submit-answer', authenticateRequest, async (req, res) => {
+  try {
+    const {
+      case_id,
+      user_answer,
+      correct_diagnosis,
+      time_spent_seconds,
+      case_data
+    } = req.body;
+    const userId = req.user.userId;
+
+    const is_correct = user_answer.toLowerCase().trim() === correct_diagnosis.toLowerCase().trim();
+
+    console.log(`[Diagnostic] Resposta: user=${userId}, correct=${is_correct}`);
+
+    // Registrar interação
+    const { error: interactionError } = await supabase
+      .from('user_case_interactions')
+      .insert({
+        user_id: userId,
+        case_id,
+        user_diagnosis: user_answer,
+        user_answer: user_answer,
+        correct_diagnosis,
+        is_correct,
+        time_spent_seconds,
+        difficulty_level: case_data.metadata?.difficulty_level || 'intermediate',
+        disorder_category: case_data.metadata?.category || 'unknown'
+      });
+
+    if (interactionError) {
+      console.error('[Diagnostic] Erro ao registrar interação:', interactionError);
+    }
+
+    // Atualizar métricas do caso
+    if (case_id) {
+      const { data: caseRecord } = await supabase
+        .from('cases')
+        .select('times_correct, times_incorrect')
+        .eq('id', case_id)
+        .single();
+
+      if (caseRecord) {
+        await supabase
+          .from('cases')
+          .update({
+            times_correct: caseRecord.times_correct + (is_correct ? 1 : 0),
+            times_incorrect: caseRecord.times_incorrect + (is_correct ? 0 : 1)
+          })
+          .eq('id', case_id);
+      }
+    }
+
+    // Atualizar progresso do usuário
+    await updateUserProgress(userId, 'diagnostic', is_correct);
+
+    // Calcular XP
+    const xpGained = is_correct ? 30 : 10;
+
+    // Gerar feedback com Diagnostic Assistant
+    const feedbackThread = await openai.beta.threads.create();
+
+    await openai.beta.threads.messages.create(feedbackThread.id, {
+      role: 'user',
+      content: JSON.stringify({
+        action: 'evaluate',
+        case: case_data,
+        user_response: {
+          selected_answer: user_answer,
+          time_spent_seconds,
+          is_correct
+        },
+        feedback_mode: 'full'
+      })
+    });
+
+    const feedbackRun = await openai.beta.threads.runs.createAndPoll(feedbackThread.id, {
+      assistant_id: process.env.DIAGNOSTIC_ID,
+      response_format: { type: "json_object" }
+    });
+
+    let feedback = null;
+    if (feedbackRun.status === 'completed') {
+      const feedbackMessages = await openai.beta.threads.messages.list(feedbackThread.id);
+      const feedbackMessage = feedbackMessages.data[0];
+      feedback = JSON.parse(feedbackMessage.content[0].text.value);
+    }
+
+    res.json({
+      success: true,
+      is_correct,
+      xp_gained: xpGained,
+      feedback
+    });
+
+  } catch (error) {
+    console.error('[Diagnostic] Erro ao processar resposta:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ========================================
+// GET /api/diagnostic/stats
+// Retorna estatísticas do usuário
+// ========================================
+router.get('/stats', authenticateRequest, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // Buscar progresso geral
+    const { data: progress } = await supabase
+      .from('user_progress')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('assistant_type', 'diagnostic')
+      .single();
+
+    // Buscar stats por categoria
+    const { data: categoryStats } = await supabase
+      .from('diagnostic_stats_by_category')
+      .select('*')
+      .eq('user_id', userId);
+
+    res.json({
+      success: true,
+      progress: progress || {
+        total_diagnoses: 0,
+        correct_diagnoses: 0,
+        accuracy_rate: 0,
+        xp_points: 0,
+        level: 1
+      },
+      category_stats: categoryStats || []
+    });
+
+  } catch (error) {
+    console.error('[Diagnostic] Erro ao buscar stats:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ========================================
+// HELPER: Atualizar progresso do usuário
+// ========================================
+async function updateUserProgress(userId, assistantType, isCorrect) {
+  try {
+    const { data: existing } = await supabase
+      .from('user_progress')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('assistant_type', assistantType)
+      .single();
+
+    if (existing) {
+      await supabase
+        .from('user_progress')
+        .update({
+          total_diagnoses: existing.total_diagnoses + 1,
+          correct_diagnoses: existing.correct_diagnoses + (isCorrect ? 1 : 0),
+          xp_points: existing.xp_points + (isCorrect ? 30 : 10),
+          last_activity_date: new Date().toISOString().split('T')[0]
+        })
+        .eq('id', existing.id);
+    } else {
+      await supabase
+        .from('user_progress')
+        .insert({
+          user_id: userId,
+          assistant_type: assistantType,
+          total_diagnoses: 1,
+          correct_diagnoses: isCorrect ? 1 : 0,
+          xp_points: isCorrect ? 30 : 10,
+          last_activity_date: new Date().toISOString().split('T')[0]
+        });
+    }
+  } catch (error) {
+    console.error('[updateUserProgress] Erro:', error);
+  }
+}
+
+module.exports = router;

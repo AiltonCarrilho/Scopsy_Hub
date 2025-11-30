@@ -53,8 +53,10 @@ function authenticateRequest(req, res, next) {
     const token = authHeader.replace('Bearer ', '');
     const decoded = verifyToken(token);
     
-    req.userId = decoded.userId;
-    req.userPlan = decoded.plan;
+    req.user = {
+      userId: decoded.userId,
+      plan: decoded.plan
+    };
     
     next();
   } catch (error) {
