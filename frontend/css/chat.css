@@ -342,6 +342,7 @@
     color: #95a5a6;
 }
 
+
 #charCount {
     font-weight: 500;
 }
@@ -436,6 +437,25 @@
     background: #c0392b;
     transform: translateY(-2px);
 }
+.button-container {
+  margin: 20px 0;
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  background-color: #667eea;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #556cd6;
+}
 
 /* ========================================
    RESPONSIVE
@@ -491,4 +511,4 @@
 .messages-container::-webkit-scrollbar-thumb:hover,
 .chat-sidebar::-webkit-scrollbar-thumb:hover {
     background: #667eea;
-}
+}container
