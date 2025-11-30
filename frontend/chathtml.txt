@@ -34,6 +34,7 @@
                             <strong>Treino de Olhar Clínico</strong>
                             <small>Casos clínicos</small>
                         </div>
+                
                     </button>
                     <button class="assistant-btn" data-assistant="diagnostic">
                         <span class="assistant-icon">🎲</span>
@@ -56,6 +57,7 @@
                     <h4 id="currentAssistantName">Treino de Olhar Clínico</h4>
                     <p id="currentAssistantDesc">Casos clínicos com feedback formativo</p>
                 </div>
+             
             </aside>
 
             <!-- Chat Messages Area -->
@@ -69,10 +71,13 @@
                             <strong>Scopsy Case</strong>
                             <p>Olá! Pronto para treinar seu olhar clínico? Posso gerar casos de qualquer transtorno do DSM-5.</p>
                             <span class="message-time">Agora</span>
-                        </div>
                     </div>
                 </div>
-
+                    </div>
+                       <div id="chat-controls" class="button-container">
+                       <button id="btn-start" class="btn">🎲 Novo Caso</button>
+                       <button id="btn-menu" class="btn">⚙️ Personalizar</button>
+                    </div>
                 <!-- Typing Indicator -->
                 <div class="typing-indicator" id="typingIndicator" style="display: none;">
                     <div class="message-avatar">🤖</div>
