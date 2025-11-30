@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treino de Olhar Clínico - Scopsy</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .case-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            padding: 16px 24px;
+            background: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #357ABD;
+            transform: translateY(-2px);
+        }
+
+        .moment-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .context-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .context-section {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4A90E2;
+        }
+
+        .context-section h4 {
+            margin-top: 0;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .critical-moment {
+            background: #fff3e0;
+            padding: 24px;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+            margin: 24px 0;
+        }
+
+        .dialogue {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+
+        .non-verbal {
+            font-size: 14px;
+            color: #666;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #ffe0b2;
+        }
+
+        .decision-point {
+            background: #e8f5e9;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            color: #2e7d32;
+            margin: 24px 0;
+            font-size: 15px;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .option-card {
+            padding: 16px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-card:hover {
+            border-color: #4A90E2;
+            background: #f0f7ff;
+        }
+
+        .option-card.selected {
+            border-color: #4A90E2;
+            background: #e3f2fd;
+        }
+
+        .option-card.correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+
+        .option-card.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .option-letter {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: #4A90E2;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        .option-card.correct .option-letter {
+            background: #4CAF50;
+        }
+
+        .option-card.incorrect .option-letter {
+            background: #f44336;
+        }
+
+        .reasoning-section {
+            margin-top: 24px;
+        }
+
+        .reasoning-textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .reasoning-textarea:focus {
+            outline: none;
+            border-color: #4A90E2;
+        }
+
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .feedback-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .feedback-header {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .feedback-header.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .feedback-header.incorrect {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .feedback-section {
+            margin: 20px 0;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .feedback-section h4 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .principle-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 16px;
+            margin: 20px 0;
+            font-style: italic;
+            font-weight: 600;
+            color: #1565c0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .back-btn {
+            background: #666;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="case-container">
+        <button class="back-btn" onclick="window.location.href='case.html'">← Voltar</button>
+
+        <h1>⚡ Desafios Clínicos</h1>
+        <p>Micro-momentos críticos • Decisões instantâneas • 30-60 segundos</p>
+
+        <div class="action-buttons">
+            <button class="btn-primary" onclick="generateNewMoment()">
+                🎬 Novo Momento Crítico
+            </button>
+        </div>
+
+        <div id="momentContainer">
+            <div class="empty-state">
+                <h2>⚡ Pronto para treinar decisões instantâneas?</h2>
+                <p>Cada momento dura 30-60 segundos</p>
+                <p>Você decide o que fazer AGORA</p>
+            </div>
+        </div>
+
+        <div id="feedbackContainer"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let currentMoment = null;
+        let selectedChoice = null;
+        let startTime = null;
+
+        async function generateNewMoment() {
+            try {
+                console.log('🎬 Gerando novo micro-momento...');
+                
+                document.getElementById('momentContainer').innerHTML = 
+                    '<div class="loading">⏳ Gerando momento crítico...</div>';
+                document.getElementById('feedbackContainer').innerHTML = '';
+
+                const token = localStorage.getItem('token');
+                
+                const response = await fetch(`${API_URL}/case/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        level: 'intermediate',
+                        moment_type: 'resistencia_tecnica' // Tipo com mais casos no cache
+                    })
+                });
+
+                const data = await response.json();
+                console.log('📦 Resposta recebida:', {
+                    success: data.success,
+                    case_id: data.case_id,
+                    from_cache: data.from_cache,
+                    moment_type: data.case?.moment_type
+                });
+
+                if (data.success) {
+                    // CRÍTICO: Salvar case_id junto com o conteúdo
+                    currentMoment = {
+                        ...data.case,
+                        case_id: data.case_id,
+                        id: data.case_id  // Também como 'id' para compatibilidade
+                    };
+                    selectedChoice = null;
+                    startTime = Date.now();
+                    renderMoment(currentMoment);
+                    
+                    console.log(`✅ Momento carregado: ID=${currentMoment.case_id}, tipo=${currentMoment.moment_type}`);
+                } else {
+                    console.error('❌ Erro na resposta:', data.error);
+                    document.getElementById('momentContainer').innerHTML = 
+                        `<div class="moment-card"><p style="color: #f44336;">Erro: ${data.error}</p></div>`;
+                }
+            } catch (error) {
+                console.error('❌ Erro ao gerar momento:', error);
+                document.getElementById('momentContainer').innerHTML = 
+                    '<div class="moment-card"><p style="color: #f44336;">Erro ao conectar</p></div>';
+            }
+        }
+
+        function renderMoment(moment) {
+            const ctx = moment.context;
+            const cm = moment.critical_moment;
+            
+            let optionsHTML = '';
+            moment.options.forEach(opt => {
+                optionsHTML += `
+                    <div class="option-card" onclick="selectOption('${opt.letter}', this)">
+                        <span class="option-letter">${opt.letter}</span>
+                        <strong>${opt.approach}</strong>
+                        <p style="margin: 8px 0 0 44px; color: #666;">"${opt.response}"</p>
+                    </div>
+                `;
+            });
+
+            document.getElementById('momentContainer').innerHTML = `
+                <div class="moment-card">
+                    <span class="context-badge">${ctx.diagnosis || 'Momento Clínico'}</span>
+                    
+                    <div class="context-section">
+                        <h4>📍 CONTEXTO</h4>
+                        <p><strong>Cliente:</strong> ${ctx.client_name}, ${ctx.client_age} anos</p>
+                        <p><strong>Sessão:</strong> ${ctx.session_number}</p>
+                        <p><strong>Acabou de acontecer:</strong> ${ctx.what_just_happened}</p>
+                    </div>
+
+                    <div class="critical-moment">
+                        <h4 style="margin-top: 0; color: #e65100;">⚡ MOMENTO CRÍTICO</h4>
+                        <div class="dialogue">"${cm.dialogue}"</div>
+                        <div class="non-verbal">
+                            <strong>Observações:</strong> ${cm.non_verbal}
+                        </div>
+                    </div>
+
+                    <div class="decision-point">
+                        ${moment.decision_point}
+                    </div>
+
+                    <h4>Escolha sua resposta:</h4>
+                    <div class="options-grid" id="optionsGrid">
+                        ${optionsHTML}
+                    </div>
+
+                    <div class="reasoning-section">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                            💭 Por que você escolheu esta opção?
+                        </label>
+                        <textarea 
+                            id="reasoningText" 
+                            class="reasoning-textarea" 
+                            placeholder="Explique seu raciocínio em 1-2 frases..."></textarea>
+                    </div>
+
+                    <button class="submit-btn" id="submitBtn" onclick="submitDecision()" disabled>
+                        Confirmar Decisão
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectOption(letter, element) {
+            // Remover seleção anterior
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            // Adicionar seleção
+            element.classList.add('selected');
+            selectedChoice = letter;
+
+            // Habilitar botão
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        async function submitDecision() {
+            if (!selectedChoice) return;
+
+            const reasoning = document.getElementById('reasoningText').value.trim();
+            const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+
+            console.log(`📤 Enviando decisão: case_id=${currentMoment.case_id}, escolha=${selectedChoice}`);
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Analisando...';
+
+            try {
+                const token = localStorage.getItem('token');
+                
+                const payload = {
+                    case_data: {
+                        ...currentMoment,
+                        case_id: currentMoment.case_id || currentMoment.id
+                    },
+                    user_choice: selectedChoice,
+                    user_reasoning: reasoning,
+                    time_spent_seconds: timeSpent
+                };
+
+                console.log('📦 Payload:', {
+                    case_id: payload.case_data.case_id,
+                    user_choice: payload.user_choice,
+                    has_reasoning: !!payload.user_reasoning
+                });
+                
+                const response = await fetch(`${API_URL}/case/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                console.log('✅ Feedback recebido:', {
+                    success: data.success,
+                    is_correct: data.feedback?.is_correct,
+                    xp_gained: data.xp_gained
+                });
+
+                if (data.success) {
+                    showFeedback(data.feedback, selectedChoice);
+                } else {
+                    console.error('❌ Erro no feedback:', data.error);
+                    alert('Erro ao processar decisão');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao enviar:', error);
+                alert('Erro ao conectar');
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Confirmar Decisão';
+        }
+
+        function showFeedback(feedback, userChoice) {
+            // Marcar opções
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.style.pointerEvents = 'none';
+                const letter = card.querySelector('.option-letter').textContent;
+                
+                if (letter === feedback.expert_choice) {
+                    card.classList.add('correct');
+                } else if (letter === userChoice && !feedback.is_correct) {
+                    card.classList.add('incorrect');
+                }
+            });
+
+            const er = feedback.expert_reasoning;
+            const lp = feedback.learning_point;
+
+            const feedbackHTML = `
+                <div class="feedback-card">
+                    <div class="feedback-header ${feedback.is_correct ? 'correct' : 'incorrect'}">
+                        <h2 style="margin: 0;">${feedback.immediate_feedback}</h2>
+                        ${feedback.is_correct ? 
+                            '<p style="margin: 8px 0 0 0;">🎯 Você pensou como um clínico experiente!</p>' :
+                            '<p style="margin: 8px 0 0 0;">💡 Vamos entender a decisão de expert</p>'
+                        }
+                    </div>
+
+                    ${feedback.user_reasoning_analysis ? `
+                    <div class="feedback-section">
+                        <h4>🗣️ Seu Raciocínio</h4>
+                        <p style="font-style: italic;">${feedback.user_reasoning_analysis}</p>
+                    </div>
+                    ` : ''}
+
+                    <div class="feedback-section">
+                        <h4>✅ Por que ${feedback.expert_choice} funciona</h4>
+                        <p>${er.why_this_works || 'Esta é a decisão mais efetiva neste momento.'}</p>
+                    </div>
+
+                    ${er.why_others_fail ? `
+                    <div class="feedback-section">
+                        <h4>❌ Por que as outras opções falham</h4>
+                        ${Object.entries(er.why_others_fail).map(([opt, reason]) => 
+                            `<p><strong>Opção ${opt.replace('option_', '')}:</strong> ${reason}</p>`
+                        ).join('')}
+                    </div>
+                    ` : ''}
+
+                    ${er.core_principle ? `
+                    <div class="principle-box">
+                        💎 PRINCÍPIO: "${er.core_principle}"
+                    </div>
+                    ` : ''}
+
+                    ${er.what_happens_next ? `
+                    <div class="feedback-section">
+                        <h4>⏭️ O que acontece depois</h4>
+                        <p>${er.what_happens_next}</p>
+                    </div>
+                    ` : ''}
+
+                    ${lp ? `
+                    <div class="feedback-section" style="background: #e8f5e9;">
+                        <h4>🎯 Aprendizado</h4>
+                        <p><strong>Padrão a reconhecer:</strong> ${lp.pattern_to_recognize || 'Continue praticando'}</p>
+                        <p><strong>Resposta automática:</strong> ${lp.instant_response || 'Desenvolva sua intuição'}</p>
+                        ${lp.common_mistake ? `<p><strong>Erro comum:</strong> ${lp.common_mistake}</p>` : ''}
+                    </div>
+                    ` : ''}
+
+                    <button class="btn-primary" onclick="generateNewMoment()" style="width: 100%; margin-top: 24px;">
+                        🎬 Próximo Momento Crítico
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('feedbackContainer').innerHTML = feedbackHTML;
+            document.getElementById('feedbackContainer').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+
+        // Auto-gerar primeiro momento ao carregar
+        // document.addEventListener('DOMContentLoaded', generateNewMoment);
+    </script>
+</body>
+</html>

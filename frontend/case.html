@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treino de Olhar Clínico - Scopsy</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .case-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .back-btn {
+            background: #666;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header-section h1 {
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .header-section p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .modes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .mode-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            border-color: #4A90E2;
+        }
+
+        .mode-card.desafios:hover {
+            border-color: #FF9800;
+        }
+
+        .mode-card.conceituacao:hover {
+            border-color: #9C27B0;
+        }
+
+        .mode-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .mode-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .mode-description {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .mode-details {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .mode-details h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .mode-details ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .mode-details li {
+            margin-bottom: 8px;
+        }
+
+        .mode-btn {
+            background: #4A90E2;
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .mode-btn:hover {
+            background: #357ABD;
+            transform: scale(1.05);
+        }
+
+        .mode-card.desafios .mode-btn {
+            background: #FF9800;
+        }
+
+        .mode-card.desafios .mode-btn:hover {
+            background: #F57C00;
+        }
+
+        .mode-card.conceituacao .mode-btn {
+            background: #9C27B0;
+        }
+
+        .mode-card.conceituacao .mode-btn:hover {
+            background: #7B1FA2;
+        }
+
+        .mode-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .modes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="case-container">
+        <button class="back-btn" onclick="window.location.href='dashboard.html'">← Voltar ao Dashboard</button>
+
+        <div class="header-section">
+            <h1>🎯 Treino de Olhar Clínico</h1>
+            <p>Escolha seu modo de treino baseado no seu objetivo e tempo disponível</p>
+        </div>
+
+        <div class="modes-grid">
+            <!-- MODO 1: DESAFIOS CLÍNICOS -->
+            <div class="mode-card desafios" onclick="window.location.href='desafios.html'">
+                <div class="mode-icon">⚡</div>
+                <div class="mode-badge">DECISÕES RÁPIDAS</div>
+                <h2 class="mode-title">Desafios Clínicos</h2>
+                
+                <p class="mode-description">
+                    Micro-momentos críticos que exigem decisão imediata. 
+                    Como um "TikTok" de situações clínicas reais.
+                </p>
+
+                <div class="mode-details">
+                    <h4>📊 Características:</h4>
+                    <ul>
+                        <li>⏱️ 30-60 segundos por caso</li>
+                        <li>🎯 Múltipla escolha (A/B/C/D)</li>
+                        <li>💡 Feedback cirúrgico instantâneo</li>
+                        <li>🔄 20-30 desafios por sessão</li>
+                    </ul>
+                </div>
+
+                <div class="mode-details">
+                    <h4>🎓 Objetivo:</h4>
+                    <ul>
+                        <li>Automatizar reflexos clínicos</li>
+                        <li>Reconhecer padrões rapidamente</li>
+                        <li>Treinar "o que fazer AGORA"</li>
+                    </ul>
+                </div>
+
+                <button class="mode-btn">
+                    Começar Desafios
+                </button>
+            </div>
+
+            <!-- MODO 2: CONCEITUAÇÃO DE CASO -->
+            <div class="mode-card conceituacao" onclick="window.location.href='conceituacao.html'">
+                <div class="mode-icon">🧩</div>
+                <div class="mode-badge">ANÁLISE PROFUNDA</div>
+                <h2 class="mode-title">Conceituação de Caso</h2>
+                
+                <p class="mode-description">
+                    Análise completa de casos clínicos com formulação conceitual, 
+                    identificação de crenças e estratégias de tratamento.
+                </p>
+
+                <div class="mode-details">
+                    <h4>📊 Características:</h4>
+                    <ul>
+                        <li>⏱️ 10-20 minutos por caso</li>
+                        <li>📝 Análise livre e escrita</li>
+                        <li>🎯 Feedback formativo estruturado</li>
+                        <li>🔄 2-5 casos por sessão</li>
+                    </ul>
+                </div>
+
+                <div class="mode-details">
+                    <h4>🎓 Foco de aprendizado:</h4>
+                    <ul>
+                        <li>Tríade cognitiva (P → E → C)</li>
+                        <li>Crenças centrais e intermediárias</li>
+                        <li>Formulação conceitual completa</li>
+                        <li>Estratégias de intervenção</li>
+                    </ul>
+                </div>
+
+                <button class="mode-btn">
+                    Começar Conceituação
+                </button>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; color: #666; font-size: 14px;">
+            <p>💡 <strong>Dica:</strong> Use Desafios para aquecimento diário (5-10min) e Conceituação para estudo profundo (sessões mais longas)</p>
+        </div>
+    </div>
+</body>
+</html>
