@@ -241,14 +241,24 @@
         }
 
         .vignette {
-            background: #f8f9fa;
-            padding: 24px;
-            border-radius: 8px;
-            border-left: 4px solid #9C27B0;
-            line-height: 1.8;
-            font-size: 15px;
+            background: #ffffff;
+            padding: 28px;
+            border-radius: 12px;
+            border-left: 5px solid #9C27B0;
+            line-height: 1.9;
+            font-size: 15.5px;
             margin: 20px 0;
             white-space: pre-wrap;
+            color: #2c3e50;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .vignette p {
+            margin-bottom: 16px;
+        }
+        
+        .vignette p:last-child {
+            margin-bottom: 0;
         }
 
         .analysis-section {
@@ -575,17 +585,6 @@
                 });
 
                 const data = await response.json();
-                console.log('📦 Caso recebido:', data.success);
-                
-                // DEBUG: Ver EXATAMENTE o que chegou
-                console.log('🔍 ESTRUTURA RECEBIDA:');
-                console.log('  - data.case existe?', !!data.case);
-                console.log('  - data.case.vignette existe?', !!data.case?.vignette);
-                console.log('  - data.case.case_content existe?', !!data.case?.case_content);
-                if (data.case?.case_content) {
-                    console.log('  - Campos em case_content:', Object.keys(data.case.case_content));
-                }
-                console.log('📋 OBJETO COMPLETO:', data.case);
 
                 if (data.success) {
                     currentCase = {
@@ -594,11 +593,22 @@
                         id: data.case_id,
                         config: config
                     };
+                    
                     caseStartTime = Date.now();
                     renderCase(currentCase);
                 } else {
+                    // Mensagem amigável quando não há casos
+                    const errorMsg = data.message || data.error || 'Erro ao gerar caso';
                     document.getElementById('caseContainer').innerHTML = 
-                        `<div class="case-card"><p style="color: #f44336;">Erro: ${data.error}</p></div>`;
+                        `<div class="case-card">
+                            <div style="padding: 20px; text-align: center;">
+                                <h3 style="color: #f57c00; margin-bottom: 16px;">⚠️ Nenhum Caso Disponível</h3>
+                                <p style="color: #666; margin-bottom: 20px;">${errorMsg}</p>
+                                <button onclick="openCustomizeModal()" style="background: #9C27B0; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                                    ⚙️ Tentar Outra Categoria
+                                </button>
+                            </div>
+                        </div>`;
                 }
             } catch (error) {
                 console.error('Erro:', error);
@@ -608,40 +618,24 @@
         }
 
         function renderCase(caseData) {
-            // MONTAR VINHETA a partir dos campos disponíveis
-            let vignette = '';
+            // Backend já envia vinheta montada
+            let vignette = caseData.vignette || 'Vinheta não disponível';
             
-            // Se case_content existe (micro-momentos), montar vinheta
-            if (caseData.case_content) {
-                const cc = caseData.case_content;
-                const ctx = cc.context || {};
-                const cm = cc.critical_moment || {};
+            // Melhorar formatação da vinheta (SEM excesso)
+            if (vignette && vignette.length > 100) {
+                // Adicionar quebra após pontos finais seguidos de maiúscula (apenas se não tiver muitas quebras)
+                const lineBreaks = (vignette.match(/\n/g) || []).length;
                 
-                vignette = `${ctx.session_number || 'Sessão'} com ${ctx.client_name || 'o cliente'}, ${ctx.client_age || '30'} anos.
-
-DIAGNÓSTICO: ${ctx.diagnosis || caseData.disorder || 'A definir'}
-
-CONTEXTO:
-${ctx.what_just_happened || 'Início da sessão.'}
-
-MOMENTO CLÍNICO:
-${cm.dialogue || 'Diálogo não disponível'}
-
-OBSERVAÇÕES NÃO-VERBAIS:
-${cm.non_verbal || 'Não registrado'}
-
-TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
-            } else {
-                // Fallback para casos antigos
-                vignette = 
-                    caseData.vignette || 
-                    caseData.clinical_content?.vignette || 
-                    'Vinheta não disponível';
+                if (lineBreaks < 2) {
+                    // Texto corrido - adicionar alguns parágrafos
+                    vignette = vignette.replace(/\. ([A-Z])/g, '.\n\n$1');
+                }
+                
+                // Limpar excesso de quebras (max 2 seguidas)
+                vignette = vignette.replace(/\n{3,}/g, '\n\n');
             }
             
             const config = caseData.config || caseConfig;
-
-            console.log('✅ Vinheta montada com sucesso');
 
             const levelLabels = {
                 'basic': 'Básico',
