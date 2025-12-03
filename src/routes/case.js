@@ -67,6 +67,10 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     const isConceptualization = category === 'clinical_moment';
 
     console.log(`\n[Case] ${isMicroMoment ? '🎬 Micro-momento' : '📋 Conceituação'}: ${moment_type || category}, level=${level}, disorder=${disorder_category || 'qualquer'}, user=${userId}`);
+    
+    if (isConceptualization) {
+      console.log('[Case] 📚 Filtrando apenas casos de conceituação completos (vinhetas 300-400 palavras)');
+    }
 
     // 1️⃣ BUSCAR MICRO-MOMENTOS QUE O USUÁRIO JÁ VIU
     const { data: interactions, error: interError } = await supabase
@@ -101,15 +105,17 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     if (isMicroMoment) {
       casesQuery = casesQuery.eq('moment_type', moment_type);
     } else if (isConceptualization) {
-      casesQuery = casesQuery.eq('category', 'clinical_moment');
+      casesQuery = casesQuery
+        .eq('category', 'clinical_moment')
+        .eq('created_by', 'diverse_population_script'); // Só casos de conceituação completos
       
       // Filtrar por categoria de transtorno se especificado
       if (disorder_category) {
         // Mapeamento de categoria para padrões de nome
         const disorderPatterns = {
           'anxiety': ['Ansiedade', 'Pânico', 'Fobia', 'TAG'],
-          'mood': ['Depressão', 'Depressivo', 'Bipolar', 'Humor'],
-          'trauma': ['Trauma', 'TEPT', 'Estresse Pós'],
+          'mood': ['Depressivo', 'Bipolar', 'Distimia', 'Ciclotímico'],  // "Depressivo" pega Depressão e Depressivo
+          'trauma': ['Estresse', 'Trauma', 'TEPT', 'Adaptação', 'Dissociativo'],  // "Estresse" pega TEPT e Agudo
           'personality': ['Personalidade', 'Borderline', 'Narcisista'],
           'psychotic': ['Psicótico', 'Esquizofrenia', 'Delirante'],
           'eating': ['Alimentar', 'Anorexia', 'Bulimia'],
@@ -184,16 +190,19 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           from_cache: true
         });
       } else {
-        // CONCEITUAÇÃO: Monta vinheta e retorna objeto completo
+        // CONCEITUAÇÃO: Usar vignette existente ou montar se necessário
         let caseToReturn = { ...selectedCase };
         
-        if (selectedCase.case_content && !selectedCase.case_content.full_vignette) {
-          const cc = selectedCase.case_content;
-          const ctx = cc.context || {};
-          const cm = cc.critical_moment || {};
-          
-          // Criar vinheta rica
-          caseToReturn.vignette = `${ctx.session_number || 'Sessão'} com ${ctx.client_name || 'o cliente'}, ${ctx.client_age || '30'} anos.
+        // Se NÃO tem vinheta completa, tentar montar de micro-momento
+        if (!selectedCase.vignette || selectedCase.vignette.length <= 100) {
+          if (selectedCase.case_content) {
+            const cc = selectedCase.case_content;
+            const ctx = cc.context || {};
+            const cm = cc.critical_moment || {};
+            
+            // Só montar se tiver dados de micro-momento
+            if (ctx.what_just_happened || cm.dialogue) {
+              caseToReturn.vignette = `${ctx.session_number || 'Sessão'} com ${ctx.client_name || 'o cliente'}, ${ctx.client_age || '30'} anos.
 
 DIAGNÓSTICO: ${ctx.diagnosis || selectedCase.disorder || 'A definir'}
 
@@ -207,8 +216,14 @@ OBSERVAÇÕES NÃO-VERBAIS:
 ${cm.non_verbal || 'Não registrado'}
 
 TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
-          
-          console.log('[Case] ✅ Vinheta completa montada pelo backend');
+              
+              console.log('[Case] ✅ Vinheta montada a partir de micro-momento');
+            } else {
+              console.log('[Case] ⚠️ Caso sem vinheta e sem dados de micro-momento');
+            }
+          }
+        } else {
+          console.log('[Case] ✅ Usando vinheta completa do banco');
         }
         
         return res.json({
@@ -220,7 +235,20 @@ TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
       }
     }
 
-    // 4️⃣ SE NÃO TEM NO CACHE: Gerar novo micro-momento
+    // 4️⃣ SE NÃO TEM NO CACHE
+    
+    // Para CONCEITUAÇÃO: Não gerar on-demand, retornar mensagem
+    if (isConceptualization) {
+      console.log('[Case] ⚠️ Nenhum caso de conceituação disponível para estes critérios');
+      return res.status(404).json({
+        success: false,
+        error: 'Nenhum caso disponível',
+        message: `Não há casos de conceituação disponíveis para "${disorder_category}" no nível "${level}". Tente selecionar outra categoria ou nível.`,
+        available_categories: ['anxiety', 'mood', 'trauma', 'personality', 'psychotic', 'eating', 'substance']
+      });
+    }
+    
+    // Para MICRO-MOMENTOS: Gerar on-demand
     console.log('[Case] ⏳ Cache vazio - Gerando novo micro-momento...');
 
     const momentInfo = MOMENTOS_CRITICOS[moment_type] || MOMENTOS_CRITICOS['resistencia_tecnica'];
