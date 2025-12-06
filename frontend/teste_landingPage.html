@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Scopsy - Treinamento com IA para Psicólogos</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
   </head>
   <body>
     <!-- Header -->
@@ -24,291 +22,71 @@
       </div>
     </header>
 
-    <!-- HERO SECTION -->
-<section class="hero">
-  <div class="container">
-    <div class="hero-text">
-      <h1 class="hero-title">
-        Sinta-se seguro no consultório <br />
-        <span class="gradient">antes de atender o primeiro paciente.</span>
-      </h1>
-      <p class="hero-subtitle">
-        Treine diagnósticos, olhar clínico e evolução de casos com IA. <br />
-        Sem riscos. Sem julgamentos. 100% baseado em evidências.
-      </p>
-      <a href="signup.html" class="btn-primary">Começar Gratuitamente</a>
-      <p class="hero-note">✓ 1.200+ psicólogos treinando ✓ 7 dias grátis</p>
-    </div>
-  </div>
-</section>
-
-<!-- HERO CSS -->
-<style>
-.hero {
-  background: #0a0a0a;
-  color: #fff;
-  padding: 120px 20px 80px;
-  text-align: center;
-  font-family: 'Inter', sans-serif;
-}
-
-.hero-title {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 20px;
-}
-
-.gradient {
-  background: linear-gradient(90deg, #8c52ff, #00c2ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.hero-subtitle {
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  color: #d1d1d1;
-  margin-bottom: 32px;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.btn-primary {
-  background: linear-gradient(90deg, #8c52ff, #00c2ff);
-  color: #fff;
-  padding: 16px 32px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 1rem;
-  text-decoration: none;
-  display: inline-block;
-  transition: transform 0.2s ease;
-}
-
-.btn-primary:hover {
-  transform: scale(1.05);
-}
-
-.hero-note {
-  margin-top: 16px;
-  font-size: 0.875rem;
-  color: #a0a0a0;
-}
-</style>
-
-<!-- THE GAP -->
-<section class="the-gap">
-  <div class="container">
-    <h2 class="gap-title">
-      “Saí da faculdade e não sei atender.”
-    </h2>
-    <p class="gap-subtitle">
-      A teoria você já tem. Mas na hora do paciente, a mente trava, o corpo tensiona e a dúvida grita dentro da sua cabeça.
-    </p>
-
-    <div class="gap-cards">
-      <div class="gap-card">
-        <span class="gap-quote">“Sei a técnica, mas na prática travo.”</span>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            Treine suas habilidades clínicas com
+            <span class="gradient-text">Inteligência Artificial</span>
+          </h1>
+          <p class="hero-subtitle">
+            3 assistentes especializados para treinar diagnóstico, olhar clínico
+            e acompanhar tratamentos. Aprenda na prática, sem riscos.
+          </p>
+          <div class="hero-buttons">
+            <a href="signup.html" class="btn-primary btn-large">
+              Começar Gratuitamente
+            </a>
+            <a href="#features" class="btn-secondary btn-large">
+              Ver Recursos
+            </a>
+          </div>
+          <p class="hero-note">✨ Teste Grátis • Sem cartão de crédito</p>
+        </div>
       </div>
-      <div class="gap-card">
-        <span class="gap-quote">“Tenho medo de prejudicar meu paciente.”</span>
-      </div>
-      <div class="gap-card">
-        <span class="gap-quote">“Supervisão é R$ 300 a hora. E uma hora não é suficiente.”</span>
-      </div>
-    </div>
+    </section>
 
-    <p class="gap-close">
-      Você não está quebrado. Só nunca teve onde <strong>praticar sem risco</strong>.
-    </p>
-  </div>
-</section>
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2 class="section-title">3 Assistentes Especializados</h2>
+        <p class="section-subtitle">
+          Cada assistente é treinado para uma função específica no seu
+          desenvolvimento clínico
+        </p>
 
-<!-- CSS -->
-<style>
+        <div class="features-grid">
+          <!-- Feature 1: Scopsy Case -->
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Treino de Olhar Clínico</h3>
+            <p>
+              Casos clínicos realistas de qualquer transtorno do DSM-5. Feedback
+              formativo em tempo real com simulação de reação do paciente.
+            </p>
+          </div>
 
-<!-- THE GAP -->
-<section class="the-gap">
-  <div class="container">
-    <h2 class="gap-title">
-      “Conheço a técnica — mas na hora H, a dúvida bate.”
-    </h2>
-    <p class="gap-subtitle">
-      Seja no primeiro ou no milésimo atendimento, a teoria não ensina o que fazer quando o paciente desvia do script.
-      E a supervisão não está disponível 24 h — mas o seu medo de errar sim.
-    </p>
+          <!-- Feature 2: Diagnostic Training -->
+          <div class="feature-card">
+            <div class="feature-icon">🎲</div>
+            <h3>Diagnostic Training</h3>
+            <p>
+              Sistema de repetição espaçada para dominar diagnósticos DSM-5.
+              Feedback imediato com justificativas técnicas.
+            </p>
+          </div>
 
-    <div class="gap-cards">
-      <div class="gap-card">
-        <span class="gap-quote">
-          “Treine em ambiente controlado, receba feedback imediato e leve segurança para o consultório real.”
-        </span>
-      </div>
-      <div class="gap-card">
-        <span class="gap-quote">
-          “Prepare-se para situações reais treinando com momentos críticos simulados.”
-        </span>
-      </div>
-      <div class="gap-card">
-        <span class="gap-quote">
-          “Ambiente seguro para elevar suas capacidades — intervenção após intervenção.”
-        </span>
-      </div>
-    </div>
-
-    <p class="gap-close">
-      Você não precisa ter as respostas hoje. Só precisa de um lugar seguro para
-      <strong>praticar até ter elas.</strong>
-    </p>
-  </div>
-</section>
-
-<!-- CSS (igual anterior) -->
-<style>
-.the-gap {
-  padding: 100px 20px;
-  background: #fff;
-  font-family: 'Inter', sans-serif;
-  text-align: center;
-}
-
-.gap-title {
-  font-size: clamp(1.8rem, 4vw, 2.25rem);
-  font-weight: 600;
-  color: #111;
-  margin-bottom: 16px;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.gap-subtitle {
-  font-size: 1.05rem;
-  color: #555;
-  margin-bottom: 48px;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.gap-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax 260px, 1fr));
-  gap: 24px;
-  max-width: 900px;
-  margin: 0 auto 48px;
-}
-
-.gap-card {
-  background: #f6f7f9;
-  border-left: 4px solid #8c52ff;
-  padding: 24px;
-  border-radius: 8px;
-  text-align: left;
-}
-
-.gap-quote {
-  font-size: 1rem;
-  line-height: 1.4;
-  color: #222;
-}
-
-.gap-close {
-  font-size: 1.05rem;
-  color: #333;
-  max-width: 600px;
-  margin: 0 auto;
-}
-</style>
-
-<!-- HOW IT WORKS -->
-<section class="how-it-works">
-  <div class="container">
-    <h2 class="section-title">Comece em 3 minutos</h2>
-    <p class="section-subtitle">Sem instalações. Sem cartão. 100% online.</p>
-
-    <div class="steps">
-      <div class="step">
-        <div class="step-icon">📋</div>
-        <h3>Crie sua conta</h3>
-        <p>Email e senha. Pronto. Já entra para o dashboard.</p>
-      </div>
-
-      <div class="step">
-        <div class="step-icon">🎯</div>
-        <h3>Escolha seu treino</h3>
-        <p>Diagnóstico, olhar clínico ou jornada completa.</p>
-      </div>
-
-      <div class="step">
-        <div class="step-icon">📈</div>
-        <h3>Pratique e evolua</h3>
-        <p>Feedback instantâneo, badges e progresso real.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CSS -->
-<style>
-.how-it-works {
-  padding: 100px 20px;
-  background: #fafafa;
-  font-family: 'Inter', sans-serif;
-  text-align: center;
-}
-
-.section-title {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: 700;
-  color: #111;
-  margin-bottom: 12px;
-}
-
-.section-subtitle {
-  font-size: 1rem;
-  color: #666;
-  margin-bottom: 60px;
-}
-
-.steps {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 40px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.step {
-  background: #fff;
-  border-radius: 12px;
-  padding: 32px 24px;
-  box-shadow: 0 4px 20px rgba(0,0,0,.05);
-  transition: transform .3s ease;
-}
-
-.step:hover {
-  transform: translateY(-6px);
-}
-
-.step-icon {
-  font-size: 40px;
-  margin-bottom: 16px;
-}
-
-.step h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #111;
-}
-
-.step p {
-  font-size: 0.95rem;
-  color: #555;
-}
-</style>
+          <!-- Feature 3: Clinical Journey -->
+          <div class="feature-card">
+            <div class="feature-icon">🗺️</div>
+            <h3>Clinical Journey</h3>
+            <p>
+              Acompanhe tratamentos completos sessão por sessão. Simule 12
+              semanas de terapia CBT, ACT ou DBT com evolução realista.
+            </p>
+          </div>
+        </div>
 
         <!-- Em Breve -->
         <div
@@ -469,19 +247,3 @@
     </footer>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
