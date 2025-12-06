@@ -68,32 +68,23 @@
                     </div>
                 </a>
 
-                <!-- 3. Clinical Journey - Tratamento Completo -->
-                <a href="chat.html?assistant=journey" class="assistant-card">
+                <!-- 3. Jornada Clínica - Tratamento Completo (ATUALIZADO) -->
+                <a href="jornada.html" class="assistant-card">
                     <div class="card-header">
-                        <div class="card-icon">🗺️</div>
+                        <div class="card-icon">🌱</div>
                         <span class="card-badge">12 Sessões</span>
                     </div>
-                    <h3>Clinical Journey</h3>
-                    <p class="card-description">Simule um tratamento completo de 12 sessões e acompanhe a evolução longitudinal do paciente</p>
+                    <h3>Jornada Clínica</h3>
+                    <p class="card-description">Acompanhe um caso completo de TCC através de 12 sessões progressivas, tomando decisões clínicas que impactam o tratamento</p>
                     <div class="card-features">
-                        <span class="feature-tag">📈 Evolução realista</span>
-                        <span class="feature-tag">🔄 CBT, ACT ou DBT</span>
-                        <span class="feature-tag">📝 Sessão por sessão</span>
+                        <span class="feature-tag">📈 Evolução longitudinal</span>
+                        <span class="feature-tag">🎯 Decisões críticas</span>
+                        <span class="feature-tag">📊 Métricas de progresso</span>
                     </div>
                     <div class="card-footer">
                         <span class="skill-level">Jornada terapêutica completa</span>
                     </div>
                 </a>
-
-                <!-- 
-                    ASSISTENTE REMOVIDO (v4.0):
-                    - Content Generator: Descontinuado (integrado no Orchestrator)
-                    
-                    ASSISTENTES FUTUROS (Fase 3):
-                    - Documents Generator (materiais terapêuticos)
-                    - Clinical Supervision (supervisão clínica)
-                -->
             </div>
         </section>
 
@@ -363,28 +354,21 @@
     
     <!-- Script adicional para garantir logout -->
     <script>
-        // Garantir que logout funciona mesmo se dashboard.js falhar
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 const logoutBtn = document.getElementById('logoutBtn');
                 
                 if (logoutBtn) {
-                    // Remover qualquer listener antigo e adicionar novo
                     logoutBtn.onclick = function() {
                         console.log('🔴 Logout clicado!');
                         
                         try {
-                            // Limpar localStorage
                             localStorage.removeItem('token');
                             localStorage.removeItem('user');
-                            
                             console.log('✅ localStorage limpo');
-                            
-                            // Redirecionar
                             window.location.href = 'index.html';
                         } catch (error) {
                             console.error('❌ Erro no logout:', error);
-                            // Tentar redirecionar mesmo assim
                             window.location.href = 'index.html';
                         }
                     };
@@ -392,10 +376,6 @@
                     console.log('✅ Event listener do logout adicionado');
                 } else {
                     console.error('❌ Botão #logoutBtn não encontrado no DOM!');
-                    console.log('Procurando botões disponíveis...');
-                    document.querySelectorAll('button').forEach(btn => {
-                        console.log('  -', btn.id || btn.className, ':', btn.textContent);
-                    });
                 }
             } catch (error) {
                 console.error('❌ Erro ao configurar logout:', error);

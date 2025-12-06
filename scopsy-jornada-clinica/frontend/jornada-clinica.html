@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scopsy - Jornada Clínica</title>
+  
+  <!-- 
+  ============================================================================
+  SCOPSY - INTERFACE DA JORNADA CLÍNICA
+  ============================================================================
+  
+  Esta página permite que o terapeuta em treinamento converse com um
+  paciente virtual (IA). O paciente reage às intervenções do terapeuta.
+  
+  COMO FUNCIONA:
+  1. Página carrega com parâmetro ?caso=renata (ou outro)
+  2. Usuário clica em "Iniciar Sessão"
+  3. Chat é habilitado
+  4. Terapeuta envia mensagens, paciente responde
+  5. Sistema detecta e mostra momentos de verdade
+  6. Ao final, terapeuta clica em "Encerrar Sessão"
+  
+  PERSONALIZAÇÃO:
+  - Cores: Altere as variáveis CSS no :root
+  - API URL: Altere API_BASE_URL no JavaScript
+  - Textos: Altere os textos diretamente no HTML
+  
+  ============================================================================
+  -->
+  
+  <style>
+    /* =======================================================================
+       VARIÁVEIS E RESET
+       ======================================================================= */
+    
+    :root {
+      /* Cores principais - Gradiente roxo (identidade Scopsy) */
+      --cor-primaria: #6366f1;
+      --cor-primaria-escura: #4f46e5;
+      --cor-primaria-clara: #818cf8;
+      
+      /* Cores de estado */
+      --cor-sucesso: #10b981;
+      --cor-aviso: #f59e0b;
+      --cor-erro: #ef4444;
+      --cor-info: #3b82f6;
+      
+      /* Cores neutras */
+      --cor-fundo: #0f0f1a;
+      --cor-fundo-card: #1a1a2e;
+      --cor-fundo-input: #252540;
+      --cor-texto: #e2e8f0;
+      --cor-texto-secundario: #94a3b8;
+      --cor-borda: #3f3f5a;
+      
+      /* Cores do chat */
+      --cor-msg-terapeuta: #4f46e5;
+      --cor-msg-paciente: #2d2d44;
+      
+      /* Espaçamentos */
+      --espacamento-xs: 0.25rem;
+      --espacamento-sm: 0.5rem;
+      --espacamento-md: 1rem;
+      --espacamento-lg: 1.5rem;
+      --espacamento-xl: 2rem;
+      
+      /* Bordas */
+      --borda-raio: 12px;
+      --borda-raio-sm: 8px;
+      
+      /* Transições */
+      --transicao: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--cor-fundo);
+      color: var(--cor-texto);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    /* =======================================================================
+       LAYOUT PRINCIPAL
+       ======================================================================= */
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--espacamento-md);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--espacamento-md) 0;
+      border-bottom: 1px solid var(--cor-borda);
+      margin-bottom: var(--espacamento-lg);
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--cor-primaria), var(--cor-primaria-clara));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .sessao-info {
+      display: flex;
+      align-items: center;
+      gap: var(--espacamento-md);
+    }
+    
+    .sessao-badge {
+      background: var(--cor-fundo-card);
+      padding: var(--espacamento-xs) var(--espacamento-md);
+      border-radius: var(--borda-raio-sm);
+      font-size: 0.875rem;
+      color: var(--cor-texto-secundario);
+    }
+    
+    /* Layout principal - Grid */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: var(--espacamento-lg);
+      flex: 1;
+    }
+    
+    @media (max-width: 900px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        order: -1;
+      }
+    }
+    
+    /* =======================================================================
+       ÁREA DO CHAT
+       ======================================================================= */
+    
+    .chat-area {
+      display: flex;
+      flex-direction: column;
+      background: var(--cor-fundo-card);
+      border-radius: var(--borda-raio);
+      overflow: hidden;
+      border: 1px solid var(--cor-borda);
+    }
+    
+    /* Cabeçalho do chat */
+    .chat-header {
+      padding: var(--espacamento-md);
+      background: linear-gradient(135deg, var(--cor-primaria-escura), var(--cor-primaria));
+      display: flex;
+      align-items: center;
+      gap: var(--espacamento-md);
+    }
+    
+    .paciente-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    
+    .paciente-info h2 {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+    
+    .paciente-info p {
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+    
+    /* Área de mensagens */
+    .chat-messages {
+      flex: 1;
+      padding: var(--espacamento-md);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--espacamento-md);
+      min-height: 400px;
+      max-height: 60vh;
+    }
+    
+    /* Mensagem individual */
+    .mensagem {
+      max-width: 80%;
+      padding: var(--espacamento-md);
+      border-radius: var(--borda-raio);
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .mensagem.terapeuta {
+      background: var(--cor-msg-terapeuta);
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+    }
+    
+    .mensagem.paciente {
+      background: var(--cor-msg-paciente);
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+    }
+    
+    .mensagem .remetente {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      margin-bottom: var(--espacamento-xs);
+    }
+    
+    .mensagem .texto {
+      white-space: pre-wrap;
+    }
+    
+    /* Indicador de digitação */
+    .typing-indicator {
+      display: none;
+      align-items: center;
+      gap: var(--espacamento-sm);
+      padding: var(--espacamento-md);
+      background: var(--cor-msg-paciente);
+      border-radius: var(--borda-raio);
+      max-width: 80%;
+    }
+    
+    .typing-indicator.visible {
+      display: flex;
+    }
+    
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+    }
+    
+    .typing-dots span {
+      width: 8px;
+      height: 8px;
+      background: var(--cor-texto-secundario);
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+    
+    .typing-dots span:nth-child(1) { animation-delay: 0s; }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-8px); }
+    }
+    
+    .typing-text {
+      font-size: 0.875rem;
+      color: var(--cor-texto-secundario);
+      font-style: italic;
+    }
+    
+    /* Área de input */
+    .chat-input-area {
+      padding: var(--espacamento-md);
+      border-top: 1px solid var(--cor-borda);
+      display: flex;
+      gap: var(--espacamento-sm);
+    }
+    
+    .chat-input {
+      flex: 1;
+      background: var(--cor-fundo-input);
+      border: 1px solid var(--cor-borda);
+      border-radius: var(--borda-raio-sm);
+      padding: var(--espacamento-md);
+      color: var(--cor-texto);
+      font-size: 1rem;
+      resize: none;
+      min-height: 50px;
+      max-height: 150px;
+    }
+    
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--cor-primaria);
+    }
+    
+    .chat-input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-enviar {
+      background: var(--cor-primaria);
+      color: white;
+      border: none;
+      border-radius: var(--borda-raio-sm);
+      padding: var(--espacamento-md) var(--espacamento-lg);
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transicao);
+    }
+    
+    .btn-enviar:hover {
+      background: var(--cor-primaria-escura);
+    }
+    
+    .btn-enviar:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* =======================================================================
+       SIDEBAR
+       ======================================================================= */
+    
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: var(--espacamento-lg);
+    }
+    
+    .card {
+      background: var(--cor-fundo-card);
+      border-radius: var(--borda-raio);
+      padding: var(--espacamento-lg);
+      border: 1px solid var(--cor-borda);
+    }
+    
+    .card-titulo {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: var(--espacamento-md);
+      color: var(--cor-texto);
+    }
+    
+    /* Medidores */
+    .medidores {
+      display: flex;
+      flex-direction: column;
+      gap: var(--espacamento-md);
+    }
+    
+    .medidor {
+      display: flex;
+      flex-direction: column;
+      gap: var(--espacamento-xs);
+    }
+    
+    .medidor-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+    }
+    
+    .medidor-label span:last-child {
+      color: var(--cor-texto-secundario);
+    }
+    
+    .medidor-barra {
+      height: 8px;
+      background: var(--cor-fundo-input);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .medidor-progresso {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    
+    .medidor-progresso.alianca {
+      background: linear-gradient(90deg, #10b981, #34d399);
+    }
+    
+    .medidor-progresso.profundidade {
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    }
+    
+    .medidor-progresso.defesas {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    }
+    
+    /* Momentos de verdade */
+    .momento-card {
+      background: var(--cor-fundo-input);
+      border-radius: var(--borda-raio-sm);
+      padding: var(--espacamento-md);
+      margin-top: var(--espacamento-sm);
+      border-left: 4px solid var(--cor-primaria);
+    }
+    
+    .momento-titulo {
+      font-weight: 600;
+      margin-bottom: var(--espacamento-xs);
+    }
+    
+    .momento-desc {
+      font-size: 0.875rem;
+      color: var(--cor-texto-secundario);
+    }
+    
+    /* Botões de ação */
+    .acoes {
+      display: flex;
+      flex-direction: column;
+      gap: var(--espacamento-sm);
+    }
+    
+    .btn {
+      padding: var(--espacamento-md);
+      border-radius: var(--borda-raio-sm);
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transicao);
+      text-align: center;
+    }
+    
+    .btn-primario {
+      background: var(--cor-primaria);
+      color: white;
+    }
+    
+    .btn-primario:hover {
+      background: var(--cor-primaria-escura);
+    }
+    
+    .btn-secundario {
+      background: transparent;
+      color: var(--cor-texto);
+      border: 1px solid var(--cor-borda);
+    }
+    
+    .btn-secundario:hover {
+      background: var(--cor-fundo-input);
+    }
+    
+    .btn-perigo {
+      background: var(--cor-erro);
+      color: white;
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* =======================================================================
+       TELA INICIAL (antes de iniciar sessão)
+       ======================================================================= */
+    
+    .tela-inicial {
+      text-align: center;
+      padding: var(--espacamento-xl);
+    }
+    
+    .tela-inicial h2 {
+      font-size: 1.5rem;
+      margin-bottom: var(--espacamento-md);
+    }
+    
+    .tela-inicial p {
+      color: var(--cor-texto-secundario);
+      margin-bottom: var(--espacamento-lg);
+    }
+    
+    .caso-briefing {
+      background: var(--cor-fundo-input);
+      border-radius: var(--borda-raio);
+      padding: var(--espacamento-lg);
+      text-align: left;
+      margin-bottom: var(--espacamento-lg);
+    }
+    
+    .caso-briefing h3 {
+      margin-bottom: var(--espacamento-sm);
+    }
+    
+    .caso-briefing .queixa {
+      font-style: italic;
+      color: var(--cor-texto-secundario);
+      border-left: 3px solid var(--cor-primaria);
+      padding-left: var(--espacamento-md);
+      margin-top: var(--espacamento-md);
+    }
+    
+    /* =======================================================================
+       MODAL DE FEEDBACK
+       ======================================================================= */
+    
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: var(--espacamento-md);
+    }
+    
+    .modal-overlay.visible {
+      display: flex;
+    }
+    
+    .modal {
+      background: var(--cor-fundo-card);
+      border-radius: var(--borda-raio);
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid var(--cor-borda);
+    }
+    
+    .modal-header {
+      padding: var(--espacamento-lg);
+      border-bottom: 1px solid var(--cor-borda);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-header h2 {
+      font-size: 1.25rem;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--cor-texto);
+      font-size: 1.5rem;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+    
+    .modal-close:hover {
+      opacity: 1;
+    }
+    
+    .modal-body {
+      padding: var(--espacamento-lg);
+    }
+    
+    .feedback-secao {
+      margin-bottom: var(--espacamento-lg);
+    }
+    
+    .feedback-secao h3 {
+      font-size: 1rem;
+      margin-bottom: var(--espacamento-sm);
+      color: var(--cor-primaria-clara);
+    }
+    
+    .feedback-secao p {
+      color: var(--cor-texto-secundario);
+      line-height: 1.7;
+    }
+    
+    .feedback-alternativa {
+      background: var(--cor-fundo-input);
+      padding: var(--espacamento-md);
+      border-radius: var(--borda-raio-sm);
+      margin-top: var(--espacamento-sm);
+      border-left: 3px solid var(--cor-sucesso);
+    }
+    
+    .modal-footer {
+      padding: var(--espacamento-lg);
+      border-top: 1px solid var(--cor-borda);
+      text-align: right;
+    }
+    
+    /* =======================================================================
+       RESPONSIVIDADE
+       ======================================================================= */
+    
+    @media (max-width: 600px) {
+      .header {
+        flex-direction: column;
+        gap: var(--espacamento-md);
+        text-align: center;
+      }
+      
+      .mensagem {
+        max-width: 90%;
+      }
+      
+      .chat-input-area {
+        flex-direction: column;
+      }
+      
+      .btn-enviar {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">Scopsy</div>
+      <div class="sessao-info">
+        <span class="sessao-badge" id="sessao-badge">Sessão 1 de 18</span>
+      </div>
+    </header>
+    
+    <!-- Layout Principal -->
+    <main class="main-layout">
+      <!-- Área do Chat -->
+      <section class="chat-area">
+        <!-- Cabeçalho do chat -->
+        <div class="chat-header">
+          <div class="paciente-avatar" id="paciente-avatar">👩</div>
+          <div class="paciente-info">
+            <h2 id="paciente-nome">Carregando...</h2>
+            <p id="paciente-resumo">Aguarde...</p>
+          </div>
+        </div>
+        
+        <!-- Área de mensagens -->
+        <div class="chat-messages" id="chat-messages">
+          <!-- Tela inicial -->
+          <div class="tela-inicial" id="tela-inicial">
+            <h2>Bem-vindo à Jornada Clínica</h2>
+            <p>Você irá conduzir sessões de terapia com um paciente virtual.</p>
+            
+            <div class="caso-briefing" id="caso-briefing">
+              <h3 id="briefing-nome">Carregando caso...</h3>
+              <p id="briefing-descricao"></p>
+              <div class="queixa" id="briefing-queixa"></div>
+            </div>
+            
+            <button class="btn btn-primario" id="btn-iniciar" disabled>
+              Iniciar Sessão
+            </button>
+          </div>
+          
+          <!-- Indicador de digitação -->
+          <div class="typing-indicator" id="typing-indicator">
+            <div class="typing-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <span class="typing-text" id="typing-text">Renata está refletindo...</span>
+          </div>
+        </div>
+        
+        <!-- Área de input -->
+        <div class="chat-input-area">
+          <textarea 
+            class="chat-input" 
+            id="chat-input" 
+            placeholder="Digite sua intervenção como terapeuta..."
+            disabled
+            rows="2"
+          ></textarea>
+          <button class="btn-enviar" id="btn-enviar" disabled>
+            Enviar
+          </button>
+        </div>
+      </section>
+      
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <!-- Medidores -->
+        <div class="card">
+          <h3 class="card-titulo">Estado da Paciente</h3>
+          <div class="medidores">
+            <div class="medidor">
+              <div class="medidor-label">
+                <span>Aliança Terapêutica</span>
+                <span id="valor-alianca">4.0</span>
+              </div>
+              <div class="medidor-barra">
+                <div class="medidor-progresso alianca" id="barra-alianca" style="width: 40%"></div>
+              </div>
+            </div>
+            
+            <div class="medidor">
+              <div class="medidor-label">
+                <span>Profundidade Permitida</span>
+                <span id="valor-profundidade">3.0</span>
+              </div>
+              <div class="medidor-barra">
+                <div class="medidor-progresso profundidade" id="barra-profundidade" style="width: 30%"></div>
+              </div>
+            </div>
+            
+            <div class="medidor">
+              <div class="medidor-label">
+                <span>Defesas Ativas</span>
+                <span id="valor-defesas">7.0</span>
+              </div>
+              <div class="medidor-barra">
+                <div class="medidor-progresso defesas" id="barra-defesas" style="width: 70%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Momentos de Verdade -->
+        <div class="card">
+          <h3 class="card-titulo">Momentos de Verdade</h3>
+          <p style="font-size: 0.875rem; color: var(--cor-texto-secundario);" id="momentos-info">
+            Momentos críticos aparecerão aqui durante a sessão.
+          </p>
+          <div id="momentos-lista"></div>
+        </div>
+        
+        <!-- Ações -->
+        <div class="card">
+          <h3 class="card-titulo">Ações</h3>
+          <div class="acoes">
+            <button class="btn btn-secundario" id="btn-dica" disabled>
+              💡 Ver Dica
+            </button>
+            <button class="btn btn-perigo" id="btn-encerrar" disabled>
+              Encerrar Sessão
+            </button>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+  
+  <!-- Modal de Feedback -->
+  <div class="modal-overlay" id="modal-feedback">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-titulo">Momento de Verdade</h2>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- Conteúdo do feedback será inserido aqui -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primario" id="modal-ok">Continuar</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    /**
+     * ========================================================================
+     * SCOPSY - JORNADA CLÍNICA - JAVASCRIPT
+     * ========================================================================
+     * 
+     * Este script gerencia toda a interação da página de jornada clínica.
+     * 
+     * ESTRUTURA:
+     * 1. Configuração
+     * 2. Estado da aplicação
+     * 3. Elementos do DOM
+     * 4. Funções de API
+     * 5. Funções de UI
+     * 6. Event Listeners
+     * 7. Inicialização
+     * 
+     * ========================================================================
+     */
+    
+    // ========================================================================
+    // 1. CONFIGURAÇÃO
+    // ========================================================================
+    
+    /**
+     * URL base da API.
+     * ALTERE ISSO para apontar para seu servidor.
+     */
+    const API_BASE_URL = '/api/paciente';
+    
+    /**
+     * Pega o ID do caso da URL (?caso=renata).
+     * Default: 'renata' se não especificado.
+     */
+    const urlParams = new URLSearchParams(window.location.search);
+    const CASO_ID = urlParams.get('caso') || 'renata';
+    
+    /**
+     * ID do terapeuta (usuário logado).
+     * TODO: Integrar com sistema de autenticação.
+     */
+    const TERAPEUTA_ID = localStorage.getItem('terapeutaId') || 'terapeuta-' + Date.now();
+    localStorage.setItem('terapeutaId', TERAPEUTA_ID);
+    
+    // ========================================================================
+    // 2. ESTADO DA APLICAÇÃO
+    // ========================================================================
+    
+    /**
+     * Estado atual da aplicação.
+     * Centraliza todos os dados que podem mudar durante a sessão.
+     */
+    const estado = {
+      sessaoIniciada: false,
+      enviandoMensagem: false,
+      caso: null,
+      sessaoAtual: 1,
+      totalSessoes: 18,
+      medidores: {
+        alianca: 4.0,
+        profundidade: 3.0,
+        defesas: 7.0
+      },
+      momentosDetectados: [],
+      frasesLoading: [
+        "Refletindo sobre sua pergunta...",
+        "Pensando na resposta...",
+        "Processando...",
+        "Considerando o que foi dito..."
+      ],
+      fraseLoadingAtual: 0
+    };
+    
+    // ========================================================================
+    // 3. ELEMENTOS DO DOM
+    // ========================================================================
+    
+    /**
+     * Referências aos elementos HTML.
+     * Centralizadas para facilitar manutenção.
+     */
+    const elementos = {
+      // Header
+      sessaoBadge: document.getElementById('sessao-badge'),
+      
+      // Chat
+      pacienteNome: document.getElementById('paciente-nome'),
+      pacienteResumo: document.getElementById('paciente-resumo'),
+      chatMessages: document.getElementById('chat-messages'),
+      chatInput: document.getElementById('chat-input'),
+      btnEnviar: document.getElementById('btn-enviar'),
+      typingIndicator: document.getElementById('typing-indicator'),
+      typingText: document.getElementById('typing-text'),
+      
+      // Tela inicial
+      telaInicial: document.getElementById('tela-inicial'),
+      btnIniciar: document.getElementById('btn-iniciar'),
+      briefingNome: document.getElementById('briefing-nome'),
+      briefingDescricao: document.getElementById('briefing-descricao'),
+      briefingQueixa: document.getElementById('briefing-queixa'),
+      
+      // Sidebar - Medidores
+      valorAlianca: document.getElementById('valor-alianca'),
+      valorProfundidade: document.getElementById('valor-profundidade'),
+      valorDefesas: document.getElementById('valor-defesas'),
+      barraAlianca: document.getElementById('barra-alianca'),
+      barraProfundidade: document.getElementById('barra-profundidade'),
+      barraDefesas: document.getElementById('barra-defesas'),
+      
+      // Sidebar - Momentos
+      momentosInfo: document.getElementById('momentos-info'),
+      momentosLista: document.getElementById('momentos-lista'),
+      
+      // Sidebar - Ações
+      btnDica: document.getElementById('btn-dica'),
+      btnEncerrar: document.getElementById('btn-encerrar'),
+      
+      // Modal
+      modalFeedback: document.getElementById('modal-feedback'),
+      modalTitulo: document.getElementById('modal-titulo'),
+      modalBody: document.getElementById('modal-body'),
+      modalClose: document.getElementById('modal-close'),
+      modalOk: document.getElementById('modal-ok')
+    };
+    
+    // ========================================================================
+    // 4. FUNÇÕES DE API
+    // ========================================================================
+    
+    /**
+     * Faz requisição à API.
+     * Centraliza tratamento de erros e headers.
+     */
+    async function apiRequest(endpoint, options = {}) {
+      try {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            ...options.headers
+          },
+          ...options
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.erro || 'Erro na requisição');
+        }
+        
+        return data;
+        
+      } catch (error) {
+        console.error('[API]', error);
+        throw error;
+      }
+    }
+    
+    /**
+     * Carrega dados do caso.
+     */
+    async function carregarCaso() {
+      const data = await apiRequest(`/casos/${CASO_ID}`);
+      return data.caso;
+    }
+    
+    /**
+     * Inicia o treinamento.
+     */
+    async function iniciarTreinamento() {
+      const data = await apiRequest('/iniciar', {
+        method: 'POST',
+        body: JSON.stringify({
+          terapeutaId: TERAPEUTA_ID,
+          casoId: CASO_ID
+        })
+      });
+      return data;
+    }
+    
+    /**
+     * Envia mensagem para o paciente.
+     */
+    async function enviarMensagemAPI(mensagem) {
+      const data = await apiRequest('/mensagem', {
+        method: 'POST',
+        body: JSON.stringify({
+          terapeutaId: TERAPEUTA_ID,
+          casoId: CASO_ID,
+          mensagem
+        })
+      });
+      return data;
+    }
+    
+    /**
+     * Finaliza a sessão atual.
+     */
+    async function finalizarSessaoAPI(resumo = null) {
+      const data = await apiRequest('/finalizar-sessao', {
+        method: 'POST',
+        body: JSON.stringify({
+          terapeutaId: TERAPEUTA_ID,
+          casoId: CASO_ID,
+          resumo
+        })
+      });
+      return data;
+    }
+    
+    // ========================================================================
+    // 5. FUNÇÕES DE UI
+    // ========================================================================
+    
+    /**
+     * Atualiza o briefing do caso na tela inicial.
+     */
+    function atualizarBriefing(caso) {
+      elementos.pacienteNome.textContent = caso.identificacao.nome;
+      elementos.pacienteResumo.textContent = `${caso.identificacao.idade} anos • ${caso.identificacao.profissao}`;
+      elementos.briefingNome.textContent = caso.identificacao.nome;
+      elementos.briefingDescricao.textContent = caso.identificacao.descricaoCompleta;
+      elementos.briefingQueixa.textContent = caso.identificacao.queixaInicial;
+      elementos.btnIniciar.disabled = false;
+    }
+    
+    /**
+     * Atualiza os medidores na sidebar.
+     */
+    function atualizarMedidores(medidores) {
+      if (!medidores) return;
+      
+      estado.medidores = { ...estado.medidores, ...medidores };
+      
+      const { alianca, profundidade, defesas } = estado.medidores;
+      
+      elementos.valorAlianca.textContent = alianca.toFixed(1);
+      elementos.valorProfundidade.textContent = profundidade.toFixed(1);
+      elementos.valorDefesas.textContent = defesas.toFixed(1);
+      
+      elementos.barraAlianca.style.width = `${alianca * 10}%`;
+      elementos.barraProfundidade.style.width = `${profundidade * 10}%`;
+      elementos.barraDefesas.style.width = `${defesas * 10}%`;
+    }
+    
+    /**
+     * Adiciona mensagem ao chat.
+     */
+    function adicionarMensagem(texto, remetente) {
+      const div = document.createElement('div');
+      div.className = `mensagem ${remetente}`;
+      
+      const labelRemetente = remetente === 'terapeuta' ? 'Você' : estado.caso?.identificacao?.nome || 'Paciente';
+      
+      div.innerHTML = `
+        <div class="remetente">${labelRemetente}</div>
+        <div class="texto">${texto}</div>
+      `;
+      
+      // Remove tela inicial se ainda estiver visível
+      if (elementos.telaInicial.parentNode === elementos.chatMessages) {
+        elementos.telaInicial.style.display = 'none';
+      }
+      
+      // Insere antes do typing indicator
+      elementos.chatMessages.insertBefore(div, elementos.typingIndicator);
+      
+      // Scroll para o final
+      elementos.chatMessages.scrollTop = elementos.chatMessages.scrollHeight;
+    }
+    
+    /**
+     * Mostra/esconde indicador de digitação.
+     */
+    function mostrarTyping(mostrar = true, texto = null) {
+      if (mostrar) {
+        elementos.typingIndicator.classList.add('visible');
+        if (texto) {
+          elementos.typingText.textContent = texto;
+        }
+      } else {
+        elementos.typingIndicator.classList.remove('visible');
+      }
+    }
+    
+    /**
+     * Atualiza frase de loading periodicamente.
+     */
+    function iniciarRotacaoFrases() {
+      return setInterval(() => {
+        estado.fraseLoadingAtual = (estado.fraseLoadingAtual + 1) % estado.frasesLoading.length;
+        elementos.typingText.textContent = estado.frasesLoading[estado.fraseLoadingAtual];
+      }, 3000);
+    }
+    
+    /**
+     * Adiciona momento de verdade à lista.
+     */
+    function adicionarMomento(momento) {
+      // Evita duplicatas
+      if (estado.momentosDetectados.find(m => m.id === momento.id)) {
+        return;
+      }
+      
+      estado.momentosDetectados.push(momento);
+      
+      // Atualiza info
+      elementos.momentosInfo.style.display = 'none';
+      
+      // Cria card do momento
+      const div = document.createElement('div');
+      div.className = 'momento-card';
+      div.innerHTML = `
+        <div class="momento-titulo">${momento.nome}</div>
+        <div class="momento-desc">${momento.descricao?.substring(0, 100)}...</div>
+      `;
+      
+      elementos.momentosLista.appendChild(div);
+    }
+    
+    /**
+     * Mostra modal de feedback.
+     */
+    function mostrarFeedback(feedback) {
+      elementos.modalTitulo.textContent = feedback.titulo || 'Feedback';
+      
+      let html = '';
+      
+      if (feedback.corpo) {
+        html += `
+          <div class="feedback-secao">
+            <h3>Análise</h3>
+            <p>${feedback.corpo.replace(/\n/g, '<br>')}</p>
+          </div>
+        `;
+      }
+      
+      if (feedback.alternativa) {
+        html += `
+          <div class="feedback-secao">
+            <h3>💡 Alternativa</h3>
+            <div class="feedback-alternativa">
+              ${feedback.alternativa}
+            </div>
+          </div>
+        `;
+      }
+      
+      if (feedback.reflexao) {
+        html += `
+          <div class="feedback-secao">
+            <h3>🤔 Reflexão</h3>
+            <p><em>${feedback.reflexao}</em></p>
+          </div>
+        `;
+      }
+      
+      elementos.modalBody.innerHTML = html;
+      elementos.modalFeedback.classList.add('visible');
+    }
+    
+    /**
+     * Fecha modal.
+     */
+    function fecharModal() {
+      elementos.modalFeedback.classList.remove('visible');
+    }
+    
+    /**
+     * Habilita/desabilita controles de chat.
+     */
+    function setControlesChat(habilitado) {
+      elementos.chatInput.disabled = !habilitado;
+      elementos.btnEnviar.disabled = !habilitado;
+      elementos.btnDica.disabled = !habilitado;
+      elementos.btnEncerrar.disabled = !habilitado;
+    }
+    
+    /**
+     * Atualiza badge da sessão.
+     */
+    function atualizarSessaoBadge() {
+      elementos.sessaoBadge.textContent = `Sessão ${estado.sessaoAtual} de ${estado.totalSessoes}`;
+    }
+    
+    // ========================================================================
+    // 6. HANDLERS DE EVENTOS
+    // ========================================================================
+    
+    /**
+     * Handler: Iniciar sessão.
+     */
+    async function handleIniciarSessao() {
+      try {
+        elementos.btnIniciar.disabled = true;
+        elementos.btnIniciar.textContent = 'Iniciando...';
+        
+        const resultado = await iniciarTreinamento();
+        
+        estado.sessaoIniciada = true;
+        estado.sessaoAtual = resultado.estado.sessaoAtual;
+        
+        // Esconde tela inicial
+        elementos.telaInicial.style.display = 'none';
+        
+        // Atualiza UI
+        atualizarMedidores(resultado.estado);
+        atualizarSessaoBadge();
+        setControlesChat(true);
+        
+        // Mostra mensagem inicial do sistema
+        if (resultado.mensagemInicial) {
+          adicionarMensagem(resultado.mensagemInicial, 'paciente');
+        }
+        
+        // Foca no input
+        elementos.chatInput.focus();
+        
+      } catch (error) {
+        alert('Erro ao iniciar sessão: ' + error.message);
+        elementos.btnIniciar.disabled = false;
+        elementos.btnIniciar.textContent = 'Iniciar Sessão';
+      }
+    }
+    
+    /**
+     * Handler: Enviar mensagem.
+     */
+    async function handleEnviarMensagem() {
+      const mensagem = elementos.chatInput.value.trim();
+      
+      if (!mensagem || estado.enviandoMensagem) return;
+      
+      try {
+        estado.enviandoMensagem = true;
+        setControlesChat(false);
+        
+        // Mostra mensagem do terapeuta
+        adicionarMensagem(mensagem, 'terapeuta');
+        elementos.chatInput.value = '';
+        
+        // Mostra typing
+        mostrarTyping(true);
+        const intervaloFrases = iniciarRotacaoFrases();
+        
+        // Envia para API
+        const resultado = await enviarMensagemAPI(mensagem);
+        
+        // Para typing
+        clearInterval(intervaloFrases);
+        mostrarTyping(false);
+        
+        // Mostra resposta do paciente
+        adicionarMensagem(resultado.resposta, 'paciente');
+        
+        // Atualiza medidores
+        atualizarMedidores(resultado.estado);
+        
+        // Processa momentos de verdade
+        if (resultado.momentosDetectados?.length > 0) {
+          resultado.momentosDetectados.forEach(momento => {
+            adicionarMomento(momento);
+          });
+        }
+        
+      } catch (error) {
+        mostrarTyping(false);
+        adicionarMensagem(`[Erro: ${error.message}. Tente novamente.]`, 'paciente');
+        
+      } finally {
+        estado.enviandoMensagem = false;
+        setControlesChat(true);
+        elementos.chatInput.focus();
+      }
+    }
+    
+    /**
+     * Handler: Encerrar sessão.
+     */
+    async function handleEncerrarSessao() {
+      if (!confirm('Deseja encerrar a sessão atual?')) return;
+      
+      try {
+        elementos.btnEncerrar.disabled = true;
+        elementos.btnEncerrar.textContent = 'Encerrando...';
+        
+        const resultado = await finalizarSessaoAPI();
+        
+        // Mostra estatísticas
+        alert(`Sessão ${resultado.sessaoFinalizada} encerrada!\n\n` +
+          `Taxa de acerto: ${resultado.estatisticas.taxaAcerto}\n` +
+          `Momentos enfrentados: ${resultado.estatisticas.momentosEnfrentados}`);
+        
+        // Atualiza estado
+        estado.sessaoAtual = resultado.proximaSessao;
+        atualizarSessaoBadge();
+        
+        if (resultado.casoConcluido) {
+          alert('Parabéns! Você concluiu todas as sessões deste caso!');
+          window.location.href = '/dashboard.html';
+        } else {
+          // Reinicia para próxima sessão
+          window.location.reload();
+        }
+        
+      } catch (error) {
+        alert('Erro ao encerrar sessão: ' + error.message);
+        elementos.btnEncerrar.disabled = false;
+        elementos.btnEncerrar.textContent = 'Encerrar Sessão';
+      }
+    }
+    
+    // ========================================================================
+    // 7. EVENT LISTENERS
+    // ========================================================================
+    
+    // Iniciar sessão
+    elementos.btnIniciar.addEventListener('click', handleIniciarSessao);
+    
+    // Enviar mensagem - botão
+    elementos.btnEnviar.addEventListener('click', handleEnviarMensagem);
+    
+    // Enviar mensagem - Enter (Shift+Enter para nova linha)
+    elementos.chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleEnviarMensagem();
+      }
+    });
+    
+    // Encerrar sessão
+    elementos.btnEncerrar.addEventListener('click', handleEncerrarSessao);
+    
+    // Fechar modal
+    elementos.modalClose.addEventListener('click', fecharModal);
+    elementos.modalOk.addEventListener('click', fecharModal);
+    elementos.modalFeedback.addEventListener('click', (e) => {
+      if (e.target === elementos.modalFeedback) {
+        fecharModal();
+      }
+    });
+    
+    // ========================================================================
+    // 8. INICIALIZAÇÃO
+    // ========================================================================
+    
+    /**
+     * Inicializa a página.
+     */
+    async function init() {
+      console.log('[Scopsy] Inicializando...');
+      console.log('[Scopsy] Caso:', CASO_ID);
+      console.log('[Scopsy] Terapeuta:', TERAPEUTA_ID);
+      
+      try {
+        // Carrega dados do caso
+        estado.caso = await carregarCaso();
+        
+        // Atualiza UI
+        atualizarBriefing(estado.caso);
+        estado.totalSessoes = estado.caso.identificacao.totalSessoes || 18;
+        
+        // Atualiza frases de loading se disponíveis
+        if (estado.caso.frasesLoading) {
+          estado.frasesLoading = estado.caso.frasesLoading.map(f => f.texto || f);
+        }
+        
+        console.log('[Scopsy] Caso carregado:', estado.caso.identificacao.nome);
+        
+      } catch (error) {
+        console.error('[Scopsy] Erro ao carregar caso:', error);
+        elementos.briefingNome.textContent = 'Erro ao carregar caso';
+        elementos.briefingDescricao.textContent = error.message;
+      }
+    }
+    
+    // Inicia quando DOM estiver pronto
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
