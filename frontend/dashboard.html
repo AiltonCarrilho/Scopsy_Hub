@@ -3,15 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Scopsy</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Dashboard - Scopsy Lab</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #fafafa; color: #333; line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        /* Header */
+        .header {
+            background: #0a0a0a;
+            color: #fff;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,.15);
+        }
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo h1 { font-size: 28px; font-weight: 800; color: #fff; }
+        .registered { font-size: .6em; vertical-align: super; }
+        .nav { display: flex; align-items: center; gap: 20px; }
+        .user-name { font-weight: 600; color: #ddd; }
+        .btn-logout {
+            background: linear-gradient(90deg, #8c52ff, #00c2ff);
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform .2s;
+        }
+        .btn-logout:hover { transform: scale(1.05); }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+        }
+        .hero h1 {
+            font-size: 42px;
+            color: #111;
+            margin-bottom: 15px;
+        }
+        .hero-subtitle {
+            font-size: 18px;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Módulos */
+        .assistants-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #111;
+        }
+        .assistants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 32px;
+        }
+        .assistant-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+            border: 2px solid transparent;
+            transition: all .3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .assistant-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(140,82,255,.2);
+            border-color: #8c52ff;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .card-icon {
+            width: 68px;
+            height: 68px;
+        }
+        .card-badge {
+            background: linear-gradient(90deg, #8c52ff, #00c2ff);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .assistant-card h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #111;
+        }
+        .card-description {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        .card-features {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .feature-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(140,82,255,.1);
+            color: #8c52ff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .card-footer {
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Progresso */
+        .progress-section {
+            margin-top: 80px;
+        }
+        .progress-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #111;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #8c52ff, #00c2ff);
+            color: #fff;
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(140,82,255,.3);
+        }
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 12px 0;
+        }
+        .stat-label { font-size: 15px; opacity: .9; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .assistants-grid, .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
+
     <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="logo">
-                <h1>Scopsy<span class="registered">®</span></h1>
+                <h1>Scopsy Lab<span class="registered">®</span></h1>
             </div>
             <nav class="nav">
                 <span class="user-name" id="userName">Carregando...</span>
@@ -21,70 +208,126 @@
     </header>
 
     <div class="container">
-        <!-- Hero Section -->
+
+        <!-- Hero -->
         <section class="hero">
-            <h1>Bem-vindo ao Scopsy<span class="registered">®</span></h1>
-            <p class="hero-subtitle">Escolha uma modalidade de treino e comece a evoluir suas habilidades clínicas</p>
+            <h1>Bem-vindo ao Scopsy Lab<span class="registered">®</span></h1>
+            <p class="hero-subtitle">Seu laboratório de prática clínica. Escolha um módulo de treino e desenvolva suas habilidades com simulações realistas e feedback imediato.</p>
         </section>
 
-        <!-- Cards dos 3 Assistentes (MVP v1.0) -->
+        <!-- Módulos -->
         <section class="assistants-section">
-            <h2>Assistentes de Treino</h2>
+            <h2>Módulos de Treinamento</h2>
             
             <div class="assistants-grid">
-                <!-- 1. Scopsy Case - Treino de Olhar Clínico -->
-                <a href="case.html?assistant=case" class="assistant-card featured">
+
+                <!-- 1. Raciocínio Clínico -->
+                <a href="case.html?assistant=case" class="assistant-card">
                     <div class="card-header">
-                        <div class="card-icon">🎯</div>
+                        <div class="card-icon">
+                            <!-- Novo ícone lindo -->
+                            <svg width="68" height="68" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#8c52ff"/>
+                                        <stop offset="100%" stop-color="#00c2ff"/>
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="50" cy="38" r="18" stroke="url(#grad1)" stroke-width="4"/>
+                                <path d="M35 38 Q50 28, 65 38" stroke="url(#grad1)" stroke-width="3" fill="none"/>
+                                <circle cx="50" cy="38" r="8" fill="url(#grad1)"/>
+                                <g opacity="0.6">
+                                    <circle cx="28" cy="25" r="3" fill="url(#grad1)"/>
+                                    <circle cx="72" cy="28" r="4" fill="url(#grad1)"/>
+                                    <circle cx="65" cy="60" r="2.5" fill="url(#grad1)"/>
+                                </g>
+                            </svg>
+                        </div>
                         <span class="card-badge">Interativo</span>
                     </div>
-                    <h3>Treino de Olhar Clínico</h3>
+                    <h3>Raciocínio Clínico</h3>
                     <p class="card-description">Desenvolva seu raciocínio clínico através de simulações interativas com feedback formativo em tempo real</p>
                     <div class="card-features">
-                        <span class="feature-tag">✅ Feedback formativo</span>
-                        <span class="feature-tag">✅ Simulação de reação</span>
-                        <span class="feature-tag">✅ Reflexão metacognitiva</span>
+                        <span class="feature-tag"><i data-lucide="zap"></i> Simulação de reação</span>
+                        <span class="feature-tag"><i data-lucide="message-square"></i> Feedback formativo</span>
+                        <span class="feature-tag"><i data-lucide="brain"></i> Reflexão metacognitiva</span>
                     </div>
                     <div class="card-footer">
-                        <span class="skill-level">🟢 🟡 🔴 Todos os níveis</span>
+                        <i data-lucide="layers"></i> Todos os níveis
                     </div>
                 </a>
 
-                <!-- 2. Diagnostic Training - Treino DSM-5 -->
+                <!-- 2. Radar Diagnóstico -->
                 <a href="diagnostic.html" class="assistant-card">
                     <div class="card-header">
-                        <div class="card-icon">🎲</div>
+                        <div class="card-icon">
+                            <!-- Novo ícone lindo -->
+                            <svg width="68" height="68" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#8c52ff"/>
+                                        <stop offset="100%" stop-color="#00c2ff"/>
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="50" cy="50" r="35" stroke="url(#grad2)" stroke-width="5" fill="none"/>
+                                <circle cx="50" cy="50" r="25" stroke="url(#grad2)" stroke-width="4" fill="none"/>
+                                <circle cx="50" cy="50" r="15" stroke="url(#grad2)" stroke-width="3" fill="none"/>
+                                <circle cx="50" cy="50" r="6" fill="url(#grad2)"/>
+                                <path d="M50 15 L50 8 M50 92 L50 85 M15 50 L8 50 M92 50 L85 50" stroke="url(#grad2)" stroke-width="4" stroke-linecap="round"/>
+                                <circle cx="70" cy="25" r="3" fill="url(#grad2)" opacity="0.7"/>
+                            </svg>
+                        </div>
                         <span class="card-badge">Repetição Espaçada</span>
                     </div>
-                    <h3>Diagnostic Training</h3>
+                    <h3>Radar Diagnóstico</h3>
                     <p class="card-description">Pratique diagnósticos DSM-5 com metodologia de repetição espaçada e feedback imediato</p>
                     <div class="card-features">
-                        <span class="feature-tag">📊 Progressão adaptativa</span>
-                        <span class="feature-tag">🎯 Casos focados</span>
-                        <span class="feature-tag">⚡ Feedback instantâneo</span>
+                        <span class="feature-tag"><i data-lucide="trending-up"></i> Progressão adaptativa</span>
+                        <span class="feature-tag"><i data-lucide="target"></i> Casos de alta precisão</span>
+                        <span class="feature-tag"><i data-lucide="clock"></i> Repetição espaçada</span>
                     </div>
                     <div class="card-footer">
-                        <span class="skill-level">Treino sistemático DSM-5</span>
+                        Treino sistemático DSM-5
                     </div>
                 </a>
 
-                <!-- 3. Jornada Clínica - Tratamento Completo (ATUALIZADO) -->
+                <!-- 3. Jornada Clínica -->
                 <a href="jornada.html" class="assistant-card">
                     <div class="card-header">
-                        <div class="card-icon">🌱</div>
+                        <div class="card-icon">
+                            <!-- Novo ícone lindo -->
+                            <svg width="68" height="68" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#8c52ff"/>
+                                        <stop offset="100%" stop-color="#00c2ff"/>
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="20" cy="70" r="8" fill="url(#grad3)"/>
+                                <circle cx="50" cy="45" r="10" fill="url(#grad3)"/>
+                                <circle cx="80" cy="30" r="12" fill="url(#grad3)"/>
+                                <path d="M20 70 Q35 58, 50 45 T80 30" stroke="url(#grad3)" stroke-width="4" fill="none" stroke-dasharray="8 6"/>
+                                <polygon points="80,20 90,30 80,40" fill="url(#grad3)" transform="rotate(30 80 30)"/>
+                                <g opacity="0.6">
+                                    <circle cx="35" cy="30" r="3" fill="url(#grad3)"/>
+                                    <circle cx="65" cy="65" r="4" fill="url(#grad3)"/>
+                                </g>
+                            </svg>
+                        </div>
                         <span class="card-badge">12 Sessões</span>
                     </div>
                     <h3>Jornada Clínica</h3>
                     <p class="card-description">Acompanhe um caso completo de TCC através de 12 sessões progressivas, tomando decisões clínicas que impactam o tratamento</p>
                     <div class="card-features">
-                        <span class="feature-tag">📈 Evolução longitudinal</span>
-                        <span class="feature-tag">🎯 Decisões críticas</span>
-                        <span class="feature-tag">📊 Métricas de progresso</span>
+                        <span class="feature-tag"><i data-lucide="activity"></i> Evolução longitudinal</span>
+                        <span class="feature-tag"><i data-lucide="git-branch"></i> Decisões críticas</span>
+                        <span class="feature-tag"><i data-lucide="bar-chart-3"></i> Métricas detalhadas</span>
                     </div>
                     <div class="card-footer">
-                        <span class="skill-level">Jornada terapêutica completa</span>
+                        Jornada terapêutica completa
                     </div>
                 </a>
+
             </div>
         </section>
 
@@ -93,293 +336,39 @@
             <h2>Seu Progresso</h2>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon">💬</div>
+                    <div class="stat-icon"><i data-lucide="message-circle"></i></div>
                     <div class="stat-number" id="totalConversations">0</div>
                     <div class="stat-label">Conversas</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">🎯</div>
+                    <div class="stat-icon"><i data-lucide="file-text"></i></div>
                     <div class="stat-number" id="casesCompleted">0</div>
                     <div class="stat-label">Casos Praticados</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">🎲</div>
+                    <div class="stat-icon"><i data-lucide="stethoscope"></i></div>
                     <div class="stat-number" id="diagnosticsCompleted">0</div>
                     <div class="stat-label">Diagnósticos</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">🏆</div>
+                    <div class="stat-icon"><i data-lucide="award"></i></div>
                     <div class="stat-number" id="badgesEarned">0</div>
                     <div class="stat-label">Badges</div>
                 </div>
             </div>
         </section>
+
     </div>
 
-    <style>
-    /* Container */
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 40px 20px;
-    }
-
-    /* Hero Section */
-    .hero {
-        text-align: center;
-        margin-bottom: 60px;
-        padding: 40px 20px;
-    }
-
-    .hero h1 {
-        font-size: 42px;
-        color: #2c3e50;
-        margin-bottom: 15px;
-    }
-
-    .registered {
-        font-size: 18px;
-        vertical-align: super;
-    }
-
-    .hero-subtitle {
-        font-size: 18px;
-        color: #7f8c8d;
-        max-width: 600px;
-        margin: 0 auto;
-    }
-
-    /* Header */
-    .header {
-        background: white;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        padding: 20px 0;
-    }
-
-    .header .container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .header .logo h1 {
-        font-size: 28px;
-        color: #667eea;
-        margin: 0;
-    }
-
-    .header .nav {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .user-name {
-        font-weight: 600;
-        color: #2c3e50;
-    }
-
-    .btn-logout {
-        background: #667eea;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
-    }
-
-    .btn-logout:hover {
-        background: #5568d3;
-    }
-
-    /* Assistants Section */
-    .assistants-section {
-        margin-bottom: 60px;
-    }
-
-    .assistants-section h2 {
-        font-size: 28px;
-        color: #2c3e50;
-        margin-bottom: 30px;
-        text-align: center;
-    }
-
-    .assistants-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 30px;
-    }
-
-    /* Assistant Card */
-    .assistant-card {
-        background: white;
-        border-radius: 20px;
-        padding: 30px;
-        text-decoration: none;
-        color: inherit;
-        transition: all 0.3s ease;
-        border: 2px solid #e1e8ed;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        display: flex;
-        flex-direction: column;
-    }
-
-    .assistant-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 40px rgba(102, 126, 234, 0.25);
-        border-color: #667eea;
-    }
-
-    .assistant-card.featured {
-        border-color: #667eea;
-        background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
-    }
-
-    .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .card-icon {
-        font-size: 52px;
-    }
-
-    .card-badge {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-    .assistant-card h3 {
-        font-size: 22px;
-        color: #2c3e50;
-        margin-bottom: 12px;
-        font-weight: 700;
-    }
-
-    .card-description {
-        font-size: 15px;
-        color: #5a6c7d;
-        line-height: 1.6;
-        margin-bottom: 20px;
-        flex-grow: 1;
-    }
-
-    .card-features {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 20px;
-    }
-
-    .feature-tag {
-        font-size: 13px;
-        color: #667eea;
-        background: rgba(102, 126, 234, 0.1);
-        padding: 6px 12px;
-        border-radius: 6px;
-    }
-
-    .card-footer {
-        margin-top: auto;
-        padding-top: 20px;
-        border-top: 1px solid #e1e8ed;
-    }
-
-    .skill-level {
-        font-size: 13px;
-        color: #7f8c8d;
-        font-weight: 500;
-    }
-
-    /* Progress Section */
-    .progress-section h2 {
-        font-size: 28px;
-        color: #2c3e50;
-        margin-bottom: 30px;
-        text-align: center;
-    }
-
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 25px;
-    }
-
-    .stat-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 30px;
-        border-radius: 15px;
-        text-align: center;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-
-    .stat-icon {
-        font-size: 36px;
-        margin-bottom: 10px;
-    }
-
-    .stat-number {
-        font-size: 48px;
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-
-    .stat-label {
-        font-size: 15px;
-        opacity: 0.9;
-        font-weight: 500;
-    }
-
-    @media (max-width: 768px) {
-        .hero h1 {
-            font-size: 32px;
-        }
-        .assistants-grid,
-        .stats-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-    </style>
-
     <script src="js/dashboard.js"></script>
-    
-    <!-- Script adicional para garantir logout -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                const logoutBtn = document.getElementById('logoutBtn');
-                
-                if (logoutBtn) {
-                    logoutBtn.onclick = function() {
-                        console.log('🔴 Logout clicado!');
-                        
-                        try {
-                            localStorage.removeItem('token');
-                            localStorage.removeItem('user');
-                            console.log('✅ localStorage limpo');
-                            window.location.href = 'index.html';
-                        } catch (error) {
-                            console.error('❌ Erro no logout:', error);
-                            window.location.href = 'index.html';
-                        }
-                    };
-                    
-                    console.log('✅ Event listener do logout adicionado');
-                } else {
-                    console.error('❌ Botão #logoutBtn não encontrado no DOM!');
-                }
-            } catch (error) {
-                console.error('❌ Erro ao configurar logout:', error);
-            }
+        lucide.createIcons();
+
+        // Logout
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
         });
     </script>
 </body>
