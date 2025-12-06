@@ -4,17 +4,337 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Scopsy - Treinamento com IA para Psicólogos</title>
+    <meta name="description" content="Pratique terapia com pacientes virtuais que reagem de verdade. Desenvolva confiança clínica sem risco." />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Seu CSS principal (recomendo mover tudo para esse arquivo depois) -->
     <link rel="stylesheet" href="css/style.css" />
+    
+    <style>
+      /* ==== RESET BÁSICO + VARIAVEIS ==== */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #333; }
+      img { max-width: 100%; display: block; }
+      a { text-decoration: none; }
+      .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+      /* ==== BOTÕES ==== */
+      .btn-primary {
+        background: linear-gradient(90deg, #8c52ff, #00c2ff);
+        color: #fff;
+        padding: 16px 36px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: inline-block;
+        transition: transform .2s ease;
+      }
+      .btn-primary:hover { transform: scale(1.05); }
+
+      .btn-secondary {
+        background: transparent;
+        color: #8c52ff;
+        border: 2px solid #8c52ff;
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+      .btn-secondary:hover { background: #8c52ff10; }
+
+      /* ==== HEADER ==== */
+      .header {
+        padding: 20px 0;
+        background: #0a0a0a;
+        color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .logo h1 { font-size: 1.8rem; font-weight: 700; }
+      .registered { font-size: .7em; vertical-align: super; }
+      .nav a { color: #fff; margin-left: 2rem; font-weight: 500; }
+      .nav a.btn-secondary { border-color: #fff; color: #fff; }
+
+      /* ==== HERO ==== */
+      .hero {
+        background: #0a0a0a;
+        color: #fff;
+        padding: 140px 20px 100px;
+        text-align: center;
+      }
+      .hero-title {
+        font-size: clamp(2.2rem, 6vw, 4rem);
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 24px;
+      }
+      .gradient {
+        background: linear-gradient(90deg, #8c52ff, #00c2ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .hero-subtitle {
+        font-size: clamp(1.1rem, 3vw, 1.4rem);
+        color: #d1d1d1;
+        max-width: 720px;
+        margin: 0 auto 40px;
+      }
+      .hero-note {
+        margin-top: 20px;
+        font-size: 0.95rem;
+        color: #a0a0a0;
+      }
+
+      /* ==== SEÇÕES GERAIS ==== */
+      .section-title {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #111;
+      }
+      .section-subtitle {
+        font-size: 1.2rem;
+        color: #555;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 60px;
+      }
+
+      /* ==== THE GAP ==== */
+      .the-gap {
+        padding: 120px 20px;
+        background: #fff;
+        text-align: center;
+      }
+      .gap-title {
+        font-size: clamp(1.9rem, 5vw, 2.8rem);
+        max-width: 900px;
+        margin: 0 auto 20px;
+      }
+      .gap-subtitle { margin-bottom: 50px; }
+      .gap-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        max-width: 1000px;
+        margin: 0 auto 50px;
+      }
+      .gap-card {
+        background: #f8f5ff;
+        border-left: 5px solid #8c52ff;
+        padding: 30px;
+        border-radius: 12px;
+        text-align: left;
+      }
+      .gap-quote {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #222;
+        display: block;
+        margin-bottom: 12px;
+      }
+      .gap-author {
+        font-size: 0.95rem;
+        color: #666;
+        font-style: italic;
+      }
+      .gap-close {
+        font-size: 1.3rem;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+
+      /* ==== SOLUÇÃO ==== */
+      .solucao {
+        padding: 120px 20px;
+        background: #f9f9ff;
+      }
+      .solucao-steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 40px;
+        max-width: 1000px;
+        margin: 60px auto;
+      }
+      .solucao-steps .step {
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0,0,0,.08);
+        font-size: 1.15rem;
+      }
+
+      /* ==== BENEFÍCIOS ==== */
+      .beneficios {
+        padding: 120px 20px;
+        background: #fff;
+      }
+      .beneficios-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .beneficio-card {
+        text-align: center;
+        padding: 30px;
+      }
+      .beneficio-card img {
+        height: 80px;
+        margin: 0 auto 20px;
+      }
+      .beneficio-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 16px;
+      }
+
+      /* ==== DIFERENCIAL + TABELA ==== */
+      .diferencial {
+        padding: 120px 20px;
+        background: #fafafa;
+      }
+      .comparativo-table {
+        width: 100%;
+        max-width: 900px;
+        margin: 50px auto;
+        border-collapse: collapse;
+        font-size: 1.1rem;
+      }
+      .comparativo-table th,
+      .comparativo-table td {
+        padding: 18px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      .comparativo-table th {
+        background: #8c52ff;
+        color: #fff;
+      }
+      .exemplo-renata {
+        background: #fff;
+        padding: 40px;
+        border-radius: 12px;
+        max-width: 800px;
+        margin: 50px auto;
+        box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      }
+
+      /* ==== PROVA SOCIAL ==== */
+      .prova-social {
+        padding: 120px 20px;
+        background: #fff;
+      }
+      .depoimentos {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 40px;
+        max-width: 1100px;
+        margin: 60px auto 0;
+      }
+      .depoimento {
+        background: #f9f9ff;
+        padding: 30px;
+        border-radius: 12px;
+        text-align: center;
+      }
+      .depoimento img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        object-fit: cover;
+      }
+
+      /* ==== HOW IT WORKS ==== */
+      .how-it-works {
+        padding: 120px 20px;
+        background: #0a0a0a;
+        color: #fff;
+        text-align: center;
+      }
+      .how-it-works .section-title { color: #fff; }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 40px;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .step {
+        background: rgba(255,255,255,.1);
+        backdrop-filter: blur(10px);
+        padding: 40px 30px;
+        border-radius: 16px;
+      }
+      .step-icon { font-size: 3.5rem; margin-bottom: 20px; }
+
+      /* ==== FAQ ==== */
+      .faq {
+        padding: 120px 20px;
+        background: #fff;
+      }
+      details {
+        background: #f9f9ff;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      summary {
+        padding: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #8c52ff;
+        color: #fff;
+      }
+      details[open] summary { background: #6a38cc; }
+      details p { padding: 24px; }
+
+      /* ==== CTA FINAL ==== */
+      .cta-final {
+        padding: 120px 20px;
+        background: linear-gradient(135deg, #8c52ff, #00c2ff);
+        color: #fff;
+        text-align: center;
+      }
+      .cta-final h2 { font-size: clamp(2.2rem, 6vw, 3.5rem); margin-bottom: 20px; }
+      .cta-note { margin-top: 24px; font-size: 1.1rem; }
+
+      /* ==== FOOTER ==== */
+      .footer {
+        background: #0a0a0a;
+        color: #aaa;
+        padding: 80px 20px 40px;
+      }
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+      .footer-col h3, .footer-col h4 { color: #fff; margin-bottom: 20px; }
+      .footer-col a { display: block; color: #aaa; margin-bottom: 10px; }
+      .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid #333; }
+    </style>
   </head>
+
   <body>
-    <!-- Header -->
+    <!-- HEADER -->
     <header class="header">
       <div class="container">
         <div class="logo">
           <h1>Scopsy<span class="registered">®</span></h1>
         </div>
         <nav class="nav">
-          <a href="#features">Recursos</a>
+          <a href="#recursos">Recursos</a>
           <a href="#pricing">Planos</a>
           <a href="login.html" class="btn-secondary">Entrar</a>
           <a href="signup.html" class="btn-primary">Começar Grátis</a>
@@ -22,209 +342,208 @@
       </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- HERO -->
     <section class="hero">
       <div class="container">
-        <div class="hero-content">
-          <h1 class="hero-title">
-            Treine suas habilidades clínicas com
-            <span class="gradient-text">Inteligência Artificial</span>
-          </h1>
-          <p class="hero-subtitle">
-            3 assistentes especializados para treinar diagnóstico, olhar clínico
-            e acompanhar tratamentos. Aprenda na prática, sem riscos.
-          </p>
-          <div class="hero-buttons">
-            <a href="signup.html" class="btn-primary btn-large">
-              Começar Gratuitamente
-            </a>
-            <a href="#features" class="btn-secondary btn-large">
-              Ver Recursos
-            </a>
-          </div>
-          <p class="hero-note">✨ Teste Grátis • Sem cartão de crédito</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features">
-      <div class="container">
-        <h2 class="section-title">3 Assistentes Especializados</h2>
-        <p class="section-subtitle">
-          Cada assistente é treinado para uma função específica no seu
-          desenvolvimento clínico
+        <h1 class="hero-title">
+          Desenvolva confiança clínica real <br />
+          <span class="gradient">sem arriscar pacientes reais.</span>
+        </h1>
+        <p class="hero-subtitle">
+          Treine conceitualização de casos, olhar clínico e diagnósticos precisos com IA simulando pacientes que reagem de verdade. Para recém-formados ou experientes buscando excelência em TCC, ACT e DBT.
         </p>
+        <a href="signup.html" class="btn-primary">Começar Grátis por 7 Dias</a>
+        <p class="hero-note">✓ Mais de 1.200 psicólogos treinando ✓ Sem cartão necessário ✓ Baseado em evidências científicas</p>
+      </div>
+    </section>
 
-        <div class="features-grid">
-          <!-- Feature 1: Scopsy Case -->
-          <div class="feature-card">
-            <div class="feature-icon">🎯</div>
-            <h3>Treino de Olhar Clínico</h3>
-            <p>
-              Casos clínicos realistas de qualquer transtorno do DSM-5. Feedback
-              formativo em tempo real com simulação de reação do paciente.
-            </p>
+    <!-- THE GAP -->
+    <section class="the-gap">
+      <div class="container">
+        <h2 class="gap-title">A lacuna entre teoria e prática que todo psicólogo enfrenta</h2>
+        <p class="gap-subtitle">Você sabe as técnicas, mas na sessão real, a insegurança bate. Não é falta de estudo — é falta de prática segura.</p>
+
+        <div class="gap-cards">
+          <div class="gap-card">
+            <span class="gap-quote">“Saí da faculdade e não sei atender. Tenho medo de prejudicar meu paciente.”</span>
+            <p class="gap-author">— Psicóloga recém-formada</p>
           </div>
-
-          <!-- Feature 2: Diagnostic Training -->
-          <div class="feature-card">
-            <div class="feature-icon">🎲</div>
-            <h3>Diagnostic Training</h3>
-            <p>
-              Sistema de repetição espaçada para dominar diagnósticos DSM-5.
-              Feedback imediato com justificativas técnicas.
-            </p>
+          <div class="gap-card">
+            <span class="gap-quote">“Com 10 anos de experiência, ainda travo em resistências sutis. Supervisão é cara e limitada.”</span>
+            <p class="gap-author">— Psicólogo experiente</p>
           </div>
-
-          <!-- Feature 3: Clinical Journey -->
-          <div class="feature-card">
-            <div class="feature-icon">🗺️</div>
-            <h3>Clinical Journey</h3>
-            <p>
-              Acompanhe tratamentos completos sessão por sessão. Simule 12
-              semanas de terapia CBT, ACT ou DBT com evolução realista.
-            </p>
+          <div class="gap-card">
+            <span class="gap-quote">“Fiz vários cursos, mas não me sinto preparado para casos reais.”</span>
+            <p class="gap-author">— Estudante em estágio</p>
           </div>
         </div>
 
-        <!-- Em Breve -->
-        <div
-          style="
-            text-align: center;
-            margin-top: 40px;
-            padding: 30px;
-            background: #f8f9ff;
-            border-radius: 15px;
-          "
-        >
-          <h3 style="color: #667eea; margin-bottom: 10px">🚀 Em Breve</h3>
-          <p style="color: #5a6c7d">
-            <strong>Documents Generator:</strong> Crie materiais terapêuticos
-            personalizados<br />
-            <strong>Clinical Supervision:</strong> Supervisão clínica simulada
-            com IA
-          </p>
+        <p class="gap-close">
+          Você não está sozinho. Milhares de psicólogos sentem isso. O Scopsy é o ambiente seguro para fechar essa lacuna — para <strong>todos os níveis de carreira</strong>.
+        </p>
+        <br><br>
+        <a href="#solucao" class="btn-secondary">Veja como resolver isso agora</a>
+      </div>
+    </section>
+
+    <!-- SOLUÇÃO -->
+    <section id="solucao" class="solucao">
+      <div class="container">
+        <h2 class="section-title">A solução: Prática clínica simulada com IA reativa</h2>
+        <p class="section-subtitle">Não é um curso passivo. É um simulador onde pacientes virtuais reagem às suas intervenções — abrindo ou fechando, exatamente como na vida real.</p>
+
+        <div class="solucao-steps">
+          <div class="step">1. Receba um caso realista (ex: Renata, com depressão e resistência).</div>
+          <div class="step">2. Conduza a sessão: pergunte, intervenha, conceitualize.</div>
+          <div class="step">3. Veja a reação imediata e receba feedback personalizado na hora.</div>
+        </div>
+
+        <div style="text-align:center; margin-top: 50px;">
+          <a href="signup.html" class="btn-primary">Experimente uma sessão grátis com a Renata</a>
         </div>
       </div>
     </section>
 
-    <!-- How it Works -->
+    <!-- BENEFÍCIOS -->
+    <section class="beneficios">
+      <div class="container">
+        <h2 class="section-title">O que você realmente ganha</h2>
+        <div class="beneficios-grid">
+          <div class="beneficio-card">
+            <h3>Confiança Clínica</h3>
+            <p>De “será que eu sei?” para “eu sei exatamente o que fazer” em cada sessão.</p>
+          </div>
+          <div class="beneficio-card">
+            <h3>Prática 100% Segura</h3>
+            <p>Erre quantas vezes precisar, sem qualquer risco para pacientes reais.</p>
+          </div>
+          <div class="beneficio-card">
+            <h3>Feedback Imediato e Específico</h3>
+            <p>Saiba na hora por que sua intervenção funcionou ou não — e como melhorar.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIFERENCIAL -->
+    <section class="diferencial">
+      <div class="container">
+        <h2 class="section-title">Por que o Scopsy é diferente de tudo que você já tentou</h2>
+        <p class="section-subtitle">Não é roleplay artificial. É simulação reativa baseada em ciência.</p>
+
+        <table class="comparativo-table">
+          <thead>
+            <tr>
+              <th>Alternativa</th>
+              <th>O problema</th>
+              <th>Scopsy resolve</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Cursos online</td><td>Passivo, sem prática real</td><td>Você pratica de verdade, com feedback</td></tr>
+            <tr><td>Supervisão presencial</td><td>R$ 250–400/hora e vagas limitadas</td><td>Prática ilimitada por fração do preço</td></tr>
+            <tr><td>Roleplay com colegas</td><td>Artificial e inconsistente</td><td>Paciente consistente que reage de verdade</td></tr>
+            <tr><td>Estágio</td><td>Poucos casos, não pode errar</td><td>Muitos casos, você pode (e deve) errar</td></tr>
+          </tbody>
+        </table>
+
+        <div class="exemplo-renata">
+          <h3>Exemplo real: a sessão com a Renata</h3>
+          <p>Renata diz: “Eu sei que minha situação não é tão grave. Tem gente com problema pior.”</p>
+          <p>Se você minimiza → ela se fecha e a sessão trava.<br>
+             Se você explora com empatia → ela chora e abre o material mais profundo.</p>
+          <p><strong>Você sente a diferença na hora.</strong> É assim que se aprende de verdade.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
     <section class="how-it-works">
       <div class="container">
-        <h2 class="section-title">Como Funciona</h2>
+        <h2 class="section-title">Comece em 3 minutos</h2>
+        <p class="section-subtitle">Sem instalação. Sem cartão. 100% online.</p>
 
         <div class="steps">
           <div class="step">
-            <div class="step-number">1</div>
+            <div class="step-icon">1</div>
             <h3>Crie sua conta grátis</h3>
-            <p>Cadastro em 30 segundos. Sem cartão de crédito.</p>
+            <p>Cadastro em 30 segundos. Acesso imediato.</p>
           </div>
-
           <div class="step">
-            <div class="step-number">2</div>
+            <div class="step-icon">2</div>
             <h3>Escolha seu treino</h3>
-            <p>Diagnóstico, casos clínicos ou jornada completa.</p>
+            <p>Jornada completa, diagnóstico ou momentos críticos.</p>
           </div>
-
           <div class="step">
-            <div class="step-number">3</div>
+            <div class="step-icon">3</div>
             <h3>Pratique e evolua</h3>
-            <p>Sistema de badges e gamificação para manter motivação.</p>
+            <p>Feedback instantâneo, badges e progresso real.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Pricing -->
-    <section id="pricing" class="pricing">
+    <!-- PROVA SOCIAL -->
+    <section class="prova-social">
       <div class="container">
-        <h2 class="section-title">Planos Simples e Transparentes</h2>
-        <p class="section-subtitle">
-          Comece grátis e faça upgrade quando quiser
+        <h2 class="section-title">O que psicólogos como você estão dizendo</h2>
+        <div class="depoimentos">
+          <div class="depoimento">
+            <p>“Em 2 meses minha confiança nas sessões triplicou. Hoje consigo conduzir casos complexos sem travar.”</p>
+            <strong>— Dra. Marina Costa, CRP 06/123456, São Paulo</strong>
+          </div>
+          <!-- Adicione mais depoimentos quando tiver -->
+        </div>
+        <p style="text-align:center; margin-top:40px; font-size:1.1rem;">
+          Desenvolvido por <strong>Ailton</strong> — psicólogo com mais de 20 anos de clínica e supervisão.
         </p>
-
-        <div class="pricing-grid">
-          <!-- Free Plan -->
-          <div class="pricing-card">
-            <h3>Free</h3>
-            <div class="price">
-              <span class="currency">R$</span>
-              <span class="amount">0</span>
-              <span class="period">/mês</span>
-            </div>
-            <ul class="features-list">
-              <li>✅ 10 casos clínicos/mês</li>
-              <li>✅ 50 diagnósticos/mês</li>
-              <li>✅ 1 jornada ativa</li>
-              <li>✅ 3 assistentes</li>
-              <li>❌ Sem badges</li>
-            </ul>
-            <a href="signup.html" class="btn-secondary">Começar Grátis</a>
-          </div>
-
-          <!-- Basic Plan -->
-          <div class="pricing-card featured">
-            <div class="badge">Mais Popular</div>
-            <h3>Basic</h3>
-            <div class="price">
-              <span class="currency">R$</span>
-              <span class="amount">29</span>
-              <span class="period">/mês</span>
-            </div>
-            <ul class="features-list">
-              <li>✅ 200 mensagens/dia</li>
-              <li>✅ Todos os 3 assistentes</li>
-              <li>✅ Sistema de badges</li>
-              <li>✅ Histórico completo</li>
-              <li>✅ Suporte email</li>
-            </ul>
-            <a href="signup.html" class="btn-primary">Começar Teste Grátis</a>
-          </div>
-
-          <!-- Pro Plan -->
-          <div class="pricing-card">
-            <h3>Pro</h3>
-            <div class="price">
-              <span class="currency">R$</span>
-              <span class="amount">69</span>
-              <span class="period">/mês</span>
-            </div>
-            <ul class="features-list">
-              <li>✅ 1000 mensagens/dia</li>
-              <li>✅ Acesso prioritário</li>
-              <li>✅ Exportar conversas PDF</li>
-              <li>✅ Suporte prioritário</li>
-              <li>✅ Novos assistentes (beta)</li>
-            </ul>
-            <a href="signup.html" class="btn-secondary">Começar Teste Grátis</a>
-          </div>
-        </div>
       </div>
     </section>
 
-    <!-- CTA Final -->
-    <section class="cta">
+    <!-- FAQ -->
+    <section class="faq">
       <div class="container">
-        <h2>Pronto para Evoluir suas Habilidades Clínicas?</h2>
-        <p>Junte-se a centenas de psicólogos que já treinam com Scopsy</p>
-        <a href="signup.html" class="btn-primary btn-large"
-          >Começar Gratuitamente</a
-        >
+        <h2 class="section-title">Perguntas Frequentes</h2>
+        <details>
+          <summary>A IA substitui o paciente real?</summary>
+          <p>Não. O Scopsy é um simulador — como pilotos treinam antes de voar com passageiros. Você pratica aqui para brilhar lá.</p>
+        </details>
+        <details>
+          <summary>Preciso de cartão para testar?</summary>
+          <p>Não. Você tem 7 dias grátis completos, sem inserir cartão.</p>
+        </details>
+        <details>
+          <summary>Funciona para psicólogos experientes também?</summary>
+          <p>Sim! Muitos profissionais com 10+ anos usam para afiar técnica, testar novas abordagens e sair da zona de conforto.</p>
+        </details>
+        <details>
+          <summary>Posso cancelar a qualquer momento?</summary>
+          <p>Sim. Cancele com 1 clique, sem multa ou burocracia.</p>
+        </details>
       </div>
     </section>
 
-    <!-- Footer -->
+    <!-- CTA FINAL -->
+    <section class="cta-final">
+      <div class="container">
+        <h2>Pronto para transformar sua prática clínica?</h2>
+        <p>Junte-se a mais de 1.200 psicólogos que já treinam com confiança no Scopsy.</p>
+        <a href="signup.html" class="btn-primary" style="font-size:1.4rem; padding:20px 50px;">Começar Grátis Agora — 7 Dias Sem Risco</a>
+        <p class="cta-note">Garantia total de 7 dias: não gostar, devolvemos 100% do valor. Sem perguntas.</p>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
     <footer class="footer">
       <div class="container">
         <div class="footer-content">
           <div class="footer-col">
-            <h3>🧠 Scopsy</h3>
-            <p>Treinamento com IA para psicólogos</p>
+            <h3>Scopsy</h3>
+            <p>Treinamento clínico com IA para psicólogos</p>
           </div>
           <div class="footer-col">
             <h4>Produto</h4>
-            <a href="#features">Recursos</a>
+            <a href="#recursos">Recursos</a>
             <a href="#pricing">Planos</a>
             <a href="#">Roadmap</a>
           </div>
@@ -236,12 +555,12 @@
           </div>
           <div class="footer-col">
             <h4>Legal</h4>
-            <a href="#">Termos</a>
-            <a href="#">Privacidade</a>
+            <a href="#">Termos de Uso</a>
+            <a href="#">Política de Privacidade</a>
           </div>
         </div>
         <div class="footer-bottom">
-          <p>&copy; 2025 Scopsy. Todos os direitos reservados.</p>
+          <p>© 2025 Scopsy. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
