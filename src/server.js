@@ -10,6 +10,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const logger = require('./config/logger');
 
+
 // ========================================
 // 1. EXPRESS + SERVER
 // ========================================
@@ -36,6 +37,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+
 // ========================================
 // 3. ROTAS
 // ========================================
@@ -44,12 +46,14 @@ const dashboardRoutes = require('./routes/dashboard');
 const chatRoutes = require('./routes/chat');
 const diagnosticRoutes = require('./routes/diagnostic');
 const caseRoutes = require('./routes/case');
+const journeyRoutes = require('./routes/journey');  
 
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/diagnostic', diagnosticRoutes);
 app.use('/api/case', caseRoutes);
+app.use('/api/journey', journeyRoutes);
 
 // ========================================
 // 4. HEALTH CHECK
@@ -97,6 +101,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   logger.info(`🚀 Servidor rodando na porta ${PORT}`);
+  logger.info(`✅ Supabase client initialized`);
   logger.info(`📡 Health check: http://localhost:${PORT}/health`);
 });
 
