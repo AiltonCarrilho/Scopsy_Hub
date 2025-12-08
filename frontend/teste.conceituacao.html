@@ -3,77 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conceituação de Caso - Scopsy Lab</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+    <title>Conceituação de Caso - Scopsy</title>
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        /* ========== APENAS CSS MELHORADO - LÓGICA 100% INTACTA ========== */
-        
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            --purple: #9C27B0;
-            --gradient: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #FAFAFA;
-            color: #1F2937;
-            line-height: 1.6;
-        }
-
-        /* Header */
-        .header {
-            background: #0F0F0F;
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,.3);
-        }
-        .header .container {
-            max-width: 1240px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo h1 { font-size: 28px; font-weight: 900; color: #fff; }
-        .registered { font-size: .6em; vertical-align: super; }
-        .header .back-btn {
-            background: rgba(255,255,255,.1);
-            color: #fff;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .header .back-btn:hover { background: rgba(255,255,255,.2); }
-
         .case-container {
             max-width: 900px;
-            margin: 60px auto 40px;
-            padding: 0 20px;
+            margin: 40px auto;
+            padding: 20px;
         }
 
-        .case-container h1 {
-            font-size: 3rem;
-            font-weight: 900;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-            margin-bottom: 12px;
-        }
-
-        .case-container > p {
-            text-align: center;
-            font-size: 1.1rem;
-            color: #6B7280;
-            margin-bottom: 40px;
+        .back-btn {
+            background: #666;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
         }
 
         /* Botões de ação */
@@ -89,7 +35,7 @@
             background: #9C27B0;
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
@@ -112,7 +58,7 @@
             background: white;
             color: #9C27B0;
             border: 2px solid #9C27B0;
-            border-radius: 12px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
@@ -201,7 +147,7 @@
             border-color: #9C27B0;
         }
 
-        /* Opções de foco */
+        /* Opções de foco com badges premium */
         .focus-options {
             display: flex;
             flex-direction: column;
@@ -288,9 +234,9 @@
 
         .case-card {
             background: white;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
 
@@ -445,26 +391,12 @@
             margin-right: 8px;
             margin-bottom: 8px;
         }
-
-        @media (max-width: 768px) {
-            .case-container h1 { font-size: 2.2rem; }
-            .action-buttons { flex-direction: column; }
-            .case-card { padding: 24px; }
-        }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <h1>Scopsy Lab<span class="registered">®</span></h1>
-            </div>
-            <button class="back-btn" onclick="window.location.href='case.html'">← Voltar</button>
-        </div>
-    </header>
-
     <div class="case-container">
+        <button class="back-btn" onclick="window.location.href='case.html'">← Voltar</button>
+
         <h1>🧩 Conceituação de Caso</h1>
         <p>Análise profunda • Formulação conceitual • Desenvolvimento de competências</p>
 
@@ -507,6 +439,7 @@
             <div class="form-group">
                 <label>🎯 Foco de Treino:</label>
                 <div class="focus-options">
+                    <!-- Opção 1: Conceituação Cognitiva (ATIVA) -->
                     <div class="focus-option active" onclick="selectFocus('conceituacao')">
                         <div class="focus-label">
                             <input type="radio" name="focus" value="conceituacao" checked>
@@ -514,6 +447,7 @@
                         </div>
                     </div>
 
+                    <!-- Opção 2: Técnicas de TCC (PREMIUM) -->
                     <div class="focus-option disabled">
                         <div class="focus-label">
                             <input type="radio" name="focus" value="tecnicas_tcc" disabled>
@@ -522,6 +456,7 @@
                         <span class="premium-badge">💎 PREMIUM</span>
                     </div>
 
+                    <!-- Opção 3: Habilidades ACT (PREMIUM) -->
                     <div class="focus-option disabled">
                         <div class="focus-label">
                             <input type="radio" name="focus" value="act" disabled>
@@ -530,6 +465,7 @@
                         <span class="premium-badge">💎 PREMIUM</span>
                     </div>
 
+                    <!-- Opção 4: Habilidades DBT (PREMIUM) -->
                     <div class="focus-option disabled">
                         <div class="focus-label">
                             <input type="radio" name="focus" value="dbt" disabled>
@@ -538,6 +474,7 @@
                         <span class="premium-badge">💎 PREMIUM</span>
                     </div>
 
+                    <!-- Opção 5: Terapia de Esquemas (PREMIUM) -->
                     <div class="focus-option disabled">
                         <div class="focus-label">
                             <input type="radio" name="focus" value="esquemas" disabled>
@@ -546,6 +483,7 @@
                         <span class="premium-badge">💎 PREMIUM</span>
                     </div>
 
+                    <!-- Opção 6: Aliança Terapêutica (PREMIUM) -->
                     <div class="focus-option disabled">
                         <div class="focus-label">
                             <input type="radio" name="focus" value="alianca" disabled>
@@ -577,7 +515,6 @@
         </div>
     </div>
 
-    <!-- ========== JAVASCRIPT 100% ORIGINAL DO DOCUMENTO 7 ========== -->
     <script>
         const API_URL = 'http://localhost:3000/api';
         let currentCase = null;

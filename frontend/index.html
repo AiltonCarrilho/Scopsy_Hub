@@ -3,724 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scopsy Lab- Treinamento Clínico com IA para Psicólogos</title>
+    <title>Scopsy Lab - Treinamento Clínico com simulado para Psicólogos</title>
     <meta name="description" content="Pratique TCC com simulações clínicas realistas. Desenvolva confiança antes de atender pacientes reais." />
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     
-    <style>
-      /* CSS INLINE - Landing Page Scopsy */
-      
-      :root {
-        --color-primary-start: #8c52ff;
-        --color-primary-end: #00c2ff;
-        --color-primary-dark: #6a38cc;
-        --color-bg-dark: #0a0a0a;
-        --color-bg-light: #ffffff;
-        --color-bg-subtle: #fafbfc;
-        --color-bg-purple-light: #f9f9ff;
-        --color-bg-purple-lighter: #f8f5ff;
-        --color-text-primary: #111827;
-        --color-text-secondary: #4b5563;
-        --color-text-tertiary: #6b7280;
-        --spacing-xs: 8px;
-        --spacing-sm: 16px;
-        --spacing-md: 24px;
-        --spacing-lg: 32px;
-        --spacing-xl: 48px;
-        --spacing-2xl: 64px;
-        --spacing-3xl: 96px;
-        --spacing-4xl: 128px;
-        --radius-sm: 8px;
-        --radius-md: 12px;
-        --radius-lg: 16px;
-        --radius-xl: 24px;
-        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
-        --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
-        --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.16);
-        --transition-fast: 150ms ease;
-        --transition-base: 250ms ease;
-      }
-      
-      *, *::before, *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      
-      html {
-        scroll-behavior: smooth;
-      }
-      
-      body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        line-height: 1.6;
-        color: var(--color-text-primary);
-        background: var(--color-bg-light);
-        -webkit-font-smoothing: antialiased;
-      }
-      
-      img {
-        max-width: 100%;
-        display: block;
-      }
-      
-      a {
-        text-decoration: none;
-        color: inherit;
-      }
-      
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 var(--spacing-md);
-      }
-      
-      @media (min-width: 768px) {
-        .container {
-          padding: 0 var(--spacing-xl);
-        }
-      }
-      
-      h1, h2, h3, h4 {
-        font-weight: 700;
-        line-height: 1.2;
-      }
-      
-      .text-gradient {
-        background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 16px 32px;
-        border-radius: var(--radius-md);
-        font-weight: 600;
-        font-size: 1rem;
-        transition: all var(--transition-base);
-        cursor: pointer;
-        border: none;
-        white-space: nowrap;
-      }
-      
-      .btn-primary {
-        background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
-        color: #ffffff;
-        box-shadow: 0 4px 16px rgba(140, 82, 255, 0.3);
-        position: relative;
-        overflow: hidden;
-      }
-      
-      .btn-primary::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary-start));
-        opacity: 0;
-        transition: opacity var(--transition-base);
-      }
-      
-      .btn-primary:hover::before {
-        opacity: 1;
-      }
-      
-      .btn-primary span {
-        position: relative;
-        z-index: 1;
-      }
-      
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(140, 82, 255, 0.4);
-      }
-      
-      .btn-secondary {
-        background: transparent;
-        color: var(--color-primary-start);
-        border: 2px solid var(--color-primary-start);
-      }
-      
-      .btn-secondary:hover {
-        background: rgba(140, 82, 255, 0.05);
-        transform: translateY(-2px);
-      }
-      
-      .btn-large {
-        padding: 20px 48px;
-        font-size: 1.125rem;
-      }
-      
-      /* HEADER */
-      .header {
-        padding: var(--spacing-md) 0;
-        background: rgba(10, 10, 10, 0.95);
-        backdrop-filter: blur(12px);
-        color: #fff;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      
-      .header .container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      
-      .logo h1 {
-        font-size: 1.75rem;
-        font-weight: 800;
-      }
-      
-      .registered {
-        font-size: 0.6em;
-        vertical-align: super;
-        opacity: 0.7;
-      }
-      
-      .nav {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-lg);
-      }
-      
-      .nav a {
-        color: rgba(255, 255, 255, 0.9);
-        font-weight: 500;
-        transition: color var(--transition-fast);
-      }
-      
-      .nav a:not(.btn):hover {
-        color: #ffffff;
-      }
-      
-      /* HERO */
-      .hero {
-        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-        color: #fff;
-        padding: var(--spacing-4xl) var(--spacing-md) var(--spacing-3xl);
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-      }
-      
-      .hero::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: 
-          linear-gradient(rgba(140, 82, 255, 0.05) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(140, 82, 255, 0.05) 1px, transparent 1px);
-        background-size: 50px 50px;
-        opacity: 0.3;
-      }
-      
-      .hero-content {
-        position: relative;
-        z-index: 1;
-        max-width: 900px;
-        margin: 0 auto;
-      }
-      
-      .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: var(--spacing-xs);
-        padding: 8px 20px;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(8px);
-        border-radius: 100px;
-        font-size: 0.875rem;
-        font-weight: 500;
-        margin-bottom: var(--spacing-md);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-      }
-      
-      .hero-badge-dot {
-        width: 8px;
-        height: 8px;
-        background: #00ff88;
-        border-radius: 50%;
-        animation: pulse 2s infinite;
-      }
-      
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-      }
-      
-      .hero-title {
-        font-size: clamp(2.25rem, 7vw, 4.5rem);
-        font-weight: 800;
-        line-height: 1.1;
-        margin-bottom: var(--spacing-md);
-        letter-spacing: -0.03em;
-      }
-      
-      .hero-subtitle {
-        font-size: clamp(1.125rem, 3vw, 1.375rem);
-        line-height: 1.6;
-        color: rgba(255, 255, 255, 0.85);
-        margin-bottom: var(--spacing-xl);
-      }
-      
-      .hero-cta-group {
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-sm);
-        align-items: center;
-        margin-bottom: var(--spacing-lg);
-      }
-      
-      @media (min-width: 640px) {
-        .hero-cta-group {
-          flex-direction: row;
-          justify-content: center;
-        }
-      }
-      
-      .hero-trust {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: var(--spacing-md);
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.7);
-      }
-      
-      .hero-trust-item {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      
-      .hero-trust-check {
-        color: #00ff88;
-        font-weight: 600;
-      }
-      
-      /* SECTIONS */
-      section {
-        padding: var(--spacing-3xl) 0;
-      }
-      
-      @media (min-width: 768px) {
-        section {
-          padding: var(--spacing-4xl) 0;
-        }
-      }
-      
-      .section-header {
-        text-align: center;
-        margin-bottom: var(--spacing-3xl);
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      
-      .section-title {
-        font-size: clamp(2rem, 5vw, 3.25rem);
-        font-weight: 800;
-        margin-bottom: var(--spacing-md);
-      }
-      
-      .section-subtitle {
-        font-size: 1.25rem;
-        color: var(--color-text-secondary);
-        line-height: 1.7;
-      }
-      
-      /* THE GAP */
-      .the-gap {
-        background: linear-gradient(180deg, var(--color-bg-light), var(--color-bg-subtle));
-      }
-      
-      .gap-cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: var(--spacing-lg);
-        margin-bottom: var(--spacing-3xl);
-      }
-      
-      .gap-card {
-        background: var(--color-bg-light);
-        border: 1px solid rgba(140, 82, 255, 0.1);
-        padding: var(--spacing-xl);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-sm);
-        transition: all var(--transition-base);
-        position: relative;
-      }
-      
-      .gap-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        background: linear-gradient(180deg, var(--color-primary-start), var(--color-primary-end));
-      }
-      
-      .gap-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-lg);
-      }
-      
-      .gap-quote {
-        font-size: 1.125rem;
-        font-weight: 600;
-        line-height: 1.5;
-        margin-bottom: var(--spacing-md);
-        display: block;
-      }
-      
-      .gap-author {
-        font-size: 0.9375rem;
-        color: var(--color-text-tertiary);
-        font-style: italic;
-      }
-      
-      .gap-close {
-        font-size: 1.25rem;
-        text-align: center;
-        color: var(--color-text-secondary);
-        line-height: 1.7;
-        max-width: 720px;
-        margin: 0 auto;
-      }
-      
-      /* RECURSOS */
-      .solucao {
-        background: var(--color-bg-purple-lighter);
-      }
-      
-      .solucao-steps {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: var(--spacing-xl);
-        margin: var(--spacing-3xl) auto;
-      }
-      
-      .step {
-        background: var(--color-bg-light);
-        padding: var(--spacing-xl);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-md);
-        font-size: 1.125rem;
-        line-height: 1.6;
-        transition: all var(--transition-base);
-      }
-      
-      .step:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-lg);
-      }
-      
-      .solucao-cta {
-        text-align: center;
-        margin-top: var(--spacing-3xl);
-      }
-      
-      /* BENEFÍCIOS */
-      .beneficios-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: var(--spacing-2xl);
-      }
-      
-      .beneficio-card {
-        text-align: center;
-        padding: var(--spacing-xl);
-      }
-      
-      .beneficio-icon {
-        width: 72px;
-        height: 72px;
-        margin: 0 auto var(--spacing-md);
-        background: linear-gradient(135deg, rgba(140, 82, 255, 0.1), rgba(0, 194, 255, 0.1));
-        border-radius: var(--radius-md);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-      }
-      
-      .beneficio-card h3 {
-        font-size: 1.5rem;
-        margin-bottom: var(--spacing-sm);
-      }
-      
-      .beneficio-card p {
-        color: var(--color-text-secondary);
-        font-size: 1.0625rem;
-      }
-      
-      /* DIFERENCIAL */
-      .diferencial {
-        background: var(--color-bg-subtle);
-      }
-      
-      .comparativo-table {
-        width: 100%;
-        max-width: 900px;
-        margin: var(--spacing-3xl) auto;
-        border-collapse: separate;
-        border-spacing: 0;
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-lg);
-        background: var(--color-bg-light);
-        overflow: hidden;
-      }
-      
-      .comparativo-table th,
-      .comparativo-table td {
-        padding: var(--spacing-md) var(--spacing-lg);
-        text-align: left;
-      }
-      
-      .comparativo-table th {
-        background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
-        color: #fff;
-        font-weight: 600;
-      }
-      
-      .comparativo-table tbody tr {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      }
-      
-      .comparativo-table tbody tr:hover {
-        background: var(--color-bg-purple-lighter);
-      }
-      
-      .exemplo-renata {
-        background: var(--color-bg-purple-light);
-        padding: var(--spacing-2xl);
-        border-radius: var(--radius-xl);
-        max-width: 800px;
-        margin: var(--spacing-3xl) auto 0;
-        box-shadow: var(--shadow-xl);
-      }
-      
-      .exemplo-renata h3 {
-        font-size: 1.75rem;
-        margin-bottom: var(--spacing-md);
-        color: var(--color-primary-start);
-      }
-      
-      .exemplo-renata p {
-        font-size: 1.0625rem;
-        line-height: 1.7;
-        margin-bottom: var(--spacing-sm);
-        color: var(--color-text-secondary);
-      }
-      
-      /* HOW IT WORKS */
-      .how-it-works {
-        background: linear-gradient(135deg, #0a0a0a, #1a1535);
-        color: #fff;
-      }
-      
-      .how-it-works .section-title,
-      .how-it-works .section-subtitle {
-        color: #fff;
-      }
-      
-      .steps-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: var(--spacing-xl);
-      }
-      
-      .step-card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(16px);
-        padding: var(--spacing-2xl);
-        border-radius: var(--radius-lg);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: all var(--transition-base);
-      }
-      
-      .step-card:hover {
-        background: rgba(255, 255, 255, 0.08);
-        transform: translateY(-8px);
-      }
-      
-      .step-number {
-        width: 64px;
-        height: 64px;
-        background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2rem;
-        font-weight: 800;
-        margin-bottom: var(--spacing-md);
-      }
-      
-      .step-card h3 {
-        font-size: 1.5rem;
-        margin-bottom: var(--spacing-sm);
-        color: #fff;
-      }
-      
-      .step-card p {
-        color: rgba(255, 255, 255, 0.75);
-        font-size: 1.0625rem;
-      }
-      
-      /* PROVA SOCIAL */
-      .credencial-fundador {
-        text-align: center;
-        padding: var(--spacing-xl);
-        background: var(--color-bg-subtle);
-        border-radius: var(--radius-lg);
-        max-width: 600px;
-        margin: 0 auto;
-      }
-      
-      /* FAQ */
-      .faq {
-        background: var(--color-bg-subtle);
-      }
-      
-      .faq-list {
-        max-width: 800px;
-        margin: 0 auto;
-      }
-      
-      details {
-        background: var(--color-bg-light);
-        margin-bottom: var(--spacing-md);
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-sm);
-      }
-      
-      summary {
-        padding: var(--spacing-md) var(--spacing-lg);
-        font-weight: 600;
-        cursor: pointer;
-        background: linear-gradient(135deg, var(--color-primary-start), var(--color-primary-end));
-        color: #fff;
-        list-style: none;
-        display: flex;
-        justify-content: space-between;
-      }
-      
-      summary::after {
-        content: '+';
-        font-size: 1.5rem;
-      }
-      
-      details[open] summary::after {
-        content: '−';
-      }
-      
-      details p {
-        padding: var(--spacing-lg);
-        color: var(--color-text-secondary);
-        line-height: 1.7;
-      }
-      
-      /* CTA FINAL */
-      .cta-final {
-        padding: var(--spacing-4xl) var(--spacing-md);
-        background: linear-gradient(135deg, #8c52ff 0%, #5a3b9e 50%, #00c2ff 100%);
-        color: #fff;
-        text-align: center;
-      }
-      
-      .cta-final h2 {
-        font-size: clamp(2.25rem, 6vw, 3.75rem);
-        margin-bottom: var(--spacing-md);
-        font-weight: 800;
-      }
-      
-      .cta-final-subtitle {
-        font-size: 1.375rem;
-        margin-bottom: var(--spacing-xl);
-      }
-      
-      .cta-final .btn-primary {
-        background: #fff;
-        color: var(--color-primary-start);
-        font-size: 1.25rem;
-        padding: 24px 56px;
-        font-weight: 700;
-      }
-      
-      .cta-guarantee {
-        margin-top: var(--spacing-lg);
-        font-size: 1.0625rem;
-      }
-      
-      /* FOOTER */
-      .footer {
-        background: var(--color-bg-dark);
-        color: rgba(255, 255, 255, 0.7);
-        padding: var(--spacing-3xl) 0 var(--spacing-xl);
-      }
-      
-      .footer-content {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: var(--spacing-2xl);
-        margin-bottom: var(--spacing-2xl);
-      }
-      
-      .footer-col h3,
-      .footer-col h4 {
-        color: #fff;
-        margin-bottom: var(--spacing-md);
-      }
-      
-      .footer-col a {
-        display: block;
-        color: rgba(255, 255, 255, 0.6);
-        margin-bottom: var(--spacing-sm);
-      }
-      
-      .footer-col a:hover {
-        color: var(--color-primary-end);
-      }
-      
-      .footer-bottom {
-        text-align: center;
-        padding-top: var(--spacing-xl);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.5);
-      }
-      
-      /* RESPONSIVE */
-      @media (max-width: 767px) {
-        .nav {
-          display: none;
-        }
-        .gap-cards,
-        .solucao-steps,
-        .beneficios-grid,
-        .steps-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-      
-      .text-center {
-        text-align: center;
-      }
-      
-      .mt-xl {
-        margin-top: var(--spacing-xl);
-      }
-    </style>
+    <!-- CSS Extraído -->
+    <link rel="stylesheet" href="css/landing.css" />
   </head>
 
   <body>
@@ -831,16 +121,16 @@
         </div>
 
         <div class="solucao-steps">
-          <div class="step">
-            <strong>🎯 Treino de Olhar Clínico</strong><br />
+          <div class="step" data-number="🎯">
+            <strong>Treino de Olhar Clínico</strong><br />
             Casos interativos com múltiplas fases. Tome decisões clínicas e veja o impacto no paciente.
           </div>
-          <div class="step">
-            <strong>🧠 Radar Diagnóstico</strong><br />
+          <div class="step" data-number="🧠">
+            <strong>Diagnostic Training</strong><br />
             Vinhetas DSM-5 com sistema de repetição espaçada. Aprimore diagnóstico diferencial.
           </div>
-          <div class="step">
-            <strong>🌱 Jornada Clínica</strong><br />
+          <div class="step" data-number="🌱">
+            <strong>Jornada Clínica</strong><br />
             Acompanhe tratamentos completos de 12 sessões. Pratique do assessment ao encerramento.
           </div>
         </div>
@@ -994,7 +284,7 @@
         
         <div class="faq-list">
           <details>
-            <summary>A IA substitui o paciente real?</summary>
+            <summary>A experiência com Scopsy Lab substitui o paciente real?</summary>
             <p>Não. O Scopsy Lab é um simulador de prática clínica — como pilotos treinam em simuladores antes de voar com passageiros. O objetivo é desenvolver habilidades em ambiente seguro antes de aplicá-las com pacientes reais.</p>
           </details>
           
@@ -1011,6 +301,11 @@
           <details>
             <summary>Os casos são baseados em evidências?</summary>
             <p>Sim. Todo conteúdo segue protocolos da FBTC e literatura científica atualizada. Os feedbacks são formativos e baseados em melhores práticas de TCC.</p>
+          </details>
+          
+          <details>
+            <summary>Como posso dar feedback?</summary>
+            <p>Use o botão de feedback em qualquer página da plataforma ou entre em contato através do email de suporte. Seu feedback é fundamental para melhorarmos!</p>
           </details>
         </div>
       </div>
@@ -1038,7 +333,7 @@
         <div class="footer-content">
           <div class="footer-col">
             <h3>Scopsy Lab <span class="registered">®</span></h3>
-            <p>Treinamento clínico com IA para psicólogos</p>
+            <p>Treinamento clínico simulado para psicólogos</p>
           </div>
           
           <div class="footer-col">
@@ -1052,12 +347,13 @@
             <h4>Suporte</h4>
             <a href="#">Ajuda</a>
             <a href="#">Contato</a>
+            <a href="#">FAQ</a>
           </div>
           
           <div class="footer-col">
             <h4>Legal</h4>
             <a href="#">Termos de Uso</a>
-            <a href="#">Privacidade</a>
+            <a href="#">Política de Privacidade</a>
           </div>
         </div>
         
@@ -1068,9 +364,14 @@
     </footer>
 
     <script>
+      // Header scroll effect
       window.addEventListener('scroll', () => {
         const header = document.querySelector('.header');
-        header.classList.toggle('scrolled', window.scrollY > 50);
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
       });
     </script>
   </body>
