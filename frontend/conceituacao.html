@@ -1,466 +1,26 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conceituação de Caso - Scopsy Lab</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <style>
-        /* ========== APENAS CSS MELHORADO - LÓGICA 100% INTACTA ========== */
-        
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            --purple: #9C27B0;
-            --gradient: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #FAFAFA;
-            color: #1F2937;
-            line-height: 1.6;
-        }
-
-        /* Header */
-        .header {
-            background: #0F0F0F;
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,.3);
-        }
-        .header .container {
-            max-width: 1240px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo h1 { font-size: 28px; font-weight: 900; color: #fff; }
-        .registered { font-size: .6em; vertical-align: super; }
-        .header .back-btn {
-            background: rgba(255,255,255,.1);
-            color: #fff;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .header .back-btn:hover { background: rgba(255,255,255,.2); }
-
-        .case-container {
-            max-width: 900px;
-            margin: 60px auto 40px;
-            padding: 0 20px;
-        }
-
-        .case-container h1 {
-            font-size: 3rem;
-            font-weight: 900;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-            margin-bottom: 12px;
-        }
-
-        .case-container > p {
-            text-align: center;
-            font-size: 1.1rem;
-            color: #6B7280;
-            margin-bottom: 40px;
-        }
-
-        /* Botões de ação */
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin: 30px 0;
-        }
-
-        .btn-primary {
-            flex: 1;
-            padding: 16px 24px;
-            background: #9C27B0;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-primary:hover {
-            background: #7B1FA2;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
-        }
-
-        .btn-secondary {
-            flex: 1;
-            padding: 16px 24px;
-            background: white;
-            color: #9C27B0;
-            border: 2px solid #9C27B0;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-secondary:hover {
-            background: #f3e5f5;
-            transform: translateY(-2px);
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: white;
-            margin: 5% auto;
-            padding: 40px;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            animation: slideIn 0.3s;
-        }
-
-        @keyframes slideIn {
-            from { 
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to { 
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-content h3 {
-            margin-top: 0;
-            color: #9C27B0;
-            margin-bottom: 24px;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-
-        .form-group select:focus {
-            outline: none;
-            border-color: #9C27B0;
-        }
-
-        /* Opções de foco */
-        .focus-options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .focus-option {
-            padding: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .focus-option.active {
-            border-color: #9C27B0;
-            background: #f3e5f5;
-        }
-
-        .focus-option.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            background: #f5f5f5;
-        }
-
-        .focus-option:not(.disabled):hover {
-            border-color: #9C27B0;
-            background: #fafafa;
-        }
-
-        .focus-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .premium-badge {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #000;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 32px;
-        }
-
-        .btn-cancel {
-            flex: 1;
-            padding: 12px 24px;
-            background: #f5f5f5;
-            color: #666;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-confirm {
-            flex: 1;
-            padding: 12px 24px;
-            background: #9C27B0;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .btn-confirm:hover {
-            background: #7B1FA2;
-        }
-
-        .case-card {
-            background: white;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-        }
-
-        .vignette {
-            background: #ffffff;
-            padding: 28px;
-            border-radius: 12px;
-            border-left: 5px solid #9C27B0;
-            line-height: 1.9;
-            font-size: 15.5px;
-            margin: 20px 0;
-            white-space: pre-wrap;
-            color: #2c3e50;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        
-        .vignette p {
-            margin-bottom: 16px;
-        }
-        
-        .vignette p:last-child {
-            margin-bottom: 0;
-        }
-
-        .analysis-section {
-            margin-top: 30px;
-        }
-
-        .analysis-section h3 {
-            color: #9C27B0;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .analysis-section p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
-
-        .analysis-textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 15px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            resize: vertical;
-            transition: border-color 0.2s;
-            margin-bottom: 20px;
-        }
-
-        .analysis-textarea:focus {
-            outline: none;
-            border-color: #9C27B0;
-        }
-
-        .submit-btn {
-            background: #9C27B0;
-            color: white;
-            padding: 14px 32px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 16px;
-            width: 100%;
-        }
-
-        .submit-btn:hover {
-            background: #7B1FA2;
-        }
-
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .feedback-card {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-top: 20px;
-            border-left: 4px solid #9C27B0;
-        }
-
-        .feedback-section {
-            margin: 20px 0;
-            padding: 16px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .feedback-section h4 {
-            margin-top: 0;
-            color: #333;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #9C27B0;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .info-box {
-            background: #f3e5f5;
-            border-left: 4px solid #9C27B0;
-            padding: 16px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
-
-        .info-box h4 {
-            margin-top: 0;
-            color: #7B1FA2;
-        }
-
-        .case-config-badge {
-            display: inline-block;
-            background: #e3f2fd;
-            color: #1976d2;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 600;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-
-        @media (max-width: 768px) {
-            .case-container h1 { font-size: 2.2rem; }
-            .action-buttons { flex-direction: column; }
-            .case-card { padding: 24px; }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/core.css?v=2">
+    <link rel="stylesheet" href="css/conceituacao.css?v=2">
 </head>
+
 <body>
-    <!-- Header -->
+    <!-- Header Standardized -->
     <header class="header">
         <div class="container">
             <div class="logo">
                 <h1>Scopsy Lab<span class="registered">®</span></h1>
             </div>
-            <button class="back-btn" onclick="window.location.href='case.html'">← Voltar</button>
+            <a href="case.html" class="btn-back">
+                ← Voltar
+            </a>
         </div>
     </header>
 
@@ -492,7 +52,7 @@
     <div id="customizeModal" class="modal">
         <div class="modal-content">
             <h3>⚙️ Personalizar Caso</h3>
-            
+
             <!-- Nível de Dificuldade -->
             <div class="form-group">
                 <label for="levelSelect">📊 Nível de Dificuldade:</label>
@@ -572,7 +132,7 @@
 
             <div class="modal-buttons">
                 <button class="btn-cancel" onclick="closeCustomizeModal()">Cancelar</button>
-                <button class="btn-confirm" onclick="generateCustomCase()">Gerar Caso</button>
+                <button class="btn btn-primary" onclick="generateCustomCase()">Gerar Caso</button>
             </div>
         </div>
     </div>
@@ -619,7 +179,7 @@
                 focus: document.querySelector('input[name="focus"]:checked').value,
                 category: document.getElementById('categorySelect').value
             };
-            
+
             await generateCase(caseConfig);
             closeCustomizeModal();
         }
@@ -627,13 +187,13 @@
         async function generateCase(config) {
             try {
                 console.log('📋 Gerando caso:', config);
-                
-                document.getElementById('caseContainer').innerHTML = 
+
+                document.getElementById('caseContainer').innerHTML =
                     '<div class="loading"><div class="spinner"></div><p>Gerando caso clínico personalizado...</p></div>';
                 document.getElementById('feedbackContainer').innerHTML = '';
 
                 const token = localStorage.getItem('token');
-                
+
                 const response = await fetch(`${API_URL}/case/generate`, {
                     method: 'POST',
                     headers: {
@@ -656,13 +216,13 @@
                         id: data.case_id,
                         config: config
                     };
-                    
+
                     caseStartTime = Date.now();
                     renderCase(currentCase);
                 } else {
                     // Mensagem amigável quando não há casos
                     const errorMsg = data.message || data.error || 'Erro ao gerar caso';
-                    document.getElementById('caseContainer').innerHTML = 
+                    document.getElementById('caseContainer').innerHTML =
                         `<div class="case-card">
                             <div style="padding: 20px; text-align: center;">
                                 <h3 style="color: #f57c00; margin-bottom: 16px;">⚠️ Nenhum Caso Disponível</h3>
@@ -675,7 +235,7 @@
                 }
             } catch (error) {
                 console.error('Erro:', error);
-                document.getElementById('caseContainer').innerHTML = 
+                document.getElementById('caseContainer').innerHTML =
                     '<div class="case-card"><p style="color: #f44336;">Erro ao conectar</p></div>';
             }
         }
@@ -683,21 +243,21 @@
         function renderCase(caseData) {
             // Backend já envia vinheta montada
             let vignette = caseData.vignette || 'Vinheta não disponível';
-            
+
             // Melhorar formatação da vinheta (SEM excesso)
             if (vignette && vignette.length > 100) {
                 // Adicionar quebra após pontos finais seguidos de maiúscula (apenas se não tiver muitas quebras)
                 const lineBreaks = (vignette.match(/\n/g) || []).length;
-                
+
                 if (lineBreaks < 2) {
                     // Texto corrido - adicionar alguns parágrafos
                     vignette = vignette.replace(/\. ([A-Z])/g, '.\n\n$1');
                 }
-                
+
                 // Limpar excesso de quebras (max 2 seguidas)
                 vignette = vignette.replace(/\n{3,}/g, '\n\n');
             }
-            
+
             const config = caseData.config || caseConfig;
 
             const levelLabels = {
@@ -771,13 +331,11 @@
                         <textarea 
                             id="intervencaoTextarea" 
                             class="analysis-textarea" 
-                            placeholder="Exemplo:&#10;Foco: Reestruturação de crenças de incompetência&#10;Técnicas: Questionamento socrático, registro de pensamentos, experimentos comportamentais para testar crenças, rescrita de narrativa pessoal"
+                            placeholder="Exemplo:&#10;Foco em reestruturação cognitiva para crenças de incompetência, experimentos comportamentais de exposição gradual a desafios profissionais. Técnicas: Registro de Pensamentos, Role-play de situações temidas."
                         ></textarea>
                     </div>
 
-                    <button class="submit-btn" onclick="submitConceptualization()">
-                        Enviar Conceituação
-                    </button>
+                    <button class="submit-btn btn-primary" onclick="submitConceptualization()">Enviar Conceituação</button>
                 </div>
             `;
         }
@@ -808,11 +366,11 @@
 
             try {
                 const token = localStorage.getItem('token');
-                
-                const response = await fetch(`${API_URL}/case/conceptualize`, {
+
+                const response = await fetch(`${API_URL} /case/conceptualize`, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': `Bearer ${token} `,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -876,18 +434,18 @@
                     <button class="btn-primary" onclick="generateNewCase()" style="margin-top: 24px; width: 100%;">
                         📋 Próximo Caso
                     </button>
-                </div>
+                </div >
             `;
 
             document.getElementById('feedbackContainer').innerHTML = feedbackHTML;
-            document.getElementById('feedbackContainer').scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start' 
+            document.getElementById('feedbackContainer').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
             });
         }
 
         // Fechar modal ao clicar fora
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modal = document.getElementById('customizeModal');
             if (event.target === modal) {
                 closeCustomizeModal();
@@ -895,4 +453,5 @@
         }
     </script>
 </body>
+
 </html>

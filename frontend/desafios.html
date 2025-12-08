@@ -1,278 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Desafios Clínicos - Scopsy Lab</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <style>
-    /* SEU CSS OFICIAL 2025 (com ajustes para esta página) */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --purple: #8B5CF6;
-      --blue: #3B82F6;
-      --gradient-purple-blue: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
-      --bg: #FAFAFA;
-      --card-bg: #FFFFFF;
-      --text: #1F2937;
-      --text-light: #6B7280;
-      --shadow: 0 20px 40px rgba(139,92,246,0.1);
-      --radius: 28px;
-      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-
-    /* Header */
-    .header { background: #0F0F0F; padding: 20px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,.3); }
-    .header .container { max-width: 1240px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
-    .logo h1 { font-size: 28px; font-weight: 900; color: #fff; }
-    .registered { font-size: .6em; vertical-align: super; }
-    .back-btn { background: rgba(255,255,255,.1); color: #fff; border: none; padding: 12px 28px; border-radius: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); }
-    .back-btn:hover { background: rgba(255,255,255,.2); }
-
-    /* Container */
-    .main-container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-
-    /* Hero */
-    .page-hero {
-      text-align: center;
-      margin-bottom: 50px;
-      padding: 40px 20px;
-    }
-    .page-hero h1 {
-      font-size: 3.2rem;
-      font-weight: 900;
-      background: var(--gradient-purple-blue);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 12px;
-    }
-    .page-hero p {
-      font-size: 1.3rem;
-      color: var(--text-light);
-    }
-
-    /* Novo Momento */
-    .new-moment-btn {
-      display: block;
-      width: 100%;
-      max-width: 480px;
-      margin: 0 auto 40px;
-      padding: 20px;
-      background: var(--gradient-purple-blue);
-      color: #fff;
-      border: none;
-      border-radius: 20px;
-      font-size: 1.4rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: 0 15px 35px rgba(139,92,246,.3);
-    }
-    .new-moment-btn:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 25px 50px rgba(139,92,246,.4);
-    }
-
-    /* Card do Momento */
-    .moment-card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 48px 40px;
-      box-shadow: var(--shadow);
-      margin-bottom: 30px;
-    }
-    .context-badge {
-      display: inline-block;
-      padding: 8px 20px;
-      background: rgba(139,92,246,.1);
-      color: var(--purple);
-      border-radius: 30px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-    .context-section {
-      background: rgba(139,92,246,.05);
-      padding: 24px;
-      border-radius: 20px;
-      border-left: 6px solid var(--purple);
-      margin: 24px 0;
-    }
-    .critical-moment {
-      background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-      padding: 32px;
-      border-radius: 20px;
-      border-left: 6px solid #fb923c;
-      margin: 32px 0;
-    }
-    .dialogue {
-      font-size: 1.3rem;
-      font-style: italic;
-      line-height: 1.7;
-      color: #333;
-      margin-bottom: 16px;
-    }
-    .non-verbal {
-      font-size: 1rem;
-      color: #e65100;
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px dashed #ffb74d;
-    }
-    .decision-point {
-      text-align: center;
-      padding: 20px;
-      background: #e8f5e9;
-      border-radius: 16px;
-      font-weight: 700;
-      color: #2e7d32;
-      font-size: 1.2rem;
-      margin: 32px 0;
-    }
-
-    /* Opções */
-    .options-grid {
-      display: grid;
-      gap: 16px;
-      margin: 32px 0;
-    }
-    .option-card {
-      padding: 20px;
-      background: #fff;
-      border: 3px solid #e5e7eb;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: 0 8px 20px rgba(0,0,0,.05);
-    }
-    .option-card:hover {
-      border-color: var(--purple);
-      transform: translateY(-6px);
-    }
-    .option-card.selected {
-      border-color: var(--purple);
-      background: rgba(139,92,246,.08);
-      box-shadow: 0 0 0 4px rgba(139,92,246,.2);
-    }
-    .option-card.correct { border-color: #10b981; background: #ecfdf5; }
-    .option-card.incorrect { border-color: #ef4444; background: #fef2f2; }
-    .option-letter {
-      display: inline-block;
-      width: 40px;
-      height: 40px;
-      background: var(--gradient-purple-blue);
-      color: #fff;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 40px;
-      font-weight: 900;
-      font-size: 1.2rem;
-      margin-right: 16px;
-      float: left;
-    }
-    .option-card.correct .option-letter { background: #10b981; }
-    .option-card.incorrect .option-letter { background: #ef4444; }
-
-    /* Raciocínio */
-    .reasoning-section {
-      margin-top: 32px;
-    }
-    .reasoning-textarea {
-      width: 100%;
-      min-height: 100px;
-      padding: 20px;
-      border: 2px solid #e5e7eb;
-      border-radius: 16px;
-      font-family: inherit;
-      font-size: 1rem;
-      resize: vertical;
-      transition: border .3s;
-    }
-    .reasoning-textarea:focus {
-      outline: none;
-      border-color: var(--purple);
-      box-shadow: 0 0 0 4px rgba(139,92,246,.15);
-    }
-
-    /* Botões */
-    .submit-btn, .next-moment-btn {
-      background: var(--gradient-purple-blue);
-      color: #fff;
-      padding: 18px 40px;
-      border: none;
-      border-radius: 16px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: var(--transition);
-      margin-top: 20px;
-    }
-    .submit-btn:hover, .next-moment-btn:hover { transform: scale(1.05); }
-    .submit-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
-
-    /* Feedback */
-    .feedback-card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 48px 40px;
-      box-shadow: var(--shadow);
-      margin-top: 40px;
-    }
-    .feedback-header {
-      text-align: center;
-      padding: 32px;
-      border-radius: 20px;
-      margin-bottom: 32px;
-      font-size: 2rem;
-      font-weight: 800;
-    }
-    .feedback-header.correct { background: #ecfdf5; color: #10b981; }
-    .feedback-header.incorrect { background: #fff7ed; color: #f97316; }
-    .feedback-section {
-      background: rgba(139,92,246,.05);
-      padding: 28px;
-      border-radius: 20px;
-      margin: 24px 0;
-      border-left: 6px solid var(--purple);
-    }
-    .principle-box {
-      background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
-      border-left: 6px solid var(--purple);
-      padding: 24px;
-      margin: 28px 0;
-      font-style: italic;
-      font-weight: 700;
-      color: var(--purple);
-      font-size: 1.1rem;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 80px 20px;
-      color: var(--text-light);
-      font-size: 1.4rem;
-    }
-    .empty-state h2 { font-size: 2.4rem; margin-bottom: 20px; background: var(--gradient-purple-blue); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-    @media (max-width: 768px) {
-      .page-hero h1 { font-size: 2.6rem; }
-      .moment-card, .feedback-card { padding: 32px 24px; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/core.css">
+  <link rel="stylesheet" href="css/desafios.css">
 </head>
+
 <body>
 
-  <!-- Header -->
+  <!-- Header Standardized -->
   <header class="header">
     <div class="container">
       <div class="logo">
         <h1>Scopsy Lab<span class="registered">®</span></h1>
       </div>
-      <button class="back-btn" onclick="window.location.href='case.html'">← Voltar</button>
+      <a href="dashboard.html" class="btn-back">
+        ← Voltar
+      </a>
     </div>
   </header>
 
@@ -294,7 +46,7 @@
       <div class="empty-state">
         <h2>Desafios Clínicos</h2>
         <p>Desafios clínicos de alta intensidade.<br>
-           Micro-casos que pedem seu melhor — e recebem um feedback cuidadoso, imediato e cheio de carinho.</p>
+          Micro-casos que pedem seu melhor — e recebem um feedback cuidadoso, imediato e cheio de carinho.</p>
       </div>
     </div>
 
@@ -455,4 +207,5 @@
     }
   </script>
 </body>
+
 </html>
