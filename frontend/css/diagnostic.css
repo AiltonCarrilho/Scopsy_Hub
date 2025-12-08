@@ -1,0 +1,210 @@
+/* ========================================
+   DIAGNOSTIC TOOL STYLES
+   ======================================== */
+
+.diagnostic-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.case-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+}
+
+.case-card h3 {
+    color: var(--text-main);
+    margin-bottom: var(--space-md);
+}
+
+.vignette {
+    background: var(--bg-subtle);
+    padding: 20px;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--color-primary);
+    margin: 20px 0;
+    line-height: 1.6;
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.options-grid {
+    display: grid;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.option-button {
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: left;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+.option-button:hover {
+    border-color: var(--color-primary);
+    background: var(--bg-subtle);
+}
+
+.option-button.selected {
+    border-color: var(--color-primary);
+    background: rgba(140, 82, 255, 0.05);
+    /* Tint color */
+}
+
+/* Status colors need to remain specific/functional */
+.option-button.correct {
+    border-color: #10B981;
+    /* Success Green */
+    background: #ecfdf5;
+    color: #065f46;
+}
+
+.option-button.incorrect {
+    border-color: #EF4444;
+    /* Error Red */
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.submit-btn {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 14px 32px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.submit-btn:hover {
+    box-shadow: 0 4px 15px rgba(140, 82, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+    background: var(--text-light);
+    /* Grayscale fallback */
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Feedback Section */
+.feedback-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+    margin-top: 20px;
+    border: 1px solid var(--border-light);
+}
+
+.feedback-section {
+    margin: 20px 0;
+    padding: 16px;
+    background: var(--bg-subtle);
+    border-radius: var(--radius-md);
+}
+
+.feedback-section h4 {
+    margin-top: 0;
+    color: var(--text-main);
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.feedback-section p {
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Stats Bar */
+.stats-bar {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-light);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-primary);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+}
+
+.next-case-btn {
+    background: #10B981;
+    /* Success Green */
+    color: white;
+    padding: 14px 32px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: var(--transition);
+}
+
+.next-case-btn:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+.back-btn {
+    background: transparent;
+    color: var(--text-muted);
+    padding: 8px 16px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: var(--transition);
+}
+
+.back-btn:hover {
+    color: var(--text-main);
+    border-color: var(--text-light);
+}
+
+.error-message {
+    background: #fef2f2;
+    border: 1px solid #fee2e2;
+    color: #b91c1c;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    margin: 20px 0;
+}

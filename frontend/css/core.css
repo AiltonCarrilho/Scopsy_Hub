@@ -1,0 +1,242 @@
+/* ==========================================================================
+   SCOPSY LAB - DESIGN SYSTEM CORE
+   v2.0 - Unified Tokens & Utilities
+   ========================================================================== */
+
+:root {
+  /* --- Color Palette --- */
+
+  /* Primary Branding (Gradients) */
+  --primary-start: #8c52ff;
+  --primary-end: #00c2ff;
+  --gradient-primary: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
+  --gradient-hover: linear-gradient(135deg, #7a42ea 0%, #00b0ea 100%);
+
+  /* Solid Colors */
+  --color-primary: #8c52ff;
+  --color-secondary: #00c2ff;
+  --color-accent: #00ff88;
+  --color-danger: #ff4757;
+  --color-warning: #ffa502;
+  --color-success: #2ed573;
+
+  /* Backgrounds */
+  --bg-body: #fafbfc;
+  --bg-card: #ffffff;
+  --bg-subtle: #f8f9fa;
+  --bg-input: #f1f2f6;
+  --bg-dark: #0a0a0a;
+  /* Headers/Footers */
+  --bg-glass: rgba(255, 255, 255, 0.8);
+
+  /* Text */
+  --text-main: #111827;
+  /* Primary text */
+  --text-muted: #6b7280;
+  /* Secondary text */
+  --text-light: #9ca3af;
+  /* Disabled/Placeholder */
+  --text-white: #ffffff;
+
+  /* Borders */
+  --border-light: rgba(0, 0, 0, 0.08);
+  --border-focus: rgba(140, 82, 255, 0.4);
+
+  /* --- Typography --- */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* --- Spacing System --- */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* --- UI Properties --- */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 16px 32px rgba(140, 82, 255, 0.12);
+  --shadow-hover: 0 20px 40px rgba(140, 82, 255, 0.2);
+
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* --- Reset & Base --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* --- Layout Utility --- */
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+/* --- Component: Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 12px 28px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: var(--text-white);
+  box-shadow: 0 4px 15px rgba(140, 82, 255, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(140, 82, 255, 0.4);
+  background: var(--gradient-hover);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-secondary:hover {
+  background: rgba(140, 82, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.btn-logout {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-white);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
+.btn-logout:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Component: Cards --- */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(140, 82, 255, 0.3);
+}
+
+/* --- Typography Utilities --- */
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* --- Global Header (Standardized) --- */
+.header {
+  background: var(--bg-dark);
+  color: var(--text-white);
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.header.scrolled {
+  background: rgba(10, 10, 10, 0.95);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-white);
+  letter-spacing: -0.02em;
+}
+
+.registred {
+  font-size: 0.5em;
+  vertical-align: super;
+  opacity: 0.7;
+}
+
+/* --- Standard Back Button --- */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-back:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(-2px);
+}
