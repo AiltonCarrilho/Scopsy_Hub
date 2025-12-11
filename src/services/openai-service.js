@@ -399,7 +399,7 @@ async function saveMessagesToBoostspace(threadId, userId, userMessage, assistant
 async function updateUserStats(userId, tokensUsed) {
   try {
     const stats = await getFromBoostspace('user_stats', { user_id: userId });
-    
+
     if (!stats || stats.length === 0) {
       // Criar stats iniciais
       await saveToBoostspace('user_stats', {
@@ -414,9 +414,9 @@ async function updateUserStats(userId, tokensUsed) {
         updated_at: new Date().toISOString()
       });
     } else {
-      // Atualizar last_activity
-      await saveToBoostspace('user_stats', {
-        id: stats[0].id,
+      // ✅ CORRIGIDO: Usar updateInBoostspace (não saveToBoostspace)
+      const { updateInBoostspace } = require('./database');
+      await updateInBoostspace('user_stats', stats[0].id, {
         last_activity: new Date().toISOString(),
         updated_at: new Date().toISOString()
       });

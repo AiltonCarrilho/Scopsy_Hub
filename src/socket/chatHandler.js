@@ -6,6 +6,12 @@
 const logger = require('../config/logger');
 const { sendMessage, getOrCreateThread, routeToAssistant } = require('../services/openai-service');
 const { verifyToken } = require('../middleware/auth');
+const { createClient } = require('@supabase/supabase-js');
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 // Store de conexões ativas (userId -> socketId)
 const activeConnections = new Map();
@@ -154,22 +160,78 @@ function initializeSocketHandlers(io) {
 
 /**
  * Check rate limiting baseado no plano do usuário
+ * ✅ IMPLEMENTADO com Supabase
  */
 async function checkRateLimit(userId, plan) {
-  // TODO: Implementar com Redis ou Boost.space
-  // Por ora, permitir sempre (implementar depois)
-  
-  const limits = {
-    free: 20,      // 20 mensagens/dia
-    basic: 100,    // 100 mensagens/dia
-    pro: 500,      // 500 mensagens/dia
-    premium: 9999  // Ilimitado
-  };
+  try {
+    const limits = {
+      free: 20,      // 20 mensagens/dia
+      basic: 100,    // 100 mensagens/dia
+      pro: 500,      // 500 mensagens/dia
+      premium: 9999  // Ilimitado
+    };
 
-  const userLimit = limits[plan] || limits.free;
-  
-  // Placeholder - sempre retorna true por ora
-  return true;
+    const userLimit = limits[plan] || limits.free;
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+    // Buscar contador de mensagens de hoje
+    const { data: rateData, error: fetchError } = await supabase
+      .from('user_rate_limits')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('date', today)
+      .single();
+
+    if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = not found
+      logger.error('Erro ao buscar rate limit', { error: fetchError.message });
+      return true; // Em caso de erro, permitir (fail-open)
+    }
+
+    // Se não existe registro de hoje, criar
+    if (!rateData) {
+      await supabase
+        .from('user_rate_limits')
+        .insert({
+          user_id: userId,
+          date: today,
+          message_count: 1,
+          plan: plan
+        });
+
+      logger.info('Rate limit: primeiro uso hoje', { userId, plan });
+      return true;
+    }
+
+    // Verificar se ultrapassou limite
+    if (rateData.message_count >= userLimit) {
+      logger.warn('Rate limit excedido', {
+        userId,
+        plan,
+        count: rateData.message_count,
+        limit: userLimit
+      });
+      return false;
+    }
+
+    // Incrementar contador
+    await supabase
+      .from('user_rate_limits')
+      .update({ message_count: rateData.message_count + 1 })
+      .eq('user_id', userId)
+      .eq('date', today);
+
+    logger.info('Rate limit OK', {
+      userId,
+      count: rateData.message_count + 1,
+      limit: userLimit
+    });
+
+    return true;
+
+  } catch (error) {
+    logger.error('Erro no rate limiting', { error: error.message });
+    return true; // Fail-open: se erro, permitir
+  }
 }
 
 /**

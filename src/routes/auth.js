@@ -1,20 +1,14 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-// Função para gerar ID único
-function generateId() {
-  return Date.now().toString(36) + Math.random().toString(36).substring(2);
-}
-function generateId() {
-  return Date.now().toString(36) + Math.random().toString(36).substring(2);
-}
-const { 
-  generateToken, 
+const {
+  generateToken,
   generateRefreshToken,
-  authenticateRequest 
+  authenticateRequest
 } = require('../middleware/auth');
 const {
-  saveToBoostspace, 
-  getFromBoostspace
+  saveToBoostspace,
+  getFromBoostspace,
+  updateInBoostspace
 } = require('../services/database');
 const logger = require('../config/logger');
 
@@ -151,13 +145,17 @@ router.post('/login', async (req, res) => {
 
     if (!passwordMatch) {
       logger.warn('Senha incorreta', { email });
-      return res.status(401).json({ 
-        error: 'Email ou senha incorretos' 
+      return res.status(401).json({
+        error: 'Email ou senha incorretos'
       });
     }
 
-    // Atualizar last_login
-    // TODO: Implementar update quando precisar
+    // ✅ Atualizar last_login (async, não bloqueia resposta)
+    updateInBoostspace('users', user.id, {
+      last_login: new Date().toISOString()
+    }).catch(err => {
+      logger.error('Erro ao atualizar last_login', { error: err.message, userId: user.id });
+    });
 
     // Gerar tokens
     const token = generateToken(user.id, user.plan);
