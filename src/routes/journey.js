@@ -191,7 +191,8 @@ router.get('/:journey_id/session/:session_number', async (req, res) => {
     if (progressError) throw progressError;
 
     // Verificar se usuário está na sessão correta
-    if (parseInt(session_number) > progress.current_session) {
+    if (!req.query.free_mode && parseInt(session_number) > progress.current_session) {
+
       console.log(`[Journey] 🚫 Acesso negado - Usuário ainda na sessão ${progress.current_session}`);
       return res.status(403).json({
         success: false,
@@ -455,6 +456,151 @@ router.get('/:journey_id/progress', async (req, res) => {
 
   } catch (error) {
     console.error('[Journey] ❌ Erro ao buscar progresso:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ============================================
+// 7️⃣ LISTAR TODAS AS SESSÕES DE UMA JORNADA (COM FILTRO POR SKILL)
+// ============================================
+router.get('/:journey_id/sessions', async (req, res) => {
+  try {
+    const { journey_id } = req.params;
+    const { skill_module } = req.query;
+    const userId = parseInt(req.query.user_id) || 8;
+
+    console.log(`\n[Journey] 📚 Listando sessões: jornada ${journey_id}`);
+    if (skill_module) {
+      console.log(`   Filtro: module = ${skill_module}`);
+    }
+
+    // Buscar sessões SEM join (evita erro de relacionamento)
+    let query = supabase
+      .from('journey_sessions')
+      .select('*')
+      .eq('journey_id', journey_id)
+      .order('session_number');
+
+    const { data: sessions, error: sessionsError } = await query;
+
+    if (sessionsError) throw sessionsError;
+
+    // Buscar skills manualmente
+    const { data: skills } = await supabase
+      .from('skills')
+      .select('*');
+
+    // Fazer join manual
+    const sessionsWithSkills = sessions.map(session => {
+      const skill = skills ? skills.find(s => s.id === session.skill_id) : null;
+      return {
+        ...session,
+        skill: skill
+      };
+    });
+
+    // Filtrar por módulo se especificado
+    let filteredSessions = sessionsWithSkills;
+    if (skill_module) {
+      filteredSessions = sessionsWithSkills.filter(s => s.skill && s.skill.module === skill_module);
+    }
+
+    // Buscar progresso do usuário para marcar sessões completadas
+    const { data: decisions } = await supabase
+      .from('user_session_decisions')
+      .select('session_id')
+      .eq('user_id', userId);
+
+    const completedSessionIds = new Set(decisions?.map(d => d.session_id) || []);
+
+    // Adicionar flag de completado
+    const sessionsWithStatus = filteredSessions.map(session => ({
+      ...session,
+      is_completed: completedSessionIds.has(session.id)
+    }));
+
+    console.log(`[Journey] ✅ ${sessionsWithStatus.length} sessões retornadas`);
+
+    res.json({
+      success: true,
+      sessions: sessionsWithStatus,
+      total: sessionsWithStatus.length,
+      filter_applied: skill_module || 'all'
+    });
+
+  } catch (error) {
+    console.error('[Journey] ❌ Erro ao listar sessões:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ============================================
+// 8️⃣ RECOMEÇAR JORNADA (RESET)
+// ============================================
+router.post('/:journey_id/restart', async (req, res) => {
+  try {
+    const { journey_id } = req.params;
+    const { user_id = 8 } = req.body;
+
+    console.log(`\n[Journey] 🔄 Recomeçando jornada: ${journey_id}, user: ${user_id}`);
+
+    // Buscar progresso atual
+    const { data: currentProgress } = await supabase
+      .from('user_journey_progress')
+      .select('*')
+      .eq('user_id', user_id)
+      .eq('journey_id', journey_id)
+      .maybeSingle();
+
+    if (currentProgress) {
+      // Arquivar progresso antigo (marcar como archived)
+      const { error: archiveError } = await supabase
+        .from('user_journey_progress')
+        .update({
+          is_completed: true,
+          archived_at: new Date().toISOString()
+        })
+        .eq('id', currentProgress.id);
+
+      if (archiveError) throw archiveError;
+
+      console.log('[Journey] 📦 Progresso antigo arquivado');
+    }
+
+    // Criar novo progresso (reset)
+    const { data: newProgress, error: createError } = await supabase
+      .from('user_journey_progress')
+      .insert({
+        user_id: user_id,
+        journey_id: journey_id,
+        current_session: 1,
+        total_rapport: 0,
+        total_insight: 0,
+        total_behavioral_change: 0,
+        total_symptom_reduction: 0,
+        is_completed: false
+      })
+      .select()
+      .single();
+
+    if (createError) throw createError;
+
+    console.log('[Journey] ✅ Nova jornada iniciada');
+
+    res.json({
+      success: true,
+      progress: newProgress,
+      message: 'Jornada recomeçada com sucesso'
+    });
+
+  } catch (error) {
+    console.error('[Journey] ❌ Erro ao recomeçar:', error);
     res.status(500).json({
       success: false,
       error: error.message
