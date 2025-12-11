@@ -19,70 +19,89 @@
             <div class="logo">
                 <h1>Scopsy Lab<span class="registered">®</span></h1>
             </div>
-            <a href="case.html" class="btn-back">
-                ← Voltar
+            <a href="dashboard.html" class="btn-back">
+                ← Dashboard
             </a>
         </div>
     </header>
 
     <div class="container">
-        <!-- HEADER REMOVED FROM HERE -->
+   
 
-        <!-- PROGRESS -->
-        <div class="progress-container" id="progressContainer" style="display: none;">
-            <div class="progress-header">
-                <div class="progress-title">Progresso do Tratamento</div>
-                <div class="session-counter" id="sessionCounter">Sessão 1/12</div>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 8.33%"></div>
-            </div>
-            <div class="metrics">
-                <div class="metric">
-                    <div class="metric-label">Rapport</div>
-                    <div class="metric-value" id="metricRapport">0</div>
+         <!-- LAYOUT COM MENU LATERAL -->
+        <div class="journey-layout">
+            <!-- MENU LATERAL DE SESSÕES -->
+            <div class="sessions-sidebar" id="sessionsSidebar">
+                <div class="sidebar-header">
+                    <h3>Sessões</h3>
+                    <div class="sessions-count" id="sessionsCount">12 disponíveis</div>
                 </div>
-                <div class="metric">
-                    <div class="metric-label">Insight</div>
-                    <div class="metric-value" id="metricInsight">0</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-label">Mudança</div>
-                    <div class="metric-value" id="metricBehavioral">0</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-label">Redução</div>
-                    <div class="metric-value" id="metricSymptom">0</div>
+                <div class="sessions-menu" id="sessionsMenu">
+                    <div class="loading-small">Carregando sessões...</div>
                 </div>
             </div>
-        </div>
 
-        <!-- SESSION CONTENT -->
-        <div id="sessionContainer">
-            <div class="loading">
-                <div class="spinner"></div>
-                <p>Carregando jornada...</p>
+            <!-- CONTEÚDO PRINCIPAL -->
+            <div class="main-content">
+                <!-- PROGRESS -->
+                <div class="progress-container" id="progressContainer" style="display: none;">
+                    <div class="progress-header">
+                        <div class="progress-title">Progresso do Tratamento</div>
+                        <div class="session-counter" id="sessionCounter">Sessão 1/12</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 8.33%"></div>
+                    </div>
+                    <div class="metrics">
+                        <div class="metric">
+                            <div class="metric-label">Rapport</div>
+                            <div class="metric-value" id="metricRapport">0</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Insight</div>
+                            <div class="metric-value" id="metricInsight">0</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Mudança</div>
+                            <div class="metric-value" id="metricBehavioral">0</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Redução</div>
+                            <div class="metric-value" id="metricSymptom">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SESSION CONTENT -->
+                <div id="sessionContainer">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Carregando jornada...</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ========== JAVASCRIPT 100% ORIGINAL ========== -->
+    <!-- ========== JAVASCRIPT ========== -->
     <script>
         const API_URL = 'http://localhost:3000/api';
         const USER_ID = 8; // TODO: Pegar do auth
 
-        // Hardcoded para primeira jornada (será dinâmico depois)
+        // Estado global
         let currentJourneyId = null;
+        let availableJourneys = []; // Lista de todas as jornadas disponíveis
         let currentSessionNumber = 1;
         let selectedOption = null;
         let sessionStartTime = null;
+        let allSessions = []; // Armazena todas as sessões carregadas
+        let currentFilter = ''; // Filtro atual de skill_module
 
         // ========================================
-        // INICIALIZAR
+        // CARREGAR JORNADAS DISPONÍVEIS
         // ========================================
-        async function init() {
+        async function loadJourneys() {
             try {
-                // Buscar primeira jornada disponível
                 const response = await fetch(`${API_URL}/journey/list`);
                 const data = await response.json();
 
@@ -90,16 +109,203 @@
                     throw new Error('Nenhuma jornada disponível');
                 }
 
-                currentJourneyId = data.journeys[0].id;
+                availableJourneys = data.journeys;
 
-                // Verificar se já iniciou
-                await checkProgress();
+                const select = document.getElementById('journeySelect');
+                select.innerHTML = availableJourneys.map((journey, index) => {
+                    const disorderLabel = {
+                        'anxiety': '😰 Ansiedade',
+                        'depression': '😔 Depressão',
+                        'ocd': '🔄 TOC',
+                        'trauma': '💔 Trauma'
+                    }[journey.disorder_category] || '📋';
+
+                    return `
+                        <option value="${journey.id}">
+                            ${disorderLabel} ${journey.client_name} - ${journey.disorder}
+                            ${index === 0 ? ' (Atual)' : ''}
+                        </option>
+                    `;
+                }).join('');
+
+                // Selecionar primeira jornada por padrão
+                currentJourneyId = availableJourneys[0].id;
+                console.log('📚 Jornadas carregadas:', availableJourneys.length);
 
             } catch (error) {
-                console.error('Erro ao inicializar:', error);
+                console.error('❌ Erro ao carregar jornadas:', error);
+                document.getElementById('journeySelect').innerHTML = `
+                    <option value="">Erro ao carregar jornadas</option>
+                `;
+            }
+        }
+
+        // ========================================
+        // SELECIONAR JORNADA (TROCAR DE CASO)
+        // ========================================
+        async function selectJourney(journeyId) {
+            if (!journeyId || journeyId === currentJourneyId) return;
+
+            console.log('🔄 Trocando para jornada:', journeyId);
+
+            currentJourneyId = journeyId;
+            currentSessionNumber = 1;
+            currentFilter = '';
+
+            // Resetar filtro de habilidades
+            document.getElementById('skillModuleFilter').value = '';
+
+            // Recarregar tudo
+            await loadAllSessions();
+            await checkProgress();
+        }
+
+        // ========================================
+        // CARREGAR FILTRO DE HABILIDADES
+        // ========================================
+        async function loadSkillsFilter() {
+            try {
+                const response = await fetch(`${API_URL}/skills/list`);
+                const data = await response.json();
+
+                if (!data.success) throw new Error('Erro ao carregar habilidades');
+
+                const moduleNames = {
+                    fundamentos: '🌿 Fundamentos da Relação',
+                    formulacao: '🔍 Formulação e Insight',
+                    intervencao: '⚙️ Intervenção e Mudança',
+                    consolidacao: '🌱 Consolidação e Alta',
+                    metacompetencias: '💎 Metacompetências'
+                };
+
+                const select = document.getElementById('skillModuleFilter');
+                select.innerHTML = `
+                    <option value="">📚 Todas as Habilidades (${data.total})</option>
+                    ${Object.keys(data.skills_by_module).map(module => `
+                        <option value="${module}">
+                            ${moduleNames[module]} (${data.skills_by_module[module].length})
+                        </option>
+                    `).join('')}
+                `;
+
+            } catch (error) {
+                console.error('Erro ao carregar filtro de skills:', error);
+            }
+        }
+
+        // ========================================
+        // FILTRAR POR MÓDULO DE HABILIDADE
+        // ========================================
+        async function filterBySkillModule(module) {
+            currentFilter = module;
+            await loadAllSessions();
+        }
+
+        // ========================================
+        // CARREGAR TODAS AS SESSÕES (COM FILTRO)
+        // ========================================
+        async function loadAllSessions() {
+            try {
+                const url = currentFilter
+                    ? `${API_URL}/journey/${currentJourneyId}/sessions?skill_module=${currentFilter}&user_id=${USER_ID}`
+                    : `${API_URL}/journey/${currentJourneyId}/sessions?user_id=${USER_ID}`;
+
+                console.log('🔍 Carregando sessões:', url);
+
+                const response = await fetch(url);
+                console.log('📡 Response status:', response.status);
+
+                const data = await response.json();
+                console.log('📦 Data recebida:', data);
+
+                if (!data.success) throw new Error('Erro ao carregar sessões');
+
+                allSessions = data.sessions;
+                console.log('✅ Sessions carregadas:', allSessions.length);
+
+                renderSessionsMenu(allSessions);
+
+                // Atualizar contador
+                document.getElementById('sessionsCount').textContent =
+                    `${allSessions.length} ${allSessions.length === 1 ? 'sessão' : 'sessões'}`;
+
+            } catch (error) {
+                console.error('❌ Erro ao carregar sessões:', error);
+                document.getElementById('sessionsMenu').innerHTML = `
+                    <div style="padding: 16px; color: #f44336; text-align: center;">
+                        Erro: ${error.message}<br>
+                        <small>Verifique o console (F12)</small>
+                    </div>
+                `;
+            }
+        }
+
+        // ========================================
+        // RENDERIZAR MENU DE SESSÕES
+        // ========================================
+        function renderSessionsMenu(sessions) {
+            const html = sessions.map(session => {
+                const isCurrent = session.session_number === currentSessionNumber;
+                const isCompleted = session.is_completed;
+
+                const skillName = session.skill ? session.skill.name : 'Sem habilidade';
+                const skillIcon = getSkillModuleIcon(session.skill?.module);
+
+                return `
+                    <div class="session-menu-item ${isCurrent ? 'active' : ''} ${isCompleted ? 'completed' : ''}"
+                         onclick="loadSession(${session.session_number}, true)">
+                        <div class="session-number">
+                            ${isCompleted ? '✓' : session.session_number}
+                        </div>
+                        <div class="session-info">
+                            <div class="session-title-small">${session.session_title}</div>
+                            <div class="session-skill">${skillIcon} ${skillName}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('sessionsMenu').innerHTML = html || `
+                <div style="padding: 16px; text-align: center; color: var(--text-secondary);">
+                    Nenhuma sessão encontrada
+                </div>
+            `;
+        }
+
+        // ========================================
+        // HELPER: Ícone do módulo de habilidade
+        // ========================================
+        function getSkillModuleIcon(module) {
+            const icons = {
+                fundamentos: '🌿',
+                formulacao: '🔍',
+                intervencao: '⚙️',
+                consolidacao: '🌱',
+                metacompetencias: '💎'
+            };
+            return icons[module] || '●';
+        }
+
+        // ========================================
+        // INICIALIZAR
+        // ========================================
+        async function init() {
+            try {
+                console.log('🚀 Inicializando Jornada Clínica...');
+                    currentJourneyId = "b438bc8c-8f25-4def-90f5-bca524876366"; // seu caso fixo
+                        await loadAllSessions();
+                        await checkProgress();
+
+                console.log('✅ Inicialização completa');
+
+            } catch (error) {
+                console.error('❌ Erro ao inicializar:', error);
                 document.getElementById('sessionContainer').innerHTML = `
                     <div class="session-card">
                         <p style="color: #f44336;">Erro ao carregar jornada: ${error.message}</p>
+                        <button class="btn btn-primary" onclick="window.location.reload()" style="margin-top: 16px;">
+                            🔄 Recarregar Página
+                        </button>
                     </div>
                 `;
             }
@@ -114,12 +320,18 @@
                 const data = await response.json();
 
                 if (data.progress) {
-                    // Já iniciou
+                    if (data.progress.is_completed) {
+                        console.log('✅ Jornada já completa - mostrando resultado final');
+                        updateProgress(data.progress);
+                        document.getElementById('progressContainer').style.display = 'block';
+                        showCompletion(data.progress);
+                        return;
+                    }
+
                     currentSessionNumber = data.progress.current_session;
                     updateProgress(data.progress);
                     loadSession(currentSessionNumber);
                 } else {
-                    // Primeira vez
                     await startJourney();
                 }
 
@@ -157,13 +369,17 @@
         // ========================================
         // CARREGAR SESSÃO
         // ========================================
-        async function loadSession(sessionNumber) {
+        async function loadSession(sessionNumber, freeMode = false) {
             try {
+                currentSessionNumber = sessionNumber;
                 sessionStartTime = Date.now();
 
-                const response = await fetch(
-                    `${API_URL}/journey/${currentJourneyId}/session/${sessionNumber}?user_id=${USER_ID}`
-                );
+                let url = `${API_URL}/journey/${currentJourneyId}/session/${sessionNumber}?user_id=${USER_ID}`;
+                if (freeMode) {
+                    url += '&free_mode=true';
+                }
+
+                const response = await fetch(url);
                 const data = await response.json();
 
                 if (data.success) {
@@ -177,7 +393,7 @@
         }
 
         // ========================================
-        // RENDERIZAR SESSÃO
+        // RENDERIZAR SESSÃO (com objetivo didático)
         // ========================================
         function renderSession(session, previousDecision) {
             const phaseName = {
@@ -188,15 +404,34 @@
                 'termination': 'Encerramento'
             }[session.session_phase] || session.session_phase;
 
+            const phaseColor = {
+                assessment: "#4CAF50",
+                psychoeducation: "#2196F3",
+                intervention: "#9C27B0",
+                consolidation: "#FF9800",
+                termination: "#F44336"
+            }[session.session_phase] || "#607D8B";
+
+            const didacticSummary = generateContextualSummary(session.session_number);
+
             let html = `
                 <div class="session-card">
                     <div class="session-header">
                         <h2 class="session-title">${session.session_title}</h2>
-                        <span class="session-phase">${phaseName}</span>
+                        <span class="session-phase" style="background:${phaseColor}33; color:${phaseColor}">
+                            ${phaseName}
+                        </span>
+                    </div>
+
+                    <div class="context-section" style="border-left-color:${phaseColor};">
+                        <div class="context-title">🎓 Objetivo Didático da Sessão</div>
+                        <div class="context-text">
+                            ${didacticSummary}
+                        </div>
                     </div>
 
                     <div class="context-section">
-                        <div class="context-title">📋 Contexto da Sessão</div>
+                        <div class="context-title">📋 Contexto Clínico</div>
                         <div class="context-text">${session.context}</div>
                     </div>
 
@@ -244,7 +479,6 @@
 
             document.getElementById('sessionContainer').innerHTML = html;
 
-            // Se já tem decisão anterior, mostrar feedback
             if (previousDecision) {
                 const option = session.options.find(o => o.label === previousDecision.option_chosen);
                 if (option) {
@@ -257,17 +491,16 @@
         // SELECIONAR OPÇÃO
         // ========================================
         function selectOption(label) {
-            // Remover seleção anterior
             document.querySelectorAll('.option').forEach(opt => {
                 opt.classList.remove('selected');
             });
 
-            // Selecionar nova
+            // Usa o event global do browser (como no seu original)
             event.currentTarget.classList.add('selected');
             selectedOption = label;
 
-            // Habilitar botão
-            document.getElementById('submitBtn').disabled = false;
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) submitBtn.disabled = false;
         }
 
         // ========================================
@@ -279,14 +512,13 @@
             try {
                 const timeTaken = Math.floor((Date.now() - sessionStartTime) / 1000);
 
-                // Desabilitar opções
                 document.querySelectorAll('.option').forEach(opt => {
                     opt.classList.add('disabled');
                     opt.onclick = null;
                 });
 
                 const response = await fetch(
-                    `${API_URL}/journey/${currentJourneyId}/session/${currentSessionNumber}/decide`,
+                    `${API_URL}/journey/${currentJourneyId}/session/${currentSessionNumber}/decide?user_id=${USER_ID}`,
                     {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -303,15 +535,16 @@
                 if (data.success) {
                     showFeedback(data.feedback, selectedOption);
 
-                    // Atualizar progresso
                     await refreshProgress();
 
-                    // Trocar botão
-                    document.getElementById('submitBtn').outerHTML = `
-                        <button class="btn btn-primary" onclick="nextSession()">
-                            ${data.is_completed ? 'Ver Resultado Final →' : 'Próxima Sessão →'}
-                        </button>
-                    `;
+                    const btn = document.getElementById('submitBtn');
+                    if (btn) {
+                        btn.outerHTML = `
+                            <button class="btn btn-primary" onclick="nextSession()">
+                                ${data.is_completed ? 'Ver Resultado Final →' : 'Próxima Sessão →'}
+                            </button>
+                        `;
+                    }
                 }
 
             } catch (error) {
@@ -408,7 +641,6 @@
         // PRÓXIMA SESSÃO
         // ========================================
         async function nextSession() {
-            // Verificar se completou
             const response = await fetch(
                 `${API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
             );
@@ -463,15 +695,109 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-primary" onclick="window.location.href='case.html'" 
-                            style="background: white; color: #8B5CF6; margin-top: 24px;">
-                        Voltar ao Hub
-                    </button>
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px;">
+                        <button class="btn btn-primary" onclick="startNewCase()"
+                                style="background: var(--color-primary); color: white; width: 100%; font-size: 1.05rem; padding: 14px;">
+                            ✨ Novo Caso Clínico
+                        </button>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <button class="btn btn-primary" onclick="restartJourney()"
+                                    style="background: white; color: var(--color-primary); border: 2px solid var(--color-primary);">
+                                🔄 Recomeçar Este Caso
+                            </button>
+                            <button class="btn btn-primary" onclick="window.location.href='dashboard.html'"
+                                    style="background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-subtle);">
+                                🏠 Dashboard
+                            </button>
+                        </div>
+                        <button class="btn btn-secondary" onclick="window.location.href='treino-livre.html'"
+                                style="width: 100%;">
+                            🎯 Treino Livre por Habilidade
+                        </button>
+                    </div>
                 </div>
             `;
 
             document.getElementById('sessionContainer').innerHTML = html;
             document.getElementById('progressContainer').style.display = 'none';
+        }
+
+        // ========================================
+        // INICIAR NOVO CASO CLÍNICO
+        // ========================================
+        async function startNewCase() {
+            try {
+                const currentIndex = availableJourneys.findIndex(j => j.id === currentJourneyId);
+                const nextIndex = (currentIndex + 1) % availableJourneys.length;
+                const nextJourney = availableJourneys[nextIndex];
+
+                console.log(`✨ Iniciando novo caso: ${nextJourney.client_name} - ${nextJourney.disorder}`);
+
+                currentJourneyId = nextJourney.id;
+                document.getElementById('journeySelect').value = currentJourneyId;
+
+                window.location.reload();
+
+            } catch (error) {
+                console.error('❌ Erro ao iniciar novo caso:', error);
+                alert('Erro ao carregar novo caso. Tente novamente.');
+            }
+        }
+
+        // ========================================
+        // RECOMEÇAR JORNADA (MESMO CASO)
+        // ========================================
+        async function restartJourney() {
+            const journey = availableJourneys.find(j => j.id === currentJourneyId);
+            const caseName = journey ? `${journey.client_name} (${journey.disorder})` : 'este caso';
+
+            if (!confirm(`Tem certeza que deseja recomeçar ${caseName} do zero?\n\nSeu progresso atual será arquivado.`)) {
+                return;
+            }
+
+            try {
+                console.log('🔄 Recomeçando mesmo caso...');
+
+                const response = await fetch(`${API_URL}/journey/${currentJourneyId}/restart`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: USER_ID })
+                });
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'Erro ao recomeçar');
+                }
+
+                console.log('✅ Caso recomeçado com sucesso');
+                window.location.reload();
+
+            } catch (error) {
+                console.error('❌ Erro ao recomeçar:', error);
+                alert('Erro ao recomeçar: ' + error.message);
+            }
+        }
+
+        // ========================================
+        // OBJETIVO DIDÁTICO POR SESSÃO
+        // ========================================
+        function generateContextualSummary(num) {
+            const summaries = {
+                1: "Início do tratamento — acolhimento, redução da ativação e construção de segurança.",
+                2: "Aprofundamento da avaliação — identificação de padrões e impacto funcional.",
+                3: "Psicoeducação — apresentação colaborativa do modelo cognitivo da TCC.",
+                4: "Identificação de pensamentos automáticos — nomeação, gatilhos e emoções.",
+                5: "Questionamento socrático — promoção de insight sobre previsões negativas.",
+                6: "Reestruturação cognitiva — construção colaborativa de alternativas realistas.",
+                7: "Experimentos comportamentais — teste de hipóteses e flexibilização de crenças.",
+                8: "Confronto empático — flexibilização de regras rígidas e autocobrança.",
+                9: "Metáforas — ampliação da flexibilidade cognitiva e emocional.",
+                10: "Revisão de progresso — fortalecimento de autoeficácia e integração de ganhos.",
+                11: "Prevenção de recaída — sinais de alerta, plano de manutenção e autonomia.",
+                12: "Encerramento — integração do processo, rituais de alta e luto terapêutico saudável."
+            };
+            return summaries[num] || "";
         }
 
         // ========================================

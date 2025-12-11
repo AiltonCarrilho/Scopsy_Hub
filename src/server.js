@@ -46,7 +46,8 @@ const dashboardRoutes = require('./routes/dashboard');
 const chatRoutes = require('./routes/chat');
 const diagnosticRoutes = require('./routes/diagnostic');
 const caseRoutes = require('./routes/case');
-const journeyRoutes = require('./routes/journey');  
+const journeyRoutes = require('./routes/journey');
+const skillsRoutes = require('./routes/skills');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
@@ -54,6 +55,7 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/diagnostic', diagnosticRoutes);
 app.use('/api/case', caseRoutes);
 app.use('/api/journey', journeyRoutes);
+app.use('/api/skills', skillsRoutes);
 
 // ========================================
 // 4. HEALTH CHECK
