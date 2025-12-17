@@ -274,6 +274,15 @@ async function submitAnswer() {
         const data = await response.json();
 
         if (data.success) {
+            // ⭐ NOVO - Exibir celebração
+            if (data.cognits_gained) {
+                if (data.is_correct && typeof showCelebration === 'function') {
+                    showCelebration(data.cognits_gained, true);
+                } else if (typeof showCognitToast === 'function') {
+                    showCognitToast(data.cognits_gained, '💡 Por tentar');
+                }
+            }
+
             showResult(data.is_correct, data.feedback);
             loadStats(); // Stats antigas
             loadProgress(); // ✅ Atualizar painel de progresso

@@ -17,14 +17,14 @@ const supabase = createClient(
 router.post('/generate-case', authenticateRequest, async (req, res) => {
   try {
     const { level = 'intermediate', category = 'anxiety' } = req.body;
-    
+
     if (!req.user || !req.user.userId) {
       return res.status(401).json({
         success: false,
         error: 'Usuário não autenticado'
       });
     }
-    
+
     const userId = req.user.userId;
 
     console.log(`[Diagnostic] Buscando caso: level=${level}, category=${category}, user=${userId}`);
@@ -42,11 +42,11 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
 
     if (cachedCase) {
       console.log(`[Diagnostic] ⚡ Cache HIT (id: ${cachedCase.id}) - INSTANTÂNEO`);
-      
+
       // Incrementar times_used (assíncrono, não bloqueia resposta)
       supabase
         .from('cases')
-        .update({ 
+        .update({
           times_used: cachedCase.times_used + 1,
           last_used_at: new Date().toISOString()
         })
@@ -207,7 +207,7 @@ router.post('/submit-answer', authenticateRequest, async (req, res) => {
 
     // ⚡ Feedback RÁPIDO com gpt-4o-mini
     let feedback = null;
-    
+
     try {
       const feedbackCompletion = await openai.chat.completions.create({
         model: "gpt-4o-mini", // RÁPIDO
@@ -253,8 +253,8 @@ Feedback JSON.`
       feedback = {
         feedback_eco: {
           explicar: {
-            what_happened: is_correct 
-              ? "Você identificou corretamente o diagnóstico!" 
+            what_happened: is_correct
+              ? "Você identificou corretamente o diagnóstico!"
               : `O diagnóstico correto é ${correct_diagnosis}.`
           },
           conectar: {
@@ -267,10 +267,22 @@ Feedback JSON.`
       };
     }
 
+    // 🔥 Atualizar Streak e Missões
+    let missionsCompleted = [];
+    try {
+      const { checkAndUpdateStreak } = require('../services/streakService');
+      const { updateMissionProgress } = require('../services/missionService');
+
+      await checkAndUpdateStreak(userId, 'diagnostic');
+      missionsCompleted = await updateMissionProgress(userId, 'diagnostic', is_correct) || [];
+    } catch (e) { console.error('Erro gamification:', e); }
+
     res.json({
       success: true,
       is_correct,
+      cognits_gained: xpGained,
       xp_gained: xpGained,
+      missions_completed: missionsCompleted, // 🎯 Retornar missões
       feedback
     });
 

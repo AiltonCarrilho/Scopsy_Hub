@@ -348,6 +348,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Carregar estatísticas
     loadUserStats();
+    displayGamification(); // ⭐ Gamificação
+    loadStreak();          // 🔥 Streaks
+    loadMissions();        // 🎯 Missões
+    loadBadges();          // 🏆 Badges
 
     // Adicionar event listener ao botão de logout
     const logoutBtn = document.getElementById('logoutBtn');
@@ -357,12 +361,263 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ========================================
+// GAMIFICAÇÃO - EXIBIR COGNITS E NÍVEL
+// ========================================
+async function displayGamification() {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const res = await fetch(`${API_URL}/api/progress/summary`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await res.json();
+
+        // Verificar se é Premium
+        if (data.plan !== 'premium') {
+            document.getElementById('levelCard').style.display = 'none';
+            return;
+        }
+
+        // Exibir card de nível
+        const levelCard = document.getElementById('levelCard');
+        if (levelCard) {
+            levelCard.style.display = 'block';
+        }
+
+        // Atualizar dados
+        const levelNumber = document.getElementById('levelNumber');
+        const levelTitle = document.getElementById('levelTitle');
+        const cognitAmount = document.getElementById('cognitAmount');
+        const currentCognits = document.getElementById('currentCognits');
+        const targetCognits = document.getElementById('targetCognits');
+        const remainingCognits = document.getElementById('remainingCognits');
+        const nextLevelName = document.getElementById('nextLevelName');
+        const levelProgressBar = document.getElementById('levelProgressBar');
+
+        if (levelNumber) levelNumber.textContent = data.level || 1;
+        if (levelTitle) levelTitle.textContent = data.clinical_title || 'Estudante de Lente';
+        if (cognitAmount) cognitAmount.textContent = data.cognits || 0;
+        if (currentCognits) currentCognits.textContent = data.cognits || 0;
+        if (targetCognits) targetCognits.textContent = data.next_level?.at || 151;
+        if (remainingCognits) remainingCognits.textContent = data.next_level?.remaining || 151;
+        if (nextLevelName) nextLevelName.textContent = getNextLevelName(data.level || 1);
+
+        // Atualizar barra de progresso
+        if (levelProgressBar) {
+            const progress = ((data.cognits || 0) / (data.next_level?.at || 151)) * 100;
+            levelProgressBar.style.width = `${Math.min(progress, 100)}%`;
+        }
+
+    } catch (error) {
+        console.error('Erro ao carregar gamificação:', error);
+    }
+}
+
+function getNextLevelName(currentLevel) {
+    const levels = {
+        1: 'Observador Clínico',
+        2: 'Apontador de Sintomas',
+        3: 'Decodificador Diagnóstico',
+        4: 'Mapeador de Comorbidades',
+        5: 'Construtor de Linha do Tempo',
+        6: 'Lente Rápida',
+        7: 'Escultor de Conceituação',
+        8: 'Terapeuta de Estratégia',
+        9: 'Arquiteto Cognitivo',
+        10: 'Mentor de Diagnóstico',
+        11: 'Clínico de Alta Performance',
+        12: 'Maestria Absoluta'
+    };
+    return levels[currentLevel + 1] || 'Maestria Absoluta';
+}
+
+// ========================================
 // NAVEGAÇÃO PARA ASSISTENTES
 // ========================================
 // Os links já funcionam via <a href="chat.html?assistant=X">
 // Não precisa adicionar JavaScript extra
 
 // ========================================
+// ========================================
+// GAMIFICATION: MISSIONS
+// ========================================
+async function loadMissions() {
+    try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_URL}/missions`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (data.success && data.missions) {
+            document.getElementById('missionsSection').style.display = 'block';
+            renderMissions(data.missions);
+            startMissionTimer();
+        }
+    } catch (e) {
+        console.error('Erro ao carregar missões:', e);
+    }
+}
+
+function renderMissions(missions) {
+    const grid = document.getElementById('missionsGrid');
+    if (!grid) return;
+
+    grid.innerHTML = missions.map(mission => {
+        const percent = Math.min((mission.progress / mission.target) * 100, 100);
+        const isCompleted = mission.is_completed;
+        const reward = mission.reward_cognits;
+
+        return `
+        <div class="mission-card ${isCompleted ? 'completed' : ''}">
+            <div class="mission-meta">
+                <span class="mission-desc">${mission.description}</span>
+                <div class="mission-reward">
+                    <img src="assets/icons/cognit-24.svg" width="16" height="16">
+                    +${reward}
+                </div>
+            </div>
+            
+            <svg class="check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+
+            <div class="mission-progress-container">
+                <div class="mission-progress-bar">
+                    <div class="mission-progress-fill" style="width: ${percent}%"></div>
+                </div>
+                <div class="mission-progress-text">
+                    ${isCompleted ? '<span>Completado!</span>' : `<span>${mission.progress} / ${mission.target}</span>`}
+                    ${isCompleted ? '' : `<span>${Math.round(percent)}%</span>`}
+                </div>
+            </div>
+        </div>
+        `;
+    }).join('');
+}
+
+function startMissionTimer() {
+    const timerEl = document.getElementById('missionResetTimer');
+    if (!timerEl) return;
+
+    function update() {
+        const now = new Date();
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0);
+
+        const diff = tomorrow - now;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        timerEl.textContent = `${hours}h ${minutes}m`;
+    }
+
+    update();
+    setInterval(update, 60000); // Atualizar a cada minuto
+}
+
+// ========================================
+// GAMIFICATION: BADGES
+// ========================================
+async function loadBadges() {
+    try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_URL}/gamification/badges`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (data.success && data.badges) {
+            renderBadges(data.badges);
+        }
+    } catch (e) {
+        console.error('Erro ao carregar badges:', e);
+    }
+}
+
+function renderBadges(badges) {
+    const scroller = document.getElementById('badgesScroller');
+    if (!scroller) return;
+
+    scroller.innerHTML = badges.map(badge => `
+        <div class="badge-item ${badge.earned ? 'unlocked' : ''}" data-desc="${badge.description} (${badge.xp_bonus} XP)">
+            <div class="badge-icon-container">
+                ${getBadgeIcon(badge.icon_url)}
+            </div>
+            <div class="badge-name">${badge.name}</div>
+        </div>
+    `).join('');
+}
+
+function getBadgeIcon(iconName) {
+    // Mapa simples de emojis para ícones (ou SVG path)
+    const map = {
+        'badge-fire-3': '🔥',
+        'badge-fire-7': '🌋',
+        'badge-fire-30': '☄️',
+        'badge-flag': '🏳️',
+        'badge-footprint': '👣',
+        'badge-magnifier-bronze': '🥉',
+        'badge-magnifier-gold': '🥇',
+        'badge-eye': '👁️',
+        'default': '🏆'
+    };
+    return map[iconName] || map['default'];
+}
+async function loadStreak() {
+    try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_URL}/streaks`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (data.success && data.streak) {
+            updateStreakUI(data.streak);
+        }
+    } catch (e) {
+        console.error('Erro ao carregar streak:', e);
+    }
+}
+
+function updateStreakUI(streakData) {
+    const container = document.getElementById('streakIndicator');
+    const count = document.getElementById('streakCount');
+    const icon = document.getElementById('streakIcon');
+
+    if (!container || !count) return;
+
+    const current = streakData.current_streak || 0;
+
+    container.style.display = 'flex';
+    count.textContent = current;
+
+    if (current > 0) {
+        if (icon) {
+            icon.classList.remove('gray');
+            icon.classList.add('lit');
+        }
+        count.classList.remove('gray');
+
+        // Se fez hoje, tooltip muda
+        if (streakData.today === streakData.last_activity_date) {
+            const tooltip = container.querySelector('.streak-tooltip');
+            if (tooltip) {
+                tooltip.innerHTML = '<span class="fire-text">Sequência Turbo!</span><br>Você já praticou hoje! 🔥';
+            }
+        }
+    } else {
+        if (icon) {
+            icon.classList.add('gray');
+            icon.classList.remove('lit');
+        }
+        count.classList.add('gray');
+    }
+}
+
 // EXPORTAR FUNÇÕES (se necessário)
 // ========================================
 if (typeof module !== 'undefined' && module.exports) {

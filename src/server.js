@@ -62,6 +62,9 @@ app.use('/api/case', caseRoutes);
 app.use('/api/journey', journeyRoutes);
 app.use('/api/skills', skillsRoutes);
 app.use('/api/progress', require('./routes/progress'));
+app.use('/api/streaks', require('./routes/streaks')); // 🔥 New Gamification
+app.use('/api/missions', require('./routes/missions')); // 🎯 New Missions
+app.use('/api/gamification', require('./routes/gamification')); // 🏆 Badges & Profile
 app.use('/api/payments', paymentsRoutes); // New
 
 // ========================================

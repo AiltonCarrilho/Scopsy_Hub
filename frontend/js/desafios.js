@@ -252,6 +252,15 @@ async function submitDecision() {
         const data = await res.json();
 
         if (data.success) {
+            // ⭐ NOVO - Exibir celebração ou toast
+            if (data.cognits_gained) {
+                if (data.feedback.is_correct && typeof showCelebration === 'function') {
+                    showCelebration(data.cognits_gained, true);
+                } else if (typeof showCognitToast === 'function') {
+                    showCognitToast(data.cognits_gained, '💡 Por tentar');
+                }
+            }
+
             showFeedback(data.feedback, selectedChoice);
             // Atualizar O Painel de Progresso após sucesso (decrementa quota em tempo real)
             loadProgress();
@@ -431,7 +440,7 @@ function updateTrialUI(remainingUsage, remainingDays) {
 
 // 🧪 TESTE MANUAL - Para debugar no console
 // Use: testTrialUI() no console do navegador
-window.testTrialUI = function() {
+window.testTrialUI = function () {
     const output = document.getElementById('debugOutput');
     if (output) output.innerHTML = '';
 
@@ -465,7 +474,7 @@ window.testTrialUI = function() {
 };
 
 // 🔧 DEBUG: Forçar esconder avisos
-window.debugTrialUI = function() {
+window.debugTrialUI = function () {
     const output = document.getElementById('debugOutput');
     const warning = document.getElementById('trialWarning');
     const expired = document.getElementById('trialExpired');
@@ -498,7 +507,7 @@ window.debugTrialUI = function() {
 };
 
 // 📊 DEBUG: Mostrar informações do estado atual
-window.showDebugInfo = async function() {
+window.showDebugInfo = async function () {
     const output = document.getElementById('debugOutput');
     const warning = document.getElementById('trialWarning');
     const expired = document.getElementById('trialExpired');
@@ -590,7 +599,7 @@ window.showDebugInfo = async function() {
 };
 
 // 🗑️ RESET: Resetar progresso do usuário (apenas para debug)
-window.resetProgress = async function() {
+window.resetProgress = async function () {
     const output = document.getElementById('debugOutput');
 
     if (!confirm('⚠️ ATENÇÃO!\n\nIsso vai ZERAR TODO o seu progresso no banco de dados.\n\nTem certeza?')) {

@@ -364,6 +364,15 @@ async function submitConceptualization() {
         const data = await response.json();
 
         if (data.success) {
+            // ⭐ NOVO - Exibir celebração
+            if (data.cognits_gained) {
+                if (typeof showCelebration === 'function') {
+                    showCelebration(data.cognits_gained, true);
+                } else if (typeof showCognitToast === 'function') {
+                    showCognitToast(data.cognits_gained, '🎯 Conceituação Completa!');
+                }
+            }
+
             showFeedback(data.feedback);
             // ✅ Atualizar progresso após sucesso
             loadProgress();

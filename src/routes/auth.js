@@ -174,6 +174,14 @@ router.post('/login', async (req, res) => {
       logger.error('Erro ao atualizar last_login', { error: err.message, userId: user.id });
     });
 
+    // 🔥 Atualizar Streak e Badges
+    const { checkAndUpdateStreak } = require('../services/streakService');
+    const { checkAndAwardBadges } = require('../services/badgeService');
+
+    checkAndUpdateStreak(user.id, 'login').then(() => {
+      return checkAndAwardBadges(user.id);
+    }).catch(err => console.error('Erro gamification login:', err));
+
     // Gerar tokens
     const token = generateToken(user.id, user.plan);
     const refreshToken = generateRefreshToken(user.id);
