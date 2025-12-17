@@ -32,6 +32,9 @@
 
     <!-- Hero -->
     <div class="page-hero">
+      <!-- Painel de Progresso -->
+      <div id="progressPanel" class="progress-panel"></div>
+
       <h1>Desafios Clínicos</h1>
       <p>Micro-momentos críticos que exigem decisão imediata — com feedback cuidadoso e instantâneo.</p>
     </div>
@@ -40,6 +43,38 @@
     <button class="new-moment-btn" onclick="generateNewMoment()">
       Novo Momento Crítico
     </button>
+
+    <!-- TRIAL QUASE ACABANDO -->
+    <div class="trial-warning hidden" id="trialWarning">
+      <div class="trial-icon">
+        <i data-lucide="hourglass"></i>
+      </div>
+
+      <p class="trial-text">
+        Seu período de teste está quase no fim.<br>
+        Aproveite os últimos momentos ou faça upgrade.
+      </p>
+
+      <button class="upgrade-btn" onclick="goToUpgrade()">
+        Fazer Upgrade Agora
+      </button>
+    </div>
+
+    <!-- TRIAL ENCERRADO -->
+    <div class="trial-block hidden" id="trialExpired">
+      <div class="trial-icon">
+        <i data-lucide="alert-triangle"></i>
+      </div>
+
+      <p class="trial-text">
+        Seu período de teste terminou.<br>
+        Faça upgrade para continuar treinando!
+      </p>
+
+      <button class="upgrade-btn" onclick="goToUpgrade()">
+        Fazer Upgrade Agora
+      </button>
+    </div>
 
     <!-- Container do Momento -->
     <div id="momentContainer">
@@ -54,158 +89,7 @@
 
   </div>
 
-  <script>
-    lucide.createIcons();
-
-    const API_URL = 'http://localhost:3000/api';
-    let currentMoment = null;
-    let selectedChoice = null;
-    let startTime = null;
-
-    async function generateNewMoment() {
-      document.getElementById('momentContainer').innerHTML = '<div class="loading">Gerando momento crítico...</div>';
-      document.getElementById('feedbackContainer').innerHTML = '';
-
-      try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/case/generate`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ level: 'intermediate', moment_type: 'resistencia_tecnica' })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          currentMoment = { ...data.case, case_id: data.case_id };
-          selectedChoice = null;
-          startTime = Date.now();
-          renderMoment(currentMoment);
-        } else {
-          document.getElementById('momentContainer').innerHTML = `<div class="moment-card"><p style="color:#ef4444">Erro: ${data.error}</p></div>`;
-        }
-      } catch (e) {
-        document.getElementById('momentContainer').innerHTML = '<div class="moment-card"><p style="color:#ef4444">Erro de conexão</p></div>';
-      }
-    }
-
-    function renderMoment(m) {
-      const ctx = m.context;
-      const cm = m.critical_moment;
-
-      let optionsHTML = '';
-      m.options.forEach(opt => {
-        optionsHTML += `
-          <div class="option-card" onclick="selectOption('${opt.letter}', this)">
-            <span class="option-letter">${opt.letter}</span>
-            <div style="flex:1">
-              <strong>${opt.approach}</strong>
-              <p style="margin:8px 0 0; color:#666; font-style:italic;">"${opt.response}"</p>
-            </div>
-          </div>`;
-      });
-
-      document.getElementById('momentContainer').innerHTML = `
-        <div class="moment-card">
-          <span class="context-badge">${ctx.diagnosis || 'Momento Clínico'}</span>
-          
-          <div class="context-section">
-            <h4>CONTEXTO</h4>
-            <p><strong>Cliente:</strong> ${ctx.client_name}, ${ctx.client_age} anos • <strong>Sessão:</strong> ${ctx.session_number}</p>
-            <p><strong>Acabou de acontecer:</strong> ${ctx.what_just_happened}</p>
-          </div>
-
-          <div class="critical-moment">
-            <h4 style="margin:0 0 16px; color:#e65100;">MOMENTO CRÍTICO</h4>
-            <div class="dialogue">"${cm.dialogue}"</div>
-            <div class="non-verbal"><strong>Observação:</strong> ${cm.non_verbal}</div>
-          </div>
-
-          <div class="decision-point">${m.decision_point}</div>
-
-          <h4 style="margin:32px 0 16px; font-size:1.4rem;">Sua resposta:</h4>
-          <div class="options-grid">${optionsHTML}</div>
-
-          <div class="reasoning-section">
-            <label style="display:block; margin-bottom:12px; font-weight:700;">Por que você escolheu esta opção?</label>
-            <textarea id="reasoningText" class="reasoning-textarea" placeholder="Explique seu raciocínio em 1-2 frases..."></textarea>
-          </div>
-
-          <button class="submit-btn" id="submitBtn" onclick="submitDecision()" disabled>Confirmar Decisão</button>
-        </div>`;
-    }
-
-    function selectOption(letter, el) {
-      document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-      el.classList.add('selected');
-      selectedChoice = letter;
-      document.getElementById('submitBtn').disabled = false;
-    }
-
-    async function submitDecision() {
-      if (!selectedChoice) return;
-      const reasoning = document.getElementById('reasoningText').value.trim();
-      const timeSpent = Math.floor((Date.now() - startTime) / 1000);
-
-      const btn = document.getElementById('submitBtn');
-      btn.disabled = true;
-      btn.textContent = 'Analisando...';
-
-      try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/case/analyze`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            case_data: { ...currentMoment, case_id: currentMoment.case_id },
-            user_choice: selectedChoice,
-            user_reasoning: reasoning,
-            time_spent_seconds: timeSpent
-          })
-        });
-        const data = await res.json();
-
-        if (data.success) showFeedback(data.feedback, selectedChoice);
-      } catch (e) { console.error(e); }
-
-      btn.disabled = false;
-      btn.textContent = 'Confirmar Decisão';
-    }
-
-    function showFeedback(f, userChoice) {
-      document.querySelectorAll('.option-card').forEach(card => {
-        card.style.pointerEvents = 'none';
-        const letter = card.querySelector('.option-letter').textContent;
-        if (letter === f.expert_choice) card.classList.add('correct');
-        else if (letter === userChoice && !f.is_correct) card.classList.add('incorrect');
-      });
-
-      const er = f.expert_reasoning;
-      const lp = f.learning_point;
-
-      const fb = `
-        <div class="feedback-card">
-          <div class="feedback-header ${f.is_correct ? 'correct' : 'incorrect'}">
-            <h2>${f.immediate_feedback}</h2>
-            <p style="margin-top:12px; font-size:1.2rem;">
-              ${f.is_correct ? 'Você pensou como um clínico experiente!' : 'Vamos crescer juntos com este aprendizado'}
-            </p>
-          </div>
-
-          ${f.user_reasoning_analysis ? `<div class="feedback-section"><h4>Seu Raciocínio</h4><p style="font-style:italic;">${f.user_reasoning_analysis}</p></div>` : ''}
-
-          <div class="feedback-section"><h4>Por que ${f.expert_choice} é a melhor escolha</h4><p>${er.why_this_works || ''}</p></div>
-
-          ${er.core_principle ? `<div class="principle-box">PRINCÍPIO CLÍNICO: "${er.core_principle}"</div>` : ''}
-
-          ${lp ? `<div class="feedback-section" style="background:#ecfdf5;"><h4>Aprendizado</h4><p><strong>Padrão:</strong> ${lp.pattern_to_recognize}</p><p><strong>Resposta ideal:</strong> ${lp.instant_response}</p></div>` : ''}
-
-          <button class="next-moment-btn" onclick="generateNewMoment()">Próximo Momento Crítico</button>
-        </div>`;
-
-      document.getElementById('feedbackContainer').innerHTML = fb;
-      document.getElementById('feedbackContainer').scrollIntoView({ behavior: 'smooth' });
-    }
-  </script>
+  <script src="js/desafios.js"></script>
 </body>
 
 </html>

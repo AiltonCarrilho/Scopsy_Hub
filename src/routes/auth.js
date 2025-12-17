@@ -24,23 +24,23 @@ router.post('/signup', async (req, res) => {
 
     // Validação básica
     if (!email || !password || !name) {
-      return res.status(400).json({ 
-        error: 'Email, senha e nome são obrigatórios' 
+      return res.status(400).json({
+        error: 'Email, senha e nome são obrigatórios'
       });
     }
 
     // Validar formato email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ 
-        error: 'Email inválido' 
+      return res.status(400).json({
+        error: 'Email inválido'
       });
     }
 
     // Validar senha (mínimo 8 caracteres)
     if (password.length < 8) {
-      return res.status(400).json({ 
-        error: 'Senha deve ter no mínimo 8 caracteres' 
+      return res.status(400).json({
+        error: 'Senha deve ter no mínimo 8 caracteres'
       });
     }
 
@@ -48,18 +48,19 @@ router.post('/signup', async (req, res) => {
 
     // Verificar se email já existe
     const existingUsers = await getFromBoostspace('users', { email });
-    
+
     if (existingUsers && existingUsers.length > 0) {
       logger.warn('Email já cadastrado', { email });
-      return res.status(409).json({ 
-        error: 'Email já cadastrado' 
+      return res.status(409).json({
+        error: 'Email já cadastrado'
       });
     }
 
     // Hash da senha
     const passwordHash = await bcrypt.hash(password, 12);
 
-    // Criar usuário
+    // Criar usuário - ✅ GARANTIR created_at no formato ISO
+    const now = new Date();
     const userData = {
       // id será gerado automaticamente pelo Supabase!
       email: email.toLowerCase(),
@@ -69,21 +70,37 @@ router.post('/signup', async (req, res) => {
       plan: 'free',
       stripe_customer_id: null,
       subscription_status: 'inactive',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
+      created_at: now.toISOString(), // ✅ Formato ISO 8601
+      updated_at: now.toISOString(),
       last_login: null
     };
 
+    // 🐞 DEBUG: Verificar formato da data
+    logger.info('🐞 DEBUG SIGNUP - userData antes de salvar:', {
+      email: userData.email,
+      created_at: userData.created_at,
+      created_at_type: typeof userData.created_at,
+      created_at_isValid: !isNaN(new Date(userData.created_at).getTime())
+    });
+
     // Salvar no Boost.space
     const savedUser = await saveToBoostspace('users', userData);
+
+    // 🐞 DEBUG: Verificar dados após salvar
+    logger.info('🐞 DEBUG SIGNUP - savedUser retornado:', {
+      id: savedUser.id,
+      email: savedUser.email,
+      created_at: savedUser.created_at,
+      created_at_type: typeof savedUser.created_at
+    });
 
     // Gerar tokens
     const token = generateToken(savedUser.id, 'free');
     const refreshToken = generateRefreshToken(savedUser.id);
 
-    logger.info('Usuário criado com sucesso', { 
+    logger.info('Usuário criado com sucesso', {
       userId: savedUser.id,
-      email 
+      email
     });
 
     // Retornar dados (sem senha!)
@@ -102,9 +119,9 @@ router.post('/signup', async (req, res) => {
 
   } catch (error) {
     logger.error('Erro no signup', { error: error.message });
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Erro ao criar conta',
-      details: error.message 
+      details: error.message
     });
   }
 });
@@ -119,22 +136,22 @@ router.post('/login', async (req, res) => {
 
     // Validação
     if (!email || !password) {
-      return res.status(400).json({ 
-        error: 'Email e senha são obrigatórios' 
+      return res.status(400).json({
+        error: 'Email e senha são obrigatórios'
       });
     }
 
     logger.info('Tentativa de login', { email });
 
     // Buscar usuário
-    const users = await getFromBoostspace('users', { 
-      email: email.toLowerCase() 
+    const users = await getFromBoostspace('users', {
+      email: email.toLowerCase()
     });
 
     if (!users || users.length === 0) {
       logger.warn('Email não encontrado', { email });
-      return res.status(401).json({ 
-        error: 'Email ou senha incorretos' 
+      return res.status(401).json({
+        error: 'Email ou senha incorretos'
       });
     }
 
@@ -161,9 +178,9 @@ router.post('/login', async (req, res) => {
     const token = generateToken(user.id, user.plan);
     const refreshToken = generateRefreshToken(user.id);
 
-    logger.info('Login bem-sucedido', { 
+    logger.info('Login bem-sucedido', {
       userId: user.id,
-      email 
+      email
     });
 
     res.json({
@@ -181,9 +198,9 @@ router.post('/login', async (req, res) => {
 
   } catch (error) {
     logger.error('Erro no login', { error: error.message });
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Erro ao fazer login',
-      details: error.message 
+      details: error.message
     });
   }
 });
@@ -194,7 +211,7 @@ router.post('/login', async (req, res) => {
  */
 router.get('/me', authenticateRequest, async (req, res) => {
   try {
-    const userId = req.userId;
+    const userId = req.user.userId;
 
     logger.info('Buscando dados do usuário', { userId });
 
@@ -202,8 +219,8 @@ router.get('/me', authenticateRequest, async (req, res) => {
     const users = await getFromBoostspace('users', { id: userId });
 
     if (!users || users.length === 0) {
-      return res.status(404).json({ 
-        error: 'Usuário não encontrado' 
+      return res.status(404).json({
+        error: 'Usuário não encontrado'
       });
     }
 
@@ -222,8 +239,8 @@ router.get('/me', authenticateRequest, async (req, res) => {
 
   } catch (error) {
     logger.error('Erro ao buscar usuário', { error: error.message });
-    res.status(500).json({ 
-      error: 'Erro ao buscar dados do usuário' 
+    res.status(500).json({
+      error: 'Erro ao buscar dados do usuário'
     });
   }
 });
@@ -234,8 +251,8 @@ router.get('/me', authenticateRequest, async (req, res) => {
  */
 router.post('/logout', (req, res) => {
   // Com JWT, logout é feito no client (deletar token)
-  res.json({ 
-    message: 'Logout realizado. Delete o token no client.' 
+  res.json({
+    message: 'Logout realizado. Delete o token no client.'
   });
 });
 

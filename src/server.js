@@ -33,6 +33,10 @@ const io = socketIo(server, {
 // ========================================
 app.use(helmet());
 app.use(cors());
+
+// STRIPE WEBHOOK (Must be before express.json)
+app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -48,6 +52,7 @@ const diagnosticRoutes = require('./routes/diagnostic');
 const caseRoutes = require('./routes/case');
 const journeyRoutes = require('./routes/journey');
 const skillsRoutes = require('./routes/skills');
+const paymentsRoutes = require('./routes/payments'); // New
 
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
@@ -56,6 +61,8 @@ app.use('/api/diagnostic', diagnosticRoutes);
 app.use('/api/case', caseRoutes);
 app.use('/api/journey', journeyRoutes);
 app.use('/api/skills', skillsRoutes);
+app.use('/api/progress', require('./routes/progress'));
+app.use('/api/payments', paymentsRoutes); // New
 
 // ========================================
 // 4. HEALTH CHECK

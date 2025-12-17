@@ -74,7 +74,7 @@ describe('Dashboard Integration Tests', () => {
           assistant_type: 'case',
           total_cases: 10,
           correct_diagnoses: 8,
-          xp_points: 100,
+          cognits: 100,
           last_activity_date: new Date().toISOString().split('T')[0]
         },
         {
@@ -82,7 +82,7 @@ describe('Dashboard Integration Tests', () => {
           assistant_type: 'diagnostic',
           total_cases: 5,
           correct_diagnoses: 4,
-          xp_points: 50,
+          cognits: 50,
           last_activity_date: new Date().toISOString().split('T')[0]
         }
       ],
@@ -109,7 +109,7 @@ describe('Dashboard Integration Tests', () => {
     expect(response.body).toMatchObject({
       cases_completed: 15, // 10 + 5
       accuracy: 80, // (8 + 4) / (10 + 5) * 100 = 80%
-      xp_points: 150, // 100 + 50
+      cognits: 150, // 100 + 50 (mudança: xp_points → cognits)
       streak_days: 3,
       badges: ['first-case', 'streak-7']
     });
@@ -143,7 +143,7 @@ describe('Dashboard Integration Tests', () => {
       practice_hours: 0,
       accuracy: 0,
       streak_days: 0,
-      xp_points: 0,
+      cognits: 0,
       badges: []
     });
   });
@@ -158,7 +158,7 @@ describe('Dashboard Integration Tests', () => {
           user_id: 'user-123',
           total_cases: 20,
           correct_diagnoses: 19, // 95% accuracy
-          xp_points: 200
+          cognits: 200
         }
       ],
       user_stats: [{ user_id: 'user-123' }]
@@ -185,7 +185,7 @@ describe('Dashboard Integration Tests', () => {
           user_id: 'user-123',
           total_cases: 0,
           correct_diagnoses: 0,
-          xp_points: 0
+          cognits: 0
         }
       ],
       user_stats: [{ user_id: 'user-123' }]
@@ -212,7 +212,7 @@ describe('Dashboard Integration Tests', () => {
           user_id: 'user-123',
           total_cases: 30, // 30 casos * 10 min = 300 min = 5 horas
           correct_diagnoses: 25,
-          xp_points: 300
+          cognits: 300
         }
       ],
       user_stats: [{ user_id: 'user-123' }]
@@ -241,7 +241,7 @@ describe('Dashboard Integration Tests', () => {
           user_id: 'user-123',
           total_cases: 5,
           correct_diagnoses: 4,
-          xp_points: 50,
+          cognits: 50,
           last_activity_date: today // Ativo hoje
         }
       ],
@@ -276,7 +276,7 @@ describe('Dashboard Integration Tests', () => {
           user_id: 'user-123',
           total_cases: 5,
           correct_diagnoses: 4,
-          xp_points: 50,
+          cognits: 50,
           last_activity_date: threeDaysAgo // Último acesso há 3 dias
         }
       ],
@@ -326,21 +326,21 @@ describe('Dashboard Integration Tests', () => {
           assistant_type: 'case',
           total_cases: 10,
           correct_diagnoses: 8,
-          xp_points: 100
+          cognits: 100
         },
         {
           user_id: 'user-123',
           assistant_type: 'diagnostic',
           total_cases: 5,
           correct_diagnoses: 4,
-          xp_points: 50
+          cognits: 50
         },
         {
           user_id: 'user-123',
           assistant_type: 'journey',
           total_cases: 3,
           correct_diagnoses: 3,
-          xp_points: 30
+          cognits: 30
         }
       ],
       user_stats: [{ user_id: 'user-123' }]
@@ -355,7 +355,7 @@ describe('Dashboard Integration Tests', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.cases_completed).toBe(18); // 10 + 5 + 3
-    expect(response.body.xp_points).toBe(180); // 100 + 50 + 30
+    expect(response.body.cognits).toBe(180); // 100 + 50 + 30
     expect(response.body.accuracy).toBe(83); // 15/18 * 100 ≈ 83%
   });
 });

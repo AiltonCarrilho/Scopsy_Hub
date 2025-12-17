@@ -595,7 +595,7 @@ Forneça feedback formativo em JSON.`
     res.json({
       success: true,
       feedback,
-      xp_gained: 50 // Mais XP por análise profunda
+      cognits_gained: 30 // ✅ Conceituação Cognitiva: +30 cognits por caso completo
     });
 
   } catch (error) {
@@ -638,7 +638,9 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
       .eq('assistant_type', assistantType)
       .single();
 
-    const xp = isCorrect ? 40 : 15;
+    // ✅ Desafios Clínicos: +8 cognits por desafio (acerto completo)
+    // Erros ganham cognits parciais para incentivar tentativas
+    const cognits = isCorrect ? 8 : 2;
 
     if (existing) {
       await supabase
@@ -646,7 +648,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
         .update({
           total_cases: (existing.total_cases || 0) + 1,
           correct_diagnoses: (existing.correct_diagnoses || 0) + (isCorrect ? 1 : 0),
-          xp_points: existing.xp_points + xp,
+          cognits: (existing.cognits || 0) + cognits, // ✅ Mudança: xp_points → cognits
           last_activity_date: new Date().toISOString().split('T')[0]
         })
         .eq('id', existing.id);
@@ -658,7 +660,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
           assistant_type: assistantType,
           total_cases: 1,
           correct_diagnoses: isCorrect ? 1 : 0,
-          xp_points: xp,
+          cognits: cognits, // ✅ Mudança: xp_points → cognits
           last_activity_date: new Date().toISOString().split('T')[0]
         });
     }
