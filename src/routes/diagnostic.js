@@ -301,7 +301,7 @@ router.get('/stats', authenticateRequest, async (req, res) => {
         total_diagnoses: 0,
         correct_diagnoses: 0,
         accuracy_rate: 0,
-        xp_points: 0,
+        cognits: 0, // ✅ Mudança: xp_points → cognits
         level: 1
       },
       category_stats: categoryStats || []
@@ -328,13 +328,17 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
       .eq('assistant_type', assistantType)
       .single();
 
+    // ✅ Radar Diagnóstico: +5 cognits por caso acertado
+    // Erros ganham 1 cognit para incentivar tentativas
+    const cognits = isCorrect ? 5 : 1;
+
     if (existing) {
       await supabase
         .from('user_progress')
         .update({
           total_diagnoses: existing.total_diagnoses + 1,
           correct_diagnoses: existing.correct_diagnoses + (isCorrect ? 1 : 0),
-          xp_points: existing.xp_points + (isCorrect ? 30 : 10),
+          cognits: (existing.cognits || 0) + cognits, // ✅ Mudança: xp_points → cognits
           last_activity_date: new Date().toISOString().split('T')[0]
         })
         .eq('id', existing.id);
@@ -346,7 +350,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
           assistant_type: assistantType,
           total_diagnoses: 1,
           correct_diagnoses: isCorrect ? 1 : 0,
-          xp_points: isCorrect ? 30 : 10,
+          cognits: cognits, // ✅ Mudança: xp_points → cognits
           last_activity_date: new Date().toISOString().split('T')[0]
         });
     }

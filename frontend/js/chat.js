@@ -54,13 +54,13 @@ const assistantsInfo = {
         welcome: 'Olá! Pronto para treinar seu olhar clínico? Posso gerar casos de qualquer transtorno do DSM-5.'
     },
     diagnostic: {
-        name: 'Diagnostic Training',
+        name: 'Radar Diagnóstico',
         description: 'Treino de diagnóstico DSM-5-TR',
         icon: '🎲',
         welcome: 'Bem-vindo ao treino diagnóstico! Vamos praticar identificação de transtornos. Pronto para começar?'
     },
     journey: {
-        name: 'Clinical Journey',
+        name: 'Jornada Clínica',
         description: 'Jornada de 12 sessões',
         icon: '🗺️',
         welcome: 'Olá! Vou te guiar em uma jornada clínica completa. Qual abordagem você quer usar? (CBT, ACT, DBT)'

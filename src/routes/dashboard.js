@@ -34,7 +34,7 @@ router.get('/stats', authenticateRequest, async (req, res) => {
       logger.error('Erro ao buscar user_progress', { error: progressError.message });
     }
 
-    // Buscar user_stats
+    // Buscar user_stats para badges e streak
     const { data: statsData, error: statsError } = await supabase
       .from('user_stats')
       .select('*')
@@ -45,52 +45,45 @@ router.get('/stats', authenticateRequest, async (req, res) => {
       logger.error('Erro ao buscar user_stats', { error: statsError.message });
     }
 
-    // Calcular totais agregados
-    const totalCases = progressData?.reduce((sum, p) => sum + (p.total_cases || 0), 0) || 0;
-    const totalCorrect = progressData?.reduce((sum, p) => sum + (p.correct_diagnoses || 0), 0) || 0;
-    const totalXP = progressData?.reduce((sum, p) => sum + (p.xp_points || 0), 0) || 0;
+    // --- CÁLCULO DAS MÉTRICAS ESPECÍFICAS ---
 
-    // Calcular accuracy global
-    const accuracy = totalCases > 0 ? Math.round((totalCorrect / totalCases) * 100) : 0;
+    // 1. Raciocínio Clínico = Desafios Clínicos ('case') + Conceituação ('case_conceptualization')
+    // Soma de CASOS (total_cases)
+    const raciocinioData = progressData?.filter(p => 
+      p.assistant_type === 'case' || p.assistant_type === 'case_conceptualization'
+    ) || [];
+    const raciocinioTotal = raciocinioData.reduce((sum, p) => sum + (p.total_cases || 0), 0);
 
-    // Calcular practice hours (aproximado: 10 min por caso)
-    const practiceHours = Math.round((totalCases * 10) / 60 * 10) / 10; // arredondar 1 casa
+    // 2. Radar Diagnóstico = 'diagnostic'
+    // Soma de CASOS (total_cases)
+    const radarData = progressData?.find(p => p.assistant_type === 'diagnostic');
+    const radarTotal = radarData?.total_cases || 0;
 
-    // Calcular streak (dias consecutivos)
-    let streakDays = 0;
-    if (progressData && progressData.length > 0) {
-      // Pegar última atividade
-      const lastActivity = progressData[0]?.last_activity_date;
-      const today = new Date().toISOString().split('T')[0];
-      const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    // 3. Jornada Terapêutica = 'journey'
+    // Soma de COGNITS (cognits) - +25 cognits por sessão completada
+    const jornadaData = progressData?.find(p => p.assistant_type === 'journey');
+    const jornadaPontos = jornadaData?.cognits || 0; // ✅ Mudança: xp_points → cognits
 
-      if (lastActivity === today || lastActivity === yesterday) {
-        streakDays = statsData?.streak_days || 1;
-      }
-    }
-
+    // Outros dados (badges)
+    const badges = statsData?.badges || [];
+    
+    // Retornar JSON estrutura para o frontend
     res.json({
-      cases_completed: totalCases,
-      practice_hours: practiceHours,
-      accuracy: accuracy,
-      streak_days: streakDays,
-      xp_points: totalXP,
-      badges: statsData?.badges || [],
-      last_activity: statsData?.last_activity || null
+      raciocinio_clinico: raciocinioTotal,
+      radar_diagnostico: radarTotal,
+      jornada_terapeutica: jornadaPontos,
+      badges: badges.length, // Retornando contagem de badges
+      badges_list: badges
     });
 
   } catch (error) {
     logger.error('Erro ao buscar stats', { error: error.message });
-
-    // Fallback: retornar zeros se erro
     res.json({
-      cases_completed: 0,
-      practice_hours: 0,
-      accuracy: 0,
-      streak_days: 0,
-      xp_points: 0,
-      badges: [],
-      last_activity: null
+      raciocinio_clinico: 0,
+      radar_diagnostico: 0,
+      jornada_terapeutica: 0,
+      badges: 0,
+      badges_list: []
     });
   }
 });
