@@ -24,6 +24,14 @@
     </header>
 
     <div class="diagnostic-container">
+        <!-- Banner Trial -->
+        <div id="trialBanner" class="trial-banner" style="display: none;">
+            <div class="trial-content">
+                <i data-lucide="clock"></i>
+                <span><strong id="trialDaysLeft">0</strong> dias restantes no seu período de teste.</span>
+            </div>
+            <a href="#" class="btn-upgrade">Assinar Premium</a>
+        </div>
         <!-- Painel de Progresso -->
         <div id="progressPanel" class="progress-panel"></div>
 
@@ -49,6 +57,7 @@
         <div id="feedbackContainer"></div>
     </div>
 
+    <script src="js/trial-banner.js"></script>
     <script src="js/diagnostic.js"></script>
 </body>
 
