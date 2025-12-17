@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🔗 API_URL:', API_URL);
 
     loadProgress(); // Carregar painel de progresso
-    loadStats();    // Carregar stats antigas (temporário)
     generateNewCase();
 });
 
@@ -94,8 +93,9 @@ async function fetchStatsAndRender(panel, isTrial) {
             const level = Number(data.level) || 1;
             const title = data.clinical_title || 'Estudante de Lente';
             const diagnosticosConcluidos = Number(data.breakdown?.radar) || 0;
+            const accuracy = (Number(data.accuracy) || 0).toFixed(1);
 
-            console.log('💎 PREMIUM:', { cognits, level, title });
+            console.log('💎 PREMIUM:', { cognits, level, title, accuracy });
 
             html = `
                 <strong>${title} (Nível ${level})</strong>
@@ -105,26 +105,19 @@ async function fetchStatsAndRender(panel, isTrial) {
                         <span>Cognits</span>
                     </div>
                     <div class="progress-item">
+                        <strong>${accuracy}%</strong>
+                        <span>Acurácia</span>
+                    </div>
+                    <div class="progress-item">
                         <strong>${diagnosticosConcluidos}</strong>
-                        <span>Diagnósticos Concluídos</span>
+                        <span>Diagnósticos</span>
                     </div>
                 </div>
             `;
         }
 
         panel.innerHTML = html;
-
-        // ✅ Esconder barra de stats antiga para Trial (só Premium deve ver)
-        const statsBar = document.getElementById('statsBar');
-        if (statsBar) {
-            if (isTrial) {
-                statsBar.style.display = 'none';
-                console.log('🚫 Stats bar escondida (Trial)');
-            } else {
-                statsBar.style.display = 'flex';
-                console.log('✅ Stats bar visível (Premium)');
-            }
-        }
+        panel.style.display = 'block'; // Ensure visible
 
     } catch (e) {
         console.error("❌ Erro ao carregar stats:", e);
@@ -134,27 +127,7 @@ async function fetchStatsAndRender(panel, isTrial) {
 // ========================================
 // STATS ANTIGAS (temporário - manter compatibilidade)
 // ========================================
-async function loadStats() {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`${API_URL}/diagnostic/stats`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            document.getElementById('totalCases').textContent = data.progress.total_diagnoses || 0;
-            document.getElementById('accuracy').textContent =
-                (data.progress.accuracy_rate || 0).toFixed(1) + '%';
-            document.getElementById('xpPoints').textContent = data.progress.xp_points || 0;
-        }
-    } catch (error) {
-        console.error('Erro ao carregar stats:', error);
-    }
-}
+// Função loadStats removida (integrada ao progressPanel)
 
 // ========================================
 // GERAÇÃO DE CASOS
@@ -284,7 +257,7 @@ async function submitAnswer() {
             }
 
             showResult(data.is_correct, data.feedback);
-            loadStats(); // Stats antigas
+            showResult(data.is_correct, data.feedback);
             loadProgress(); // ✅ Atualizar painel de progresso
         } else {
             alert('Erro ao processar resposta');

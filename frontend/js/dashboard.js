@@ -152,7 +152,8 @@ function displayUserInfo(user) {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({ returnUrl: window.location.href })
                 });
 
                 const data = await res.json();
@@ -202,6 +203,56 @@ function displayUserInfo(user) {
 
         // Mostrar barras de limite nos cards
         document.querySelectorAll('.trial-limit-info').forEach(el => el.style.display = 'block');
+    }
+
+    // ZONA DE PERIGO: PORTAL DO CLIENTE (Premium Only)
+    if (isPremium) {
+        const userInfo = document.querySelector('.user-info');
+        // Evitar duplicar
+        if (userInfo && !document.getElementById('btnPortal')) {
+            const btnPortal = document.createElement('button');
+            btnPortal.id = 'btnPortal';
+            btnPortal.className = 'btn-logout';
+            // Estilo diferenciado (dourado/escuro)
+            btnPortal.style.background = 'transparent';
+            btnPortal.style.border = '1px solid rgba(255,255,255,0.3)';
+            btnPortal.style.marginRight = '12px';
+            btnPortal.style.fontSize = '0.9rem';
+            btnPortal.textContent = 'Gerenciar Assinatura';
+
+            btnPortal.onclick = async () => {
+                btnPortal.textContent = 'Carregando...';
+                try {
+                    const token = localStorage.getItem('token');
+                    const res = await fetch(`${API_URL}/api/payments/create-portal-session`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ returnUrl: window.location.href })
+                    });
+                    const data = await res.json();
+                    if (data.url) {
+                        window.location.href = data.url;
+                    } else {
+                        alert('Erro ao abrir portal: ' + (data.error || 'Erro desconhecido'));
+                        btnPortal.textContent = 'Gerenciar Assinatura';
+                    }
+                } catch (e) {
+                    console.error('Portal Error:', e);
+                    alert('Erro de conexão');
+                    btnPortal.textContent = 'Gerenciar Assinatura';
+                }
+            };
+
+            const btnLogout = userInfo.querySelector('.btn-logout');
+            if (btnLogout) {
+                userInfo.insertBefore(btnPortal, btnLogout);
+            } else {
+                userInfo.appendChild(btnPortal);
+            }
+        }
     }
 }
 
