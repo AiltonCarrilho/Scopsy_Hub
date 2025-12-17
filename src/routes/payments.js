@@ -16,24 +16,36 @@ router.post('/create-checkout-session', authenticateRequest, async (req, res) =>
 
         if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
 
-        // URL base do frontend
-        const origin = req.headers.origin || 'http://localhost:5500';
+        // URL base do frontend (Dinâmica: Body > Referer > Origin)
+        let returnUrl = req.body.returnUrl || req.headers.referer || req.headers.origin || 'http://localhost:5500/dashboard.html';
+
+        // Limpar query params duplicados
+        try {
+            const urlObj = new URL(returnUrl);
+            urlObj.search = ''; // Remove ?session_id=... anterior
+            returnUrl = urlObj.toString().replace(/\/$/, ''); // Remove trailing slash
+        } catch (e) {
+            // Fallback se URL inválida
+        }
+
         const priceId = process.env.STRIPE_PRICE_ID;
 
         logger.info('Iniciando Checkout Stripe', {
             userId,
             email: user.email,
             priceId: priceId ? '*******' + priceId.slice(-4) : 'UNDEFINED',
-            origin
+            returnUrl: returnUrl // Log returnUrl instead
         });
 
         if (!priceId) {
             throw new Error('STRIPE_PRICE_ID não configurado no servidor');
         }
 
-        const session = await stripe.checkout.sessions.create({
+        // Check if user already has a stripe customer id
+        const customerId = user.stripe_customer_id || user.customer_id;
+
+        const sessionConfig = {
             payment_method_types: ['card'],
-            customer_email: user.email,
             client_reference_id: userId.toString(),
             line_items: [
                 {
@@ -42,12 +54,21 @@ router.post('/create-checkout-session', authenticateRequest, async (req, res) =>
                 },
             ],
             mode: 'subscription',
-            success_url: `${origin}/dashboard.html?session_id={CHECKOUT_SESSION_ID}&upgrade=success`,
-            cancel_url: `${origin}/dashboard.html?upgrade=canceled`,
+            success_url: `${returnUrl}?session_id={CHECKOUT_SESSION_ID}&upgrade=success`,
+            cancel_url: `${returnUrl}?upgrade=canceled`,
             metadata: {
                 userId: userId.toString()
             }
-        });
+        };
+
+        // Reuse Customer if exists, else use email
+        if (customerId) {
+            sessionConfig.customer = customerId;
+        } else {
+            sessionConfig.customer_email = user.email;
+        }
+
+        const session = await stripe.checkout.sessions.create(sessionConfig);
 
         res.json({ id: session.id, url: session.url });
 
@@ -66,6 +87,46 @@ router.post('/create-checkout-session', authenticateRequest, async (req, res) =>
             : 'Erro ao processar pagamento';
 
         res.status(500).json({ error: errorMessage, details: error.message });
+    }
+});
+
+// ===========================================
+// 1.5. PORTAL DO CLIENTE (GERENCIAR ASSINATURA)
+// ===========================================
+router.post('/create-portal-session', authenticateRequest, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const users = await getFromBoostspace('users', { id: userId });
+        const user = users[0];
+
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        const customerId = user.stripe_customer_id || user.customer_id;
+
+        if (!customerId) {
+            return res.status(400).json({ error: 'Nenhum cliente Stripe associado. Faça um checkout primeiro.' });
+        }
+
+        const origin = req.headers.origin || 'http://localhost:5500';
+        let returnUrl = req.body.returnUrl || req.headers.referer || `${origin}/dashboard.html`;
+
+        // Limpar query params
+        try {
+            const urlObj = new URL(returnUrl);
+            urlObj.search = '';
+            returnUrl = urlObj.toString();
+        } catch (e) { }
+
+        const session = await stripe.billingPortal.sessions.create({
+            customer: customerId,
+            return_url: returnUrl,
+        });
+
+        res.json({ url: session.url });
+
+    } catch (error) {
+        logger.error('Erro Portal:', error);
+        res.status(500).json({ error: 'Erro ao abrir portal: ' + error.message });
     }
 });
 
@@ -111,6 +172,7 @@ async function handleCheckoutCompleted(session) {
             await updateInBoostspace('users', { id: userId }, {
                 plan: 'premium',
                 subscription_status: 'active',
+                stripe_customer_id: session.customer, // Salvar ID do Cliente Stripe!
                 updated_at: new Date().toISOString()
             });
             logger.info(`🚀 User ${userId} atualizado para PREMIUM`);

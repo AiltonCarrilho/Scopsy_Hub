@@ -31,7 +31,10 @@ const io = socketIo(server, {
 // ========================================
 // 2. MIDDLEWARES
 // ========================================
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false
+}));
 app.use(cors());
 
 // STRIPE WEBHOOK (Must be before express.json)
@@ -39,7 +42,8 @@ app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+const path = require('path'); // Ensure path is imported if not already, or use it here
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 
 // ========================================
