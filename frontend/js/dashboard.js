@@ -135,39 +135,55 @@ function displayUserInfo(user) {
         }
 
         // Configurar Botão de Upgrade no Modal
-        const btnUpgrade = document.querySelector('.btn-upgrade-modal');
-        if (btnUpgrade) {
-            btnUpgrade.onclick = async (e) => {
-                e.preventDefault();
-                btnUpgrade.textContent = 'Processando...';
-                btnUpgrade.style.opacity = '0.7';
+        // Shared Upgrade Handler
+        const handleUpgrade = async (e) => {
+            e.preventDefault();
+            const btn = e.currentTarget;
+            const originalText = btn.textContent;
 
-                try {
-                    const token = localStorage.getItem('token');
-                    const res = await fetch(`${API_URL}/api/payments/create-checkout-session`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
+            btn.textContent = 'Processando...';
+            btn.style.opacity = '0.7';
+            btn.style.pointerEvents = 'none';
 
-                    const data = await res.json();
-
-                    if (data.url) {
-                        window.location.href = data.url;
-                    } else {
-                        alert('Erro ao iniciar pagamento: ' + (data.error || 'Erro desconhecido'));
-                        btnUpgrade.textContent = 'Tentar Novamente';
-                        btnUpgrade.style.opacity = '1';
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_URL}/api/payments/create-checkout-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
                     }
-                } catch (err) {
-                    console.error('Erro de checkout:', err);
-                    alert('Erro de conexão com o sistema de pagamento.');
-                    btnUpgrade.textContent = 'Tentar Novamente';
-                    btnUpgrade.style.opacity = '1';
+                });
+
+                const data = await res.json();
+
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert('Erro ao iniciar pagamento: ' + (data.error || 'Erro desconhecido'));
+                    btn.textContent = originalText;
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
                 }
-            };
+            } catch (err) {
+                console.error('Erro de checkout:', err);
+                alert('Erro de conexão com o sistema de pagamento.');
+                btn.textContent = originalText;
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            }
+        };
+
+        // Attach to Modal Button
+        const btnUpgradeModal = document.querySelector('.btn-upgrade-modal');
+        if (btnUpgradeModal) {
+            btnUpgradeModal.onclick = handleUpgrade;
+        }
+
+        // Attach to Banner Button
+        const btnUpgradeBanner = trialBanner ? trialBanner.querySelector('.btn-upgrade') : null;
+        if (btnUpgradeBanner) {
+            btnUpgradeBanner.onclick = handleUpgrade;
         }
 
         // Calcular Dias Restantes
