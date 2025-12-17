@@ -56,6 +56,10 @@ async function getFromBoostspace(collection, filters = {}) {
       query = query.eq('id', filters.id);
     }
 
+    if (filters.user_id) {
+      query = query.eq('user_id', filters.user_id);
+    }
+
     const { data, error } = await query;
 
     if (error) {

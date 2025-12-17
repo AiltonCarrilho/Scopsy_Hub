@@ -431,10 +431,17 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
       console.log('[Case] ✅ Interação salva com ID:', savedInteraction[0]?.id);
     }
 
-    // Atualizar progresso
-    updateUserProgress(userId, 'case', is_correct);
+    // ✅ Atualizar progresso (NÃO quebra se falhar)
+    try {
+      console.log('[Case] 🔄 Atualizando progresso do usuário...');
+      await updateUserProgress(userId, 'case', is_correct);
+      console.log('[Case] ✅ Progresso atualizado');
+    } catch (progressError) {
+      console.error('[Case] ⚠️ AVISO: Erro ao atualizar progresso, mas continuando...', progressError.message);
+      // NÃO quebra o fluxo - feedback é mais importante
+    }
 
-    // XP
+    // XP (legacy - agora são cognits)
     const xpGained = is_correct ? 40 : 15;
 
     // Feedback estruturado
@@ -589,8 +596,15 @@ Forneça feedback formativo em JSON.`
       };
     }
 
-    // Atualizar progresso
-    updateUserProgress(userId, 'case_conceptualization', null);
+    // ✅ Atualizar progresso (NÃO quebra se falhar)
+    try {
+      console.log('[Case] 🔄 Atualizando progresso (conceituação)...');
+      await updateUserProgress(userId, 'case_conceptualization', null);
+      console.log('[Case] ✅ Progresso de conceituação atualizado');
+    } catch (progressError) {
+      console.error('[Case] ⚠️ AVISO: Erro ao atualizar progresso, mas continuando...', progressError.message);
+      // NÃO quebra o fluxo - feedback é mais importante
+    }
 
     res.json({
       success: true,
@@ -631,41 +645,89 @@ router.get('/moment-types', authenticateRequest, async (req, res) => {
 // ========================================
 async function updateUserProgress(userId, assistantType, isCorrect) {
   try {
-    const { data: existing } = await supabase
+    console.log(`\n[updateUserProgress] 🎯 INICIANDO:`, { userId, assistantType, isCorrect });
+
+    const { data: existing, error: selectError } = await supabase
       .from('user_progress')
       .select('*')
       .eq('user_id', userId)
       .eq('assistant_type', assistantType)
       .single();
 
-    // ✅ Desafios Clínicos: +8 cognits por desafio (acerto completo)
-    // Erros ganham cognits parciais para incentivar tentativas
-    const cognits = isCorrect ? 8 : 2;
+    if (selectError && selectError.code !== 'PGRST116') {
+      console.error('[updateUserProgress] ❌ Erro ao buscar:', selectError);
+      throw selectError;
+    }
+
+    // ✅ Cognits por módulo
+    let cognits = 0;
+    if (assistantType === 'case') {
+      cognits = isCorrect ? 8 : 2; // Desafios: +8 acerto, +2 erro
+    } else if (assistantType === 'diagnostic') {
+      cognits = isCorrect ? 5 : 1; // Radar: +5 acerto, +1 erro
+    } else if (assistantType === 'case_conceptualization') {
+      cognits = 30; // Conceituação: +30 sempre
+    } else if (assistantType === 'journey') {
+      cognits = 25; // Jornada: +25 por sessão
+    }
 
     if (existing) {
-      await supabase
+      console.log('[updateUserProgress] 📝 Registro existe, atualizando...');
+      console.log('[updateUserProgress] 📊 ANTES:', {
+        total_cases: existing.total_cases,
+        correct_diagnoses: existing.correct_diagnoses,
+        cognits: existing.cognits
+      });
+
+      const newData = {
+        total_cases: (existing.total_cases || 0) + 1,
+        correct_diagnoses: (existing.correct_diagnoses || 0) + (isCorrect ? 1 : 0),
+        xp_points: (existing.xp_points || 0) + cognits, // ⚠️ Usando xp_points até migrar
+        last_activity_date: new Date().toISOString().split('T')[0]
+      };
+
+      console.log('[updateUserProgress] 📊 DEPOIS:', newData);
+
+      const { error: updateError } = await supabase
         .from('user_progress')
-        .update({
-          total_cases: (existing.total_cases || 0) + 1,
-          correct_diagnoses: (existing.correct_diagnoses || 0) + (isCorrect ? 1 : 0),
-          cognits: (existing.cognits || 0) + cognits, // ✅ Mudança: xp_points → cognits
-          last_activity_date: new Date().toISOString().split('T')[0]
-        })
+        .update(newData)
         .eq('id', existing.id);
+
+      if (updateError) {
+        console.error('[updateUserProgress] ❌ Erro ao atualizar:', updateError);
+        throw updateError;
+      }
+
+      console.log('[updateUserProgress] ✅ ATUALIZADO COM SUCESSO!');
     } else {
-      await supabase
+      console.log('[updateUserProgress] ➕ Registro NÃO existe, criando novo...');
+
+      const newData = {
+        user_id: userId,
+        assistant_type: assistantType,
+        total_cases: 1,
+        correct_diagnoses: isCorrect ? 1 : 0,
+        xp_points: cognits, // ⚠️ Usando xp_points até migrar
+        last_activity_date: new Date().toISOString().split('T')[0]
+      };
+
+      console.log('[updateUserProgress] 📊 CRIANDO:', newData);
+
+      const { error: insertError } = await supabase
         .from('user_progress')
-        .insert({
-          user_id: userId,
-          assistant_type: assistantType,
-          total_cases: 1,
-          correct_diagnoses: isCorrect ? 1 : 0,
-          cognits: cognits, // ✅ Mudança: xp_points → cognits
-          last_activity_date: new Date().toISOString().split('T')[0]
-        });
+        .insert(newData);
+
+      if (insertError) {
+        console.error('[updateUserProgress] ❌ Erro ao inserir:', insertError);
+        throw insertError;
+      }
+
+      console.log('[updateUserProgress] ✅ CRIADO COM SUCESSO!');
     }
   } catch (error) {
-    console.error('[updateUserProgress] Erro:', error);
+    console.error('[updateUserProgress] ❌ ERRO:', error.message);
+    console.error('[updateUserProgress] Stack:', error.stack);
+    // NÃO faz throw - apenas loga para não quebrar o feedback
   }
 }
 
