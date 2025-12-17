@@ -14,6 +14,9 @@
 
     <link rel="stylesheet" href="css/core.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/gamification.css">
+    <link rel="stylesheet" href="css/components/cognit-toast.css">
+    <link rel="stylesheet" href="css/components/streak-indicator.css">
 </head>
 
 <body>
@@ -25,11 +28,24 @@
                 <h1>Scopsy Lab<span class="registered">®</span></h1>
             </div>
             <nav class="nav">
+                <!-- Streak Indicator -->
+                <div class="streak-container" id="streakIndicator" style="display: none;">
+                    <img src="assets/icons/streak-flame.svg" alt="Streak" class="streak-icon" id="streakIcon">
+                    <span class="streak-count" id="streakCount">0</span>
+                    <div class="streak-tooltip">
+                        <span class="fire-text">Sequência Ativa!</span><br>
+                        Pratique todo dia para manter o fogo aceso 🔥
+                    </div>
+                </div>
+
                 <span class="user-name" id="userName">Carregando...</span>
                 <button class="btn-logout" id="logoutBtn">Sair</button>
             </nav>
         </div>
     </header>
+
+    <!-- Confetti Script -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <div class="container">
 
@@ -42,11 +58,69 @@
             <a href="#" class="btn-upgrade">Assinar Premium</a>
         </div>
 
+        <!-- Card de Nível (Apenas Premium) -->
+        <div id="levelCard" class="level-card" style="display: none;">
+            <div class="level-header">
+                <div class="level-icon">⚡</div>
+                <div class="level-info">
+                    <p class="level-title">Nível <span id="levelNumber">1</span></p>
+                    <h3 class="level-name" id="levelTitle">Estudante de Lente</h3>
+                </div>
+                <div class="cognit-counter">
+                    <img src="assets/icons/cognit-24.svg" alt="Cognit" class="cognit-icon">
+                    <span class="cognit-amount" id="cognitAmount">0</span>
+                </div>
+            </div>
+
+            <div class="level-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="levelProgressBar" style="width: 0%"></div>
+                </div>
+                <div class="progress-text">
+                    <span class="current" id="currentCognits">0</span>
+                    <span class="separator">/</span>
+                    <span class="target" id="targetCognits">151</span>
+                    <span class="unit">cognits</span>
+                </div>
+            </div>
+
+            <p class="level-next">
+                Faltam <strong id="remainingCognits">151</strong> cognits para
+                <span class="next-level" id="nextLevelName">Observador Clínico</span>
+            </p>
+        </div>
+
         <!-- Hero -->
         <section class="hero">
             <h1>Bem-vindo ao Scopsy Lab<span class="registered">®</span></h1>
             <p class="hero-subtitle">Seu laboratório de prática clínica. Escolha um módulo de treino e desenvolva suas
                 habilidades com simulações realistas e feedback imediato.</p>
+        </section>
+
+        <!-- Daily Missions -->
+        <section class="missions-section" id="missionsSection" style="display: none;">
+            <div class="missions-header">
+                <h2><span class="icon">📜</span> Missões Diárias</h2>
+                <div class="missions-timer">
+                    <i data-lucide="clock"></i> Reseta em <span id="missionResetTimer">--:--</span>
+                </div>
+            </div>
+            <div class="missions-grid" id="missionsGrid">
+                <!-- Injetado via JS -->
+            </div>
+        </section>
+
+        </section>
+
+        <!-- Badges / Conquistas -->
+        <section class="badges-section" id="badgesSection">
+            <div class="section-header">
+                <h2><span class="icon">🏆</span> Conquistas</h2>
+                <a href="#" class="view-all-link" style="font-size: 0.9rem; color: var(--primary);">Ver todas</a>
+            </div>
+            <div class="badges-scroller" id="badgesScroller">
+                <!-- Injetado via JS -->
+            </div>
         </section>
 
         <!-- Módulos -->
@@ -280,6 +354,9 @@
             window.location.href = 'index.html';
         });
     </script>
+
+    <!-- Gamification -->
+    <script src="js/gamification.js"></script>
 </body>
 
 </html>

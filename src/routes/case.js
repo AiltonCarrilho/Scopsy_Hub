@@ -46,20 +46,20 @@ const MOMENTOS_CRITICOS = {
 // ========================================
 router.post('/generate', authenticateRequest, async (req, res) => {
   try {
-    const { 
-      level = 'intermediate', 
+    const {
+      level = 'intermediate',
       moment_type = null,
       category = null, // 'clinical_moment' para conceituação
       disorder_category = null // 'anxiety', 'mood', 'psychotic', etc
     } = req.body;
-    
+
     if (!req.user || !req.user.userId) {
       return res.status(401).json({
         success: false,
         error: 'Usuário não autenticado'
       });
     }
-    
+
     const userId = req.user.userId;
 
     // Determinar tipo de caso (micro-momento ou conceituação)
@@ -67,7 +67,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     const isConceptualization = category === 'clinical_moment';
 
     console.log(`\n[Case] ${isMicroMoment ? '🎬 Micro-momento' : '📋 Conceituação'}: ${moment_type || category}, level=${level}, disorder=${disorder_category || 'qualquer'}, user=${userId}`);
-    
+
     if (isConceptualization) {
       console.log('[Case] 📚 Filtrando apenas casos de conceituação completos (vinhetas 300-400 palavras)');
     }
@@ -85,7 +85,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     }
 
     const seenCaseIds = interactions ? interactions.map(i => i.case_id) : [];
-    
+
     console.log(`[Case] 👁️ Usuário já viu: ${seenCaseIds.length} micro-momentos`);
     if (seenCaseIds.length > 0) {
       console.log(`[Case] 📋 Últimos 5 IDs vistos:`);
@@ -108,7 +108,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       casesQuery = casesQuery
         .eq('category', 'clinical_moment')
         .eq('created_by', 'diverse_population_script'); // Só casos de conceituação completos
-      
+
       // Filtrar por categoria de transtorno se especificado
       if (disorder_category) {
         // Mapeamento de categoria para padrões de nome
@@ -121,7 +121,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           'eating': ['Alimentar', 'Anorexia', 'Bulimia'],
           'substance': ['Substância', 'Álcool', 'Dependência']
         };
-        
+
         const patterns = disorderPatterns[disorder_category];
         if (patterns && patterns.length > 0) {
           // Usar primeiro padrão (mais genérico)
@@ -157,18 +157,18 @@ router.post('/generate', authenticateRequest, async (req, res) => {
 
     // 3️⃣ ESCOLHER UM CASO ALEATÓRIO DOS MENOS USADOS
     let selectedCase = null;
-    
+
     if (availableCases && availableCases.length > 0) {
       // Pegar um dos 3 menos usados aleatoriamente (mais variedade)
       const topCases = availableCases.slice(0, Math.min(3, availableCases.length));
       selectedCase = topCases[Math.floor(Math.random() * topCases.length)];
-      
+
       console.log(`[Case] ✅ Caso do cache selecionado (id: ${selectedCase.id}, usado ${selectedCase.times_used}x)`);
-      
+
       // Incrementar contador (assíncrono - não bloqueia resposta)
       supabase
         .from('cases')
-        .update({ 
+        .update({
           times_used: selectedCase.times_used + 1
         })
         .eq('id', selectedCase.id)
@@ -192,14 +192,14 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       } else {
         // CONCEITUAÇÃO: Usar vignette existente ou montar se necessário
         let caseToReturn = { ...selectedCase };
-        
+
         // Se NÃO tem vinheta completa, tentar montar de micro-momento
         if (!selectedCase.vignette || selectedCase.vignette.length <= 100) {
           if (selectedCase.case_content) {
             const cc = selectedCase.case_content;
             const ctx = cc.context || {};
             const cm = cc.critical_moment || {};
-            
+
             // Só montar se tiver dados de micro-momento
             if (ctx.what_just_happened || cm.dialogue) {
               caseToReturn.vignette = `${ctx.session_number || 'Sessão'} com ${ctx.client_name || 'o cliente'}, ${ctx.client_age || '30'} anos.
@@ -216,7 +216,7 @@ OBSERVAÇÕES NÃO-VERBAIS:
 ${cm.non_verbal || 'Não registrado'}
 
 TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
-              
+
               console.log('[Case] ✅ Vinheta montada a partir de micro-momento');
             } else {
               console.log('[Case] ⚠️ Caso sem vinheta e sem dados de micro-momento');
@@ -225,7 +225,7 @@ TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
         } else {
           console.log('[Case] ✅ Usando vinheta completa do banco');
         }
-        
+
         return res.json({
           success: true,
           case: caseToReturn,
@@ -236,7 +236,7 @@ TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
     }
 
     // 4️⃣ SE NÃO TEM NO CACHE
-    
+
     // Para CONCEITUAÇÃO: Não gerar on-demand, retornar mensagem
     if (isConceptualization) {
       console.log('[Case] ⚠️ Nenhum caso de conceituação disponível para estes critérios');
@@ -247,7 +247,7 @@ TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
         available_categories: ['anxiety', 'mood', 'trauma', 'personality', 'psychotic', 'eating', 'substance']
       });
     }
-    
+
     // Para MICRO-MOMENTOS: Gerar on-demand
     console.log('[Case] ⏳ Cache vazio - Gerando novo micro-momento...');
 
@@ -346,7 +346,7 @@ NÍVEL ${level}: ${level === 'basic' ? 'Padrão claro' : level === 'intermediate
     // MONTAR VINHETA COMPLETA para retorno
     const ctx = caseData.context || {};
     const cm = caseData.critical_moment || {};
-    
+
     const fullVignette = `${ctx.session_number || 'Sessão'} com ${ctx.client_name || 'o cliente'}, ${ctx.client_age || '30'} anos.
 
 DIAGNÓSTICO: ${ctx.diagnosis || 'A definir'}
@@ -449,23 +449,35 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
       is_correct: is_correct,
       user_choice: user_choice,
       expert_choice: case_data.expert_choice,
-      
-      immediate_feedback: is_correct 
+
+      immediate_feedback: is_correct
         ? `✅ Decisão de Expert! Você escolheu ${user_choice}.`
         : `💡 Um expert escolheria ${case_data.expert_choice}. Você escolheu ${user_choice}.`,
-      
+
       expert_reasoning: case_data.expert_reasoning || {},
       learning_point: case_data.learning_point || {},
-      
-      user_reasoning_analysis: user_reasoning 
+
+      user_reasoning_analysis: user_reasoning
         ? `Seu raciocínio: "${user_reasoning}"`
         : null
     };
 
+    // 🔥 Atualizar Streak e Missões
+    let missionsCompleted = [];
+    try {
+      const { checkAndUpdateStreak } = require('../services/streakService');
+      const { updateMissionProgress } = require('../services/missionService');
+
+      await checkAndUpdateStreak(userId, 'challenge');
+      missionsCompleted = await updateMissionProgress(userId, 'challenge', true) || [];
+    } catch (e) { console.error('Erro gamification:', e); }
+
     res.json({
       success: true,
       feedback,
-      xp_gained: xpGained
+      cognits_gained: xpGained,
+      xp_gained: xpGained,
+      missions_completed: missionsCompleted // 🎯 Retornar missões completadas
     });
 
   } catch (error) {
@@ -494,12 +506,12 @@ router.post('/conceptualize', authenticateRequest, async (req, res) => {
 
     // Montar vinheta se for caso de micro-momento
     let vignetteText = case_data.vignette || case_data.clinical_content?.vignette;
-    
+
     if (!vignetteText && case_data.case_content) {
       const cc = case_data.case_content;
       const ctx = cc.context || {};
       const cm = cc.critical_moment || {};
-      
+
       vignetteText = `${ctx.session_number || 'Sessão'} com ${ctx.client_name || 'o cliente'}, ${ctx.client_age || '30'} anos.
 
 DIAGNÓSTICO: ${ctx.diagnosis || case_data.disorder || 'A definir'}
@@ -514,7 +526,7 @@ OBSERVAÇÕES NÃO-VERBAIS:
 ${cm.non_verbal || 'Não registrado'}
 
 TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
-      
+
       console.log('[Case] ✅ Vinheta montada a partir de case_content');
     }
 
