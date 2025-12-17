@@ -1,15 +1,139 @@
-const API_URL = 'http://localhost:3000/api';
+// ========================================
+// RADAR DIAGNÓSTICO - SCOPSY LAB
+// ========================================
+
+// Detectar ambiente (desenvolvimento vs produção)
+const IS_DEV = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+const API_URL = IS_DEV
+    ? 'http://localhost:3000/api'
+    : '/api';
+
 let currentCase = null;
 let caseStartTime = null;
 let selectedAnswer = null;
 
-// Carregar stats ao iniciar
+// ========================================
+// INICIALIZAÇÃO
+// ========================================
 document.addEventListener('DOMContentLoaded', () => {
-    loadStats();
+    console.log('✅ diagnostic.js carregado');
+    console.log('🌍 Ambiente:', IS_DEV ? 'DESENVOLVIMENTO' : 'PRODUÇÃO');
+    console.log('🔗 API_URL:', API_URL);
+
+    loadProgress(); // Carregar painel de progresso
+    loadStats();    // Carregar stats antigas (temporário)
     generateNewCase();
 });
 
-// Carregar estatísticas
+// ========================================
+// PAINEL DE PROGRESSO (TRIAL/PREMIUM)
+// ========================================
+function loadProgress() {
+    console.log('🚀 loadProgress() iniciado');
+
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const panel = document.getElementById('progressPanel');
+
+    if (!panel) return;
+
+    const isPremium = user.plan === 'premium' || user.plan === 'pro';
+    const isTrial = !isPremium;
+
+    if (isTrial) {
+        panel.classList.add('trial');
+    }
+
+    fetchStatsAndRender(panel, isTrial);
+}
+
+async function fetchStatsAndRender(panel, isTrial) {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+        const res = await fetch(`${API_URL}/progress/summary`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (!data || typeof data !== 'object') {
+            console.error('❌ Resposta inválida do backend:', data);
+            return;
+        }
+
+        console.log('📊 Resposta /api/progress/summary:', data);
+
+        let html = '';
+
+        if (isTrial) {
+            // MODO TRIAL - Mostra limite ESPECÍFICO de Radar Diagnóstico
+            const remaining = data.remaining || {};
+            const remainingRadar = Number(remaining.radar) || 0;
+            const remainingDays = Number(data.trial_days_left) || 0;
+
+            console.log('🎯 TRIAL - Radar:', { remainingRadar, remainingDays });
+
+            html = `
+                <strong>Seu Progresso Trial</strong>
+                <div class="progress-grid">
+                    <div class="progress-item">
+                        <strong>${remainingRadar}</strong>
+                        <span>Diagnósticos Restantes</span>
+                    </div>
+                    <div class="progress-item">
+                        <strong>${remainingDays}</strong>
+                        <span>Dias Restantes</span>
+                    </div>
+                </div>
+            `;
+
+        } else {
+            // MODO PREMIUM - Mostra Cognits e Gamificação
+            const cognits = Number(data.cognits) || 0;
+            const level = Number(data.level) || 1;
+            const title = data.clinical_title || 'Estudante de Lente';
+            const diagnosticosConcluidos = Number(data.breakdown?.radar) || 0;
+
+            console.log('💎 PREMIUM:', { cognits, level, title });
+
+            html = `
+                <strong>${title} (Nível ${level})</strong>
+                <div class="progress-grid">
+                    <div class="progress-item">
+                        <strong>${cognits}</strong>
+                        <span>Cognits</span>
+                    </div>
+                    <div class="progress-item">
+                        <strong>${diagnosticosConcluidos}</strong>
+                        <span>Diagnósticos Concluídos</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        panel.innerHTML = html;
+
+        // ✅ Esconder barra de stats antiga para Trial (só Premium deve ver)
+        const statsBar = document.getElementById('statsBar');
+        if (statsBar) {
+            if (isTrial) {
+                statsBar.style.display = 'none';
+                console.log('🚫 Stats bar escondida (Trial)');
+            } else {
+                statsBar.style.display = 'flex';
+                console.log('✅ Stats bar visível (Premium)');
+            }
+        }
+
+    } catch (e) {
+        console.error("❌ Erro ao carregar stats:", e);
+    }
+}
+
+// ========================================
+// STATS ANTIGAS (temporário - manter compatibilidade)
+// ========================================
 async function loadStats() {
     try {
         const token = localStorage.getItem('token');
@@ -20,10 +144,10 @@ async function loadStats() {
         });
 
         const data = await response.json();
-        
+
         if (data.success) {
             document.getElementById('totalCases').textContent = data.progress.total_diagnoses || 0;
-            document.getElementById('accuracy').textContent = 
+            document.getElementById('accuracy').textContent =
                 (data.progress.accuracy_rate || 0).toFixed(1) + '%';
             document.getElementById('xpPoints').textContent = data.progress.xp_points || 0;
         }
@@ -32,10 +156,12 @@ async function loadStats() {
     }
 }
 
-// Gerar novo caso
+// ========================================
+// GERAÇÃO DE CASOS
+// ========================================
 async function generateNewCase() {
     try {
-        document.getElementById('caseContainer').innerHTML = '<div class="loading">Gerando caso...</div>';
+        document.getElementById('caseContainer').innerHTML = '<div class="loading">⏳ Gerando caso diagnóstico...<br><small>Isso pode levar 10-15 segundos</small></div>';
         document.getElementById('feedbackContainer').innerHTML = '';
 
         const token = localStorage.getItem('token');
@@ -63,49 +189,48 @@ async function generateNewCase() {
             selectedAnswer = null;
             renderCase(currentCase);
         } else {
-            document.getElementById('caseContainer').innerHTML = 
-                `<div class="case-card"><p>Erro ao gerar caso: ${data.error}</p></div>`;
+            document.getElementById('caseContainer').innerHTML =
+                `<div class="error-message">Erro ao gerar caso: ${data.error}</div>`;
         }
     } catch (error) {
         console.error('Erro ao gerar caso:', error);
-        document.getElementById('caseContainer').innerHTML = 
-            '<div class="case-card"><p>Erro ao conectar com o servidor</p></div>';
+        document.getElementById('caseContainer').innerHTML =
+            '<div class="error-message">Erro ao conectar com o servidor. Verifique se o backend está rodando.</div>';
     }
 }
 
-// Renderizar caso
+// ========================================
+// RENDERIZAÇÃO
+// ========================================
 function renderCase(caseData) {
     const container = document.getElementById('caseContainer');
-    
+
     const vignette = caseData.clinical_content?.vignette || 'Vinheta não disponível';
     const options = caseData.question_format?.options || [];
 
+    let optionsHTML = '';
+    options.forEach((option, index) => {
+        optionsHTML += `
+            <button class="option-button" data-answer="${option}" onclick="selectOption('${option.replace(/'/g, "\\'")}', this)">
+                ${String.fromCharCode(65 + index)}. ${option}
+            </button>
+        `;
+    });
+
     container.innerHTML = `
         <div class="case-card">
-            ${caseData.from_cache ? '<p style="color: #4CAF50; font-size: 12px;">✅ Caso do banco (cache)</p>' : '<p style="color: #FF9800; font-size: 12px;">⚠️ Caso novo</p>'}
-            
             <h3>📋 Caso Clínico</h3>
-            
             <div class="vignette">${vignette}</div>
-
             <h4>Qual é o diagnóstico mais provável?</h4>
-
-            <div class="options-grid" id="optionsGrid">
-                ${options.map((option, index) => `
-                    <button class="option-button" data-answer="${option}" onclick="selectOption('${option}', this)">
-                        ${String.fromCharCode(65 + index)}. ${option}
-                    </button>
-                `).join('')}
-            </div>
-
-            <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>
-                Enviar Resposta
-            </button>
+            <div class="options-grid" id="optionsGrid">${optionsHTML}</div>
+            <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Enviar Resposta</button>
         </div>
     `;
 }
 
-// Selecionar opção
+// ========================================
+// INTERAÇÃO
+// ========================================
 function selectOption(answer, button) {
     // Remover seleção anterior
     document.querySelectorAll('.option-button').forEach(btn => {
@@ -120,7 +245,6 @@ function selectOption(answer, button) {
     document.getElementById('submitBtn').disabled = false;
 }
 
-// Enviar resposta
 async function submitAnswer() {
     if (!selectedAnswer) return;
 
@@ -151,7 +275,8 @@ async function submitAnswer() {
 
         if (data.success) {
             showResult(data.is_correct, data.feedback);
-            loadStats(); // Atualizar stats
+            loadStats(); // Stats antigas
+            loadProgress(); // ✅ Atualizar painel de progresso
         } else {
             alert('Erro ao processar resposta');
         }
@@ -163,13 +288,15 @@ async function submitAnswer() {
     submitBtn.textContent = 'Enviar Resposta';
 }
 
-// Mostrar resultado
+// ========================================
+// FEEDBACK
+// ========================================
 function showResult(isCorrect, feedback) {
     // Marcar opções
     document.querySelectorAll('.option-button').forEach(btn => {
         btn.disabled = true;
-        const answer = btn.dataset.answer;
-        
+        const answer = btn.getAttribute('data-answer');
+
         if (answer === currentCase.diagnostic_structure?.correct_diagnosis) {
             btn.classList.add('correct');
         } else if (answer === selectedAnswer && !isCorrect) {
@@ -180,11 +307,11 @@ function showResult(isCorrect, feedback) {
     // Mostrar feedback
     if (feedback && feedback.feedback_eco) {
         const feedbackContainer = document.getElementById('feedbackContainer');
-        
+
         feedbackContainer.innerHTML = `
             <div class="feedback-card">
                 <h3>${isCorrect ? '✅ Correto!' : '❌ Incorreto'}</h3>
-                
+
                 <div class="feedback-section">
                     <h4>📝 Explicação</h4>
                     <p>${feedback.feedback_eco.explicar?.what_happened || ''}</p>
@@ -200,19 +327,15 @@ function showResult(isCorrect, feedback) {
                     <p>${feedback.feedback_eco.orientar?.what_to_focus_next || ''}</p>
                 </div>
 
-                <button class="next-case-btn" onclick="generateNewCase()">
-                    Próximo Caso →
-                </button>
+                <button class="next-case-btn" onclick="generateNewCase()">Próximo Caso →</button>
             </div>
         `;
     } else {
         document.getElementById('feedbackContainer').innerHTML = `
             <div class="feedback-card">
                 <h3>${isCorrect ? '✅ Correto!' : '❌ Incorreto'}</h3>
-                <p>Diagnóstico correto: ${currentCase.diagnostic_structure?.correct_diagnosis}</p>
-                <button class="next-case-btn" onclick="generateNewCase()">
-                    Próximo Caso →
-                </button>
+                <p>Diagnóstico correto: ${currentCase.diagnostic_structure?.correct_diagnosis || ''}</p>
+                <button class="next-case-btn" onclick="generateNewCase()">Próximo Caso →</button>
             </div>
         `;
     }

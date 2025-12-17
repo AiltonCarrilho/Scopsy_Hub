@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateRequest } = require('../middleware/auth');
-const { getFromBoostspace } = require('../services/database');
+const { getFromBoostspace, deleteFromBoostspace } = require('../services/database');
 const logger = require('../config/logger');
 
 // ===========================================
@@ -65,101 +65,27 @@ function calculateLevelAndTitle(totalCognits) {
 
 /**
  * GET /api/progress/summary
- * Retorna o resumo completo de progresso conforme arquitetura solicitada
+ * Retorna resumo de progresso DIFERENCIADO para Trial vs Premium
  */
 router.get('/summary', authenticateRequest, async (req, res) => {
     try {
         const userId = req.user.userId;
 
-        // 1. Buscar Plan (tabela users)
+        // 1. Buscar usuário
         const users = await getFromBoostspace('users', { id: userId });
-        if (!users || users.length === 0) return res.status(404).json({ error: 'Usuário não encontrado' });
+        if (!users || users.length === 0) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
         const user = users[0];
+        const userPlan = user.plan || 'free';
+        const isTrial = userPlan === 'free';
 
-        // 🐞 DEBUG: Log completo do usuário
-        logger.info('🐞 DEBUG USER DATA:', {
-            userId,
-            plan: user.plan,
-            created_at: user.created_at,
-            created_at_type: typeof user.created_at,
-            created_at_isValid: user.created_at ? !isNaN(new Date(user.created_at).getTime()) : false
-        });
+        logger.info('📊 /api/progress/summary:', { userId, plan: userPlan, isTrial });
 
-        // 2. Buscar Progresso (tabela user_progress)
+        // 2. Buscar progresso por assistente
         const progressEntries = await getFromBoostspace('user_progress', { user_id: userId });
 
-        logger.info('🐞 DEBUG PROGRESS ENTRIES:', {
-            userId,
-            entriesCount: progressEntries?.length || 0,
-            entries: progressEntries
-        });
-
-        let totalExercises = 0;
-        let totalCorrect = 0;
-        let totalCognits = 0;
-
-        // Agregar dados
-        if (progressEntries && progressEntries.length > 0) {
-            progressEntries.forEach(entry => {
-                totalExercises += (entry.total_cases || 0);
-                totalCorrect += (entry.correct_diagnoses || 0);
-                totalCognits += (entry.cognits || 0); // ✅ Mudança: xp_points → cognits
-            });
-        }
-
-        // 3. Calcular Métricas Derivadas
-        const accuracy = totalExercises > 0
-            ? Math.round((totalCorrect / totalExercises) * 100)
-            : 0;
-
-        const { level, title } = calculateLevelAndTitle(totalCognits);
-
-        // 4. Trial Limits (Backend Logic) - BLINDAGEM REFORÇADA
-        let trialDaysLeft = 7; // Default seguro
-
-        if (user.plan === 'free') {
-            let createdAt;
-
-            // ✅ BLINDAGEM: Múltiplos formatos de data
-            if (!user.created_at) {
-                // Se não tem created_at, assumir criado agora (trial completo)
-                logger.warn('⚠️ User sem created_at, usando data atual como fallback', { userId });
-                createdAt = new Date();
-                trialDaysLeft = 7;
-            } else {
-                // Tentar parsear a data
-                createdAt = new Date(user.created_at);
-
-                // Validar se a data é válida
-                if (isNaN(createdAt.getTime())) {
-                    logger.error('❌ User created_at INVÁLIDO', {
-                        userId,
-                        created_at: user.created_at,
-                        created_at_type: typeof user.created_at
-                    });
-                    // Fallback: assumir usuário novo (trial completo)
-                    createdAt = new Date();
-                    trialDaysLeft = 7;
-                } else {
-                    // Data válida, calcular dias restantes
-                    const now = new Date();
-                    const diffTime = Math.abs(now - createdAt);
-                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                    trialDaysLeft = Math.max(0, 7 - diffDays);
-
-                    logger.info('✅ Cálculo Trial bem-sucedido', {
-                        userId,
-                        created_at_raw: user.created_at,
-                        createdAt: createdAt.toISOString(),
-                        now: now.toISOString(),
-                        diffDays,
-                        trialDaysLeft
-                    });
-                }
-            }
-        }
-
-        // 5. Retorno Padronizado - BLINDAGEM TOTAL
+        // 3. Montar breakdown por assistente
         const breakdown = {
             raciocinio: Number(progressEntries?.find(p => p.assistant_type === 'case')?.total_cases || 0),
             radar: Number(progressEntries?.find(p => p.assistant_type === 'diagnostic')?.total_cases || 0),
@@ -167,70 +93,163 @@ router.get('/summary', authenticateRequest, async (req, res) => {
             jornada: Number(progressEntries?.find(p => p.assistant_type === 'journey')?.total_cases || 0)
         };
 
-        // 🐞 DEBUG: Log valores finais antes de enviar
-        logger.info('📤 RETORNO FINAL /api/progress/summary:', {
-            userId,
-            plan: user.plan || 'free',
-            trial_days_left: trialDaysLeft,
-            breakdown,
-            totalCognits,
-            level,
-            title
-        });
+        // 4. TRIAL: Calcular limites e dias restantes
+        if (isTrial) {
+            // Limites fixos do Trial
+            const TRIAL_LIMITS = {
+                raciocinio: 30,    // Desafios Clínicos
+                radar: 30,         // Radar Diagnóstico
+                conceituacao: 7,   // Conceituação Cognitiva
+                jornada: 0         // Bloqueado (só Premium)
+            };
 
-        res.json({
+            // Calcular remaining por assistente
+            const remaining = {
+                raciocinio: Math.max(0, TRIAL_LIMITS.raciocinio - breakdown.raciocinio),
+                radar: Math.max(0, TRIAL_LIMITS.radar - breakdown.radar),
+                conceituacao: Math.max(0, TRIAL_LIMITS.conceituacao - breakdown.conceituacao),
+                jornada: 0  // Sempre bloqueado no Trial
+            };
+
+            // Calcular dias restantes
+            let trialDaysLeft = 7;
+            if (user.created_at) {
+                const createdAt = new Date(user.created_at);
+                if (!isNaN(createdAt.getTime())) {
+                    const now = new Date();
+                    const diffDays = Math.floor((now - createdAt) / (1000 * 60 * 60 * 24));
+                    trialDaysLeft = Math.max(0, 7 - diffDays);
+                }
+            }
+
+            logger.info('✅ TRIAL:', { userId, trialDaysLeft, breakdown, remaining });
+
+            return res.json({
+                success: true,
+                plan: 'free',
+                trial_days_left: trialDaysLeft,
+
+                limits: TRIAL_LIMITS,
+                breakdown: breakdown,
+                remaining: remaining
+            });
+        }
+
+        // 5. PREMIUM: Calcular cognits, level e título
+        let totalCognits = 0;
+        if (progressEntries && progressEntries.length > 0) {
+            progressEntries.forEach(entry => {
+                // ⚠️ Usando xp_points até migrar coluna
+                totalCognits += (entry.xp_points || entry.cognits || 0);
+            });
+        }
+
+        const { level, title } = calculateLevelAndTitle(totalCognits);
+
+        // Calcular próximo nível
+        let nextLevelAt = 151; // Default (nível 4)
+        if (totalCognits < 151) nextLevelAt = 151;
+        else if (totalCognits < 501) nextLevelAt = 501;
+        else if (totalCognits < 1201) nextLevelAt = 1201;
+        else nextLevelAt = totalCognits + 500; // Maestria continua crescendo
+
+        const nextLevelRemaining = Math.max(0, nextLevelAt - totalCognits);
+
+        logger.info('✅ PREMIUM:', { userId, totalCognits, level, title });
+
+        return res.json({
             success: true,
-            plan: user.plan || 'free',
-            trial_days_left: Number(trialDaysLeft) || 7, // ✅ Garantir número
+            plan: userPlan,
 
-            // Stats
-            exercises_done: Number(totalExercises) || 0,
-            correct_answers: Number(totalCorrect) || 0,
-            accuracy: Number(accuracy) || 0,
+            cognits: totalCognits,
+            level: level,
+            clinical_title: title,
 
-            // Gamification
-            cognits: Number(totalCognits) || 0, // ✅ Cognits = unidades de sabedoria cognitiva
-            level: Number(level) || 1,
-            clinical_title: title || 'Estudante de Lente',
+            breakdown: breakdown,
 
-            // Contadores Específicos (para limites trial)
-            breakdown: breakdown
+            next_level: {
+                at: nextLevelAt,
+                remaining: nextLevelRemaining
+            }
         });
 
     } catch (error) {
-        logger.error('❌ Erro ao buscar resumo de progresso', {
+        logger.error('❌ Erro em /api/progress/summary:', {
+            error: error.message,
+            userId: req.user?.userId
+        });
+
+        // Fallback seguro
+        res.status(200).json({
+            success: true,
+            plan: 'free',
+            trial_days_left: 7,
+            limits: { raciocinio: 30, radar: 30, conceituacao: 7, jornada: 0 },
+            breakdown: { raciocinio: 0, radar: 0, conceituacao: 0, jornada: 0 },
+            remaining: { raciocinio: 30, radar: 30, conceituacao: 7, jornada: 0 },
+            _error: 'Fallback - erro ao carregar dados'
+        });
+    }
+});
+
+/**
+ * POST /api/progress/reset
+ * 🗑️ DEBUG: Reseta o progresso do usuário (apaga todos os registros de user_progress)
+ * ATENÇÃO: Usar apenas para debug/testes
+ */
+router.post('/reset', authenticateRequest, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+
+        logger.warn('🗑️ RESET DE PROGRESSO SOLICITADO', { userId });
+
+        // Buscar todos os registros de progresso do usuário
+        const progressEntries = await getFromBoostspace('user_progress', { user_id: userId });
+
+        if (!progressEntries || progressEntries.length === 0) {
+            return res.json({
+                success: true,
+                message: 'Nenhum registro de progresso encontrado',
+                deleted_count: 0
+            });
+        }
+
+        // Deletar cada registro
+        let deletedCount = 0;
+        for (const entry of progressEntries) {
+            try {
+                logger.info('🗑️ Deletando entrada de progresso', { entryId: entry.id, userId });
+
+                await deleteFromBoostspace('user_progress', entry.id);
+
+                deletedCount++;
+            } catch (delError) {
+                logger.error('❌ Erro ao deletar entrada de progresso', {
+                    error: delError.message,
+                    entryId: entry.id,
+                    userId
+                });
+            }
+        }
+
+        logger.info('✅ Reset de progresso concluído', { userId, deletedCount });
+
+        res.json({
+            success: true,
+            message: 'Progresso resetado com sucesso',
+            deleted_count: deletedCount
+        });
+
+    } catch (error) {
+        logger.error('❌ Erro ao resetar progresso', {
             error: error.message,
             stack: error.stack,
             userId: req.user?.userId
         });
 
-        // ✅ FALLBACK SEGURO: Em vez de retornar apenas erro,
-        // retornar dados padrão para não quebrar o frontend
-        res.status(200).json({
-            success: true,
-            plan: 'free',
-            trial_days_left: 7, // Assumir trial completo em caso de erro
-
-            // Stats default
-            exercises_done: 0,
-            correct_answers: 0,
-            accuracy: 0,
-
-            // Gamification default
-            cognits: 0,
-            level: 1,
-            clinical_title: 'Estudante de Lente',
-
-            // Breakdown default (zero em tudo)
-            breakdown: {
-                raciocinio: 0,
-                radar: 0,
-                conceituacao: 0,
-                jornada: 0
-            },
-
-            // Flag de erro para frontend (opcional)
-            _error: 'Erro ao carregar progresso, usando valores padrão'
+        res.status(500).json({
+            success: false,
+            error: 'Erro ao resetar progresso'
         });
     }
 });
