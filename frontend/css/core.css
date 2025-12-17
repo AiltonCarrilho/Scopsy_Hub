@@ -240,3 +240,67 @@ svg {
   border-color: rgba(255, 255, 255, 0.3);
   transform: translateX(-2px);
 }
+
+/* --- Global Trial Banner (Moved from dashboard.css) --- */
+.trial-banner {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #e0e0e0;
+  padding: 16px 24px;
+  border-radius: var(--radius-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  animation: slideDown 0.5s ease;
+}
+
+.trial-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.05rem;
+}
+
+.trial-content i {
+  color: #ffd700;
+}
+
+.trial-content strong {
+  color: #ffd700;
+  font-size: 1.2rem;
+}
+
+/* Specific upgrade button for banner */
+.btn-upgrade {
+  background: linear-gradient(90deg, #ffd700 0%, #ffaa00 100%);
+  color: #1a1a2e;
+  padding: 10px 24px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+  box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2);
+}
+
+.btn-upgrade:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 215, 0, 0.4);
+  filter: brightness(1.1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

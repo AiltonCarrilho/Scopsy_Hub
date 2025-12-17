@@ -171,9 +171,18 @@ function displayUserInfo(user) {
         }
 
         // Calcular Dias Restantes
-        const daysLeft = calculateDaysLeft(user.created_at);
-        document.getElementById('trialDaysLeft').textContent = daysLeft;
-        document.getElementById('trialDaysLeftStat').textContent = daysLeft;
+        let daysLeft;
+        if (user.trial_days_left !== undefined) {
+            daysLeft = user.trial_days_left;
+        } else {
+            daysLeft = calculateDaysLeft(user.created_at);
+        }
+
+        const elDaysLeft = document.getElementById('trialDaysLeft');
+        if (elDaysLeft) elDaysLeft.textContent = daysLeft;
+
+        const elDaysLeftStat = document.getElementById('trialDaysLeftStat');
+        if (elDaysLeftStat) elDaysLeftStat.textContent = daysLeft;
 
         // Mostrar barras de limite nos cards
         document.querySelectorAll('.trial-limit-info').forEach(el => el.style.display = 'block');
@@ -185,7 +194,7 @@ function calculateDaysLeft(createdAt) {
     const start = new Date(createdAt);
     const now = new Date();
     const diffTime = Math.abs(now - start);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // Use floor directly to match backend
     const remaining = 7 - diffDays;
     return remaining > 0 ? remaining : 0;
 }
@@ -280,12 +289,19 @@ function updateStatsDisplay(data) {
             barConcept.style.width = `${pct}%`;
         }
 
-        // Update Card Text
+        // Update Card Text (Raciocínio)
         const limitTextRadiocinio = document.querySelector('#cardRaciocinio .limit-text');
         if (limitTextRadiocinio) limitTextRadiocinio.textContent = `Restam ${remainingGeneral} de ${LIMIT_GENERAL} acessos`;
 
         const barRaciocinio = document.querySelector('#cardRaciocinio .limit-bar');
         if (barRaciocinio) barRaciocinio.style.width = `${Math.max(0, (remainingGeneral / LIMIT_GENERAL) * 100)}%`;
+
+        // Update Card Text (Radar Diagnóstico)
+        const limitTextRadar = document.querySelector('#cardRadar .limit-text');
+        if (limitTextRadar) limitTextRadar.textContent = `Restam ${remainingGeneral} de ${LIMIT_GENERAL} acessos`;
+
+        const barRadar = document.querySelector('#cardRadar .limit-bar');
+        if (barRadar) barRadar.style.width = `${Math.max(0, (remainingGeneral / LIMIT_GENERAL) * 100)}%`;
     }
 }
 
