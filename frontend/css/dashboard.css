@@ -861,6 +861,27 @@
 .assistant-card {
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
+    opacity: 0;
+    animation: cardFadeIn 0.6s ease-out forwards;
+}
+
+/* Cascade delay for each card */
+.assistant-card:nth-child(1) { animation-delay: 0.1s; }
+.assistant-card:nth-child(2) { animation-delay: 0.2s; }
+.assistant-card:nth-child(3) { animation-delay: 0.3s; }
+.assistant-card:nth-child(4) { animation-delay: 0.4s; }
+.assistant-card:nth-child(5) { animation-delay: 0.5s; }
+.assistant-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .assistant-card::before {
@@ -1143,6 +1164,49 @@
         opacity: 1;
         transform: scale(1);
     }
+}
+
+/* ==========================================================================
+   SPRINT 4 - MICRO-INTERAÇÕES & POLIMENTO FINAL
+   ========================================================================== */
+
+/* BUTTON RIPPLE EFFECT */
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-logout,
+.btn-upgrade,
+.badge-modal-close,
+.assistant-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: rippleEffect 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* BUTTON ACTIVE STATE (Bounce) */
+.btn:active,
+.btn-primary:active,
+.btn-upgrade:active {
+    transform: scale(0.95);
+}
+
+.assistant-card:active {
+    transform: translateY(-6px) scale(0.98);
 }
 
 /* Responsivo SPRINT 3 */

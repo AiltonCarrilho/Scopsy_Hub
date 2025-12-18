@@ -301,8 +301,13 @@ async function loadUserStats() {
         updateStatsDisplay(data);
         displayUserInfo(data); // Passa o objeto completo que já tem plano
 
+        // SPRINT 4: Remove skeleton loaders após carregar
+        hideSkeletonLoaders();
+
     } catch (error) {
         console.error('Erro ao carregar stats do dashboard:', error);
+        // Remove loaders mesmo com erro
+        hideSkeletonLoaders();
     }
 }
 
@@ -1004,10 +1009,87 @@ function testBadgeUnlock() {
     console.log('✅ Teste: Badge desbloqueado');
 }
 
-// Inicializar efeitos SPRINT 3 quando página carregar
+// ============================================================================
+// SPRINT 4 - MICRO-INTERAÇÕES & POLIMENTO FINAL
+// ============================================================================
+
+/**
+ * Adiciona efeito ripple em todos os botões e cards clicáveis
+ */
+function initRippleEffect() {
+    const rippleElements = document.querySelectorAll('.btn, .btn-primary, .btn-secondary, .btn-logout, .btn-upgrade, .badge-modal-close, .assistant-card');
+
+    rippleElements.forEach(element => {
+        element.addEventListener('click', function(e) {
+            // Remove ripples antigos
+            const existingRipple = this.querySelector('.ripple');
+            if (existingRipple) {
+                existingRipple.remove();
+            }
+
+            // Cria novo ripple
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+
+            // Posiciona no local do clique
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+
+            this.appendChild(ripple);
+
+            // Remove após animação
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+}
+
+/**
+ * Aplica skeleton loaders nos elementos enquanto carregam
+ */
+function showSkeletonLoaders() {
+    const levelCard = document.getElementById('levelCard');
+    const freshnessIndicator = document.getElementById('freshnessIndicator');
+    const userName = document.getElementById('userName');
+
+    // Level card skeleton
+    if (levelCard) {
+        levelCard.classList.add('loading');
+    }
+
+    // User name skeleton
+    if (userName) {
+        userName.innerHTML = '<span class="skeleton skeleton-text short" style="width: 120px; height: 16px; display: inline-block;"></span>';
+    }
+}
+
+/**
+ * Remove skeleton loaders após dados carregarem
+ */
+function hideSkeletonLoaders() {
+    const levelCard = document.getElementById('levelCard');
+
+    if (levelCard) {
+        levelCard.classList.remove('loading');
+    }
+}
+
+// Inicializar efeitos SPRINT 3 + SPRINT 4 quando página carregar
 document.addEventListener('DOMContentLoaded', () => {
+    // SPRINT 3
     initCardGlowEffect();
     checkNearLevelUp();
+
+    // SPRINT 4
+    initRippleEffect();
+    showSkeletonLoaders(); // Mostra loaders inicialmente
 
     // Recheck near-level a cada atualização de dados
     setInterval(checkNearLevelUp, 5000);
