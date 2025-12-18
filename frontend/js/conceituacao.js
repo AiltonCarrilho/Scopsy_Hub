@@ -319,6 +319,9 @@ function renderCase(caseData) {
         'alianca': 'Aliança Terapêutica'
     };
 
+    // 🔒 SEGURANÇA XSS: Sanitizar vinheta do backend
+    const safeVignette = sanitizeHTML(vignette);
+
     document.getElementById('caseContainer').innerHTML = `
         <div class="case-card">
             <div style="margin-bottom: 16px;">
@@ -338,7 +341,7 @@ function renderCase(caseData) {
             </div>
 
             <h3>📋 Caso Clínico</h3>
-            <div class="vignette">${vignette}</div>
+            <div class="vignette">${safeVignette}</div>
 
             <!-- 1. TRÍADE COGNITIVA -->
             <div class="analysis-section">
@@ -460,38 +463,46 @@ async function submitConceptualization() {
 }
 
 function showFeedback(feedback) {
+    // 🔒 SEGURANÇA XSS: Sanitizar todos os campos de feedback do backend
+    const safeTriade = sanitizeHTML(feedback.triade_feedback || 'Feedback sobre tríade cognitiva');
+    const safeCrencas = sanitizeHTML(feedback.crencas_feedback || 'Feedback sobre crenças');
+    const safeFormulacao = sanitizeHTML(feedback.formulacao_feedback || 'Feedback sobre formulação');
+    const safeIntervencao = sanitizeHTML(feedback.intervencao_feedback || 'Feedback sobre intervenção');
+    const safeStrengths = sanitizeHTML(feedback.strengths || 'Continue desenvolvendo');
+    const safeAreas = sanitizeHTML(feedback.areas_to_develop || 'Continue praticando');
+
     const feedbackHTML = `
         <div class="feedback-card">
             <h3>✅ Feedback Formativo</h3>
 
             <div class="feedback-section">
                 <h4>🔄 Sua Tríade Cognitiva</h4>
-                <p>${feedback.triade_feedback || 'Feedback sobre tríade cognitiva'}</p>
+                <p>${safeTriade}</p>
             </div>
 
             <div class="feedback-section">
                 <h4>💭 Suas Crenças Identificadas</h4>
-                <p>${feedback.crencas_feedback || 'Feedback sobre crenças'}</p>
+                <p>${safeCrencas}</p>
             </div>
 
             <div class="feedback-section">
                 <h4>🧩 Sua Formulação Conceitual</h4>
-                <p>${feedback.formulacao_feedback || 'Feedback sobre formulação'}</p>
+                <p>${safeFormulacao}</p>
             </div>
 
             <div class="feedback-section">
                 <h4>💡 Sua Estratégia de Intervenção</h4>
-                <p>${feedback.intervencao_feedback || 'Feedback sobre intervenção'}</p>
+                <p>${safeIntervencao}</p>
             </div>
 
             <div class="feedback-section" style="background: #e8f5e9;">
                 <h4>🎯 Pontos Fortes da Sua Análise</h4>
-                <p>${feedback.strengths || 'Continue desenvolvendo'}</p>
+                <p>${safeStrengths}</p>
             </div>
 
             <div class="feedback-section" style="background: #fff3e0;">
                 <h4>📚 Áreas para Aprofundar</h4>
-                <p>${feedback.areas_to_develop || 'Continue praticando'}</p>
+                <p>${safeAreas}</p>
             </div>
 
             <button class="btn-primary" onclick="generateNewCase()" style="margin-top: 24px; width: 100%;">
