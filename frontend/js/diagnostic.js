@@ -181,11 +181,16 @@ function renderCase(caseData) {
     const vignette = caseData.clinical_content?.vignette || 'Vinheta não disponível';
     const options = caseData.question_format?.options || [];
 
+    // 🔒 SEGURANÇA XSS: Sanitizar vinheta do backend
+    const safeVignette = sanitizeHTML(vignette);
+
     let optionsHTML = '';
     options.forEach((option, index) => {
+        // 🔒 SEGURANÇA XSS: Sanitizar opções do backend
+        const safeOption = escapeHTML(option);
         optionsHTML += `
-            <button class="option-button" data-answer="${option}" onclick="selectOption('${option.replace(/'/g, "\\'")}', this)">
-                ${String.fromCharCode(65 + index)}. ${option}
+            <button class="option-button" data-answer="${safeOption}" onclick="selectOption('${safeOption.replace(/'/g, "\\'")}', this)">
+                ${String.fromCharCode(65 + index)}. ${safeOption}
             </button>
         `;
     });
@@ -193,7 +198,7 @@ function renderCase(caseData) {
     container.innerHTML = `
         <div class="case-card">
             <h3>📋 Caso Clínico</h3>
-            <div class="vignette">${vignette}</div>
+            <div class="vignette">${safeVignette}</div>
             <h4>Qual é o diagnóstico mais provável?</h4>
             <div class="options-grid" id="optionsGrid">${optionsHTML}</div>
             <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Enviar Resposta</button>
@@ -290,33 +295,41 @@ function showResult(isCorrect, feedback) {
     if (feedback && feedback.feedback_eco) {
         const feedbackContainer = document.getElementById('feedbackContainer');
 
+        // 🔒 SEGURANÇA XSS: Sanitizar feedback do backend
+        const safeExplicacao = sanitizeHTML(feedback.feedback_eco.explicar?.what_happened || '');
+        const safeConexao = sanitizeHTML(feedback.feedback_eco.conectar?.theory_connection || '');
+        const safeOrientacao = sanitizeHTML(feedback.feedback_eco.orientar?.what_to_focus_next || '');
+
         feedbackContainer.innerHTML = `
             <div class="feedback-card">
                 <h3>${isCorrect ? '✅ Correto!' : '❌ Incorreto'}</h3>
 
                 <div class="feedback-section">
                     <h4>📝 Explicação</h4>
-                    <p>${feedback.feedback_eco.explicar?.what_happened || ''}</p>
+                    <p>${safeExplicacao}</p>
                 </div>
 
                 <div class="feedback-section">
                     <h4>🔗 Conexão Teórica</h4>
-                    <p>${feedback.feedback_eco.conectar?.theory_connection || ''}</p>
+                    <p>${safeConexao}</p>
                 </div>
 
                 <div class="feedback-section">
                     <h4>🎯 Orientação</h4>
-                    <p>${feedback.feedback_eco.orientar?.what_to_focus_next || ''}</p>
+                    <p>${safeOrientacao}</p>
                 </div>
 
                 <button class="next-case-btn" onclick="generateNewCase()">Próximo Caso →</button>
             </div>
         `;
     } else {
+        // 🔒 SEGURANÇA XSS: Sanitizar diagnóstico correto
+        const safeDiagnosis = escapeHTML(currentCase.diagnostic_structure?.correct_diagnosis || '');
+
         document.getElementById('feedbackContainer').innerHTML = `
             <div class="feedback-card">
                 <h3>${isCorrect ? '✅ Correto!' : '❌ Incorreto'}</h3>
-                <p>Diagnóstico correto: ${currentCase.diagnostic_structure?.correct_diagnosis || ''}</p>
+                <p>Diagnóstico correto: ${safeDiagnosis}</p>
                 <button class="next-case-btn" onclick="generateNewCase()">Próximo Caso →</button>
             </div>
         `;

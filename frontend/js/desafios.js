@@ -179,35 +179,48 @@ function renderMoment(m) {
     const ctx = m.context;
     const cm = m.critical_moment;
 
+    // 🔒 SEGURANÇA XSS: Sanitizar dados do backend
+    const safeDiagnosis = escapeHTML(ctx.diagnosis || 'Momento Clínico');
+    const safeClientName = escapeHTML(ctx.client_name);
+    const safeWhatHappened = sanitizeHTML(ctx.what_just_happened);
+    const safeDialogue = sanitizeHTML(cm.dialogue);
+    const safeNonVerbal = sanitizeHTML(cm.non_verbal);
+    const safeDecisionPoint = sanitizeHTML(m.decision_point);
+
     let optionsHTML = '';
     m.options.forEach(opt => {
+        // 🔒 SEGURANÇA XSS: Sanitizar opções
+        const safeApproach = escapeHTML(opt.approach);
+        const safeResponse = escapeHTML(opt.response);
+        const safeLetter = escapeHTML(opt.letter);
+
         optionsHTML += `
-          <div class="option-card" onclick="selectOption('${opt.letter}', this)">
-            <span class="option-letter">${opt.letter}</span>
+          <div class="option-card" onclick="selectOption('${safeLetter}', this)">
+            <span class="option-letter">${safeLetter}</span>
             <div style="flex:1">
-              <strong>${opt.approach}</strong>
-              <p style="margin:8px 0 0; color:#666; font-style:italic;">"${opt.response}"</p>
+              <strong>${safeApproach}</strong>
+              <p style="margin:8px 0 0; color:#666; font-style:italic;">"${safeResponse}"</p>
             </div>
           </div>`;
     });
 
     document.getElementById('momentContainer').innerHTML = `
         <div class="moment-card">
-          <span class="context-badge">${ctx.diagnosis || 'Momento Clínico'}</span>
-          
+          <span class="context-badge">${safeDiagnosis}</span>
+
           <div class="context-section">
             <h4>CONTEXTO</h4>
-            <p><strong>Cliente:</strong> ${ctx.client_name}, ${ctx.client_age} anos • <strong>Sessão:</strong> ${ctx.session_number}</p>
-            <p><strong>Acabou de acontecer:</strong> ${ctx.what_just_happened}</p>
+            <p><strong>Cliente:</strong> ${safeClientName}, ${ctx.client_age} anos • <strong>Sessão:</strong> ${ctx.session_number}</p>
+            <p><strong>Acabou de acontecer:</strong> ${safeWhatHappened}</p>
           </div>
 
           <div class="critical-moment">
             <h4 style="margin:0 0 16px; color:#e65100;">MOMENTO CRÍTICO</h4>
-            <div class="dialogue">"${cm.dialogue}"</div>
-            <div class="non-verbal"><strong>Observação:</strong> ${cm.non_verbal}</div>
+            <div class="dialogue">"${safeDialogue}"</div>
+            <div class="non-verbal"><strong>Observação:</strong> ${safeNonVerbal}</div>
           </div>
 
-          <div class="decision-point">${m.decision_point}</div>
+          <div class="decision-point">${safeDecisionPoint}</div>
 
           <h4 style="margin:32px 0 16px; font-size:1.4rem;">Sua resposta:</h4>
           <div class="options-grid">${optionsHTML}</div>
@@ -282,22 +295,31 @@ function showFeedback(f, userChoice) {
     const er = f.expert_reasoning;
     const lp = f.learning_point;
 
+    // 🔒 SEGURANÇA XSS: Sanitizar feedback do backend
+    const safeImmediateFeedback = sanitizeHTML(f.immediate_feedback);
+    const safeUserReasoning = f.user_reasoning_analysis ? sanitizeHTML(f.user_reasoning_analysis) : '';
+    const safeExpertChoice = escapeHTML(f.expert_choice);
+    const safeWhyWorks = sanitizeHTML(er.why_this_works || '');
+    const safeCorePrinciple = er.core_principle ? sanitizeHTML(er.core_principle) : '';
+    const safePattern = lp ? sanitizeHTML(lp.pattern_to_recognize) : '';
+    const safeInstantResponse = lp ? sanitizeHTML(lp.instant_response) : '';
+
     const fb = `
         <div class="feedback-card">
           <div class="feedback-header ${f.is_correct ? 'correct' : 'incorrect'}">
-            <h2>${f.immediate_feedback}</h2>
+            <h2>${safeImmediateFeedback}</h2>
             <p style="margin-top:12px; font-size:1.2rem;">
               ${f.is_correct ? 'Você pensou como um clínico experiente!' : 'Vamos crescer juntos com este aprendizado'}
             </p>
           </div>
 
-          ${f.user_reasoning_analysis ? `<div class="feedback-section"><h4>Seu Raciocínio</h4><p style="font-style:italic;">${f.user_reasoning_analysis}</p></div>` : ''}
+          ${safeUserReasoning ? `<div class="feedback-section"><h4>Seu Raciocínio</h4><p style="font-style:italic;">${safeUserReasoning}</p></div>` : ''}
 
-          <div class="feedback-section"><h4>Por que ${f.expert_choice} é a melhor escolha</h4><p>${er.why_this_works || ''}</p></div>
+          <div class="feedback-section"><h4>Por que ${safeExpertChoice} é a melhor escolha</h4><p>${safeWhyWorks}</p></div>
 
-          ${er.core_principle ? `<div class="principle-box">PRINCÍPIO CLÍNICO: "${er.core_principle}"</div>` : ''}
+          ${safeCorePrinciple ? `<div class="principle-box">PRINCÍPIO CLÍNICO: "${safeCorePrinciple}"</div>` : ''}
 
-          ${lp ? `<div class="feedback-section" style="background:#ecfdf5;"><h4>Aprendizado</h4><p><strong>Padrão:</strong> ${lp.pattern_to_recognize}</p><p><strong>Resposta ideal:</strong> ${lp.instant_response}</p></div>` : ''}
+          ${lp ? `<div class="feedback-section" style="background:#ecfdf5;"><h4>Aprendizado</h4><p><strong>Padrão:</strong> ${safePattern}</p><p><strong>Resposta ideal:</strong> ${safeInstantResponse}</p></div>` : ''}
 
           <button class="next-moment-btn" onclick="generateNewMoment()">Próximo Momento Crítico</button>
         </div>`;
