@@ -30,7 +30,7 @@
             </div>
             <nav class="nav">
                 <!-- Streak Indicator -->
-                <div class="streak-container" id="streakIndicator" style="display: none;">
+                <div class="streak-container" id="streakIndicator" data-tooltip="Dias consecutivos de prática" style="display: none;">
                     <img src="assets/icons/streak-flame.svg" alt="Streak" class="streak-icon" id="streakIcon">
                     <span class="streak-count" id="streakCount">0</span>
                     <div class="streak-tooltip">
@@ -60,14 +60,14 @@
         </div>
 
         <!-- Card de Nível (Apenas Premium) -->
-        <div id="levelCard" class="level-card" style="display: none;">
+        <div id="levelCard" class="level-card" data-tooltip="Ganhe cognits para subir de nível" style="display: none;">
             <div class="level-header">
                 <div class="level-icon">⚡</div>
                 <div class="level-info">
                     <p class="level-title">Nível <span id="levelNumber">1</span></p>
                     <h3 class="level-name" id="levelTitle">Estudante de Lente</h3>
                 </div>
-                <div class="cognit-counter">
+                <div class="cognit-counter" data-tooltip="Cognits acumulados">
                     <img src="assets/icons/cognit-24.svg" alt="Cognit" class="cognit-icon">
                     <span class="cognit-amount" id="cognitAmount">0</span>
                 </div>
@@ -92,7 +92,7 @@
         </div>
 
         <!-- Freshness Indicator (Premium Only) -->
-        <div id="freshnessIndicator" class="freshness-indicator" style="display: none;">
+        <div id="freshnessIndicator" class="freshness-indicator" data-tooltip="Pratique regularmente para manter 100%" style="display: none;">
             <div class="freshness-icon" id="freshnessIcon">🔥</div>
             <div class="freshness-content">
                 <div class="freshness-header">
@@ -364,9 +364,15 @@
         </div>
     </div>
 
+    <!-- Global Tooltip -->
+    <div id="global-tooltip" class="tooltip" style="display: none;"></div>
+
     <script src="js/dashboard.js"></script>
     <script>
         lucide.createIcons();
+
+        // Initialize tooltips
+        initTooltips();
 
         // Logout
         document.getElementById('logoutBtn')?.addEventListener('click', () => {
