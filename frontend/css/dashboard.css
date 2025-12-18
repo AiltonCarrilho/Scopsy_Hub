@@ -12,6 +12,40 @@
     gap: var(--space-lg);
 }
 
+/* Métricas Compactas no Header */
+.metrics-compact {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.metric-mini {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.metric-mini:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.metric-mini-icon {
+    font-size: 16px;
+}
+
+.metric-mini strong {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 700;
+    font-size: 15px;
+}
+
 .user-name {
     font-weight: 500;
     color: rgba(255, 255, 255, 0.8);
@@ -218,6 +252,24 @@
 
     .hero {
         padding-top: 20px;
+    }
+
+    /* Métricas compactas em mobile */
+    .metrics-compact {
+        gap: 12px;
+    }
+
+    .metric-mini {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    .metric-mini-icon {
+        font-size: 14px;
+    }
+
+    .metric-mini strong {
+        font-size: 13px;
     }
 }
 
@@ -498,6 +550,85 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* --- Freshness Alert Banner --- */
+.freshness-alert {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    margin-bottom: var(--space-lg);
+    border-radius: var(--radius-md);
+    border: 2px solid;
+    animation: slideDown 0.4s ease-out;
+    transition: all 0.3s ease;
+}
+
+.freshness-alert.good {
+    background: #FFF4E6;
+    border-color: #F59E0B;
+}
+
+.freshness-alert.warning {
+    background: #FEF3E2;
+    border-color: #F97316;
+}
+
+.freshness-alert.critical {
+    background: #FEE2E2;
+    border-color: #EF4444;
+    animation: slideDown 0.4s ease-out, gentle-pulse 2s ease-in-out infinite;
+}
+
+.alert-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+.alert-icon {
+    font-size: 32px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.alert-text strong {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text-main);
+}
+
+.alert-text p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.freshness-alert.critical .alert-text strong {
+    color: #DC2626;
+}
+
+.alert-dismiss {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #9CA3AF;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.alert-dismiss:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #6B7280;
 }
 
 /* --- Modal Statistics --- */
