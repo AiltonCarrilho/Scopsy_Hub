@@ -437,10 +437,106 @@ async function loadFreshness() {
             document.getElementById('freshnessFill').style.width = `${freshness.percentage}%`;
 
             console.log('💧 Frescor carregado:', freshness);
+
+            // Mostrar banner de alerta se necessário
+            showFreshnessAlert(freshness);
         }
 
     } catch (error) {
         console.error('Erro ao carregar frescor:', error);
+    }
+}
+
+/**
+ * Mostra banner de alerta contextual baseado no frescor
+ * @param {Object} freshness - Dados de frescor
+ */
+function showFreshnessAlert(freshness) {
+    const alert = document.getElementById('freshnessAlert');
+    if (!alert) return;
+
+    // Verificar se já foi dismissado hoje
+    const dismissedDate = localStorage.getItem('freshness_alert_dismissed');
+    const today = new Date().toDateString();
+
+    if (dismissedDate === today) {
+        alert.style.display = 'none';
+        return;
+    }
+
+    // Mostrar apenas se frescor < 80%
+    if (freshness.percentage < 80) {
+        alert.style.display = 'flex';
+        alert.className = `freshness-alert ${freshness.status}`;
+
+        document.getElementById('freshnessAlertIcon').textContent = freshness.emoji;
+        document.getElementById('freshnessAlertTitle').textContent = freshness.message;
+        document.getElementById('freshnessAlertMessage').textContent = freshness.description;
+    } else {
+        alert.style.display = 'none';
+    }
+}
+
+/**
+ * Fecha o banner de alerta e salva dismiss
+ */
+function dismissFreshnessAlert() {
+    const alert = document.getElementById('freshnessAlert');
+    if (alert) {
+        alert.style.display = 'none';
+        localStorage.setItem('freshness_alert_dismissed', new Date().toDateString());
+    }
+}
+
+/**
+ * Popula métricas compactas no header (Premium)
+ */
+async function populateCompactMetrics() {
+    const container = document.getElementById('metricsCompact');
+    if (!container) return;
+
+    try {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        // Mostrar apenas para Premium
+        if (user.plan !== 'premium') {
+            container.style.display = 'none';
+            return;
+        }
+
+        // Buscar progresso
+        const progressRes = await fetch(`${API_URL}/api/progress/summary`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (progressRes.ok) {
+            const data = await progressRes.json();
+            const totalCognits = data.total_cognits || 0;
+            document.getElementById('cognitsMini').textContent = formatNumber(totalCognits);
+        }
+
+        // Buscar frescor
+        const freshnessRes = await fetch(`${API_URL}/api/freshness/status`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (freshnessRes.ok) {
+            const data = await freshnessRes.json();
+            if (data.success && data.freshness) {
+                document.getElementById('freshnessMini').textContent = data.freshness.percentage + '%';
+            }
+        }
+
+        // Streak (calculado localmente ou via API)
+        const streakDays = user.streak_days || 0;
+        document.getElementById('streakMini').textContent = streakDays;
+
+        // Mostrar container
+        container.style.display = 'flex';
+
+    } catch (error) {
+        console.error('Erro ao carregar métricas compactas:', error);
     }
 }
 
@@ -462,6 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadMissions();        // 🎯 Missões
     // loadBadges();       // 🏆 Badges (REMOVIDO)
     loadFreshness();       // 💧 Frescor
+    populateCompactMetrics(); // 📊 Métricas Header (Premium)
 
     // Adicionar event listener ao botão de logout
     const logoutBtn = document.getElementById('logoutBtn');

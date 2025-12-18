@@ -29,7 +29,23 @@
                 <h1>Scopsy Lab<span class="registered">®</span></h1>
             </div>
             <nav class="nav">
-                <!-- Streak Indicator -->
+                <!-- Métricas Compactas (Premium) -->
+                <div class="metrics-compact" id="metricsCompact" style="display: none;">
+                    <span class="metric-mini" data-tooltip="Dias de sequência ativa">
+                        <span class="metric-mini-icon">🔥</span>
+                        <strong id="streakMini">0</strong>
+                    </span>
+                    <span class="metric-mini" data-tooltip="Frescor clínico atual">
+                        <span class="metric-mini-icon">💧</span>
+                        <strong id="freshnessMini">100%</strong>
+                    </span>
+                    <span class="metric-mini" data-tooltip="Total de cognits acumulados">
+                        <span class="metric-mini-icon">💎</span>
+                        <strong id="cognitsMini">0</strong>
+                    </span>
+                </div>
+
+                <!-- Streak Indicator (Trial) -->
                 <div class="streak-container" id="streakIndicator" data-tooltip="Dias consecutivos de prática" style="display: none;">
                     <img src="assets/icons/streak-flame.svg" alt="Streak" class="streak-icon" id="streakIcon">
                     <span class="streak-count" id="streakCount">0</span>
@@ -49,6 +65,18 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <div class="container">
+
+        <!-- Banner de Alerta de Frescor -->
+        <div id="freshnessAlert" class="freshness-alert" style="display: none;">
+            <div class="alert-content">
+                <span class="alert-icon" id="freshnessAlertIcon">💧</span>
+                <div class="alert-text">
+                    <strong id="freshnessAlertTitle">Frescor Caindo</strong>
+                    <p id="freshnessAlertMessage"></p>
+                </div>
+            </div>
+            <button class="alert-dismiss" onclick="dismissFreshnessAlert()">×</button>
+        </div>
 
         <!-- Banner Trial -->
         <div id="trialBanner" class="trial-banner" style="display: none;">
