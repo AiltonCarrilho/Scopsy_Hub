@@ -5,6 +5,18 @@
 
 const API_URL = 'http://localhost:3000';
 
+/**
+ * Formata números grandes para exibição
+ * @param {number} num - Número a ser formatado
+ * @returns {string} - Número formatado (ex: "1.2k", "15k")
+ */
+function formatNumber(num) {
+    if (!num || num === 0) return '0';
+    if (num >= 10000) return Math.floor(num / 1000) + 'k';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
+    return num.toString();
+}
+
 // ========================================
 // PROTEÇÃO DE ROTA
 // ========================================
@@ -321,7 +333,7 @@ function updateStatsDisplay(data) {
 
         // 4. Cognits (Unidades de Sabedoria Cognitiva)
         const elCognits = document.getElementById('badgesEarned');
-        if (elCognits) elCognits.textContent = data.cognits || 0;
+        if (elCognits) elCognits.textContent = formatNumber(data.cognits || 0);
 
         // EXTRA: Título Clínico (se houver onde mostrar, senão console)
         console.log(`[Gamification] Title: ${data.clinical_title} (Level ${data.level})`);
@@ -458,6 +470,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+/**
+ * Sistema de Tooltips Global
+ * Mostra tooltips para elementos com data-tooltip
+ */
+function initTooltips() {
+    const tooltip = document.getElementById('global-tooltip');
+    if (!tooltip) return;
+
+    document.addEventListener('mouseover', (e) => {
+        const el = e.target.closest('[data-tooltip]');
+        if (!el) return;
+
+        tooltip.textContent = el.dataset.tooltip;
+        tooltip.style.display = 'block';
+
+        // Posicionar tooltip
+        const rect = el.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+
+        // Centralizar horizontalmente
+        const left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+        // Posicionar abaixo do elemento
+        const top = rect.bottom + 8;
+
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+    });
+
+    document.addEventListener('mouseout', (e) => {
+        const el = e.target.closest('[data-tooltip]');
+        if (!el) return;
+        tooltip.style.display = 'none';
+    });
+}
+
 // ========================================
 // GAMIFICAÇÃO - EXIBIR COGNITS E NÍVEL
 // ========================================
@@ -496,10 +543,10 @@ async function displayGamification() {
 
         if (levelNumber) levelNumber.textContent = data.level || 1;
         if (levelTitle) levelTitle.textContent = data.clinical_title || 'Estudante de Lente';
-        if (cognitAmount) cognitAmount.textContent = data.cognits || 0;
-        if (currentCognits) currentCognits.textContent = data.cognits || 0;
-        if (targetCognits) targetCognits.textContent = data.next_level?.at || 151;
-        if (remainingCognits) remainingCognits.textContent = data.next_level?.remaining || 151;
+        if (cognitAmount) cognitAmount.textContent = formatNumber(data.cognits || 0);
+        if (currentCognits) currentCognits.textContent = formatNumber(data.cognits || 0);
+        if (targetCognits) targetCognits.textContent = formatNumber(data.next_level?.at || 151);
+        if (remainingCognits) remainingCognits.textContent = formatNumber(data.next_level?.remaining || 151);
         if (nextLevelName) nextLevelName.textContent = getNextLevelName(data.level || 1);
 
         // Atualizar barra de progresso
