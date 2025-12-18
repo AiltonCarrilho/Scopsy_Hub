@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="css/gamification.css">
     <link rel="stylesheet" href="css/components/cognit-toast.css">
     <link rel="stylesheet" href="css/components/streak-indicator.css">
+    <link rel="stylesheet" href="css/components/freshness-indicator.css">
 </head>
 
 <body>
@@ -90,6 +91,26 @@
             </p>
         </div>
 
+        <!-- Freshness Indicator (Premium Only) -->
+        <div id="freshnessIndicator" class="freshness-indicator" style="display: none;">
+            <div class="freshness-icon" id="freshnessIcon">🔥</div>
+            <div class="freshness-content">
+                <div class="freshness-header">
+                    <h4 class="freshness-title" id="freshnessTitle">Frescor Clínico</h4>
+                    <span class="freshness-percentage" id="freshnessPercentage">100%</span>
+                </div>
+                <p class="freshness-description" id="freshnessDescription">
+                    Continue praticando para manter 100% dos cognits
+                </p>
+                <div class="freshness-bar">
+                    <div class="freshness-fill" id="freshnessFill" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="freshness-tooltip">
+                Pratique regularmente para manter o frescor em 100%
+            </div>
+        </div>
+
         <!-- Hero -->
         <section class="hero">
             <h1>Bem-vindo ao Scopsy Lab<span class="registered">®</span></h1>
@@ -110,9 +131,8 @@
             </div>
         </section>
 
-        </section>
-
-        <!-- Badges / Conquistas -->
+        <!-- Badges / Conquistas (REMOVIDO TEMPORARIAMENTE) -->
+        <!--
         <section class="badges-section" id="badgesSection">
             <div class="section-header">
                 <h2><span class="icon">🏆</span> Conquistas</h2>
@@ -120,208 +140,209 @@
             </div>
             <div class="badges-scroller" id="badgesScroller">
                 <!-- Injetado via JS -->
+    </div>
+    </section>
+    -->
+
+    <!-- Módulos -->
+    <section class="assistants-section">
+        <h2>Módulos de Treinamento</h2>
+
+        <div class="assistants-grid">
+
+            <!-- 1. Raciocínio Clínico -->
+            <a href="case.html?assistant=case" class="assistant-card" id="cardRaciocinio">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <!-- Novo ícone lindo -->
+                        <svg width="68" height="68" viewBox="0 0 100 100" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#8c52ff" />
+                                    <stop offset="100%" stop-color="#00c2ff" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="50" cy="38" r="18" stroke="url(#grad1)" stroke-width="4" />
+                            <path d="M35 38 Q50 28, 65 38" stroke="url(#grad1)" stroke-width="3" fill="none" />
+                            <circle cx="50" cy="38" r="8" fill="url(#grad1)" />
+                            <g opacity="0.6">
+                                <circle cx="28" cy="25" r="3" fill="url(#grad1)" />
+                                <circle cx="72" cy="28" r="4" fill="url(#grad1)" />
+                                <circle cx="65" cy="60" r="2.5" fill="url(#grad1)" />
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="card-badge">Interativo</span>
+                </div>
+                <h3>Raciocínio Clínico</h3>
+                <p class="card-description">Desenvolva seu raciocínio clínico através de simulações interativas com
+                    feedback formativo em tempo real</p>
+                <div class="card-features">
+                    <span class="feature-tag"><i data-lucide="zap"></i> Simulação de reação</span>
+                    <span class="feature-tag"><i data-lucide="message-square"></i> Feedback formativo</span>
+                    <span class="feature-tag"><i data-lucide="brain"></i> Reflexão metacognitiva</span>
+                </div>
+                <!-- Trial Limit Info -->
+                <div class="trial-limit-info" style="display: none;">
+                    <div class="limit-bar-container">
+                        <div class="limit-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="limit-text">Restam 30 de 30 acessos</span>
+                </div>
+                <div class="card-footer">
+                    <i data-lucide="layers"></i> Todos os níveis
+                </div>
+            </a>
+
+            <!-- 2. Radar Diagnóstico -->
+            <a href="diagnostic.html" class="assistant-card" id="cardRadar">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <!-- Novo ícone lindo -->
+                        <svg width="68" height="68" viewBox="0 0 100 100" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#8c52ff" />
+                                    <stop offset="100%" stop-color="#00c2ff" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="35" stroke="url(#grad2)" stroke-width="5" fill="none" />
+                            <circle cx="50" cy="50" r="25" stroke="url(#grad2)" stroke-width="4" fill="none" />
+                            <circle cx="50" cy="50" r="15" stroke="url(#grad2)" stroke-width="3" fill="none" />
+                            <circle cx="50" cy="50" r="6" fill="url(#grad2)" />
+                            <path d="M50 15 L50 8 M50 92 L50 85 M15 50 L8 50 M92 50 L85 50" stroke="url(#grad2)"
+                                stroke-width="4" stroke-linecap="round" />
+                            <circle cx="70" cy="25" r="3" fill="url(#grad2)" opacity="0.7" />
+                        </svg>
+                    </div>
+                    <span class="card-badge">Repetição Espaçada</span>
+                </div>
+                <h3>Radar Diagnóstico</h3>
+                <p class="card-description">Pratique diagnósticos DSM-5 com metodologia de repetição espaçada e
+                    feedback imediato</p>
+                <div class="card-features">
+                    <span class="feature-tag"><i data-lucide="trending-up"></i> Progressão adaptativa</span>
+                    <span class="feature-tag"><i data-lucide="target"></i> Casos de alta precisão</span>
+                    <span class="feature-tag"><i data-lucide="clock"></i> Repetição espaçada</span>
+                </div>
+                <!-- Trial Limit Info -->
+                <div class="trial-limit-info" style="display: none;">
+                    <div class="limit-bar-container">
+                        <div class="limit-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="limit-text">Compartilha limite com Raciocínio</span>
+                </div>
+                <div class="card-footer">
+                    Treino sistemático DSM-5
+                </div>
+            </a>
+
+            <!-- 3. Jornada Clínica -->
+            <!-- Voltando para ser um card normal visualmente, o JS controlará o clique -->
+            <a href="#" class="assistant-card" id="cardJornada">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <!-- Novo ícone lindo -->
+                        <svg width="68" height="68" viewBox="0 0 100 100" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#8c52ff" />
+                                    <stop offset="100%" stop-color="#00c2ff" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="20" cy="70" r="8" fill="url(#grad3)" />
+                            <circle cx="50" cy="45" r="10" fill="url(#grad3)" />
+                            <circle cx="80" cy="30" r="12" fill="url(#grad3)" />
+                            <path d="M20 70 Q35 58, 50 45 T80 30" stroke="url(#grad3)" stroke-width="4" fill="none"
+                                stroke-dasharray="8 6" />
+                            <polygon points="80,20 90,30 80,40" fill="url(#grad3)" transform="rotate(30 80 30)" />
+                            <g opacity="0.6">
+                                <circle cx="35" cy="30" r="3" fill="url(#grad3)" />
+                                <circle cx="65" cy="65" r="4" fill="url(#grad3)" />
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="card-badge">12 Sessões</span>
+                </div>
+                <h3>Jornada Clínica</h3>
+                <p class="card-description">Acompanhe um caso completo de TCC através de 12 sessões progressivas,
+                    tomando decisões clínicas que impactam o tratamento</p>
+                <div class="card-features">
+                    <span class="feature-tag"><i data-lucide="lock"></i> Exclusivo Premium</span>
+                    <span class="feature-tag"><i data-lucide="activity"></i> Evolução longitudinal</span>
+                    <span class="feature-tag"><i data-lucide="git-branch"></i> Decisões críticas</span>
+                </div>
+                <div class="card-footer">
+                    Jornada terapêutica completa
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- Seu Progresso (Premium) -->
+    <section class="progress-section" id="premiumStats" style="display: none;">
+        <h2>Seu Progresso</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="message-circle"></i></div>
+                <div class="stat-number" id="totalConversations">0</div>
+                <div class="stat-label">Raciocínio Clínico</div>
             </div>
-        </section>
-
-        <!-- Módulos -->
-        <section class="assistants-section">
-            <h2>Módulos de Treinamento</h2>
-
-            <div class="assistants-grid">
-
-                <!-- 1. Raciocínio Clínico -->
-                <a href="case.html?assistant=case" class="assistant-card" id="cardRaciocinio">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <!-- Novo ícone lindo -->
-                            <svg width="68" height="68" viewBox="0 0 100 100" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#8c52ff" />
-                                        <stop offset="100%" stop-color="#00c2ff" />
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="50" cy="38" r="18" stroke="url(#grad1)" stroke-width="4" />
-                                <path d="M35 38 Q50 28, 65 38" stroke="url(#grad1)" stroke-width="3" fill="none" />
-                                <circle cx="50" cy="38" r="8" fill="url(#grad1)" />
-                                <g opacity="0.6">
-                                    <circle cx="28" cy="25" r="3" fill="url(#grad1)" />
-                                    <circle cx="72" cy="28" r="4" fill="url(#grad1)" />
-                                    <circle cx="65" cy="60" r="2.5" fill="url(#grad1)" />
-                                </g>
-                            </svg>
-                        </div>
-                        <span class="card-badge">Interativo</span>
-                    </div>
-                    <h3>Raciocínio Clínico</h3>
-                    <p class="card-description">Desenvolva seu raciocínio clínico através de simulações interativas com
-                        feedback formativo em tempo real</p>
-                    <div class="card-features">
-                        <span class="feature-tag"><i data-lucide="zap"></i> Simulação de reação</span>
-                        <span class="feature-tag"><i data-lucide="message-square"></i> Feedback formativo</span>
-                        <span class="feature-tag"><i data-lucide="brain"></i> Reflexão metacognitiva</span>
-                    </div>
-                    <!-- Trial Limit Info -->
-                    <div class="trial-limit-info" style="display: none;">
-                        <div class="limit-bar-container">
-                            <div class="limit-bar" style="width: 0%"></div>
-                        </div>
-                        <span class="limit-text">Restam 30 de 30 acessos</span>
-                    </div>
-                    <div class="card-footer">
-                        <i data-lucide="layers"></i> Todos os níveis
-                    </div>
-                </a>
-
-                <!-- 2. Radar Diagnóstico -->
-                <a href="diagnostic.html" class="assistant-card" id="cardRadar">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <!-- Novo ícone lindo -->
-                            <svg width="68" height="68" viewBox="0 0 100 100" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#8c52ff" />
-                                        <stop offset="100%" stop-color="#00c2ff" />
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="50" cy="50" r="35" stroke="url(#grad2)" stroke-width="5" fill="none" />
-                                <circle cx="50" cy="50" r="25" stroke="url(#grad2)" stroke-width="4" fill="none" />
-                                <circle cx="50" cy="50" r="15" stroke="url(#grad2)" stroke-width="3" fill="none" />
-                                <circle cx="50" cy="50" r="6" fill="url(#grad2)" />
-                                <path d="M50 15 L50 8 M50 92 L50 85 M15 50 L8 50 M92 50 L85 50" stroke="url(#grad2)"
-                                    stroke-width="4" stroke-linecap="round" />
-                                <circle cx="70" cy="25" r="3" fill="url(#grad2)" opacity="0.7" />
-                            </svg>
-                        </div>
-                        <span class="card-badge">Repetição Espaçada</span>
-                    </div>
-                    <h3>Radar Diagnóstico</h3>
-                    <p class="card-description">Pratique diagnósticos DSM-5 com metodologia de repetição espaçada e
-                        feedback imediato</p>
-                    <div class="card-features">
-                        <span class="feature-tag"><i data-lucide="trending-up"></i> Progressão adaptativa</span>
-                        <span class="feature-tag"><i data-lucide="target"></i> Casos de alta precisão</span>
-                        <span class="feature-tag"><i data-lucide="clock"></i> Repetição espaçada</span>
-                    </div>
-                    <!-- Trial Limit Info -->
-                    <div class="trial-limit-info" style="display: none;">
-                        <div class="limit-bar-container">
-                            <div class="limit-bar" style="width: 0%"></div>
-                        </div>
-                        <span class="limit-text">Compartilha limite com Raciocínio</span>
-                    </div>
-                    <div class="card-footer">
-                        Treino sistemático DSM-5
-                    </div>
-                </a>
-
-                <!-- 3. Jornada Clínica -->
-                <!-- Voltando para ser um card normal visualmente, o JS controlará o clique -->
-                <a href="#" class="assistant-card" id="cardJornada">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <!-- Novo ícone lindo -->
-                            <svg width="68" height="68" viewBox="0 0 100 100" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#8c52ff" />
-                                        <stop offset="100%" stop-color="#00c2ff" />
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="20" cy="70" r="8" fill="url(#grad3)" />
-                                <circle cx="50" cy="45" r="10" fill="url(#grad3)" />
-                                <circle cx="80" cy="30" r="12" fill="url(#grad3)" />
-                                <path d="M20 70 Q35 58, 50 45 T80 30" stroke="url(#grad3)" stroke-width="4" fill="none"
-                                    stroke-dasharray="8 6" />
-                                <polygon points="80,20 90,30 80,40" fill="url(#grad3)" transform="rotate(30 80 30)" />
-                                <g opacity="0.6">
-                                    <circle cx="35" cy="30" r="3" fill="url(#grad3)" />
-                                    <circle cx="65" cy="65" r="4" fill="url(#grad3)" />
-                                </g>
-                            </svg>
-                        </div>
-                        <span class="card-badge">12 Sessões</span>
-                    </div>
-                    <h3>Jornada Clínica</h3>
-                    <p class="card-description">Acompanhe um caso completo de TCC através de 12 sessões progressivas,
-                        tomando decisões clínicas que impactam o tratamento</p>
-                    <div class="card-features">
-                        <span class="feature-tag"><i data-lucide="lock"></i> Exclusivo Premium</span>
-                        <span class="feature-tag"><i data-lucide="activity"></i> Evolução longitudinal</span>
-                        <span class="feature-tag"><i data-lucide="git-branch"></i> Decisões críticas</span>
-                    </div>
-                    <div class="card-footer">
-                        Jornada terapêutica completa
-                    </div>
-                </a>
-
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="file-text"></i></div>
+                <div class="stat-number" id="casesCompleted">0</div>
+                <div class="stat-label">Radar Diagnóstico</div>
             </div>
-        </section>
-
-        <!-- Seu Progresso (Premium) -->
-        <section class="progress-section" id="premiumStats" style="display: none;">
-            <h2>Seu Progresso</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon"><i data-lucide="message-circle"></i></div>
-                    <div class="stat-number" id="totalConversations">0</div>
-                    <div class="stat-label">Raciocínio Clínico</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i data-lucide="file-text"></i></div>
-                    <div class="stat-number" id="casesCompleted">0</div>
-                    <div class="stat-label">Radar Diagnóstico</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i data-lucide="stethoscope"></i></div>
-                    <div class="stat-number" id="diagnosticsCompleted">0</div>
-                    <div class="stat-label">Jornada Terapêutica</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i data-lucide="award"></i></div>
-                    <div class="stat-number" id="badgesEarned">0</div>
-                    <div class="stat-label">Cognits</div>
-                </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="stethoscope"></i></div>
+                <div class="stat-number" id="diagnosticsCompleted">0</div>
+                <div class="stat-label">Jornada Terapêutica</div>
             </div>
-        </section>
+            <div class="stat-card">
+                <div class="stat-icon"><i data-lucide="award"></i></div>
+                <div class="stat-number" id="badgesEarned">0</div>
+                <div class="stat-label">Cognits</div>
+            </div>
+        </div>
+    </section>
 
-        <!-- Seu Progresso (Trial) -->
-        <section class="progress-section" id="trialStats" style="display: none;">
-            <h2>Seu Limite Trial</h2>
-            <div class="stats-grid">
-                <div class="stat-card trial-card">
-                    <div class="stat-icon"><i data-lucide="pie-chart"></i></div>
-                    <div class="stat-number"><span id="trialAccessGeneral">30</span>/30</div>
-                    <div class="stat-label">Raciocínio + Radar</div>
-                    <div class="progress-bar">
-                        <div class="fill" id="barGeneral" style="width: 100%"></div>
-                    </div>
-                </div>
-                <div class="stat-card trial-card">
-                    <div class="stat-icon"><i data-lucide="book-open"></i></div>
-                    <div class="stat-number"><span id="trialAccessConcept">7</span>/7</div>
-                    <div class="stat-label">Conceituação</div>
-                    <div class="progress-bar">
-                        <div class="fill" id="barConcept" style="width: 100%"></div>
-                    </div>
-                </div>
-                <!-- Card Trial locked visual removido do stats também, se desejado, ou mantido como info -->
-                <div class="stat-card trial-card locked">
-                    <div class="stat-icon"><i data-lucide="lock"></i></div>
-                    <div class="stat-number"><i data-lucide="star" style="color: gold;"></i></div>
-                    <div class="stat-label">Jornada (Premium)</div>
-                </div>
-                <div class="stat-card trial-card">
-                    <div class="stat-icon"><i data-lucide="clock"></i></div>
-                    <div class="stat-number"><span id="trialDaysLeftStat">7</span></div>
-                    <div class="stat-label">Dias Restantes</div>
+    <!-- Seu Progresso (Trial) -->
+    <section class="progress-section" id="trialStats" style="display: none;">
+        <h2>Seu Limite Trial</h2>
+        <div class="stats-grid">
+            <div class="stat-card trial-card">
+                <div class="stat-icon"><i data-lucide="pie-chart"></i></div>
+                <div class="stat-number"><span id="trialAccessGeneral">30</span>/30</div>
+                <div class="stat-label">Raciocínio + Radar</div>
+                <div class="progress-bar">
+                    <div class="fill" id="barGeneral" style="width: 100%"></div>
                 </div>
             </div>
-        </section>
+            <div class="stat-card trial-card">
+                <div class="stat-icon"><i data-lucide="book-open"></i></div>
+                <div class="stat-number"><span id="trialAccessConcept">7</span>/7</div>
+                <div class="stat-label">Conceituação</div>
+                <div class="progress-bar">
+                    <div class="fill" id="barConcept" style="width: 100%"></div>
+                </div>
+            </div>
+            <!-- Card Trial locked visual removido do stats também, se desejado, ou mantido como info -->
+            <div class="stat-card trial-card locked">
+                <div class="stat-icon"><i data-lucide="lock"></i></div>
+                <div class="stat-number"><i data-lucide="star" style="color: gold;"></i></div>
+                <div class="stat-label">Jornada (Premium)</div>
+            </div>
+            <div class="stat-card trial-card">
+                <div class="stat-icon"><i data-lucide="clock"></i></div>
+                <div class="stat-number"><span id="trialDaysLeftStat">7</span></div>
+                <div class="stat-label">Dias Restantes</div>
+            </div>
+        </div>
+    </section>
 
     </div>
 

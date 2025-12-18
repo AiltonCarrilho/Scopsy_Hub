@@ -3,6 +3,7 @@ const router = express.Router();
 const OpenAI = require('openai');
 const { createClient } = require('@supabase/supabase-js');
 const { authenticateRequest } = require('../middleware/auth');
+const { applyFreshnessMultiplier } = require('../services/freshnessService');
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const supabase = createClient(
@@ -672,16 +673,20 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
     }
 
     // ✅ Cognits por módulo
-    let cognits = 0;
+    let baseCognits = 0;
     if (assistantType === 'case') {
-      cognits = isCorrect ? 8 : 2; // Desafios: +8 acerto, +2 erro
+      baseCognits = isCorrect ? 8 : 2; // Desafios: +8 acerto, +2 erro
     } else if (assistantType === 'diagnostic') {
-      cognits = isCorrect ? 5 : 1; // Radar: +5 acerto, +1 erro
+      baseCognits = isCorrect ? 5 : 1; // Radar: +5 acerto, +1 erro
     } else if (assistantType === 'case_conceptualization') {
-      cognits = 30; // Conceituação: +30 sempre
+      baseCognits = 30; // Conceituação: +30 sempre
     } else if (assistantType === 'journey') {
-      cognits = 25; // Jornada: +25 por sessão
+      baseCognits = 25; // Jornada: +25 por sessão
     }
+
+    // 💧 APLICAR MULTIPLICADOR DE FRESCOR (atualiza last_practice_date e recupera frescor gradualmente)
+    const finalCognits = await applyFreshnessMultiplier(userId, baseCognits);
+    console.log(`[updateUserProgress] 💧 Frescor aplicado: ${baseCognits} × multiplicador = ${finalCognits} cognits`);
 
     if (existing) {
       console.log('[updateUserProgress] 📝 Registro existe, atualizando...');
@@ -694,7 +699,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
       const newData = {
         total_cases: (existing.total_cases || 0) + 1,
         correct_diagnoses: (existing.correct_diagnoses || 0) + (isCorrect ? 1 : 0),
-        xp_points: (existing.xp_points || 0) + cognits, // ⚠️ Usando xp_points até migrar
+        xp_points: (existing.xp_points || 0) + finalCognits, // ✅ Cognits com multiplicador de frescor aplicado
         last_activity_date: new Date().toISOString().split('T')[0]
       };
 
@@ -719,7 +724,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
         assistant_type: assistantType,
         total_cases: 1,
         correct_diagnoses: isCorrect ? 1 : 0,
-        xp_points: cognits, // ⚠️ Usando xp_points até migrar
+        xp_points: finalCognits, // ✅ Cognits com multiplicador de frescor aplicado
         last_activity_date: new Date().toISOString().split('T')[0]
       };
 
