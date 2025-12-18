@@ -387,6 +387,52 @@ function logout() {
 }
 
 // ========================================
+// CARREGAR FRESCOR CLÍNICO
+// ========================================
+async function loadFreshness() {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const res = await fetch(`${API_URL}/api/freshness/status`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!res.ok) return;
+
+        const data = await res.json();
+
+        if (data.success && data.freshness) {
+            const freshness = data.freshness;
+            const indicator = document.getElementById('freshnessIndicator');
+
+            // Mostrar apenas para Premium
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (user.plan !== 'premium') {
+                indicator.style.display = 'none';
+                return;
+            }
+
+            // Exibir indicador
+            indicator.style.display = 'flex';
+            indicator.className = `freshness-indicator ${freshness.status}`;
+
+            // Atualizar conteúdo
+            document.getElementById('freshnessIcon').textContent = freshness.emoji;
+            document.getElementById('freshnessTitle').textContent = freshness.message;
+            document.getElementById('freshnessPercentage').textContent = `${freshness.percentage}%`;
+            document.getElementById('freshnessDescription').textContent = freshness.description;
+            document.getElementById('freshnessFill').style.width = `${freshness.percentage}%`;
+
+            console.log('💧 Frescor carregado:', freshness);
+        }
+
+    } catch (error) {
+        console.error('Erro ao carregar frescor:', error);
+    }
+}
+
+// ========================================
 // INICIALIZAÇÃO
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -402,7 +448,8 @@ document.addEventListener('DOMContentLoaded', () => {
     displayGamification(); // ⭐ Gamificação
     loadStreak();          // 🔥 Streaks
     loadMissions();        // 🎯 Missões
-    loadBadges();          // 🏆 Badges
+    // loadBadges();       // 🏆 Badges (REMOVIDO)
+    loadFreshness();       // 💧 Frescor
 
     // Adicionar event listener ao botão de logout
     const logoutBtn = document.getElementById('logoutBtn');

@@ -3,6 +3,7 @@ const router = express.Router();
 const OpenAI = require('openai');
 const { createClient } = require('@supabase/supabase-js');
 const { authenticateRequest } = require('../middleware/auth');
+const { applyFreshnessMultiplier } = require('../services/freshnessService');
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const supabase = createClient(
@@ -354,8 +355,12 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
       throw selectError;
     }
 
-    // ✅ Radar Diagnóstico: +5 cognits por acerto, +1 por erro
-    const cognits = isCorrect ? 5 : 1;
+    // ✅ Radar Diagnóstico: +5 cognits por acerto, +1 por erro (BASE)
+    const baseCognits = isCorrect ? 5 : 1;
+
+    // 💧 APLICAR MULTIPLICADOR DE FRESCOR (atualiza last_practice_date e recupera frescor gradualmente)
+    const finalCognits = await applyFreshnessMultiplier(userId, baseCognits);
+    console.log(`[updateUserProgress] 💧 Frescor aplicado: ${baseCognits} × multiplicador = ${finalCognits} cognits`);
 
     if (existing) {
       console.log('[updateUserProgress] 📝 Registro existe, atualizando...');
@@ -365,7 +370,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
         .update({
           total_cases: (existing.total_cases || 0) + 1,
           correct_diagnoses: (existing.correct_diagnoses || 0) + (isCorrect ? 1 : 0),
-          xp_points: (existing.xp_points || 0) + cognits, // ⚠️ Usando xp_points
+          xp_points: (existing.xp_points || 0) + finalCognits, // ✅ Cognits com multiplicador de frescor aplicado
           last_activity_date: new Date().toISOString().split('T')[0]
         })
         .eq('id', existing.id);
@@ -386,7 +391,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
           assistant_type: assistantType,
           total_cases: 1,
           correct_diagnoses: isCorrect ? 1 : 0,
-          xp_points: cognits, // ⚠️ Usando xp_points
+          xp_points: finalCognits, // ✅ Cognits com multiplicador de frescor aplicado
           last_activity_date: new Date().toISOString().split('T')[0]
         });
 

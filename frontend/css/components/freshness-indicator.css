@@ -1,0 +1,153 @@
+/* ============================================
+   FRESHNESS INDICATOR
+   Sistema de Frescor Clínico
+   ============================================ */
+
+.freshness-indicator {
+    background: linear-gradient(135deg, #F8FAFC 0%, #FFFFFF 100%);
+    border: 2px solid var(--border-light);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.freshness-indicator::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--freshness-color, #10B981);
+    transition: background 0.3s ease;
+}
+
+.freshness-icon {
+    font-size: 32px;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.freshness-content {
+    flex: 1;
+}
+
+.freshness-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.freshness-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.freshness-percentage {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--freshness-color, #10B981);
+}
+
+.freshness-description {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.freshness-bar {
+    height: 6px;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.freshness-fill {
+    height: 100%;
+    background: var(--freshness-color, #10B981);
+    border-radius: 3px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estados de Frescor */
+.freshness-indicator.excellent {
+    --freshness-color: #10B981;
+}
+
+.freshness-indicator.good {
+    --freshness-color: #F59E0B;
+}
+
+.freshness-indicator.warning {
+    --freshness-color: #F97316;
+}
+
+.freshness-indicator.critical {
+    --freshness-color: #EF4444;
+}
+
+/* Animação de Pulsação (quando em risco) */
+.freshness-indicator.warning .freshness-icon,
+.freshness-indicator.critical .freshness-icon {
+    animation: pulse-warning 2s ease-in-out infinite;
+}
+
+@keyframes pulse-warning {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+/* Tooltip */
+.freshness-tooltip {
+    position: absolute;
+    top: -8px;
+    right: 16px;
+    background: var(--text-primary);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+}
+
+.freshness-indicator:hover .freshness-tooltip {
+    opacity: 1;
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+    .freshness-indicator {
+        padding: 12px 16px;
+    }
+
+    .freshness-icon {
+        font-size: 24px;
+    }
+
+    .freshness-percentage {
+        font-size: 16px;
+    }
+}
