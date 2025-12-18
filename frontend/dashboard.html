@@ -395,6 +395,25 @@
     <!-- Global Tooltip -->
     <div id="global-tooltip" class="tooltip" style="display: none;"></div>
 
+    <!-- Floating Cognits Container (SPRINT 3) -->
+    <div id="floatingCognitsContainer" class="floating-cognits-container"></div>
+
+    <!-- Badge Unlock Modal (SPRINT 3) -->
+    <div id="badgeUnlockModal" class="badge-modal" style="display: none;">
+        <div class="badge-modal-content">
+            <div class="badge-modal-icon" id="badgeModalIcon">🏆</div>
+            <h2 class="badge-modal-title">Conquista Desbloqueada!</h2>
+            <h3 class="badge-modal-name" id="badgeModalName">Badge Name</h3>
+            <p class="badge-modal-description" id="badgeModalDescription">Badge description goes here.</p>
+            <div class="badge-modal-xp">
+                <span class="xp-label">+</span>
+                <span class="xp-amount" id="badgeModalXP">50</span>
+                <span class="xp-unit">XP</span>
+            </div>
+            <button class="badge-modal-close" onclick="closeBadgeModal()">Continuar</button>
+        </div>
+    </div>
+
     <script src="js/dashboard.js"></script>
     <script>
         lucide.createIcons();

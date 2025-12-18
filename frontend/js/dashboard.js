@@ -860,12 +860,168 @@ function updateStreakUI(streakData) {
     }
 }
 
+// ============================================================================
+// SPRINT 3 - FEEDBACK VISUAL & MICRO-ANIMAÇÕES
+// ============================================================================
+
+/**
+ * Mostra animação de cognits flutuantes (+X 💎)
+ * @param {number} amount - Quantidade de cognits ganhos
+ * @param {number} x - Posição X (opcional, usa centro se não especificado)
+ * @param {number} y - Posição Y (opcional, usa centro se não especificado)
+ */
+function showFloatingCognits(amount, x = null, y = null) {
+    const container = document.getElementById('floatingCognitsContainer');
+    if (!container) return;
+
+    // Posição padrão: centro da tela
+    const posX = x || window.innerWidth / 2;
+    const posY = y || window.innerHeight / 2;
+
+    const floater = document.createElement('div');
+    floater.className = 'floating-cognit';
+    floater.style.left = posX + 'px';
+    floater.style.top = posY + 'px';
+    floater.innerHTML = `+${amount} <span class="cognit-emoji">💎</span>`;
+
+    container.appendChild(floater);
+
+    // Remove após animação
+    setTimeout(() => {
+        floater.remove();
+    }, 2000);
+}
+
+/**
+ * Mostra modal de badge desbloqueado com confetti
+ * @param {object} badge - Objeto com dados do badge {name, description, icon, xp}
+ */
+function showBadgeUnlockModal(badge) {
+    const modal = document.getElementById('badgeUnlockModal');
+    if (!modal) return;
+
+    // Popular dados
+    document.getElementById('badgeModalIcon').textContent = badge.icon || '🏆';
+    document.getElementById('badgeModalName').textContent = badge.name;
+    document.getElementById('badgeModalDescription').textContent = badge.description;
+    document.getElementById('badgeModalXP').textContent = badge.xp || 50;
+
+    // Mostrar modal
+    modal.style.display = 'flex';
+
+    // Confetti celebration
+    if (typeof confetti !== 'undefined') {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+
+        setTimeout(() => {
+            confetti({
+                particleCount: 50,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 }
+            });
+            confetti({
+                particleCount: 50,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 }
+            });
+        }, 200);
+    }
+}
+
+/**
+ * Fecha modal de badge
+ */
+function closeBadgeModal() {
+    const modal = document.getElementById('badgeUnlockModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+/**
+ * Adiciona efeito glow nos cards seguindo o mouse
+ */
+function initCardGlowEffect() {
+    const cards = document.querySelectorAll('.assistant-card');
+
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+}
+
+/**
+ * Adiciona classe 'near-level' quando próximo do próximo nível (>90%)
+ */
+function checkNearLevelUp() {
+    const currentCognits = parseInt(document.getElementById('currentCognits')?.textContent.replace('k', '000') || 0);
+    const targetCognits = parseInt(document.getElementById('targetCognits')?.textContent.replace('k', '000') || 0);
+    const progressBar = document.getElementById('levelProgressBar');
+
+    if (progressBar && targetCognits > 0) {
+        const percentage = (currentCognits / targetCognits) * 100;
+
+        if (percentage >= 90) {
+            progressBar.classList.add('near-level');
+        } else {
+            progressBar.classList.remove('near-level');
+        }
+    }
+}
+
+/**
+ * Simula ganho de cognits (para testes)
+ * USO: Abra console e digite: testCognitGain(15)
+ */
+function testCognitGain(amount = 10) {
+    showFloatingCognits(amount);
+    console.log(`✅ Teste: +${amount} cognits`);
+}
+
+/**
+ * Simula desbloqueio de badge (para testes)
+ * USO: Abra console e digite: testBadgeUnlock()
+ */
+function testBadgeUnlock() {
+    showBadgeUnlockModal({
+        name: 'Primeiro Passo',
+        description: 'Completou seu primeiro caso clínico com sucesso!',
+        icon: '🎯',
+        xp: 50
+    });
+    console.log('✅ Teste: Badge desbloqueado');
+}
+
+// Inicializar efeitos SPRINT 3 quando página carregar
+document.addEventListener('DOMContentLoaded', () => {
+    initCardGlowEffect();
+    checkNearLevelUp();
+
+    // Recheck near-level a cada atualização de dados
+    setInterval(checkNearLevelUp, 5000);
+});
+
 // EXPORTAR FUNÇÕES (se necessário)
 // ========================================
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         checkAuth,
         logout,
-        loadUserStats
+        loadUserStats,
+        showFloatingCognits,
+        showBadgeUnlockModal,
+        closeBadgeModal
     };
 }
