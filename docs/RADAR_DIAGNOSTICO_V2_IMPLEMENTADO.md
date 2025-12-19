@@ -160,7 +160,6 @@ Abra o caso gerado e veja o JSON completo para avaliar qualidade.
 
 ## 📈 IMPACTO ESPERADO
 
-
 ### Taxa de Acerto:
 - **ANTES:** ~90% (muito fácil - ilusão de competência)
 - **DEPOIS:** ~60-70% (dificuldade real - aprendizado efetivo)

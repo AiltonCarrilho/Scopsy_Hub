@@ -21,7 +21,7 @@
   --color-success: #2ed573;
 
   /* Backgrounds */
-  --bg-body: #fafbfc;
+  --bg-body: #F8FAFC;
   --bg-card: #ffffff;
   --bg-subtle: #f8f9fa;
   --bg-input: #f1f2f6;
@@ -339,6 +339,7 @@ svg {
     opacity: 0;
     transform: translateY(-4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
