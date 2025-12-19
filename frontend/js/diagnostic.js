@@ -181,8 +181,11 @@ function renderCase(caseData) {
     const vignette = caseData.clinical_content?.vignette || 'Vinheta não disponível';
     const options = caseData.question_format?.options || [];
 
-    // 🔒 SEGURANÇA XSS: Sanitizar vinheta do backend
+    const questionText = caseData.question_format?.question || 'Qual é o diagnóstico mais provável?';
+
+    // 🔒 SEGURANÇA XSS: Sanitizar vinheta e pergunta
     const safeVignette = sanitizeHTML(vignette);
+    const safeQuestion = escapeHTML(questionText);
 
     let optionsHTML = '';
     options.forEach((option, index) => {
@@ -199,7 +202,7 @@ function renderCase(caseData) {
         <div class="case-card">
             <h3>📋 Caso Clínico</h3>
             <div class="vignette">${safeVignette}</div>
-            <h4>Qual é o diagnóstico mais provável?</h4>
+            <h4>${safeQuestion}</h4>
             <div class="options-grid" id="optionsGrid">${optionsHTML}</div>
             <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" disabled>Enviar Resposta</button>
         </div>
