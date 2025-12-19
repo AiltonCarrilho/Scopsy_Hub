@@ -135,14 +135,26 @@ router.get('/summary', authenticateRequest, async (req, res) => {
             });
         }
 
-        // 5. PREMIUM: Calcular cognits, level e título
+        // 5. PREMIUM: Calcular cognits, level, título e ACURÁCIA
         let totalCognits = 0;
+        let totalCases = 0;
+        let totalCorrect = 0;
+
         if (progressEntries && progressEntries.length > 0) {
             progressEntries.forEach(entry => {
                 // ⚠️ Usando xp_points até migrar coluna
                 totalCognits += (entry.xp_points || entry.cognits || 0);
+
+                // Calcular acurácia
+                totalCases += (entry.total_cases || 0);
+                totalCorrect += (entry.correct_diagnoses || 0);
             });
         }
+
+        // Calcular acurácia percentual
+        const accuracy = totalCases > 0
+            ? Math.round((totalCorrect / totalCases) * 100)
+            : 0;
 
         const { level, title } = calculateLevelAndTitle(totalCognits);
 
@@ -155,7 +167,15 @@ router.get('/summary', authenticateRequest, async (req, res) => {
 
         const nextLevelRemaining = Math.max(0, nextLevelAt - totalCognits);
 
-        logger.info('✅ PREMIUM:', { userId, totalCognits, level, title });
+        logger.info('✅ PREMIUM:', {
+            userId,
+            totalCognits,
+            level,
+            title,
+            accuracy,
+            totalCases,
+            totalCorrect
+        });
 
         return res.json({
             success: true,
@@ -164,8 +184,15 @@ router.get('/summary', authenticateRequest, async (req, res) => {
             cognits: totalCognits,
             level: level,
             clinical_title: title,
+            accuracy: accuracy,  // ✅ NOVO: Acurácia percentual
 
             breakdown: breakdown,
+
+            stats: {  // ✅ NOVO: Estatísticas detalhadas
+                total_cases: totalCases,
+                correct_cases: totalCorrect,
+                accuracy_rate: accuracy
+            },
 
             next_level: {
                 at: nextLevelAt,

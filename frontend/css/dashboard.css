@@ -243,7 +243,36 @@
     font-weight: 500;
 }
 
-/* Responsiveness */
+/* =========================================
+   GAMIFICATION GRID - CORREÇÃO DE ALINHAMENTO
+   ========================================= */
+
+.gamification-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* =========================================
+   RESPONSIVIDADE
+   ========================================= */
+
+@media (max-width: 968px) {
+    .gamification-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .level-card,
+    .freshness-indicator {
+        min-height: auto;
+    }
+}
+
 @media (max-width: 768px) {
     .assistants-grid,
     .stats-grid {
@@ -270,6 +299,55 @@
 
     .metric-mini strong {
         font-size: 13px;
+    }
+}
+
+@media (max-width: 640px) {
+    .level-card,
+    .freshness-indicator {
+        padding: 20px;
+    }
+
+    .level-name,
+    .freshness-title {
+        font-size: 18px;
+    }
+
+    .level-icon {
+        font-size: 28px;
+    }
+
+    .freshness-icon {
+        font-size: 32px;
+    }
+
+    .freshness-percentage {
+        font-size: 20px;
+    }
+}
+
+/* =========================================
+   ACESSIBILIDADE
+   ========================================= */
+
+.level-card:focus-visible,
+.freshness-indicator:focus-visible {
+    outline: 3px solid #6366f1;
+    outline-offset: 2px;
+}
+
+/* Reduzir animações se o usuário preferir */
+@media (prefers-reduced-motion: reduce) {
+    .progress-fill,
+    .freshness-fill,
+    .freshness-icon,
+    .freshness-indicator.critical {
+        animation: none;
+    }
+
+    .level-card:hover,
+    .freshness-indicator:hover {
+        transform: none;
     }
 }
 

@@ -404,7 +404,7 @@ function logout() {
 }
 
 // ========================================
-// CARREGAR FRESCOR CLÍNICO
+// CARREGAR VIGOR CLÍNICO
 // ========================================
 async function loadFreshness() {
     try {
@@ -423,15 +423,10 @@ async function loadFreshness() {
             const freshness = data.freshness;
             const indicator = document.getElementById('freshnessIndicator');
 
-            // Mostrar apenas para Premium
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            if (user.plan !== 'premium') {
-                indicator.style.display = 'none';
-                return;
-            }
+            // ✅ Não precisa verificar premium aqui - gamificationGrid já controla isso
 
-            // Exibir indicador
-            indicator.style.display = 'flex';
+            // Exibir indicador (já será visível se gamificationGrid estiver visível)
+            if (!indicator) return;
             indicator.className = `freshness-indicator ${freshness.status}`;
 
             // Atualizar conteúdo
@@ -441,20 +436,20 @@ async function loadFreshness() {
             document.getElementById('freshnessDescription').textContent = freshness.description;
             document.getElementById('freshnessFill').style.width = `${freshness.percentage}%`;
 
-            console.log('💧 Frescor carregado:', freshness);
+            console.log('💧 Vigor carregado:', freshness);
 
             // Mostrar banner de alerta se necessário
             showFreshnessAlert(freshness);
         }
 
     } catch (error) {
-        console.error('Erro ao carregar frescor:', error);
+        console.error('Erro ao carregar vigor:', error);
     }
 }
 
 /**
- * Mostra banner de alerta contextual baseado no frescor
- * @param {Object} freshness - Dados de frescor
+ * Mostra banner de alerta contextual baseado no vigor
+ * @param {Object} freshness - Dados de vigor
  */
 function showFreshnessAlert(freshness) {
     const alert = document.getElementById('freshnessAlert');
@@ -469,7 +464,7 @@ function showFreshnessAlert(freshness) {
         return;
     }
 
-    // Mostrar apenas se frescor < 80%
+    // Mostrar apenas se vigor < 80%
     if (freshness.percentage < 80) {
         alert.style.display = 'flex';
         alert.className = `freshness-alert ${freshness.status}`;
@@ -521,7 +516,7 @@ async function populateCompactMetrics() {
             document.getElementById('cognitsMini').textContent = formatNumber(totalCognits);
         }
 
-        // Buscar frescor
+        // Buscar vigor
         const freshnessRes = await fetch(`${API_URL}/api/freshness/status`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -562,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadStreak();          // 🔥 Streaks
     loadMissions();        // 🎯 Missões
     // loadBadges();       // 🏆 Badges (REMOVIDO)
-    loadFreshness();       // 💧 Frescor
+    loadFreshness();       // 💧 Vigor
     populateCompactMetrics(); // 📊 Métricas Header (Premium)
 
     // Adicionar event listener ao botão de logout
@@ -623,14 +618,15 @@ async function displayGamification() {
 
         // Verificar se é Premium
         if (data.plan !== 'premium') {
-            document.getElementById('levelCard').style.display = 'none';
+            const gamificationGrid = document.getElementById('gamificationGrid');
+            if (gamificationGrid) gamificationGrid.style.display = 'none';
             return;
         }
 
-        // Exibir card de nível
-        const levelCard = document.getElementById('levelCard');
-        if (levelCard) {
-            levelCard.style.display = 'block';
+        // Exibir gamification grid (contém cognits + vigor)
+        const gamificationGrid = document.getElementById('gamificationGrid');
+        if (gamificationGrid) {
+            gamificationGrid.style.display = 'grid'; // Usar grid ao invés de block
         }
 
         // Atualizar dados
@@ -1020,7 +1016,7 @@ function initRippleEffect() {
     const rippleElements = document.querySelectorAll('.btn, .btn-primary, .btn-secondary, .btn-logout, .btn-upgrade, .badge-modal-close, .assistant-card');
 
     rippleElements.forEach(element => {
-        element.addEventListener('click', function(e) {
+        element.addEventListener('click', function (e) {
             // Remove ripples antigos
             const existingRipple = this.querySelector('.ripple');
             if (existingRipple) {

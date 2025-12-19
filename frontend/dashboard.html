@@ -35,7 +35,7 @@
                         <span class="metric-mini-icon">🔥</span>
                         <strong id="streakMini">0</strong>
                     </span>
-                    <span class="metric-mini" data-tooltip="Frescor clínico atual">
+                    <span class="metric-mini" data-tooltip="Vigor clínico atual">
                         <span class="metric-mini-icon">💧</span>
                         <strong id="freshnessMini">100%</strong>
                     </span>
@@ -46,7 +46,8 @@
                 </div>
 
                 <!-- Streak Indicator (Trial) -->
-                <div class="streak-container" id="streakIndicator" data-tooltip="Dias consecutivos de prática" style="display: none;">
+                <div class="streak-container" id="streakIndicator" data-tooltip="Dias consecutivos de prática"
+                    style="display: none;">
                     <img src="assets/icons/streak-flame.svg" alt="Streak" class="streak-icon" id="streakIcon">
                     <span class="streak-count" id="streakCount">0</span>
                     <div class="streak-tooltip">
@@ -70,12 +71,12 @@
 
     <div class="container">
 
-        <!-- Banner de Alerta de Frescor -->
+        <!-- Banner de Alerta de Vigor -->
         <div id="freshnessAlert" class="freshness-alert" style="display: none;">
             <div class="alert-content">
                 <span class="alert-icon" id="freshnessAlertIcon">💧</span>
                 <div class="alert-text">
-                    <strong id="freshnessAlertTitle">Frescor Caindo</strong>
+                    <strong id="freshnessAlertTitle">Vigor Caindo</strong>
                     <p id="freshnessAlertMessage"></p>
                 </div>
             </div>
@@ -91,56 +92,63 @@
             <a href="#" class="btn-upgrade">Assinar Premium</a>
         </div>
 
-        <!-- Card de Nível (Apenas Premium) -->
-        <div id="levelCard" class="level-card" data-tooltip="Ganhe cognits para subir de nível" style="display: none;">
-            <div class="level-header">
-                <div class="level-icon">⚡</div>
-                <div class="level-info">
-                    <p class="level-title">Nível <span id="levelNumber">1</span></p>
-                    <h3 class="level-name" id="levelTitle">Estudante de Lente</h3>
-                </div>
-                <div class="cognit-counter" data-tooltip="Cognits acumulados">
-                    <img src="assets/icons/cognit-24.svg" alt="Cognit" class="cognit-icon">
-                    <span class="cognit-amount" id="cognitAmount">0</span>
-                </div>
-            </div>
+        <!-- Gamification Grid (2 Colunas: Cognits + Vigor) -->
+        <div id="gamificationGrid" class="gamification-grid" style="display: none;">
 
-            <div class="level-progress">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="levelProgressBar" style="width: 0%"></div>
+            <!-- Card de Nível (Apenas Premium) -->
+            <div id="levelCard" class="level-card" data-tooltip="Ganhe cognits para subir de nível">
+                <div class="level-header">
+                    <div class="level-icon">⚡</div>
+                    <div class="level-info">
+                        <p class="level-title">Nível <span id="levelNumber">1</span></p>
+                        <h3 class="level-name" id="levelTitle">Estudante de Lente</h3>
+                    </div>
+                    <div class="cognit-counter" data-tooltip="Cognits acumulados">
+                        <img src="assets/icons/cognit-24.svg" alt="Cognit" class="cognit-icon">
+                        <span class="cognit-amount" id="cognitAmount">0</span>
+                    </div>
                 </div>
-                <div class="progress-text">
-                    <span class="current" id="currentCognits">0</span>
-                    <span class="separator">/</span>
-                    <span class="target" id="targetCognits">151</span>
-                    <span class="unit">cognits</span>
-                </div>
-            </div>
 
-            <p class="level-next">
-                Faltam <strong id="remainingCognits">151</strong> cognits para
-                <span class="next-level" id="nextLevelName">Observador Clínico</span>
-            </p>
-        </div>
-
-        <!-- Freshness Indicator (Premium Only) -->
-        <div id="freshnessIndicator" class="freshness-indicator" style="display: none;">
-            <div class="freshness-icon" id="freshnessIcon">🔥</div>
-            <div class="freshness-content">
-                <div class="freshness-header">
-                    <h4 class="freshness-title" id="freshnessTitle">Frescor Clínico</h4>
-                    <span class="freshness-percentage" id="freshnessPercentage">100%</span>
+                <div class="level-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="levelProgressBar" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span class="current" id="currentCognits">0</span>
+                        <span class="separator">/</span>
+                        <span class="target" id="targetCognits">151</span>
+                        <span class="unit">cognits</span>
+                    </div>
                 </div>
-                <p class="freshness-description" id="freshnessDescription">
-                    Continue praticando para manter 100% dos cognits
+
+                <p class="level-next">
+                    Faltam <strong id="remainingCognits">151</strong> cognits para
+                    <span class="next-level" id="nextLevelName">Observador Clínico</span>
                 </p>
-                <div class="freshness-bar">
-                    <div class="freshness-fill" id="freshnessFill" style="width: 100%"></div>
+            </div>
+
+            <!-- Freshness Indicator (Premium Only) -->
+            <div id="freshnessIndicator" class="freshness-indicator">
+                <div class="freshness-icon" id="freshnessIcon">🔥</div>
+                <div class="freshness-content">
+                    <div class="freshness-header">
+                        <h4 class="freshness-title" id="freshnessTitle">Vigor Clínico</h4>
+                        <span class="freshness-percentage" id="freshnessPercentage">100%</span>
+                    </div>
+                    <!-- Barra movida para cima, antes da description -->
+                    <div class="freshness-bar">
+                        <div class="freshness-fill" id="freshnessFill" style="width: 100%"></div>
+                    </div>
+                    <!-- Description agora abaixo da barra -->
+                    <p class="freshness-description" id="freshnessDescription">
+                        Continue praticando para manter 100% dos cognits
+                    </p>
+                </div>
+                <div class="freshness-tooltip">
+                    Pratique regularmente para manter o vigor em 100%
                 </div>
             </div>
-            <div class="freshness-tooltip">
-                Pratique regularmente para manter o frescor em 100%
-            </div>
+
         </div>
 
         <!-- Hero -->
