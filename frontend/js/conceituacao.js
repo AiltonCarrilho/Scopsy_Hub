@@ -100,8 +100,9 @@ async function fetchStatsAndRender(panel, isTrial) {
             const level = Number(data.level) || 1;
             const title = data.clinical_title || 'Estudante de Lente';
             const conceituacoesConcluidas = Number(data.breakdown?.conceituacao) || 0;
+            const accuracy = (Number(data.accuracy) || 0).toFixed(1);
 
-            console.log('💎 PREMIUM:', { cognits, level, title });
+            console.log('💎 PREMIUM:', { cognits, level, title, accuracy });
 
             html = `
                 <strong>${title} (Nível ${level})</strong>
@@ -111,8 +112,12 @@ async function fetchStatsAndRender(panel, isTrial) {
                         <span>Cognits</span>
                     </div>
                     <div class="progress-item">
+                        <strong>${accuracy}%</strong>
+                        <span>Acurácia</span>
+                    </div>
+                    <div class="progress-item">
                         <strong>${conceituacoesConcluidas}</strong>
-                        <span>Conceituações Concluídas</span>
+                        <span>Conceituações</span>
                     </div>
                 </div>
             `;

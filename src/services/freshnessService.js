@@ -117,7 +117,7 @@ function getFreshnessStatus(multiplier) {
             status: 'excellent',
             color: '#10B981', // Verde
             emoji: '🔥',
-            message: 'Frescor Máximo!',
+            message: 'Vigor Máximo!',
             description: 'Continue praticando para manter 100% dos cognits'
         };
     } else if (multiplier >= 0.80) {
@@ -125,7 +125,7 @@ function getFreshnessStatus(multiplier) {
             status: 'good',
             color: '#F59E0B', // Amarelo
             emoji: '⚠️',
-            message: 'Frescor Caindo',
+            message: 'Vigor Caindo',
             description: `Você está ganhando ${(multiplier * 100).toFixed(0)}% dos cognits. Pratique hoje para recuperar!`
         };
     } else if (multiplier >= 0.60) {
@@ -133,7 +133,7 @@ function getFreshnessStatus(multiplier) {
             status: 'warning',
             color: '#F97316', // Laranja
             emoji: '🔶',
-            message: 'Frescor Baixo',
+            message: 'Vigor Baixo',
             description: `Apenas ${(multiplier * 100).toFixed(0)}% dos cognits. Volte a praticar para recuperar!`
         };
     } else {
@@ -141,7 +141,7 @@ function getFreshnessStatus(multiplier) {
             status: 'critical',
             color: '#EF4444', // Vermelho
             emoji: '🔴',
-            message: 'Frescor Crítico',
+            message: 'Vigor Crítico',
             description: `Você está ganhando apenas ${(multiplier * 100).toFixed(0)}% dos cognits. Hora de voltar!`
         };
     }

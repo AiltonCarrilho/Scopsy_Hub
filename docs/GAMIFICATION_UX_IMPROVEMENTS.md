@@ -97,7 +97,7 @@ const finalCognits = await applyFreshnessMultiplier(userId, baseCognits);
 
 | # | Melhoria | Esforço | Risco | Impacto | Prioridade |
 |---|----------|---------|-------|---------|------------|
-| 1 | Animações de estado (frescor crítico) | 30min | Mínimo | ⭐⭐⭐⭐⭐ | **ALTA** |
+| 1 | Animações de estado (vigor crítico) | 30min | Mínimo | ⭐⭐⭐⭐⭐ | **ALTA** |
 | 2 | Tooltips explicativos | 45min | Mínimo | ⭐⭐⭐⭐⭐ | **ALTA** |
 | 3 | Formatação de números (1.2k) | 15min | Mínimo | ⭐⭐⭐ | **MÉDIA** |
 | 4 | Banner de alerta contextual | 1h | Baixo | ⭐⭐⭐⭐ | **MÉDIA** |
@@ -114,20 +114,20 @@ const finalCognits = await applyFreshnessMultiplier(userId, baseCognits);
 ### SPRINT 1: Quick Wins (1.5 horas)
 **Objetivo:** Melhorias visuais imediatas sem alterar lógica
 
-#### 1. Animações de Estado no Indicador de Frescor
+#### 1. Animações de Estado no Indicador de Vigor
 
 **Arquivo:** `frontend/css/components/freshness-indicator.css`
 
 ```css
 /* ADICIONAR ao final do arquivo */
 
-/* Animação suave quando frescor está caindo */
+/* Animação suave quando vigor está caindo */
 .freshness-indicator.warning .freshness-icon,
 .freshness-indicator.good .freshness-icon {
   animation: gentle-pulse 2s ease-in-out infinite;
 }
 
-/* Animação urgente quando frescor está crítico */
+/* Animação urgente quando vigor está crítico */
 .freshness-indicator.critical .freshness-icon {
   animation: urgent-pulse 1s ease-in-out infinite;
 }
@@ -161,7 +161,7 @@ indicator.className = `freshness-indicator ${freshness.status}`; // ✅ Já apli
 // Animações serão aplicadas automaticamente via CSS
 ```
 
-**Resultado:** Ícone pulsa quando frescor < 80%, alerta visual sutil.
+**Resultado:** Ícone pulsa quando vigor < 80%, alerta visual sutil.
 
 ---
 
@@ -329,12 +329,12 @@ document.getElementById('badgesEarned').textContent = formatNumber(data.total_co
 ```html
 <!-- ADICIONAR após </header> - linha ~47 -->
 <div class="container">
-    <!-- Banner de Alerta de Frescor -->
+    <!-- Banner de Alerta de Vigor -->
     <div id="freshnessAlert" class="freshness-alert" style="display: none;">
         <div class="alert-content">
             <span class="alert-icon" id="freshnessAlertIcon">💧</span>
             <div class="alert-text">
-                <strong id="freshnessAlertTitle">Frescor Caindo</strong>
+                <strong id="freshnessAlertTitle">Vigor Caindo</strong>
                 <p id="freshnessAlertMessage"></p>
             </div>
         </div>
@@ -440,7 +440,7 @@ async function loadFreshness() {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        if (!res.ok) throw new Error('Erro ao carregar frescor');
+        if (!res.ok) throw new Error('Erro ao carregar vigor');
         const data = await res.json();
 
         if (data.success && data.freshness) {
@@ -457,14 +457,14 @@ async function loadFreshness() {
                 document.getElementById('freshnessDescription').textContent = freshness.description;
                 document.getElementById('freshnessFill').style.width = `${freshness.percentage}%`;
 
-                console.log('💧 Frescor carregado:', freshness);
+                console.log('💧 Vigor carregado:', freshness);
             }
 
             // ✅ ADICIONAR: Mostrar banner de alerta se necessário
             showFreshnessAlert(freshness);
         }
     } catch (error) {
-        console.error('❌ Erro ao carregar frescor:', error);
+        console.error('❌ Erro ao carregar vigor:', error);
     }
 }
 
@@ -482,7 +482,7 @@ function showFreshnessAlert(freshness) {
         return;
     }
 
-    // Mostrar apenas se frescor < 80%
+    // Mostrar apenas se vigor < 80%
     if (freshness.percentage < 80) {
         alert.style.display = 'flex';
         alert.className = `freshness-alert ${freshness.status}`;
@@ -505,7 +505,7 @@ function dismissFreshnessAlert() {
 }
 ```
 
-**Resultado:** Banner aparece quando frescor < 80%, pode ser fechado (volta amanhã).
+**Resultado:** Banner aparece quando vigor < 80%, pode ser fechado (volta amanhã).
 
 ---
 
@@ -522,7 +522,7 @@ function dismissFreshnessAlert() {
             <span class="metric-mini-icon">🔥</span>
             <strong id="streakMini">0</strong>
         </span>
-        <span class="metric-mini" data-tooltip="Frescor clínico atual">
+        <span class="metric-mini" data-tooltip="Vigor clínico atual">
             <span class="metric-mini-icon">💧</span>
             <strong id="freshnessMini">100%</strong>
         </span>
@@ -635,7 +635,7 @@ function populateCompactMetrics(user) {
     })
     .catch(err => console.error('Erro ao carregar métricas compactas:', err));
 
-    // Buscar frescor
+    // Buscar vigor
     fetch(`${API_URL}/api/freshness/status`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
     })
@@ -645,7 +645,7 @@ function populateCompactMetrics(user) {
             document.getElementById('freshnessMini').textContent = data.freshness.percentage + '%';
         }
     })
-    .catch(err => console.error('Erro ao carregar frescor compacto:', err));
+    .catch(err => console.error('Erro ao carregar vigor compacto:', err));
 }
 ```
 
@@ -672,7 +672,7 @@ function populateCompactMetrics(user) {
 
 ### SPRINT 1
 ```
-□ Indicador de frescor pulsa quando < 80%
+□ Indicador de vigor pulsa quando < 80%
 □ Tooltip aparece ao passar mouse em elementos com data-tooltip
 □ Números grandes aparecem como "1.2k" ao invés de "1250"
 □ Sem erros no console
@@ -681,7 +681,7 @@ function populateCompactMetrics(user) {
 
 ### SPRINT 2
 ```
-□ Banner aparece quando frescor < 80%
+□ Banner aparece quando vigor < 80%
 □ Banner pode ser fechado e não reaparece no mesmo dia
 □ Métricas compactas aparecem no header (🔥 💧 💎)
 □ Métricas atualizam corretamente
@@ -724,7 +724,7 @@ git checkout HEAD -- frontend/js/dashboard.js
 - **Percepção de qualidade:** +25% (animações + polish)
 
 ### Próximos passos (futuro):
-- Notificações push quando frescor < 60%
+- Notificações push quando vigor < 60%
 - Gráfico de evolução de cognits (Chart.js)
 - Comparação com outros usuários (leaderboard semanal)
 - Achievements desbloqueáveis com animação

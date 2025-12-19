@@ -1,0 +1,45 @@
+services:
+  # Backend Express.js + Socket.io
+  - type: web
+    name: scopsy-backend
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ORCHESTRATOR_ID
+        sync: false
+      - key: CASE_ID
+        sync: false
+      - key: DIAGNOSTIC_ID
+        sync: false
+      - key: JOURNEY_ID
+        sync: false
+      - key: FRONTEND_URL
+        value: https://www.scopsy.com.br/lab
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 100
+      - key: LOG_LEVEL
+        value: info
+      - key: TOKEN_LIMIT_FREE
+        value: 1000
+      - key: TOKEN_LIMIT_BASIC
+        value: 5000
+      - key: TOKEN_LIMIT_PRO
+        value: 20000
+      - key: TOKEN_LIMIT_PREMIUM
+        value: 100000

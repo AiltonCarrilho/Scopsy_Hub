@@ -19,7 +19,7 @@ Este documento apresenta as **melhorias significativas de UX** implementadas no 
 ### ✅ **Objetivo 1: Melhorar Clareza e Comunicação**
 - Tooltips explicativos em todos os elementos
 - Formatação inteligente de números (1.2k vs 1250)
-- Alertas contextuais de frescor clínico
+- Alertas contextuais de vigor clínico
 
 ### ✅ **Objetivo 2: Aumentar Engajamento**
 - Sistema de feedback visual imediato (+X cognits flutuantes)
@@ -47,7 +47,7 @@ Este documento apresenta as **melhorias significativas de UX** implementadas no 
 
 **Onde aparece:**
 - 🔥 Streak: "Dias consecutivos de prática"
-- 💧 Frescor: "Pratique regularmente para manter 100%"
+- 💧 Vigor: "Pratique regularmente para manter 100%"
 - 💎 Cognits: "Cognits acumulados"
 - ⚡ Level: "Ganhe cognits para subir de nível"
 
@@ -67,8 +67,8 @@ Este documento apresenta as **melhorias significativas de UX** implementadas no 
 
 ---
 
-#### 3. **Animações de Estado (Frescor)** 💧
-**O que é:** Ícone do frescor pulsa quando < 100%.
+#### 3. **Animações de Estado (Vigor)** 💧
+**O que é:** Ícone do vigor pulsa quando < 100%.
 
 **Estados:**
 - ✅ **Excellent (100%):** Sem animação
@@ -83,7 +83,7 @@ Este documento apresenta as **melhorias significativas de UX** implementadas no 
 ### **SPRINT 2: Engajamento & Retenção**
 
 #### 4. **Banner de Alerta Contextual** ⚠️
-**O que é:** Banner aparece quando frescor cai abaixo de 80%.
+**O que é:** Banner aparece quando vigor cai abaixo de 80%.
 
 **Características:**
 - 3 níveis visuais (good, warning, critical)
@@ -100,7 +100,7 @@ Este documento apresenta as **melhorias significativas de UX** implementadas no 
 
 **Mostra:**
 - 🔥 Streak atual (dias consecutivos)
-- 💧 Frescor % (0-100%)
+- 💧 Vigor % (0-100%)
 - 💎 Total de cognits
 
 **Benefício:** Usuário acompanha progresso sem scrollar, sensação de "estar no controle".
@@ -224,7 +224,7 @@ Este documento apresenta as **melhorias significativas de UX** implementadas no 
 
 #### 15. **Correções de UX**
 **O que foi corrigido:**
-- ❌ Tooltip duplicado no frescor (removido)
+- ❌ Tooltip duplicado no vigor (removido)
 - ✅ Consistência visual entre barras
 - ✅ Responsividade melhorada
 
@@ -265,7 +265,7 @@ Você verá:
 
 #### 2. **Passe o mouse sobre elementos**
 - 🔥 Streak → tooltip "Dias consecutivos..."
-- 💧 Frescor → tooltip "Pratique regularmente..."
+- 💧 Vigor → tooltip "Pratique regularmente..."
 - 💎 Cognits → tooltip "Cognits acumulados"
 
 #### 3. **Clique em qualquer botão ou card**
@@ -274,7 +274,7 @@ Você verá:
 
 #### 4. **Observe as animações**
 - Progress bar tem **brilho deslizante**
-- Ícone de frescor **pulsa** se < 100%
+- Ícone de vigor **pulsa** se < 100%
 
 #### 5. **Teste no Console (F12)**
 ```javascript

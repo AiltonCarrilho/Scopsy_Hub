@@ -26,29 +26,40 @@
     --border-light: #E2E8F0;
 }
 
-/* ============================================
-   CARD DE NÍVEL
-   ============================================ */
+/* =========================================
+   LEVEL CARD (Cognits)
+   ========================================= */
 
 .level-card {
-    background: linear-gradient(135deg, #F8FAFC 0%, #FFFFFF 100%);
-    border: 2px solid var(--border-light);
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    border: 2px solid #e0e7ff;
     border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-bottom: 24px;
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px; /* Altura mínima igual */
+}
+
+.level-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
+    border-color: #c7d2fe;
 }
 
 .level-header {
     display: flex;
-    align-items: center;
-    gap: 16px;
+    align-items: flex-start;
+    gap: 12px;
     margin-bottom: 20px;
 }
 
 .level-icon {
-    font-size: 48px;
-    filter: drop-shadow(0 2px 8px rgba(124, 58, 237, 0.3));
+    font-size: 32px;
+    line-height: 1;
+    flex-shrink: 0;
 }
 
 .level-info {
@@ -56,41 +67,64 @@
 }
 
 .level-title {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
-    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: #6366f1;
     margin: 0 0 4px 0;
 }
 
 .level-name {
-    font-size: 24px;
-    font-weight: 700;
-    background: var(--cognit-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: 20px; /* MESMO TAMANHO */
+    font-weight: 700; /* MESMO PESO */
+    color: #1e293b;
     margin: 0;
+    line-height: 1.2;
 }
 
 .level-progress {
-    margin-bottom: 16px;
+    margin-top: auto; /* Empurra para baixo */
+    padding-top: 16px;
 }
 
 .progress-bar {
-    height: 6px;
-    background: var(--bg-tertiary);
-    border-radius: 3px;
+    width: 100%;
+    height: 12px;
+    background: #e0e7ff;
+    border-radius: 6px;
     overflow: hidden;
+    position: relative;
     margin-bottom: 8px;
 }
 
 .progress-fill {
     height: 100%;
-    background: var(--cognit-gradient);
+    background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
     border-radius: 6px;
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 100%
+    );
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
 .progress-text {
@@ -98,61 +132,65 @@
     align-items: baseline;
     gap: 4px;
     font-size: 14px;
-    color: var(--text-secondary);
+    color: #64748b;
 }
 
 .progress-text .current {
-    font-size: 20px;
     font-weight: 700;
-    color: var(--text-primary);
+    color: #6366f1;
+    font-size: 16px;
+}
+
+.progress-text .separator {
+    color: #cbd5e1;
+}
+
+.progress-text .target {
+    font-weight: 600;
+    color: #475569;
+}
+
+.progress-text .unit {
+    font-weight: 500;
+    color: #94a3b8;
 }
 
 .level-next {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin: 0;
+    font-size: 13px;
+    color: #64748b;
+    margin: 12px 0 0 0;
+    line-height: 1.4;
 }
 
 .level-next strong {
-    color: var(--text-primary);
+    color: #6366f1;
     font-weight: 700;
 }
 
-.next-level {
-    background: var(--cognit-gradient);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.level-next .next-level {
+    color: #8b5cf6;
     font-weight: 600;
 }
-
-/* ============================================
-   COGNIT COUNTER (Header)
-   ============================================ */
 
 .cognit-counter {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background: white;
-    border: 2px solid var(--border-light);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    gap: 6px;
+    background: rgba(99, 102, 241, 0.1);
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: help;
 }
 
 .cognit-icon {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
 }
 
 .cognit-amount {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
-    background: var(--cognit-gradient);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #6366f1;
 }
 
 /* ============================================

@@ -30,19 +30,67 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
 
     console.log(`[Diagnostic] Buscando caso: level=${level}, category=${category}, user=${userId}`);
 
-    // ⚡ PRIORIDADE 1: Buscar caso do CACHE (0.5s)
-    const { data: cachedCase } = await supabase
+    // 1️⃣ BUSCAR CASOS QUE O USUÁRIO JÁ VIU
+    const { data: interactions, error: interError } = await supabase
+      .from('user_case_interactions')
+      .select('case_id, created_at')
+      .eq('user_id', userId)
+      .not('case_id', 'is', null)
+      .order('created_at', { ascending: false });
+
+    if (interError) {
+      console.error('[Diagnostic] ❌ Erro ao buscar interações:', interError.message);
+    }
+
+    const seenCaseIds = interactions ? interactions.map(i => i.case_id) : [];
+
+    console.log(`[Diagnostic] 👁️ Usuário já viu: ${seenCaseIds.length} casos diagnósticos`);
+    if (seenCaseIds.length > 0) {
+      console.log(`[Diagnostic] 📋 Últimos 5 IDs vistos:`);
+      interactions.slice(0, 5).forEach((inter, idx) => {
+        console.log(`  ${idx + 1}. ${inter.case_id} (${inter.created_at})`);
+      });
+    }
+
+    // 2️⃣ BUSCAR CASOS DISPONÍVEIS (que usuário NÃO viu)
+    let casesQuery = supabase
       .from('cases')
       .select('*')
-      .eq('status', 'active') // Apenas casos validados
+      .eq('status', 'active')
       .eq('difficulty_level', level)
-      .eq('category', category)
-      .order('times_used', { ascending: true }) // Menos usado primeiro
-      .limit(1)
-      .maybeSingle();
+      .eq('category', category);
 
-    if (cachedCase) {
-      console.log(`[Diagnostic] ⚡ Cache HIT (id: ${cachedCase.id}) - INSTANTÂNEO`);
+    // Filtrar casos já vistos
+    if (seenCaseIds.length > 0) {
+      casesQuery = casesQuery.not('id', 'in', `(${seenCaseIds.join(',')})`);
+      console.log(`[Diagnostic] 🚫 Filtrando ${seenCaseIds.length} IDs já vistos`);
+    }
+
+    const { data: availableCases, error: queryError } = await casesQuery
+      .order('times_used', { ascending: true })
+      .limit(10);
+
+    if (queryError) {
+      console.error('[Diagnostic] ❌ Erro na query:', queryError.message);
+    }
+
+    console.log(`[Diagnostic] 📦 Casos disponíveis no cache: ${availableCases ? availableCases.length : 0}`);
+    if (availableCases && availableCases.length > 0) {
+      console.log(`[Diagnostic] 📋 IDs disponíveis (top 5):`);
+      availableCases.slice(0, 5).forEach((c, idx) => {
+        console.log(`  ${idx + 1}. ${c.id} (usado ${c.times_used}x)`);
+      });
+    }
+
+    // 3️⃣ ESCOLHER UM CASO ALEATÓRIO DOS MENOS USADOS
+    let cachedCase = null;
+
+    if (availableCases && availableCases.length > 0) {
+      // Pegar um dos 3 menos usados aleatoriamente (mais variedade)
+      const topCases = availableCases.slice(0, Math.min(3, availableCases.length));
+      cachedCase = topCases[Math.floor(Math.random() * topCases.length)];
+
+      console.log(`[Diagnostic] ✅ Caso selecionado (id: ${cachedCase.id}, usado ${cachedCase.times_used}x)`);
 
       // Incrementar times_used (assíncrono, não bloqueia resposta)
       supabase
@@ -73,26 +121,97 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
       messages: [
         {
           role: "system",
-          content: `Gerador de casos clínicos. Retorna APENAS JSON.
+          content: `Você é um gerador de casos clínicos para treino diagnóstico e clínico DSM-5-TR.
 
-SAÍDA:
+OBJETIVO PEDAGÓGICO: Treinar competências clínicas reais (diagnóstico diferencial, conhecimento DSM, raciocínio clínico).
+
+========================================
+FORMATOS DISPONÍVEIS (escolha 1 aleatoriamente):
+========================================
+
+FORMATO 1: DIAGNÓSTICO DIFERENCIAL (40% dos casos)
+- Pergunta: "Qual é o diagnóstico DSM-5-TR mais provável?"
+- 4 opções: todas da MESMA categoria (ex: apenas ansiedade)
+- Diferenciais PLAUSÍVEIS (não óbvios)
+
+FORMATO 2: CRITÉRIO AUSENTE (30% dos casos)
+- Dê o diagnóstico na pergunta
+- Pergunta: "Qual dos sintomas apresentados NÃO faz parte dos critérios DSM-5-TR de [diagnóstico]?"
+- 3 critérios corretos + 1 que não pertence
+
+FORMATO 3: INTERVENÇÃO INDICADA (30% dos casos)
+- Adicione contexto de sessão (ex: "Sessão 2", "primeira sessão", "após psicoeducação")
+- Pergunta: "Qual intervenção TCC seria MAIS indicada neste momento?"
+- 4 intervenções plausíveis (psicoeducação, reestruturação cognitiva, exposição, ativação comportamental, etc)
+
+========================================
+REGRAS CRÍTICAS (TODOS OS FORMATOS):
+========================================
+
+1. DIFERENCIAIS/OPÇÕES PLAUSÍVEIS:
+   - NUNCA misturar categorias distantes (ansiedade com psicose)
+   - Todas as opções devem ser da MESMA categoria diagnóstica
+   - Diferenciais devem diferir por 1-2 critérios DSM apenas
+
+2. EVITAR "ONE-WORD DIAGNOSIS":
+   - NÃO use palavras-chave óbvias na vinheta
+   - Descreva SINTOMAS e CONTEXTO, não o nome do transtorno
+   - Exemplo: NÃO escreva "pânico" se diagnóstico é Transtorno de Pânico
+
+3. NÍVEL DE DIFICULDADE:
+   - basic: 1 opção claramente errada, 2 plausíveis, 1 correta
+   - intermediate: 3 opções plausíveis, 1 correta (diferença sutil)
+   - advanced: 4 opções igualmente plausíveis, critérios DSM diferenciam
+
+4. VINHETA REALISTA:
+   - 150-200 palavras
+   - Português brasileiro natural
+   - Contexto clínico realista (não acadêmico demais)
+   - Idade 20-60 anos, profissões variadas
+
+========================================
+EXEMPLOS DE DIFERENCIAIS PLAUSÍVEIS:
+========================================
+
+Anxiety: TAG vs. Pânico vs. Fobia Social vs. Ajustamento
+Mood: Depressão Maior vs. Distimia vs. Ajustamento vs. Bipolar (fase depr.)
+Trauma: TEPT vs. Estresse Agudo vs. Ajustamento vs. TAG
+
+========================================
+SAÍDA JSON:
+========================================
+
 {
-  "metadata": {"difficulty_level": "${level}", "category": "${category}", "disorder": "Transtorno específico"},
+  "metadata": {
+    "difficulty_level": "${level}",
+    "category": "${category}",
+    "disorder": "Diagnóstico específico DSM-5-TR"
+  },
   "clinical_content": {
-    "vignette": "Caso em português (150-200 palavras)",
-    "demographics": {"name": "Nome", "age": 30, "occupation": "Profissão"}
+    "vignette": "Vinheta 150-200 palavras. DESCREVA sintomas e contexto, NÃO nomeie transtorno.",
+    "session_context": "Sessão X, fase terapêutica, rapport (APENAS para FORMATO 3)",
+    "demographics": {"name": "Nome brasileiro", "age": 20-60, "occupation": "Profissão"}
   },
   "diagnostic_structure": {
-    "correct_diagnosis": "Diagnóstico correto",
-    "criteria_present": ["Critério 1", "Critério 2", "Critério 3"]
+    "correct_diagnosis": "Diagnóstico DSM-5-TR completo",
+    "criteria_present": ["Critério DSM A presente", "Critério B", "Critério C"],
+    "differential_reasoning": "Por que diferenciais são plausíveis mas incorretos (1-2 frases)"
   },
   "question_format": {
-    "question": "Qual é o diagnóstico mais provável?",
-    "options": ["Correto", "Diferencial 1", "Diferencial 2", "Diferencial 3"]
+    "format_type": "differential | criteria_absent | intervention",
+    "question": "Pergunta específica do formato escolhido",
+    "options": [
+      "Opção correta",
+      "Opção plausível 1",
+      "Opção plausível 2",
+      "Opção plausível 3"
+    ],
+    "correct_answer": "A opção correta (texto exato)",
+    "rationale": "Por que a resposta correta é a melhor (2-3 frases)"
   }
 }
 
-REGRAS: Português brasileiro, 20-55 anos, contextos variados, DSM-5-TR.`
+PORTUGUÊS BRASILEIRO. Casos realistas. DSM-5-TR. ESCOLHA 1 FORMATO ALEATORIAMENTE.`
         },
         {
           role: "user",
