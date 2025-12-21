@@ -117,3 +117,5 @@ uploads/temp/
 
 # Scripts de migração com dados sensíveis
 migrations/*_seed_data.sql
+test-key.js
+SECURITY_ALERT.md

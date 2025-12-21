@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upgrade para Premium | ScopsyLab</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .upgrade-container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 500px;
+      width: 100%;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #2d3748;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #718096;
+      margin-bottom: 30px;
+    }
+
+    .features {
+      text-align: left;
+      margin: 30px 0;
+      padding: 20px;
+      background: #f7fafc;
+      border-radius: 12px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      font-size: 15px;
+      color: #2d3748;
+    }
+
+    .feature-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .feature-icon {
+      font-size: 20px;
+      margin-right: 12px;
+      color: #48bb78;
+    }
+
+    .price-section {
+      margin: 30px 0;
+      padding: 25px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      color: white;
+    }
+
+    .price {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .price-small {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .price-detail {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 10px;
+    }
+
+    .cta-button {
+      background: #48bb78;
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+    }
+
+    .cta-button:hover {
+      background: #38a169;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(72, 187, 120, 0.3);
+    }
+
+    .cta-button:active {
+      transform: translateY(0);
+    }
+
+    .back-link {
+      color: #667eea;
+      text-decoration: none;
+      font-size: 14px;
+      display: inline-block;
+      margin-top: 15px;
+      transition: opacity 0.3s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .guarantee {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff5f5;
+      border-radius: 8px;
+      border-left: 4px solid #fc8181;
+      font-size: 13px;
+      color: #742a2a;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 600px) {
+      .upgrade-container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .price {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="upgrade-container">
+    <!-- Icon -->
+    <div class="icon">💎</div>
+
+    <!-- Header -->
+    <h1>Desbloqueie Todo o Potencial</h1>
+    <p class="subtitle">Seu trial expirou. Continue treinando com acesso ilimitado!</p>
+
+    <!-- Features -->
+    <div class="features">
+      <div class="feature-item">
+        <span class="feature-icon">✅</span>
+        <span>Desafios Clínicos <strong>ilimitados</strong></span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">✅</span>
+        <span>Radar Diagnóstico <strong>completo</strong></span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">✅</span>
+        <span>Conceituação Cognitiva TCC</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">✅</span>
+        <span>Jornada Clínica (12 sessões)</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">✅</span>
+        <span>Sistema de Gamificação full</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">✅</span>
+        <span>Certificado de conclusão</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">✅</span>
+        <span>Histórico completo + Export PDF</span>
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div class="price-section">
+      <div class="price">R$ 47</div>
+      <div class="price-small">por mês</div>
+      <div class="price-detail">ou 12x de R$ 3,91 no cartão</div>
+    </div>
+
+    <!-- CTA Button -->
+    <button class="cta-button" onclick="redirectToCheckout()">
+      Fazer Upgrade Agora
+    </button>
+
+    <!-- Loading State -->
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p style="margin-top: 10px; color: #718096;">Redirecionando para checkout...</p>
+    </div>
+
+    <!-- Back Link -->
+    <a href="/dashboard" class="back-link">← Voltar ao Dashboard</a>
+
+    <!-- Guarantee -->
+    <div class="guarantee">
+      🔒 <strong>Garantia de 7 dias:</strong> Se não gostar, devolvemos 100% do seu dinheiro sem perguntas.
+    </div>
+  </div>
+
+  <script>
+    // ========================================
+    // REDIRECT TO KIWIFY CHECKOUT
+    // ========================================
+
+    async function redirectToCheckout() {
+      try {
+        // Mostrar loading
+        document.querySelector('.cta-button').style.display = 'none';
+        document.getElementById('loading').style.display = 'block';
+
+        // Pegar email do usuário (se estiver logado)
+        const token = localStorage.getItem('token');
+        let userEmail = '';
+
+        if (token) {
+          try {
+            // Decodificar JWT para pegar email
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            userEmail = payload.email || '';
+          } catch (e) {
+            console.warn('Erro ao decodificar token:', e);
+          }
+        }
+
+        // Montar URL de checkout Kiwify
+        // IMPORTANTE: Substitua pela URL real do seu produto Kiwify
+        const KIWIFY_CHECKOUT_URL = 'https://pay.kiwify.com.br/SEU_LINK_AQUI';
+
+        // Adicionar email como parâmetro (Kiwify preenche automaticamente)
+        const checkoutUrl = userEmail
+          ? `${KIWIFY_CHECKOUT_URL}?email=${encodeURIComponent(userEmail)}`
+          : KIWIFY_CHECKOUT_URL;
+
+        // Aguardar 500ms para UX
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // Redirecionar
+        window.location.href = checkoutUrl;
+
+      } catch (error) {
+        console.error('Erro ao redirecionar:', error);
+        alert('Erro ao abrir checkout. Tente novamente.');
+
+        // Resetar UI
+        document.querySelector('.cta-button').style.display = 'block';
+        document.getElementById('loading').style.display = 'none';
+      }
+    }
+
+    // ========================================
+    // CHECK QUERY PARAMS
+    // ========================================
+
+    // Se URL tiver ?success=true (voltou do checkout)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success') === 'true') {
+      // Mostrar mensagem de sucesso
+      const container = document.querySelector('.upgrade-container');
+      container.innerHTML = `
+        <div class="icon">🎉</div>
+        <h1>Pagamento em Processamento!</h1>
+        <p class="subtitle">
+          Aguarde a confirmação do pagamento. <br>
+          Você receberá um email quando o acesso for liberado.
+        </p>
+        <a href="/dashboard" class="cta-button" style="display:inline-block; text-decoration:none;">
+          Voltar ao Dashboard
+        </a>
+      `;
+    }
+
+    // Se URL tiver ?canceled=true (cancelou checkout)
+    if (urlParams.get('canceled') === 'true') {
+      const subtitle = document.querySelector('.subtitle');
+      subtitle.innerHTML = `
+        <span style="color: #e53e3e;">❌ Checkout cancelado.</span><br>
+        Não se preocupe, você pode tentar novamente quando quiser!
+      `;
+    }
+  </script>
+
+</body>
+</html>

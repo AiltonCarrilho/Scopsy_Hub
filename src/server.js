@@ -18,15 +18,46 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: [
-      'http://localhost:3001',
-      'http://127.0.0.1:5500',
-      'http://localhost:5500',
-      'http://127.0.0.1:3001',
-      'https://www.scopsy.com.br',
-      'https://scopsy.com.br',
-      process.env.FRONTEND_URL
-    ].filter(Boolean),
+    origin: process.env.NODE_ENV === 'production'
+      ? [
+          // 🔒 PRODUÇÃO - Apenas domínios oficiais
+          'https://www.scopsy.com.br',
+          'https://scopsy.com.br',
+          'https://app.scopsy.com.br',
+          process.env.FRONTEND_URL
+        ].filter(Boolean)
+      : [
+          // 🛠️ DESENVOLVIMENTO - Portas locais comuns
+          'http://localhost:3000',
+          'http://localhost:3001',
+          'http://localhost:3002',
+          'http://localhost:5500',  // VSCode Live Server
+          'http://localhost:5501',
+          'http://localhost:5502',
+          'http://localhost:5503',
+          'http://localhost:5504',
+          'http://localhost:5505',
+          'http://localhost:5173',  // Vite
+          'http://localhost:8080',  // Webpack dev server
+          'http://localhost:8000',  // Python/outros
+          'http://localhost:4200',  // Angular
+          'http://127.0.0.1:3000',
+          'http://127.0.0.1:3001',
+          'http://127.0.0.1:3002',
+          'http://127.0.0.1:5500',  // VSCode Live Server
+          'http://127.0.0.1:5501',
+          'http://127.0.0.1:5502',
+          'http://127.0.0.1:5503',
+          'http://127.0.0.1:5504',
+          'http://127.0.0.1:5505',
+          'http://127.0.0.1:5173',
+          'http://127.0.0.1:8080',
+          'http://127.0.0.1:8000',
+          'http://127.0.0.1:4200',
+          'https://www.scopsy.com.br',
+          'https://scopsy.com.br',
+          process.env.FRONTEND_URL
+        ].filter(Boolean),
     credentials: true
   }
 });
@@ -34,14 +65,85 @@ const io = socketIo(server, {
 // ========================================
 // 2. MIDDLEWARES
 // ========================================
+
+// Security Headers
 app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
 }));
-app.use(cors());
 
-// STRIPE WEBHOOK (Must be before express.json)
-app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
+// CORS - RESTRITO AO DOMÍNIO (Segurança!)
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [
+      // 🔒 PRODUÇÃO - Apenas domínios oficiais
+      'https://www.scopsy.com.br',
+      'https://scopsy.com.br',
+      'https://app.scopsy.com.br', // Se tiver subdomínio separado
+      process.env.FRONTEND_URL
+    ].filter(Boolean)
+  : [
+      // 🛠️ DESENVOLVIMENTO - Portas locais comuns
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:3002',
+      'http://localhost:5500',  // VSCode Live Server
+      'http://localhost:5501',
+      'http://localhost:5502',
+      'http://localhost:5503',
+      'http://localhost:5504',
+      'http://localhost:5505',
+      'http://localhost:5173',  // Vite
+      'http://localhost:8080',  // Webpack dev server
+      'http://localhost:8000',  // Python/outros
+      'http://localhost:4200',  // Angular
+      'http://127.0.0.1:3000',
+      'http://127.0.0.1:3001',
+      'http://127.0.0.1:3002',
+      'http://127.0.0.1:5500',  // VSCode Live Server
+      'http://127.0.0.1:5501',
+      'http://127.0.0.1:5502',
+      'http://127.0.0.1:5503',
+      'http://127.0.0.1:5504',
+      'http://127.0.0.1:5505',
+      'http://127.0.0.1:5173',
+      'http://127.0.0.1:8080',
+      'http://127.0.0.1:8000',
+      'http://127.0.0.1:4200',
+      'https://www.scopsy.com.br',
+      'https://scopsy.com.br',
+      process.env.FRONTEND_URL
+    ].filter(Boolean);
+
+app.use(cors({
+  origin: function(origin, callback) {
+    // 🔓 DESENVOLVIMENTO: Permite requisições sem origin (arquivos locais, Postman, etc)
+    if (!origin && process.env.NODE_ENV !== 'production') {
+      logger.info('✅ CORS permitido: requisição sem origin (arquivo local ou Postman)');
+      return callback(null, true);
+    }
+
+    // 🔒 PRODUÇÃO: Permite requisições sem origin apenas de mobile apps
+    if (!origin && process.env.NODE_ENV === 'production') {
+      logger.info('✅ CORS permitido: requisição sem origin (mobile app)');
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      logger.info(`✅ CORS permitido: ${origin}`);
+      callback(null, true);
+    } else {
+      logger.warn(`❌ CORS BLOQUEADO - Origin: "${origin}" não está na lista de permitidas`);
+      logger.warn(`📋 Origins permitidas: ${JSON.stringify(allowedOrigins, null, 2)}`);
+      callback(new Error('Origin não permitida pelo CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Rate Limiters
+const { apiLimiter, openaiLimiter, authLimiter, webhookLimiter } = require('./middleware/rateLimiter');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -59,21 +161,32 @@ const diagnosticRoutes = require('./routes/diagnostic');
 const caseRoutes = require('./routes/case');
 const journeyRoutes = require('./routes/journey');
 const skillsRoutes = require('./routes/skills');
-const paymentsRoutes = require('./routes/payments'); // New
+const webhooksRoutes = require('./routes/webhooks');
 
-app.use('/api/auth', authRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/chat', chatRoutes);
-app.use('/api/diagnostic', diagnosticRoutes);
-app.use('/api/case', caseRoutes);
-app.use('/api/journey', journeyRoutes);
-app.use('/api/skills', skillsRoutes);
-app.use('/api/progress', require('./routes/progress'));
-app.use('/api/streaks', require('./routes/streaks')); // 🔥 New Gamification
-app.use('/api/missions', require('./routes/missions')); // 🎯 New Missions
-app.use('/api/gamification', require('./routes/gamification')); // 🏆 Badges & Profile
-app.use('/api/freshness', require('./routes/freshness')); // 💧 Freshness System
-app.use('/api/payments', paymentsRoutes); // New
+// ✅ ROTAS COM RATE LIMITING E PROTEÇÃO
+
+// Auth routes - Rate limit mais restritivo (anti brute-force)
+app.use('/api/auth', authLimiter, authRoutes);
+
+// Rotas gerais - Rate limit padrão da API
+app.use('/api/dashboard', apiLimiter, dashboardRoutes);
+app.use('/api/chat', apiLimiter, chatRoutes);
+app.use('/api/progress', apiLimiter, require('./routes/progress'));
+app.use('/api/streaks', apiLimiter, require('./routes/streaks'));
+app.use('/api/missions', apiLimiter, require('./routes/missions'));
+app.use('/api/gamification', apiLimiter, require('./routes/gamification'));
+app.use('/api/freshness', apiLimiter, require('./routes/freshness'));
+app.use('/api/skills', apiLimiter, skillsRoutes);
+
+// ⚠️ ROTAS OPENAI - Rate limit MAIS AGRESSIVO (custo!)
+app.use('/api/diagnostic', openaiLimiter, diagnosticRoutes);
+app.use('/api/case', openaiLimiter, caseRoutes);
+
+// 📚 ROTAS JOURNEY - Rate limit padrão API (são apenas leituras de banco)
+app.use('/api/journey', apiLimiter, journeyRoutes);
+
+// 🔔 WEBHOOKS - Rate limit separado (Kiwify)
+app.use('/api/webhooks', webhookLimiter, webhooksRoutes);
 
 // ========================================
 // 4. HEALTH CHECK

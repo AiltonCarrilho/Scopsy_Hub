@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🌍 Ambiente:', IS_DEV ? 'DESENVOLVIMENTO' : 'PRODUÇÃO');
     console.log('🔗 API_URL:', API_URL);
 
-    // 🔧 Esconder painel de debug em produção
-    const debugPanel = document.getElementById('debugPanel');
-    if (debugPanel && !IS_DEV) {
-        debugPanel.style.display = 'none';
+    // ✅ Adicionar listener ao botão principal de novo momento
+    const newMomentBtn = document.getElementById('newMomentBtn');
+    if (newMomentBtn) {
+        newMomentBtn.addEventListener('click', generateNewMoment);
     }
 
     lucide.createIcons();
@@ -140,12 +140,44 @@ async function fetchStatsAndRender(panel, isTrial) {
                     </div>
                 </div>
             `;
+
+            // 🔒 GARANTIR que avisos de trial estejam ESCONDIDOS para premium
+            hidePremiumTrialWarnings();
         }
 
         panel.innerHTML = html;
 
     } catch (e) {
         console.error("❌ Erro ao carregar stats:", e);
+    }
+}
+
+// 🔒 ESCONDER AVISOS DE TRIAL PARA USUÁRIOS PREMIUM
+function hidePremiumTrialWarnings() {
+    const warning = document.getElementById('trialWarning');
+    const expired = document.getElementById('trialExpired');
+    const newMomentBtn = document.querySelector('.new-moment-btn');
+
+    console.log('💎 Escondendo avisos de trial para usuário premium');
+
+    if (warning) {
+        warning.style.display = 'none';
+        warning.style.visibility = 'hidden';
+        warning.classList.add('hidden');
+    }
+
+    if (expired) {
+        expired.style.display = 'none';
+        expired.style.visibility = 'hidden';
+        expired.classList.add('hidden');
+    }
+
+    // Garantir que botão está habilitado
+    if (newMomentBtn) {
+        newMomentBtn.disabled = false;
+        newMomentBtn.style.opacity = '1';
+        newMomentBtn.style.cursor = 'pointer';
+        newMomentBtn.style.pointerEvents = 'auto';
     }
 }
 
@@ -200,7 +232,7 @@ function renderMoment(m) {
         const safeLetter = escapeHTML(opt.letter);
 
         optionsHTML += `
-          <div class="option-card" onclick="selectOption('${safeLetter}', this)">
+          <div class="option-card" data-letter="${safeLetter}">
             <span class="option-letter">${safeLetter}</span>
             <div style="flex:1">
               <strong>${safeApproach}</strong>
@@ -235,15 +267,53 @@ function renderMoment(m) {
             <textarea id="reasoningText" class="reasoning-textarea" placeholder="Explique seu raciocínio em 1-2 frases..."></textarea>
           </div>
 
-          <button class="submit-btn" id="submitBtn" onclick="submitDecision()" disabled>Confirmar Decisão</button>
+          <button class="submit-btn" id="submitBtn" disabled>Confirmar Decisão</button>
         </div>`;
+
+    // ✅ Adicionar event listeners APÓS renderizar (delegação de eventos)
+    attachOptionListeners();
+    attachSubmitListener();
 }
 
-function selectOption(letter, el) {
+// ========================================
+// EVENT LISTENERS - Delega eventos após renderizar
+// ========================================
+function attachOptionListeners() {
+    const optionCards = document.querySelectorAll('.option-card');
+
+    optionCards.forEach(card => {
+        card.addEventListener('click', function() {
+            selectOption(this);
+        });
+    });
+}
+
+function attachSubmitListener() {
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+        // Remove listener antigo se existir
+        const newBtn = submitBtn.cloneNode(true);
+        submitBtn.parentNode.replaceChild(newBtn, submitBtn);
+
+        // Adiciona novo listener
+        newBtn.addEventListener('click', submitDecision);
+    }
+}
+
+function selectOption(el) {
+    // Remove seleção anterior
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+
+    // Adiciona seleção atual
     el.classList.add('selected');
+
+    // Pega letra da opção
+    const letter = el.getAttribute('data-letter');
     selectedChoice = letter;
-    document.getElementById('submitBtn').disabled = false;
+
+    // Habilita botão de submit
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) submitBtn.disabled = false;
 }
 
 async function submitDecision() {
@@ -326,11 +396,21 @@ function showFeedback(f, userChoice) {
 
           ${lp ? `<div class="feedback-section" style="background:#ecfdf5;"><h4>Aprendizado</h4><p><strong>Padrão:</strong> ${safePattern}</p><p><strong>Resposta ideal:</strong> ${safeInstantResponse}</p></div>` : ''}
 
-          <button class="next-moment-btn" onclick="generateNewMoment()">Próximo Momento Crítico</button>
+          <button class="next-moment-btn" id="nextMomentBtn">Próximo Momento Crítico</button>
         </div>`;
 
     document.getElementById('feedbackContainer').innerHTML = fb;
     document.getElementById('feedbackContainer').scrollIntoView({ behavior: 'smooth' });
+
+    // ✅ Adicionar listener ao botão de próximo momento
+    attachNextMomentListener();
+}
+
+function attachNextMomentListener() {
+    const nextBtn = document.getElementById('nextMomentBtn');
+    if (nextBtn) {
+        nextBtn.addEventListener('click', generateNewMoment);
+    }
 }
 
 // ========================================
@@ -464,209 +544,3 @@ function updateTrialUI(remainingUsage, remainingDays) {
 
     lucide.createIcons();
 }
-
-// 🧪 TESTE MANUAL - Para debugar no console
-// Use: testTrialUI() no console do navegador
-window.testTrialUI = function () {
-    const output = document.getElementById('debugOutput');
-    if (output) output.innerHTML = '';
-
-    function log(msg) {
-        console.log(msg);
-        if (output) output.innerHTML += msg + '\n';
-    }
-
-    log('=== TESTE 1: Usuário Novo (30 acessos, 7 dias) ===');
-    updateTrialUI(30, 7);
-
-    setTimeout(() => {
-        log('\n=== TESTE 2: Quase Acabando (2 acessos, 6 dias) ===');
-        updateTrialUI(2, 6);
-    }, 3000);
-
-    setTimeout(() => {
-        log('\n=== TESTE 3: Trial Expirado (0 acessos, 5 dias) ===');
-        updateTrialUI(0, 5);
-    }, 6000);
-
-    setTimeout(() => {
-        log('\n=== TESTE 4: Trial Expirado por Tempo (10 acessos, 0 dias) ===');
-        updateTrialUI(10, 0);
-    }, 9000);
-
-    setTimeout(() => {
-        log('\n=== TESTE 5: Valores Inválidos (undefined, null) ===');
-        updateTrialUI(undefined, null);
-    }, 12000);
-};
-
-// 🔧 DEBUG: Forçar esconder avisos
-window.debugTrialUI = function () {
-    const output = document.getElementById('debugOutput');
-    const warning = document.getElementById('trialWarning');
-    const expired = document.getElementById('trialExpired');
-
-    let result = '✅ FORÇANDO ESCONDER AVISOS...\n\n';
-
-    if (warning) {
-        warning.style.display = 'none';
-        warning.style.visibility = 'hidden';
-        warning.classList.add('hidden');
-        result += '✓ trialWarning: display=none, visibility=hidden\n';
-    } else {
-        result += '✗ trialWarning: NÃO ENCONTRADO\n';
-    }
-
-    if (expired) {
-        expired.style.display = 'none';
-        expired.style.visibility = 'hidden';
-        expired.classList.add('hidden');
-        result += '✓ trialExpired: display=none, visibility=hidden\n';
-    } else {
-        result += '✗ trialExpired: NÃO ENCONTRADO\n';
-    }
-
-    result += '\n✅ PRONTO! Os avisos devem estar escondidos agora.\n';
-    result += 'Se ainda estão aparecendo, há um problema no CSS ou HTML.';
-
-    if (output) output.innerHTML = result;
-    console.log(result);
-};
-
-// 📊 DEBUG: Mostrar informações do estado atual
-window.showDebugInfo = async function () {
-    const output = document.getElementById('debugOutput');
-    const warning = document.getElementById('trialWarning');
-    const expired = document.getElementById('trialExpired');
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-
-    let info = '📊 INFORMAÇÕES DE DEBUG\n';
-    info += '='.repeat(50) + '\n\n';
-
-    // User Info
-    info += '👤 USUÁRIO:\n';
-    info += `  - Plan: ${user.plan || 'não definido'}\n`;
-    info += `  - Email: ${user.email || 'não definido'}\n\n`;
-
-    // Warning Element
-    info += '⚠️ TRIAL WARNING:\n';
-    if (warning) {
-        info += `  - Existe: SIM\n`;
-        info += `  - display: ${warning.style.display || 'não definido'}\n`;
-        info += `  - visibility: ${warning.style.visibility || 'não definido'}\n`;
-        info += `  - classList: ${Array.from(warning.classList).join(', ') || 'vazio'}\n`;
-        info += `  - offsetHeight: ${warning.offsetHeight}px (0 = invisível)\n`;
-    } else {
-        info += `  - Existe: NÃO\n`;
-    }
-
-    info += '\n🚫 TRIAL EXPIRED:\n';
-    if (expired) {
-        info += `  - Existe: SIM\n`;
-        info += `  - display: ${expired.style.display || 'não definido'}\n`;
-        info += `  - visibility: ${expired.style.visibility || 'não definido'}\n`;
-        info += `  - classList: ${Array.from(expired.classList).join(', ') || 'vazio'}\n`;
-        info += `  - offsetHeight: ${expired.offsetHeight}px (0 = invisível)\n`;
-    } else {
-        info += `  - Existe: NÃO\n`;
-    }
-
-    // Buscar dados do backend
-    info += '\n📡 BUSCANDO DADOS DO BACKEND...\n';
-    if (output) output.innerHTML = info;
-
-    try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/progress/summary`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await res.json();
-
-        info += '\n💾 RESPOSTA DO BACKEND:\n';
-        info += `  - plan: ${data.plan}\n`;
-
-        if (data.plan === 'free') {
-            // TRIAL
-            info += `  - trial_days_left: ${data.trial_days_left}\n`;
-            info += `  - limits.raciocinio: ${data.limits?.raciocinio || 0}\n`;
-            info += `  - breakdown.raciocinio: ${data.breakdown?.raciocinio || 0}\n`;
-            info += `  - remaining.raciocinio: ${data.remaining?.raciocinio || 0}\n`;
-
-            const remainingRaciocinio = data.remaining?.raciocinio || 0;
-            const remainingDays = data.trial_days_left || 0;
-
-            info += '\n🚦 O QUE DEVERIA ACONTECER (Desafios):\n';
-            if (remainingRaciocinio === 0 || remainingDays === 0) {
-                info += `  ❌ BLOQUEAR (trial expirado)\n`;
-            } else if (remainingRaciocinio <= 3 || remainingDays <= 3) {
-                info += `  ⚠️ MOSTRAR AVISO (quase acabando)\n`;
-            } else {
-                info += `  ✅ SEM AVISOS (trial ativo)\n`;
-            }
-        } else {
-            // PREMIUM
-            info += `  - cognits: ${data.cognits || 0}\n`;
-            info += `  - level: ${data.level || 1}\n`;
-            info += `  - clinical_title: ${data.clinical_title || 'N/A'}\n`;
-            info += `  - breakdown.raciocinio: ${data.breakdown?.raciocinio || 0}\n`;
-
-            info += '\n🚦 MODO PREMIUM:\n';
-            info += `  ✅ Sem limites - Gamificação ativa\n`;
-        }
-
-    } catch (error) {
-        info += `\n❌ ERRO AO BUSCAR DADOS: ${error.message}\n`;
-    }
-
-    if (output) output.innerHTML = info;
-    console.log(info);
-
-    // Também logar no console os elementos reais
-    console.log('🔍 Elementos DOM:', { warning, expired });
-};
-
-// 🗑️ RESET: Resetar progresso do usuário (apenas para debug)
-window.resetProgress = async function () {
-    const output = document.getElementById('debugOutput');
-
-    if (!confirm('⚠️ ATENÇÃO!\n\nIsso vai ZERAR TODO o seu progresso no banco de dados.\n\nTem certeza?')) {
-        return;
-    }
-
-    let result = '🗑️ RESETANDO PROGRESSO...\n\n';
-    if (output) output.innerHTML = result;
-
-    try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/progress/reset`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const data = await res.json();
-
-        if (data.success) {
-            result += '✅ PROGRESSO RESETADO COM SUCESSO!\n\n';
-            result += `- ${data.deleted_count || 0} registro(s) deletado(s)\n\n`;
-            result += '🔄 Recarregando página em 3 segundos...\n';
-
-            if (output) output.innerHTML = result;
-
-            // Recarregar página após 3 segundos
-            setTimeout(() => {
-                window.location.reload();
-            }, 3000);
-
-        } else {
-            result += `❌ ERRO: ${data.error || 'Erro desconhecido'}\n`;
-            if (output) output.innerHTML = result;
-        }
-
-    } catch (error) {
-        result += `❌ ERRO DE CONEXÃO: ${error.message}\n`;
-        if (output) output.innerHTML = result;
-    }
-};

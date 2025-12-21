@@ -748,4 +748,241 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
   }
 }
 
+// ========================================
+// GET /api/case/series
+// Lista séries de casos disponíveis
+// ========================================
+router.get('/series', authenticateRequest, async (req, res) => {
+  try {
+    const {
+      difficulty_level,
+      disorder_category
+    } = req.query;
+
+    console.log(`\n[Case Series] 📚 Listando séries disponíveis`);
+    if (difficulty_level) console.log(`   Filtro: difficulty=${difficulty_level}`);
+    if (disorder_category) console.log(`   Filtro: category=${disorder_category}`);
+
+    let query = supabase
+      .from('case_series')
+      .select(`
+        *,
+        episodes:cases(count)
+      `)
+      .eq('status', 'active');
+
+    if (difficulty_level) {
+      query = query.eq('difficulty_level', difficulty_level);
+    }
+
+    if (disorder_category) {
+      query = query.eq('disorder_category', disorder_category);
+    }
+
+    const { data: series, error } = await query.order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    // Adicionar contagem de episódios disponíveis
+    const enriched = await Promise.all(series.map(async (s) => {
+      const { count } = await supabase
+        .from('cases')
+        .select('*', { count: 'exact', head: true })
+        .eq('series_id', s.id)
+        .eq('status', 'active');
+
+      return {
+        ...s,
+        episodes_available: count || 0
+      };
+    }));
+
+    console.log(`[Case Series] ✅ ${series.length} séries encontradas\n`);
+
+    res.json({
+      success: true,
+      series: enriched,
+      total: series.length
+    });
+
+  } catch (error) {
+    console.error('[Case Series] ❌ Erro ao listar séries:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ========================================
+// GET /api/case/series/:series_id/next
+// Retorna próximo episódio não visto da série
+// ========================================
+router.get('/series/:series_id/next', authenticateRequest, async (req, res) => {
+  try {
+    const { series_id } = req.params;
+    const userId = req.user.userId;
+
+    console.log(`\n[Case Series] 🎬 Próximo episódio da série ${series_id}, user=${userId}`);
+
+    // 1. Buscar série
+    const { data: series, error: seriesError } = await supabase
+      .from('case_series')
+      .select('*')
+      .eq('id', series_id)
+      .eq('status', 'active')
+      .single();
+
+    if (seriesError || !series) {
+      return res.status(404).json({
+        success: false,
+        error: 'Série não encontrada'
+      });
+    }
+
+    console.log(`[Case Series] 📚 Série: ${series.series_name}`);
+
+    // 2. Buscar episódios já vistos pelo usuário
+    const { data: seenEpisodes } = await supabase
+      .from('user_case_interactions')
+      .select('case_id')
+      .eq('user_id', userId)
+      .not('case_id', 'is', null);
+
+    const seenCaseIds = seenEpisodes ? seenEpisodes.map(e => e.case_id) : [];
+
+    console.log(`[Case Series] 👁️ Usuário já viu ${seenCaseIds.length} episódios desta série`);
+
+    // 3. Buscar próximo episódio não visto
+    let query = supabase
+      .from('cases')
+      .select('*')
+      .eq('series_id', series_id)
+      .eq('status', 'active')
+      .order('episode_number', { ascending: true });
+
+    if (seenCaseIds.length > 0) {
+      query = query.not('id', 'in', `(${seenCaseIds.join(',')})`);
+    }
+
+    const { data: episodes, error: episodesError } = await query.limit(1);
+
+    if (episodesError) throw episodesError;
+
+    if (!episodes || episodes.length === 0) {
+      console.log(`[Case Series] 🏁 Todos os episódios já foram vistos!`);
+      return res.json({
+        success: true,
+        completed: true,
+        message: `Parabéns! Você completou toda a série "${series.series_name}"`,
+        series: series
+      });
+    }
+
+    const nextEpisode = episodes[0];
+
+    console.log(`[Case Series] ✅ Próximo episódio: #${nextEpisode.episode_number} - ${nextEpisode.episode_title}`);
+
+    // Incrementar contador (assíncrono)
+    supabase
+      .from('cases')
+      .update({ times_used: (nextEpisode.times_used || 0) + 1 })
+      .eq('id', nextEpisode.id)
+      .then(({ error }) => {
+        if (error) console.error('[Case Series] Erro ao atualizar contador:', error.message);
+      });
+
+    res.json({
+      success: true,
+      series: series,
+      episode: {
+        ...nextEpisode,
+        progress: {
+          current: nextEpisode.episode_number,
+          total: series.total_episodes,
+          percentage: Math.round((nextEpisode.episode_number / series.total_episodes) * 100)
+        }
+      },
+      case: nextEpisode.case_content,
+      case_id: nextEpisode.id
+    });
+
+  } catch (error) {
+    console.error('[Case Series] ❌ Erro:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ========================================
+// GET /api/case/series/:series_id/progress
+// Retorna progresso do usuário na série
+// ========================================
+router.get('/series/:series_id/progress', authenticateRequest, async (req, res) => {
+  try {
+    const { series_id } = req.params;
+    const userId = req.user.userId;
+
+    console.log(`\n[Case Series] 📊 Progresso na série ${series_id}, user=${userId}`);
+
+    // Buscar série
+    const { data: series } = await supabase
+      .from('case_series')
+      .select('*')
+      .eq('id', series_id)
+      .single();
+
+    if (!series) {
+      return res.status(404).json({ success: false, error: 'Série não encontrada' });
+    }
+
+    // Buscar todos os episódios da série
+    const { data: allEpisodes } = await supabase
+      .from('cases')
+      .select('id, episode_number, episode_title')
+      .eq('series_id', series_id)
+      .eq('status', 'active')
+      .order('episode_number');
+
+    // Buscar episódios que o usuário viu
+    const { data: userInteractions } = await supabase
+      .from('user_case_interactions')
+      .select('case_id, is_correct, created_at')
+      .eq('user_id', userId)
+      .in('case_id', allEpisodes.map(e => e.id));
+
+    const seenIds = new Set(userInteractions?.map(i => i.case_id) || []);
+
+    const progress = allEpisodes.map(ep => ({
+      episode_number: ep.episode_number,
+      episode_title: ep.episode_title,
+      completed: seenIds.has(ep.id),
+      interaction: userInteractions?.find(i => i.case_id === ep.id)
+    }));
+
+    const completed = progress.filter(p => p.completed).length;
+    const total = allEpisodes.length;
+
+    console.log(`[Case Series] ✅ Progresso: ${completed}/${total} episódios`);
+
+    res.json({
+      success: true,
+      series: series,
+      progress: {
+        completed: completed,
+        total: total,
+        percentage: Math.round((completed / total) * 100),
+        episodes: progress,
+        is_complete: completed === total
+      }
+    });
+
+  } catch (error) {
+    console.error('[Case Series] ❌ Erro:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 module.exports = router;
