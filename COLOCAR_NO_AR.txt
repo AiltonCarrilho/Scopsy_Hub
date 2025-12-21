@@ -1,0 +1,76 @@
+========================================
+COMO COLOCAR NO AR - PASSO A PASSO
+========================================
+
+PASSO 1: Testar localmente
+========================================
+
+Abra o terminal e digite:
+
+cd D:\projetos.vscode\SCOPSY-CLAUDE-CODE
+npm run dev
+
+Aguarde aparecer: Server running on port 3000
+
+Abra o navegador e teste:
+http://localhost:3000/landing.html
+
+
+PASSO 2: Ver se esta funcionando
+========================================
+
+Se abriu a pagina bonita no navegador, esta funcionando!
+
+Agora teste o cadastro:
+http://localhost:3000/signup.html
+
+Crie uma conta de teste e veja se funciona.
+
+
+PASSO 3: Suas socias testarem (mesma rede)
+========================================
+
+Descubra seu IP local:
+
+ipconfig
+
+Procure por IPv4 Address (algo como 192.168.1.X)
+
+Suas socias acessam no navegador delas:
+http://SEU_IP:3000/landing.html
+
+Exemplo: http://192.168.1.100:3000/landing.html
+
+
+PASSO 4: Colocar na internet (depois)
+========================================
+
+Vamos fazer isso juntos quando estiver tudo testado.
+
+Por agora, foque em testar local com suas socias.
+
+
+========================================
+TEM PROBLEMA?
+========================================
+
+Se der erro ao rodar npm run dev:
+
+1. Instale dependencias:
+npm install
+
+2. Tente de novo:
+npm run dev
+
+
+========================================
+PROXIMOS PASSOS
+========================================
+
+1. Rode: npm run dev
+2. Abra: http://localhost:3000/landing.html
+3. Teste cadastro
+4. Chame suas socias para testar
+5. Me avise se funcionou ou se deu erro
+
+========================================

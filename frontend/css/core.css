@@ -32,8 +32,12 @@
   /* Text */
   --text-main: #111827;
   /* Primary text */
+  --text-primary: #111827;
+  /* Alias for main text */
+  --text-secondary: #6b7280;
+  /* Secondary text (headers, descriptions) */
   --text-muted: #6b7280;
-  /* Secondary text */
+  /* Muted text */
   --text-light: #9ca3af;
   /* Disabled/Placeholder */
   --text-white: #ffffff;

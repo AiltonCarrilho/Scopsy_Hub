@@ -236,7 +236,7 @@ async function checkRateLimit(userId, plan) {
 
 /**
  * Enviar notificação para usuário específico
- * (útil para webhooks Stripe, badges desbloqueados, etc)
+ * (útil para webhooks de pagamento, badges desbloqueados, etc)
  */
 function sendNotificationToUser(userId, notification) {
   const socketId = activeConnections.get(userId);

@@ -559,18 +559,15 @@ router.post('/:journey_id/restart', async (req, res) => {
       .maybeSingle();
 
     if (currentProgress) {
-      // Arquivar progresso antigo (marcar como archived)
-      const { error: archiveError } = await supabase
+      // Deletar progresso antigo
+      const { error: deleteError } = await supabase
         .from('user_journey_progress')
-        .update({
-          is_completed: true,
-          archived_at: new Date().toISOString()
-        })
+        .delete()
         .eq('id', currentProgress.id);
 
-      if (archiveError) throw archiveError;
+      if (deleteError) throw deleteError;
 
-      console.log('[Journey] 📦 Progresso antigo arquivado');
+      console.log('[Journey] 🗑️ Progresso antigo deletado');
     }
 
     // Criar novo progresso (reset)

@@ -201,43 +201,114 @@
             await loadAllSessions();
         }
 
+        // Cache de sessões por jornada
+        let sessionsCache = {};
+        let lastLoadedJourney = null;
+        let lastLoadedFilter = null;
+
         // ========================================
-        // CARREGAR TODAS AS SESSÕES (COM FILTRO)
+        // CARREGAR TODAS AS SESSÕES (COM FILTRO E CACHE)
         // ========================================
-        async function loadAllSessions() {
+        async function loadAllSessions(forceReload = false) {
             try {
+                const cacheKey = `${currentJourneyId}_${currentFilter}`;
+
+                // Usar cache se disponível e não forçar reload
+                if (!forceReload &&
+                    sessionsCache[cacheKey] &&
+                    lastLoadedJourney === currentJourneyId &&
+                    lastLoadedFilter === currentFilter) {
+                    console.log('📦 Usando cache de sessões');
+                    allSessions = sessionsCache[cacheKey];
+                    renderSessionsMenu(allSessions);
+                    updateSessionsCount();
+                    return;
+                }
+
+                // Mostrar loading no menu
+                document.getElementById('sessionsMenu').innerHTML = `
+                    <div class="loading-small">Carregando sessões...</div>
+                `;
+
                 const url = currentFilter
                     ? `${API_URL}/journey/${currentJourneyId}/sessions?skill_module=${currentFilter}&user_id=${USER_ID}`
                     : `${API_URL}/journey/${currentJourneyId}/sessions?user_id=${USER_ID}`;
 
-                console.log('🔍 Carregando sessões:', url);
+                console.log('🔍 Carregando sessões da API:', url);
 
                 const response = await fetch(url);
                 console.log('📡 Response status:', response.status);
+                console.log('📡 Response ok:', response.ok);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
 
                 const data = await response.json();
                 console.log('📦 Data recebida:', data);
 
-                if (!data.success) throw new Error('Erro ao carregar sessões');
+                if (!data.success) {
+                    throw new Error(data.error || 'Erro desconhecido ao carregar sessões');
+                }
 
                 allSessions = data.sessions;
-                console.log('✅ Sessions carregadas:', allSessions.length);
+
+                // Atualizar cache
+                sessionsCache[cacheKey] = allSessions;
+                lastLoadedJourney = currentJourneyId;
+                lastLoadedFilter = currentFilter;
+
+                console.log('✅ Sessões carregadas:', allSessions.length);
 
                 renderSessionsMenu(allSessions);
-
-                // Atualizar contador
-                document.getElementById('sessionsCount').textContent =
-                    `${allSessions.length} ${allSessions.length === 1 ? 'sessão' : 'sessões'}`;
+                updateSessionsCount();
 
             } catch (error) {
                 console.error('❌ Erro ao carregar sessões:', error);
-                document.getElementById('sessionsMenu').innerHTML = `
-                    <div style="padding: 16px; color: #f44336; text-align: center;">
-                        Erro: ${error.message}<br>
-                        <small>Verifique o console (F12)</small>
-                    </div>
-                `;
+                console.error('❌ Stack trace:', error.stack);
+                console.error('❌ Journey ID:', currentJourneyId);
+                console.error('❌ API URL:', API_URL);
+
+                // Tratamento especial para erro 429 (Rate Limit)
+                let errorMessage = '';
+                if (error.message.includes('429')) {
+                    errorMessage = `
+                        <div style="padding: 16px; color: #ff9800; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">⏱️</div>
+                            <strong>Muitas requisições</strong><br>
+                            <small style="color: #666;">Aguarde 1 minuto e recarregue a página</small><br>
+                            <div style="margin-top: 12px; font-size: 0.85rem; color: #999;">
+                                O servidor está protegido contra sobrecarga.<br>
+                                Isso acontece durante testes intensivos.
+                            </div>
+                            <button class="btn btn-primary" onclick="window.location.reload()"
+                                    style="margin-top: 16px; font-size: 0.9rem;">
+                                🔄 Recarregar Página
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    errorMessage = `
+                        <div style="padding: 16px; color: #f44336; text-align: center;">
+                            <strong>Erro ao carregar sessões</strong><br>
+                            <small>${error.message}</small><br>
+                            <small style="color: #999;">Journey: ${currentJourneyId}</small><br>
+                            <button class="btn btn-primary" onclick="loadAllSessions(true)"
+                                    style="margin-top: 12px; font-size: 0.9rem;">
+                                🔄 Tentar Novamente
+                            </button>
+                        </div>
+                    `;
+                }
+
+                document.getElementById('sessionsMenu').innerHTML = errorMessage;
             }
+        }
+
+        // Helper para atualizar contador
+        function updateSessionsCount() {
+            document.getElementById('sessionsCount').textContent =
+                `${allSessions.length} ${allSessions.length === 1 ? 'sessão' : 'sessões'}`;
         }
 
         // ========================================
@@ -253,7 +324,7 @@
 
                 return `
                     <div class="session-menu-item ${isCurrent ? 'active' : ''} ${isCompleted ? 'completed' : ''}"
-                         onclick="loadSession(${session.session_number}, true)">
+                         data-session-number="${session.session_number}">
                         <div class="session-number">
                             ${isCompleted ? '✓' : session.session_number}
                         </div>
@@ -270,6 +341,24 @@
                     Nenhuma sessão encontrada
                 </div>
             `;
+
+            // ✅ Adicionar listeners aos itens do menu de sessões
+            attachSessionMenuListeners();
+        }
+
+        // ========================================
+        // ADICIONAR LISTENERS AO MENU DE SESSÕES
+        // ========================================
+        function attachSessionMenuListeners() {
+            const menuItems = document.querySelectorAll('.session-menu-item');
+            menuItems.forEach(item => {
+                const sessionNumber = parseInt(item.getAttribute('data-session-number'));
+                if (sessionNumber) {
+                    item.addEventListener('click', () => {
+                        loadSession(sessionNumber, true);
+                    });
+                }
+            });
         }
 
         // ========================================
@@ -292,9 +381,21 @@
         async function init() {
             try {
                 console.log('🚀 Inicializando Jornada Clínica...');
-                    currentJourneyId = "b438bc8c-8f25-4def-90f5-bca524876366"; // seu caso fixo
-                        await loadAllSessions();
-                        await checkProgress();
+
+                // Verificar se há journey ID salvo no localStorage (de "Novo Caso")
+                const savedJourneyId = localStorage.getItem('scopsy_current_journey_id');
+
+                if (savedJourneyId) {
+                    currentJourneyId = savedJourneyId;
+                    console.log(`📂 Journey ID carregado do localStorage: ${currentJourneyId}`);
+                } else {
+                    // Fallback: usar caso padrão
+                    currentJourneyId = "b438bc8c-8f25-4def-90f5-bca524876366"; // Carolina - TAG
+                    console.log(`📋 Usando journey ID padrão: ${currentJourneyId}`);
+                }
+
+                await loadAllSessions();
+                await checkProgress();
 
                 console.log('✅ Inicialização completa');
 
@@ -366,11 +467,30 @@
             }
         }
 
+        // Estado para prevenir chamadas simultâneas
+        let isLoadingSession = false;
+
         // ========================================
         // CARREGAR SESSÃO
         // ========================================
         async function loadSession(sessionNumber, freeMode = false) {
+            // Prevenir múltiplas chamadas simultâneas
+            if (isLoadingSession) {
+                console.log('⏳ Já carregando sessão, ignorando clique duplicado');
+                return;
+            }
+
             try {
+                isLoadingSession = true;
+
+                // Mostrar loading
+                document.getElementById('sessionContainer').innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Carregando sessão ${sessionNumber}...</p>
+                    </div>
+                `;
+
                 currentSessionNumber = sessionNumber;
                 sessionStartTime = Date.now();
 
@@ -385,10 +505,23 @@
                 if (data.success) {
                     renderSession(data.session, data.previous_decision);
                     document.getElementById('progressContainer').style.display = 'block';
+                } else {
+                    throw new Error(data.error || 'Erro ao carregar sessão');
                 }
 
             } catch (error) {
-                console.error('Erro ao carregar sessão:', error);
+                console.error('❌ Erro ao carregar sessão:', error);
+                document.getElementById('sessionContainer').innerHTML = `
+                    <div class="session-card">
+                        <p style="color: #f44336;">❌ Erro ao carregar sessão ${sessionNumber}</p>
+                        <p style="color: #666; font-size: 0.9rem;">${error.message}</p>
+                        <button class="btn btn-primary" onclick="loadSession(${sessionNumber})" style="margin-top: 16px;">
+                            🔄 Tentar Novamente
+                        </button>
+                    </div>
+                `;
+            } finally {
+                isLoadingSession = false;
             }
         }
 
@@ -449,9 +582,8 @@
 
                         <div class="options" id="optionsContainer">
                             ${session.options.map(opt => `
-                                <div class="option ${previousDecision && previousDecision.option_chosen === opt.label ? 'selected' : ''}" 
-                                     data-option="${opt.label}"
-                                     onclick="selectOption('${opt.label}')">
+                                <div class="option ${previousDecision && previousDecision.option_chosen === opt.label ? 'selected' : ''}"
+                                     data-option="${opt.label}">
                                     <div class="option-label">${opt.label}</div>
                                     <div class="option-content">
                                         <div class="option-text">${opt.text}</div>
@@ -465,11 +597,11 @@
 
                     <div class="actions">
                         ${previousDecision ? `
-                            <button class="btn btn-primary" onclick="nextSession()">
+                            <button class="btn btn-primary" id="nextSessionBtn">
                                 Próxima Sessão →
                             </button>
                         ` : `
-                            <button class="btn btn-primary" id="submitBtn" onclick="submitDecision()" disabled>
+                            <button class="btn btn-primary" id="submitBtn" disabled>
                                 Confirmar Decisão
                             </button>
                         `}
@@ -478,6 +610,9 @@
             `;
 
             document.getElementById('sessionContainer').innerHTML = html;
+
+            // ✅ Adicionar event listeners APÓS renderizar
+            attachSessionListeners(previousDecision);
 
             if (previousDecision) {
                 const option = session.options.find(o => o.label === previousDecision.option_chosen);
@@ -488,17 +623,48 @@
         }
 
         // ========================================
+        // ANEXAR EVENT LISTENERS
+        // ========================================
+        function attachSessionListeners(hasPreviousDecision) {
+            // Listeners para opções
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    selectOption(this);
+                });
+            });
+
+            // Listener para botão submit ou nextSession
+            if (hasPreviousDecision) {
+                const nextBtn = document.getElementById('nextSessionBtn');
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', nextSession);
+                }
+            } else {
+                const submitBtn = document.getElementById('submitBtn');
+                if (submitBtn) {
+                    submitBtn.addEventListener('click', submitDecision);
+                }
+            }
+        }
+
+        // ========================================
         // SELECIONAR OPÇÃO
         // ========================================
-        function selectOption(label) {
+        function selectOption(element) {
+            // Remove seleção anterior
             document.querySelectorAll('.option').forEach(opt => {
                 opt.classList.remove('selected');
             });
 
-            // Usa o event global do browser (como no seu original)
-            event.currentTarget.classList.add('selected');
+            // Adiciona seleção atual
+            element.classList.add('selected');
+
+            // Pega label da opção
+            const label = element.getAttribute('data-option');
             selectedOption = label;
 
+            // Habilita botão de submit
             const submitBtn = document.getElementById('submitBtn');
             if (submitBtn) submitBtn.disabled = false;
         }
@@ -509,12 +675,20 @@
         async function submitDecision() {
             if (!selectedOption) return;
 
+            const btn = document.getElementById('submitBtn');
+            if (!btn || btn.disabled) return; // Evita duplo clique
+
             try {
+                // Desabilitar botão e mostrar loading
+                btn.disabled = true;
+                btn.textContent = 'Enviando...';
+
                 const timeTaken = Math.floor((Date.now() - sessionStartTime) / 1000);
 
+                // Desabilitar opções
                 document.querySelectorAll('.option').forEach(opt => {
                     opt.classList.add('disabled');
-                    opt.onclick = null;
+                    opt.style.pointerEvents = 'none';
                 });
 
                 const response = await fetch(
@@ -537,19 +711,40 @@
 
                     await refreshProgress();
 
-                    const btn = document.getElementById('submitBtn');
-                    if (btn) {
-                        btn.outerHTML = `
-                            <button class="btn btn-primary" onclick="nextSession()">
-                                ${data.is_completed ? 'Ver Resultado Final →' : 'Próxima Sessão →'}
-                            </button>
-                        `;
+                    // Recarregar sessões para atualizar status de completude (forçar reload)
+                    await loadAllSessions(true);
+
+                    // Substituir botão
+                    btn.outerHTML = `
+                        <button class="btn btn-primary" id="nextSessionBtnAfterDecision">
+                            ${data.is_completed ? 'Ver Resultado Final →' : 'Próxima Sessão →'}
+                        </button>
+                    `;
+
+                    // ✅ Adicionar listener ao novo botão
+                    const nextBtn = document.getElementById('nextSessionBtnAfterDecision');
+                    if (nextBtn) {
+                        nextBtn.addEventListener('click', nextSession);
                     }
+                } else {
+                    throw new Error(data.error || 'Erro ao processar decisão');
                 }
 
             } catch (error) {
-                console.error('Erro ao submeter decisão:', error);
+                console.error('❌ Erro ao submeter decisão:', error);
                 alert('Erro ao registrar decisão. Tente novamente.');
+
+                // Re-habilitar botão em caso de erro
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = 'Confirmar Decisão';
+                }
+
+                // Re-habilitar opções
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('disabled');
+                    opt.style.pointerEvents = 'auto';
+                });
             }
         }
 
@@ -641,18 +836,43 @@
         // PRÓXIMA SESSÃO
         // ========================================
         async function nextSession() {
-            const response = await fetch(
-                `${API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
-            );
-            const data = await response.json();
+            try {
+                // Desabilitar botão para evitar múltiplos cliques
+                const btn = event?.target;
+                if (btn) {
+                    btn.disabled = true;
+                    btn.textContent = 'Carregando...';
+                }
 
-            if (data.progress.is_completed) {
-                showCompletion(data.progress);
-            } else {
-                currentSessionNumber++;
-                selectedOption = null;
-                loadSession(currentSessionNumber);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                const response = await fetch(
+                    `${API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
+                );
+                const data = await response.json();
+
+                if (data.progress.is_completed) {
+                    showCompletion(data.progress);
+                } else {
+                    currentSessionNumber = data.progress.current_session;
+                    selectedOption = null;
+
+                    // Recarregar menu para marcar sessão anterior como completa (forçar reload)
+                    await loadAllSessions(true);
+
+                    // Carregar próxima sessão
+                    await loadSession(currentSessionNumber);
+
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } catch (error) {
+                console.error('❌ Erro ao avançar sessão:', error);
+                alert('Erro ao carregar próxima sessão. Tente novamente.');
+
+                // Re-habilitar botão em caso de erro
+                const btn = event?.target;
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = 'Próxima Sessão →';
+                }
             }
         }
 
@@ -696,21 +916,21 @@
                     </div>
 
                     <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px;">
-                        <button class="btn btn-primary" onclick="startNewCase()"
+                        <button class="btn btn-primary" id="newCaseBtn"
                                 style="background: var(--color-primary); color: white; width: 100%; font-size: 1.05rem; padding: 14px;">
                             ✨ Novo Caso Clínico
                         </button>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                            <button class="btn btn-primary" onclick="restartJourney()"
+                            <button class="btn btn-primary" id="restartBtn"
                                     style="background: white; color: var(--color-primary); border: 2px solid var(--color-primary);">
                                 🔄 Recomeçar Este Caso
                             </button>
-                            <button class="btn btn-primary" onclick="window.location.href='dashboard.html'"
+                            <button class="btn btn-primary" id="dashboardBtn"
                                     style="background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-subtle);">
                                 🏠 Dashboard
                             </button>
                         </div>
-                        <button class="btn btn-secondary" onclick="window.location.href='treino-livre.html'"
+                        <button class="btn btn-secondary" id="treinoLivreBtn"
                                 style="width: 100%;">
                             🎯 Treino Livre por Habilidade
                         </button>
@@ -720,27 +940,73 @@
 
             document.getElementById('sessionContainer').innerHTML = html;
             document.getElementById('progressContainer').style.display = 'none';
+
+            // ✅ Adicionar listeners aos botões de conclusão
+            const newCaseBtn = document.getElementById('newCaseBtn');
+            const restartBtn = document.getElementById('restartBtn');
+            const dashboardBtn = document.getElementById('dashboardBtn');
+            const treinoLivreBtn = document.getElementById('treinoLivreBtn');
+
+            if (newCaseBtn) {
+                console.log('✅ Botão Novo Caso encontrado, adicionando listener...');
+                newCaseBtn.addEventListener('click', async () => {
+                    console.log('🎯 Botão clicado!');
+                    await startNewCase();
+                });
+            } else {
+                console.error('❌ Botão newCaseBtn NÃO encontrado!');
+            }
+
+            if (restartBtn) restartBtn.addEventListener('click', restartJourney);
+            if (dashboardBtn) dashboardBtn.addEventListener('click', () => window.location.href = 'dashboard.html');
+            if (treinoLivreBtn) treinoLivreBtn.addEventListener('click', () => window.location.href = 'treino-livre.html');
         }
 
         // ========================================
         // INICIAR NOVO CASO CLÍNICO
         // ========================================
         async function startNewCase() {
+            console.log('🎯 startNewCase() chamada');
+            console.log('availableJourneys:', availableJourneys);
+            console.log('currentJourneyId:', currentJourneyId);
+
             try {
+                // Verificar se há jornadas disponíveis carregadas
+                if (!availableJourneys || availableJourneys.length === 0) {
+                    console.log('⚠️ Lista de jornadas não carregada. Carregando agora...');
+
+                    // Buscar jornadas disponíveis
+                    const response = await fetch(`${API_URL}/journey/list`);
+                    const data = await response.json();
+
+                    if (!data.success || !data.journeys || data.journeys.length === 0) {
+                        throw new Error('Nenhuma jornada disponível no momento');
+                    }
+
+                    availableJourneys = data.journeys;
+                    console.log(`✅ ${availableJourneys.length} jornadas carregadas`);
+                }
+
                 const currentIndex = availableJourneys.findIndex(j => j.id === currentJourneyId);
                 const nextIndex = (currentIndex + 1) % availableJourneys.length;
                 const nextJourney = availableJourneys[nextIndex];
 
+                if (!nextJourney) {
+                    throw new Error('Próxima jornada não encontrada');
+                }
+
                 console.log(`✨ Iniciando novo caso: ${nextJourney.client_name} - ${nextJourney.disorder}`);
 
-                currentJourneyId = nextJourney.id;
-                document.getElementById('journeySelect').value = currentJourneyId;
+                // Salvar novo journey ID no localStorage antes de recarregar
+                localStorage.setItem('scopsy_current_journey_id', nextJourney.id);
+                console.log(`💾 Journey ID salvo no localStorage: ${nextJourney.id}`);
 
+                // Recarregar página para iniciar novo caso
                 window.location.reload();
 
             } catch (error) {
                 console.error('❌ Erro ao iniciar novo caso:', error);
-                alert('Erro ao carregar novo caso. Tente novamente.');
+                alert(`Erro ao carregar novo caso: ${error.message}\n\nTente voltar ao dashboard.`);
             }
         }
 
@@ -771,6 +1037,10 @@
                 }
 
                 console.log('✅ Caso recomeçado com sucesso');
+
+                // Garantir que localStorage está atualizado com o caso atual
+                localStorage.setItem('scopsy_current_journey_id', currentJourneyId);
+
                 window.location.reload();
 
             } catch (error) {

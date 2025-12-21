@@ -68,7 +68,6 @@ router.post('/signup', async (req, res) => {
       name,
       crp: crp || null,
       plan: 'free',
-      stripe_customer_id: null,
       subscription_status: 'inactive',
       created_at: now.toISOString(), // ✅ Formato ISO 8601
       updated_at: now.toISOString(),

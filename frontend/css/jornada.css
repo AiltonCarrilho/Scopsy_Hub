@@ -204,7 +204,7 @@ h1 {
 }
 
 .context-text {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     line-height: 1.8;
     color: var(--text-secondary);
     white-space: pre-wrap;
@@ -279,7 +279,7 @@ h1 {
 }
 
 .option-text {
-    font-size: 0.95rem;
+    font-size: 1rem;
     line-height: 1.7;
     color: var(--text-main);
 }
@@ -322,14 +322,14 @@ h1 {
 }
 
 .feedback-immediate {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     line-height: 1.8;
     color: var(--text-main);
     margin-bottom: 16px;
 }
 
 .feedback-explanation {
-    font-size: 0.9rem;
+    font-size: 1rem;
     line-height: 1.7;
     color: var(--text-secondary);
     padding: 20px;
