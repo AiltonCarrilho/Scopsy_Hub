@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - Scopsy</title>
+    <!-- Config deve ser carregado PRIMEIRO -->
+    <script src="js/config.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <style>
         body {
@@ -246,7 +248,7 @@
     </div>
 
     <script>
-        const API_URL = 'http://localhost:3000';
+        // API_URL vem do config.js (window.API_URL)
 
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
