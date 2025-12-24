@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const API_URL = 'http://localhost:3000'; // Adjust if deploying
+    // API_URL vem do config.js (window.API_URL)
     const token = localStorage.getItem('token');
 
     // Button References
