@@ -27,6 +27,7 @@ const io = socketIo(server, {
           // 🔒 PRODUÇÃO - Apenas domínios oficiais
           'https://www.scopsy.com.br',
           'https://scopsy.com.br',
+          'https://lab.scopsy.com.br',
           'https://app.scopsy.com.br',
           process.env.FRONTEND_URL
         ].filter(Boolean)
@@ -82,6 +83,7 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
       // 🔒 PRODUÇÃO - Apenas domínios oficiais
       'https://www.scopsy.com.br',
       'https://scopsy.com.br',
+      'https://lab.scopsy.com.br',
       'https://app.scopsy.com.br', // Se tiver subdomínio separado
       process.env.FRONTEND_URL
     ].filter(Boolean)
