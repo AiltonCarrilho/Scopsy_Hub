@@ -39,11 +39,11 @@
             ENVIRONMENT: 'development'
         },
         production: {
-            // Backend hospedado no Render (URL Confirmada)
-            API_URL: 'https://scopsy-hub.onrender.com',
+            // Backend hospedado no Render com domínio customizado
+            API_URL: 'https://lab.scopsy.com.br',
 
             // WebSocket com protocolo seguro (wss)
-            WS_URL: 'wss://scopsy-hub.onrender.com',
+            WS_URL: 'wss://lab.scopsy.com.br',
 
             ENVIRONMENT: 'production'
         }
