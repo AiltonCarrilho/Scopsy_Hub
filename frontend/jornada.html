@@ -18,6 +18,7 @@
         <div class="container">
             <div class="logo">
                 <h1>Scopsy Lab<span class="registered">®</span></h1>
+                <div style="color: #00ff00; font-size: 12px; margin-top: 4px;">VERSÃO CORRIGIDA v2.0</div>
             </div>
             <a href="dashboard.html" class="btn-back">
                 ← Dashboard
@@ -26,9 +27,7 @@
     </header>
 
     <div class="container">
-   
-
-         <!-- LAYOUT COM MENU LATERAL -->
+        <!-- LAYOUT COM MENU LATERAL -->
         <div class="journey-layout">
             <!-- MENU LATERAL DE SESSÕES -->
             <div class="sessions-sidebar" id="sessionsSidebar">
@@ -84,9 +83,21 @@
     </div>
 
     <!-- ========== JAVASCRIPT ========== -->
+    <!-- Carregar configuração centralizada e utilitários de auth -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+
     <script>
-        const API_URL = 'http://localhost:3000/api';
-        const USER_ID = 8; // TODO: Pegar do auth
+        // API_URL definida globalmente em config.js
+        // Criar constante local com sufixo /api para uso neste arquivo
+        const JOURNEY_API_URL = window.API_URL + '/api';
+
+        // Obter usuário logado dinamicamente
+        const currentUser = getUser(); // Função do auth.js
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+        const USER_ID = currentUser.id;
 
         // Estado global
         let currentJourneyId = null;
@@ -95,14 +106,13 @@
         let selectedOption = null;
         let sessionStartTime = null;
         let allSessions = []; // Armazena todas as sessões carregadas
-        let currentFilter = ''; // Filtro atual de skill_module
 
         // ========================================
         // CARREGAR JORNADAS DISPONÍVEIS
         // ========================================
         async function loadJourneys() {
             try {
-                const response = await fetch(`${API_URL}/journey/list`);
+                const response = await fetch(`${JOURNEY_API_URL}/journey/list`);
                 const data = await response.json();
 
                 if (!data.success || data.journeys.length === 0) {
@@ -110,116 +120,29 @@
                 }
 
                 availableJourneys = data.journeys;
-
-                const select = document.getElementById('journeySelect');
-                select.innerHTML = availableJourneys.map((journey, index) => {
-                    const disorderLabel = {
-                        'anxiety': '😰 Ansiedade',
-                        'depression': '😔 Depressão',
-                        'ocd': '🔄 TOC',
-                        'trauma': '💔 Trauma'
-                    }[journey.disorder_category] || '📋';
-
-                    return `
-                        <option value="${journey.id}">
-                            ${disorderLabel} ${journey.client_name} - ${journey.disorder}
-                            ${index === 0 ? ' (Atual)' : ''}
-                        </option>
-                    `;
-                }).join('');
-
-                // Selecionar primeira jornada por padrão
-                currentJourneyId = availableJourneys[0].id;
                 console.log('📚 Jornadas carregadas:', availableJourneys.length);
 
             } catch (error) {
                 console.error('❌ Erro ao carregar jornadas:', error);
-                document.getElementById('journeySelect').innerHTML = `
-                    <option value="">Erro ao carregar jornadas</option>
-                `;
+                availableJourneys = [];
             }
-        }
-
-        // ========================================
-        // SELECIONAR JORNADA (TROCAR DE CASO)
-        // ========================================
-        async function selectJourney(journeyId) {
-            if (!journeyId || journeyId === currentJourneyId) return;
-
-            console.log('🔄 Trocando para jornada:', journeyId);
-
-            currentJourneyId = journeyId;
-            currentSessionNumber = 1;
-            currentFilter = '';
-
-            // Resetar filtro de habilidades
-            document.getElementById('skillModuleFilter').value = '';
-
-            // Recarregar tudo
-            await loadAllSessions();
-            await checkProgress();
-        }
-
-        // ========================================
-        // CARREGAR FILTRO DE HABILIDADES
-        // ========================================
-        async function loadSkillsFilter() {
-            try {
-                const response = await fetch(`${API_URL}/skills/list`);
-                const data = await response.json();
-
-                if (!data.success) throw new Error('Erro ao carregar habilidades');
-
-                const moduleNames = {
-                    fundamentos: '🌿 Fundamentos da Relação',
-                    formulacao: '🔍 Formulação e Insight',
-                    intervencao: '⚙️ Intervenção e Mudança',
-                    consolidacao: '🌱 Consolidação e Alta',
-                    metacompetencias: '💎 Metacompetências'
-                };
-
-                const select = document.getElementById('skillModuleFilter');
-                select.innerHTML = `
-                    <option value="">📚 Todas as Habilidades (${data.total})</option>
-                    ${Object.keys(data.skills_by_module).map(module => `
-                        <option value="${module}">
-                            ${moduleNames[module]} (${data.skills_by_module[module].length})
-                        </option>
-                    `).join('')}
-                `;
-
-            } catch (error) {
-                console.error('Erro ao carregar filtro de skills:', error);
-            }
-        }
-
-        // ========================================
-        // FILTRAR POR MÓDULO DE HABILIDADE
-        // ========================================
-        async function filterBySkillModule(module) {
-            currentFilter = module;
-            await loadAllSessions();
         }
 
         // Cache de sessões por jornada
         let sessionsCache = {};
         let lastLoadedJourney = null;
-        let lastLoadedFilter = null;
 
         // ========================================
-        // CARREGAR TODAS AS SESSÕES (COM FILTRO E CACHE)
+        // CARREGAR TODAS AS SESSÕES
         // ========================================
         async function loadAllSessions(forceReload = false) {
             try {
-                const cacheKey = `${currentJourneyId}_${currentFilter}`;
-
                 // Usar cache se disponível e não forçar reload
                 if (!forceReload &&
-                    sessionsCache[cacheKey] &&
-                    lastLoadedJourney === currentJourneyId &&
-                    lastLoadedFilter === currentFilter) {
+                    sessionsCache[currentJourneyId] &&
+                    lastLoadedJourney === currentJourneyId) {
                     console.log('📦 Usando cache de sessões');
-                    allSessions = sessionsCache[cacheKey];
+                    allSessions = sessionsCache[currentJourneyId];
                     renderSessionsMenu(allSessions);
                     updateSessionsCount();
                     return;
@@ -230,35 +153,26 @@
                     <div class="loading-small">Carregando sessões...</div>
                 `;
 
-                const url = currentFilter
-                    ? `${API_URL}/journey/${currentJourneyId}/sessions?skill_module=${currentFilter}&user_id=${USER_ID}`
-                    : `${API_URL}/journey/${currentJourneyId}/sessions?user_id=${USER_ID}`;
-
+                const url = `${JOURNEY_API_URL}/journey/${currentJourneyId}/sessions?user_id=${USER_ID}`;
                 console.log('🔍 Carregando sessões da API:', url);
 
                 const response = await fetch(url);
-                console.log('📡 Response status:', response.status);
-                console.log('📡 Response ok:', response.ok);
 
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
 
                 const data = await response.json();
-                console.log('📦 Data recebida:', data);
 
                 if (!data.success) {
-                    throw new Error(data.error || 'Erro desconhecido ao carregar sessões');
+                    throw new Error(data.error || 'Erro ao carregar sessões');
                 }
 
                 allSessions = data.sessions;
 
                 // Atualizar cache
-                sessionsCache[cacheKey] = allSessions;
+                sessionsCache[currentJourneyId] = allSessions;
                 lastLoadedJourney = currentJourneyId;
-                lastLoadedFilter = currentFilter;
-
-                console.log('✅ Sessões carregadas:', allSessions.length);
 
                 renderSessionsMenu(allSessions);
                 updateSessionsCount();
@@ -267,7 +181,7 @@
                 console.error('❌ Erro ao carregar sessões:', error);
                 console.error('❌ Stack trace:', error.stack);
                 console.error('❌ Journey ID:', currentJourneyId);
-                console.error('❌ API URL:', API_URL);
+                console.error('❌ API URL:', JOURNEY_API_URL);
 
                 // Tratamento especial para erro 429 (Rate Limit)
                 let errorMessage = '';
@@ -317,7 +231,7 @@
         function renderSessionsMenu(sessions) {
             const html = sessions.map(session => {
                 const isCurrent = session.session_number === currentSessionNumber;
-                const isCompleted = session.is_completed;
+                const isCompleted = session.is_completed === true; // Força verificação boolean
 
                 const skillName = session.skill ? session.skill.name : 'Sem habilidade';
                 const skillIcon = getSkillModuleIcon(session.skill?.module);
@@ -382,6 +296,9 @@
             try {
                 console.log('🚀 Inicializando Jornada Clínica...');
 
+                // Carregar lista de jornadas (para lógica de "Novo Caso")
+                await loadJourneys();
+
                 // Verificar se há journey ID salvo no localStorage (de "Novo Caso")
                 const savedJourneyId = localStorage.getItem('scopsy_current_journey_id');
 
@@ -389,9 +306,13 @@
                     currentJourneyId = savedJourneyId;
                     console.log(`📂 Journey ID carregado do localStorage: ${currentJourneyId}`);
                 } else {
-                    // Fallback: usar caso padrão
-                    currentJourneyId = "b438bc8c-8f25-4def-90f5-bca524876366"; // Carolina - TAG
-                    console.log(`📋 Usando journey ID padrão: ${currentJourneyId}`);
+                    // Fallback: usar primeiro da lista ou padrão
+                    if (availableJourneys.length > 0) {
+                        currentJourneyId = availableJourneys[0].id;
+                    } else {
+                        currentJourneyId = "b438bc8c-8f25-4def-90f5-bca524876366"; // Carolina - TAG
+                    }
+                    console.log(`📋 Usando journey ID: ${currentJourneyId}`);
                 }
 
                 await loadAllSessions();
@@ -417,7 +338,7 @@
         // ========================================
         async function checkProgress() {
             try {
-                const response = await fetch(`${API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`);
+                const response = await fetch(`${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`);
                 const data = await response.json();
 
                 if (data.progress) {
@@ -446,7 +367,7 @@
         // ========================================
         async function startJourney() {
             try {
-                const response = await fetch(`${API_URL}/journey/start`, {
+                const response = await fetch(`${JOURNEY_API_URL}/journey/start`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -494,7 +415,7 @@
                 currentSessionNumber = sessionNumber;
                 sessionStartTime = Date.now();
 
-                let url = `${API_URL}/journey/${currentJourneyId}/session/${sessionNumber}?user_id=${USER_ID}`;
+                let url = `${JOURNEY_API_URL}/journey/${currentJourneyId}/session/${sessionNumber}?user_id=${USER_ID}`;
                 if (freeMode) {
                     url += '&free_mode=true';
                 }
@@ -629,7 +550,7 @@
             // Listeners para opções
             const options = document.querySelectorAll('.option');
             options.forEach(option => {
-                option.addEventListener('click', function() {
+                option.addEventListener('click', function () {
                     selectOption(this);
                 });
             });
@@ -692,7 +613,7 @@
                 });
 
                 const response = await fetch(
-                    `${API_URL}/journey/${currentJourneyId}/session/${currentSessionNumber}/decide?user_id=${USER_ID}`,
+                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/session/${currentSessionNumber}/decide?user_id=${USER_ID}`,
                     {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -820,7 +741,7 @@
         async function refreshProgress() {
             try {
                 const response = await fetch(
-                    `${API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
+                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
                 );
                 const data = await response.json();
 
@@ -835,27 +756,33 @@
         // ========================================
         // PRÓXIMA SESSÃO
         // ========================================
-        async function nextSession() {
+        async function nextSession(e) {
             try {
-                // Desabilitar botão para evitar múltiplos cliques
-                const btn = event?.target;
+                // Desabilitar botão
+                const btn = e?.target || document.getElementById('nextSessionBtn') || document.getElementById('nextSessionBtnAfterDecision');
                 if (btn) {
                     btn.disabled = true;
                     btn.textContent = 'Carregando...';
                 }
 
+                // Buscar progresso atualizado
                 const response = await fetch(
-                    `${API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
+                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
                 );
                 const data = await response.json();
 
                 if (data.progress.is_completed) {
+                    // Jornada completa
                     showCompletion(data.progress);
                 } else {
+                    // Atualizar número da sessão atual
                     currentSessionNumber = data.progress.current_session;
                     selectedOption = null;
 
-                    // Recarregar menu para marcar sessão anterior como completa (forçar reload)
+                    // Atualizar progresso no topo
+                    updateProgress(data.progress);
+
+                    // Recarregar sessões (forçar reload para pegar is_completed atualizado)
                     await loadAllSessions(true);
 
                     // Carregar próxima sessão
@@ -864,11 +791,10 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             } catch (error) {
-                console.error('❌ Erro ao avançar sessão:', error);
-                alert('Erro ao carregar próxima sessão. Tente novamente.');
+                console.error('Erro ao avançar:', error);
+                alert('Erro ao carregar próxima sessão.');
 
-                // Re-habilitar botão em caso de erro
-                const btn = event?.target;
+                const btn = e?.target;
                 if (btn) {
                     btn.disabled = false;
                     btn.textContent = 'Próxima Sessão →';
@@ -967,46 +893,48 @@
         // ========================================
         async function startNewCase() {
             console.log('🎯 startNewCase() chamada');
-            console.log('availableJourneys:', availableJourneys);
-            console.log('currentJourneyId:', currentJourneyId);
 
             try {
-                // Verificar se há jornadas disponíveis carregadas
+                // Carregar lista de jornadas se não estiver carregada
                 if (!availableJourneys || availableJourneys.length === 0) {
-                    console.log('⚠️ Lista de jornadas não carregada. Carregando agora...');
-
-                    // Buscar jornadas disponíveis
-                    const response = await fetch(`${API_URL}/journey/list`);
-                    const data = await response.json();
-
-                    if (!data.success || !data.journeys || data.journeys.length === 0) {
-                        throw new Error('Nenhuma jornada disponível no momento');
-                    }
-
-                    availableJourneys = data.journeys;
-                    console.log(`✅ ${availableJourneys.length} jornadas carregadas`);
+                    console.log('⚠️ Carregando lista de jornadas...');
+                    await loadJourneys();
                 }
 
+                if (!availableJourneys || availableJourneys.length === 0) {
+                    throw new Error('Nenhuma jornada disponível');
+                }
+
+                // Pegar próximo caso (circular)
                 const currentIndex = availableJourneys.findIndex(j => j.id === currentJourneyId);
                 const nextIndex = (currentIndex + 1) % availableJourneys.length;
                 const nextJourney = availableJourneys[nextIndex];
 
-                if (!nextJourney) {
-                    throw new Error('Próxima jornada não encontrada');
-                }
+                console.log(`✨ Carregando próximo caso: ${nextJourney.client_name} - ${nextJourney.disorder}`);
 
-                console.log(`✨ Iniciando novo caso: ${nextJourney.client_name} - ${nextJourney.disorder}`);
+                // Limpar celebração e mostrar loading
+                document.getElementById('sessionContainer').innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Carregando novo caso...</p>
+                    </div>
+                `;
+                document.getElementById('progressContainer').style.display = 'block';
 
-                // Salvar novo journey ID no localStorage antes de recarregar
+                // Limpar cache
+                sessionsCache = {};
+                lastLoadedJourney = null;
+
+                // Salvar novo journey ID e recarregar
                 localStorage.setItem('scopsy_current_journey_id', nextJourney.id);
-                console.log(`💾 Journey ID salvo no localStorage: ${nextJourney.id}`);
+                console.log(`💾 Novo caso salvo: ${nextJourney.id}`);
 
-                // Recarregar página para iniciar novo caso
+                // Recarregar página
                 window.location.reload();
 
             } catch (error) {
-                console.error('❌ Erro ao iniciar novo caso:', error);
-                alert(`Erro ao carregar novo caso: ${error.message}\n\nTente voltar ao dashboard.`);
+                console.error('❌ Erro ao carregar novo caso:', error);
+                alert(`Erro: ${error.message}`);
             }
         }
 
@@ -1024,6 +952,14 @@
             try {
                 console.log('🔄 Recomeçando mesmo caso...');
 
+                // Mostrar loading
+                document.getElementById('sessionContainer').innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Recomeçando caso...</p>
+                    </div>
+                `;
+
                 const response = await fetch(`${API_URL}/journey/${currentJourneyId}/restart`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1038,9 +974,15 @@
 
                 console.log('✅ Caso recomeçado com sucesso');
 
-                // Garantir que localStorage está atualizado com o caso atual
+                // Limpar cache de sessões para forçar reload
+                sessionsCache = {};
+                lastLoadedJourney = null;
+                lastLoadedFilter = null;
+
+                // Garantir que localStorage está atualizado
                 localStorage.setItem('scopsy_current_journey_id', currentJourneyId);
 
+                // Recarregar página para garantir estado limpo
                 window.location.reload();
 
             } catch (error) {

@@ -3,7 +3,8 @@
  * Scopsy v4.0
  */
 
-const API_URL = 'http://localhost:3000';
+// API_URL é definido em config.js (carregado antes deste arquivo)
+// Não redeclarar para evitar conflitos!
 
 // ========================================
 // VERIFICAR SE ESTÁ AUTENTICADO
