@@ -39,9 +39,12 @@
             ENVIRONMENT: 'development'
         },
         production: {
-            // Em produção, usa o mesmo domínio da aplicação
-            API_URL: window.location.origin,
-            WS_URL: window.location.origin.replace(/^http/, 'ws'),
+            // Backend hospedado no Render
+            API_URL: 'https://scopsy-backend.onrender.com',
+
+            // WebSocket com protocolo seguro (wss)
+            WS_URL: 'wss://scopsy-backend.onrender.com',
+
             ENVIRONMENT: 'production'
         }
     };
