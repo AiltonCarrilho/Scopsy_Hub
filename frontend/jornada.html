@@ -672,43 +672,64 @@
         // ========================================
         // MOSTRAR FEEDBACK
         // ========================================
+        // ========================================
+        // MOSTRAR FEEDBACK (GOLD STANDARD)
+        // ========================================
         function showFeedback(feedback, optionChosen) {
             const isOptimal = feedback.is_optimal;
 
+            // Configuração baseada no tipo de decisão
+            const config = isOptimal ? {
+                headerClass: 'optimal',
+                icon: '🌟',
+                title: 'Intervenção Eficaz',
+                subtitle: 'Você demonstrou excelente julgamento clínico.'
+            } : {
+                headerClass: 'learning',
+                icon: '💡',
+                title: 'Oportunidade de Aprendizado',
+                subtitle: 'Analise o impacto para ajustar sua abordagem.'
+            };
+
             const html = `
-                <div class="feedback-title">
-                    ${isOptimal ? '✅ Excelente escolha!' : '💭 Feedback da Intervenção'}
-                </div>
-                <div class="feedback-immediate">
-                    <strong>Reação do Cliente:</strong> ${feedback.immediate}
-                </div>
-                <div class="feedback-explanation">
-                    <strong>📚 Explicação Técnica:</strong><br>
-                    ${feedback.explanation}
-                </div>
-                <div class="feedback-impact">
-                    <div class="impact-item">
-                        <div class="impact-label">Rapport</div>
-                        <div class="impact-value ${feedback.impact.rapport < 0 ? 'negative' : ''}">
-                            ${feedback.impact.rapport > 0 ? '+' : ''}${feedback.impact.rapport}
+                <div class="feedback-container">
+                    <div class="feedback-card-premium">
+                        <!-- Header Premium -->
+                        <div class="feedback-header ${config.headerClass}">
+                            <div class="feedback-badge">
+                                ${config.icon}
+                            </div>
+                            <div class="feedback-title-group">
+                                <h3>${config.title}</h3>
+                                <div class="feedback-subtitle">${config.subtitle}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="impact-item">
-                        <div class="impact-label">Insight</div>
-                        <div class="impact-value ${feedback.impact.insight < 0 ? 'negative' : ''}">
-                            ${feedback.impact.insight > 0 ? '+' : ''}${feedback.impact.insight}
-                        </div>
-                    </div>
-                    <div class="impact-item">
-                        <div class="impact-label">Mudança</div>
-                        <div class="impact-value ${feedback.impact.behavioral_change < 0 ? 'negative' : ''}">
-                            ${feedback.impact.behavioral_change > 0 ? '+' : ''}${feedback.impact.behavioral_change}
-                        </div>
-                    </div>
-                    <div class="impact-item">
-                        <div class="impact-label">Redução</div>
-                        <div class="impact-value ${feedback.impact.symptom_reduction < 0 ? 'negative' : ''}">
-                            ${feedback.impact.symptom_reduction > 0 ? '+' : ''}${feedback.impact.symptom_reduction}
+
+                        <div class="feedback-body">
+                            <!-- 1. Reação do Paciente -->
+                            <div class="client-reaction-box">
+                                <div class="reaction-label">Reação do Paciente</div>
+                                <div class="reaction-text">"${feedback.immediate}"</div>
+                            </div>
+
+                            <!-- 2. Insight do Supervisor -->
+                            <div class="supervisor-insight">
+                                <div class="supervisor-icon">👨‍⚕️ Nota de Supervisão</div>
+                                <div class="insight-content">
+                                    ${feedback.explanation}
+                                </div>
+                            </div>
+
+                            <!-- 3. Impacto Visual -->
+                            <div class="impact-section">
+                                <div class="reaction-label" style="margin-bottom: 12px;">Impacto nas Competências</div>
+                                <div class="impact-grid">
+                                    ${generateMetricCard('Rapport', feedback.impact.rapport)}
+                                    ${generateMetricCard('Insight', feedback.impact.insight)}
+                                    ${generateMetricCard('Mudança', feedback.impact.behavioral_change)}
+                                    ${generateMetricCard('Sintomas', feedback.impact.symptom_reduction)}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -717,6 +738,48 @@
             const feedbackEl = document.getElementById('feedbackSection');
             feedbackEl.innerHTML = html;
             feedbackEl.classList.add('show');
+
+            // Animar as barras de progresso após renderizar
+            setTimeout(() => animateMetrics(feedback.impact), 100);
+        }
+
+        // Helper para gerar card de métrica
+        function generateMetricCard(label, value) {
+            const isPos = value > 0;
+            const isNeg = value < 0;
+            const type = isPos ? 'positive' : (isNeg ? 'negative' : 'neutral');
+            const sign = isPos ? '+' : '';
+
+            // Largura base 50% + valor ajustado (max ~10)
+            // Ex: +5 -> 50% + 25% = 75%
+            // Ex: -3 -> 50% - 15% = 35%
+            const width = 50 + (value * 5);
+            const clampedWidth = Math.min(Math.max(width, 10), 100);
+
+            return `
+                <div class="impact-metric-card">
+                    <div class="metric-header">
+                        <span>${label}</span>
+                        <span class="metric-delta ${isPos ? 'pos' : (isNeg ? 'neg' : '')}">
+                            ${sign}${value}
+                        </span>
+                    </div>
+                    <div class="metric-bar-bg">
+                        <div class="metric-bar-fill ${type}" 
+                             style="width: 0%" 
+                             data-target-width="${clampedWidth}%">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Helper para animar métricas
+        function animateMetrics() {
+            document.querySelectorAll('.metric-bar-fill').forEach(bar => {
+                const target = bar.getAttribute('data-target-width');
+                bar.style.width = target;
+            });
         }
 
         // ========================================
