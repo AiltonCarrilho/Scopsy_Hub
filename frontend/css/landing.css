@@ -221,6 +221,25 @@
   box-shadow: var(--shadow-hover);
 }
 
+.step-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 20px;
+  color: var(--color-primary);
+  display: block;
+}
+
+.step-card-icon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 24px;
+  color: var(--color-secondary);
+  background: rgba(140, 82, 255, 0.1);
+  padding: 12px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
 .solucao-cta {
   text-align: center;
   margin-top: 48px;
