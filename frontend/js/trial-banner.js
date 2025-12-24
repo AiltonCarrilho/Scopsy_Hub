@@ -5,7 +5,7 @@
  */
 
 (() => {
-    const API_URL = 'http://localhost:3000'; // Adjust if needed or get from config
+    // API_URL vem do config.js (window.API_URL)
 
     document.addEventListener('DOMContentLoaded', () => {
         initTrialBanner();

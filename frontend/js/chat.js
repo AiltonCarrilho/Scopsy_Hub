@@ -2,7 +2,7 @@
 // CHAT.JS - SCOPSY CHAT (REST API)
 // ========================================
 
-const API_URL = 'http://localhost:3000';
+// API_URL vem do config.js (window.API_URL)
 
 // ========================================
 // CACHE DE REFERÊNCIAS DOM

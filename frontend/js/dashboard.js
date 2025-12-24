@@ -3,7 +3,8 @@
  * Proteção de rota + carregamento de dados do usuário
  */
 
-const API_URL = 'http://localhost:3000';
+// API_URL vem do config.js (window.API_URL) - carregado no HTML
+// Não redeclarar para evitar sobrescrever a configuração correta!
 
 /**
  * Formata números grandes para exibição
