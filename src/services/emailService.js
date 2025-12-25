@@ -110,7 +110,7 @@ function getWelcomeEmailHTML(name, email, temporaryPassword) {
 
                             <!-- CTA Button -->
                             <div style="text-align: center; margin: 0 0 30px 0;">
-                                <a href="https://lab.scopsy.com.br/login.html" 
+                                <a href="https://app.scopsy.com.br/login.html" 
                                    style="display: inline-block; background: linear-gradient(135deg, #8c52ff 0%, #00c2ff 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 12px rgba(140, 82, 255, 0.3);">
                                     Acessar Plataforma →
                                 </a>
