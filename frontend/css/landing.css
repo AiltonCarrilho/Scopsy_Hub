@@ -173,6 +173,24 @@
   text-align: left;
 }
 
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 30px 0;
+  text-align: left;
+}
+
+.plan-features li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.plan-features li:last-child {
+  border-bottom: none;
+}
+
 .gap-quote {
   font-size: 1.15rem;
   font-weight: 600;
@@ -191,6 +209,17 @@
   font-size: 1.3rem;
   max-width: 720px;
   margin: 0 auto;
+}
+
+/* ==== SECTION CLOSING ==== */
+.section-closing {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-top: 48px;
+  font-weight: 500;
+  opacity: 0.9;
+  line-height: 1.6;
 }
 
 /* ==== SOLUÇÃO ==== */
@@ -238,6 +267,13 @@
   padding: 12px;
   border-radius: 12px;
   display: inline-block;
+}
+
+.step-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  opacity: 0.9;
 }
 
 .solucao-cta {
