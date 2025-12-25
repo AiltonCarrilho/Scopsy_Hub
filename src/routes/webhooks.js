@@ -100,24 +100,46 @@ router.post('/kiwify', express.json(), async (req, res) => {
     const eventType = event.event || event.webhook_event_type;
 
     switch (eventType) {
+      // Compra aprovada - Ativar premium
       case 'order.approved':
       case 'order_approved':
+      case 'purchase_approved': // Kiwify pode usar este nome
         await handleOrderApproved(event);
         break;
 
+      // Assinatura cancelada - Downgrade para free
       case 'subscription.canceled':
       case 'subscription_canceled':
+      case 'subscription_cancelled': // Variação PT-BR
         await handleSubscriptionCanceled(event);
         break;
 
+      // Assinatura renovada - Manter premium
       case 'subscription.renewed':
       case 'subscription_renewed':
         await handleSubscriptionRenewed(event);
         break;
 
+      // Reembolso - Downgrade para free
       case 'order.refunded':
       case 'order_refunded':
+      case 'refund':
         await handleOrderRefunded(event);
+        break;
+
+      // Chargeback - Downgrade para free
+      case 'chargeback':
+        await handleOrderRefunded(event); // Mesmo tratamento que reembolso
+        logger.info('[WEBHOOK] Chargeback processado como reembolso');
+        break;
+
+      // Eventos que apenas logamos (não precisam ação)
+      case 'billet_created': // Boleto gerado
+      case 'pix_generated': // Pix gerado
+      case 'cart_abandoned': // Carrinho abandonado
+      case 'purchase_refused': // Compra recusada
+      case 'subscription_overdue': // Assinatura atrasada
+        logger.info('[WEBHOOK] Evento informativo recebido', { event: eventType });
         break;
 
       default:
