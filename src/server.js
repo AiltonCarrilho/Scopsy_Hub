@@ -89,7 +89,9 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
     'https://scopsy.com.br',
     'https://lab.scopsy.com.br',
     'https://app.scopsy.com.br', // Se tiver subdomínio separado
-    process.env.FRONTEND_URL
+    process.env.FRONTEND_URL,
+    // Vercel deployment URLs (para preview e produção)
+    /https:\/\/.*\.vercel\.app$/
   ].filter(Boolean)
   : [
     // 🛠️ DESENVOLVIMENTO - Portas locais comuns
@@ -138,7 +140,18 @@ app.use(cors({
       return callback(null, true);
     }
 
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    // Verificar se origin está na lista (suporta strings e regex)
+    const isAllowed = allowedOrigins.some(allowed => {
+      if (typeof allowed === 'string') {
+        return allowed === origin;
+      }
+      if (allowed instanceof RegExp) {
+        return allowed.test(origin);
+      }
+      return false;
+    });
+
+    if (isAllowed) {
       logger.info(`✅ CORS permitido: ${origin}`);
       callback(null, true);
     } else {
