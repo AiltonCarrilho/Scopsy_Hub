@@ -329,6 +329,39 @@
   border: 1px solid var(--border-light);
 }
 
+/* ==== PRICING SECTION ==== */
+.pricing-section {
+  padding: 120px 20px;
+  background: var(--bg-card);
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  max-width: 1100px;
+  margin: 60px auto 40px;
+}
+
+.pricing-card-single {
+  max-width: 500px;
+  margin: 60px auto 40px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-lg);
+  padding: 50px 40px;
+  text-align: center;
+  border: 2px solid var(--color-primary);
+  background: linear-gradient(135deg, rgba(140, 82, 255, 0.05) 0%, rgba(0, 194, 255, 0.05) 100%);
+  box-shadow: 0 8px 30px rgba(140, 82, 255, 0.15);
+  position: relative;
+  transition: var(--transition);
+}
+
+.pricing-card-single:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(140, 82, 255, 0.25);
+}
+
 /* ==== PROVA SOCIAL ==== */
 .prova-social {
   padding: 120px 20px;
