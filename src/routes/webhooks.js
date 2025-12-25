@@ -201,7 +201,7 @@ async function handleOrderApproved(event) {
       .insert({
         email: customerEmail,
         name: customerName || customerEmail.split('@')[0],
-        password: hashedPassword,
+        password_hash: hashedPassword,
         plan: 'premium',
         subscription_status: 'active',
         kiwify_customer_id: orderId,

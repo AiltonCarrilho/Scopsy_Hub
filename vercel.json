@@ -1,12 +1,16 @@
 {
     "rewrites": [
         {
+            "source": "/api/:path*",
+            "destination": "https://lab.scopsy.com.br/api/:path*"
+        },
+        {
             "source": "/",
             "destination": "/frontend/index.html"
         },
         {
-            "source": "/(.*)",
-            "destination": "/frontend/$1"
+            "source": "/:path*",
+            "destination": "/frontend/:path*"
         }
     ]
 }
