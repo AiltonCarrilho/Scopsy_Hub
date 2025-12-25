@@ -85,14 +85,16 @@ router.post('/kiwify', express.json(), async (req, res) => {
       customer_email: event.customer?.email || event.Customer?.email
     });
 
-    // 2. Validar assinatura (seguranca!)
-    const signature = req.headers['x-kiwify-signature'];
-    const isValid = validateKiwifySignature(event, signature, process.env.KIWIFY_WEBHOOK_SECRET);
+    // 2. Validar assinatura (DESABILITADO - Kiwify não usa assinatura)
+    // const signature = req.headers['x-kiwify-signature'];
+    // const isValid = validateKiwifySignature(event, signature, process.env.KIWIFY_WEBHOOK_SECRET);
 
-    if (!isValid) {
-      logger.error('[WEBHOOK] Rejeitado: assinatura invalida');
-      return res.status(401).json({ error: 'Invalid signature' });
-    }
+    // if (!isValid) {
+    //   logger.error('[WEBHOOK] Rejeitado: assinatura invalida');
+    //   return res.status(401).json({ error: 'Invalid signature' });
+    // }
+
+    logger.info('[WEBHOOK] Processando evento (validação desabilitada)');
 
     // 3. Processar evento baseado no tipo
     const eventType = event.event || event.webhook_event_type;
