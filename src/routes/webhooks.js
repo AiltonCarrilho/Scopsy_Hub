@@ -14,6 +14,7 @@ const router = express.Router();
 const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
 const logger = require('../config/logger');
+const { sendWelcomeEmail, sendCancellationEmail, generateTemporaryPassword } = require('../services/emailService');
 
 // ========================================
 // SUPABASE CLIENT
@@ -73,12 +74,10 @@ function validateKiwifySignature(payload, signature, secret) {
  * - subscription.renewed -> Manter ativo
  * - order.refunded -> Downgrade Free
  */
-router.post('/kiwify', express.raw({ type: 'application/json' }), async (req, res) => {
+router.post('/kiwify', express.json(), async (req, res) => {
   try {
-    // 1. Parse do body (vem como Buffer no express.raw)
-    const rawBody = req.body;
-    const bodyString = rawBody.toString('utf8');
-    const event = JSON.parse(bodyString);
+    // 1. Parse do body (já vem como objeto com express.json)
+    const event = req.body;
 
     logger.info('[WEBHOOK] Kiwify recebido', {
       event: event.event || event.webhook_event_type,
@@ -167,12 +166,18 @@ async function handleOrderApproved(event) {
       email: customerEmail
     });
 
+    // Gerar senha temporária
+    const temporaryPassword = generateTemporaryPassword();
+    const bcrypt = require('bcrypt');
+    const hashedPassword = await bcrypt.hash(temporaryPassword, 10);
+
     // CRIAR USUARIO automaticamente se nao existe
     const { data: newUser, error: insertError } = await supabase
       .from('users')
       .insert({
         email: customerEmail,
         name: customerName || customerEmail.split('@')[0],
+        password: hashedPassword,
         plan: 'premium',
         subscription_status: 'active',
         kiwify_customer_id: orderId,
@@ -196,6 +201,10 @@ async function handleOrderApproved(event) {
       userId: newUser.id,
       email: customerEmail
     });
+
+    // Enviar email de boas-vindas com credenciais
+    await sendWelcomeEmail(newUser, temporaryPassword);
+
     return;
   }
 
@@ -277,7 +286,8 @@ async function handleSubscriptionCanceled(event) {
     email: user.email
   });
 
-  // TODO: Enviar email de cancelamento
+  // Enviar email de cancelamento
+  await sendCancellationEmail(user);
 }
 
 /**

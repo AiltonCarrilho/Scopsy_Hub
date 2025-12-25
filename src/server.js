@@ -19,50 +19,54 @@ const logger = require('./config/logger');
 // 1. EXPRESS + SERVER
 // ========================================
 const app = express();
+
+// Trust proxy (necessário para Render/Heroku/etc)
+app.set('trust proxy', 1);
+
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: process.env.NODE_ENV === 'production'
       ? [
-          // 🔒 PRODUÇÃO - Apenas domínios oficiais
-          'https://www.scopsy.com.br',
-          'https://scopsy.com.br',
-          'https://lab.scopsy.com.br',
-          'https://app.scopsy.com.br',
-          process.env.FRONTEND_URL
-        ].filter(Boolean)
+        // 🔒 PRODUÇÃO - Apenas domínios oficiais
+        'https://www.scopsy.com.br',
+        'https://scopsy.com.br',
+        'https://lab.scopsy.com.br',
+        'https://app.scopsy.com.br',
+        process.env.FRONTEND_URL
+      ].filter(Boolean)
       : [
-          // 🛠️ DESENVOLVIMENTO - Portas locais comuns
-          'http://localhost:3000',
-          'http://localhost:3001',
-          'http://localhost:3002',
-          'http://localhost:5500',  // VSCode Live Server
-          'http://localhost:5501',
-          'http://localhost:5502',
-          'http://localhost:5503',
-          'http://localhost:5504',
-          'http://localhost:5505',
-          'http://localhost:5173',  // Vite
-          'http://localhost:8080',  // Webpack dev server
-          'http://localhost:8000',  // Python/outros
-          'http://localhost:4200',  // Angular
-          'http://127.0.0.1:3000',
-          'http://127.0.0.1:3001',
-          'http://127.0.0.1:3002',
-          'http://127.0.0.1:5500',  // VSCode Live Server
-          'http://127.0.0.1:5501',
-          'http://127.0.0.1:5502',
-          'http://127.0.0.1:5503',
-          'http://127.0.0.1:5504',
-          'http://127.0.0.1:5505',
-          'http://127.0.0.1:5173',
-          'http://127.0.0.1:8080',
-          'http://127.0.0.1:8000',
-          'http://127.0.0.1:4200',
-          'https://www.scopsy.com.br',
-          'https://scopsy.com.br',
-          process.env.FRONTEND_URL
-        ].filter(Boolean),
+        // 🛠️ DESENVOLVIMENTO - Portas locais comuns
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'http://localhost:3002',
+        'http://localhost:5500',  // VSCode Live Server
+        'http://localhost:5501',
+        'http://localhost:5502',
+        'http://localhost:5503',
+        'http://localhost:5504',
+        'http://localhost:5505',
+        'http://localhost:5173',  // Vite
+        'http://localhost:8080',  // Webpack dev server
+        'http://localhost:8000',  // Python/outros
+        'http://localhost:4200',  // Angular
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:3001',
+        'http://127.0.0.1:3002',
+        'http://127.0.0.1:5500',  // VSCode Live Server
+        'http://127.0.0.1:5501',
+        'http://127.0.0.1:5502',
+        'http://127.0.0.1:5503',
+        'http://127.0.0.1:5504',
+        'http://127.0.0.1:5505',
+        'http://127.0.0.1:5173',
+        'http://127.0.0.1:8080',
+        'http://127.0.0.1:8000',
+        'http://127.0.0.1:4200',
+        'https://www.scopsy.com.br',
+        'https://scopsy.com.br',
+        process.env.FRONTEND_URL
+      ].filter(Boolean),
     credentials: true
   }
 });
@@ -80,48 +84,48 @@ app.use(helmet({
 // CORS - RESTRITO AO DOMÍNIO (Segurança!)
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? [
-      // 🔒 PRODUÇÃO - Apenas domínios oficiais
-      'https://www.scopsy.com.br',
-      'https://scopsy.com.br',
-      'https://lab.scopsy.com.br',
-      'https://app.scopsy.com.br', // Se tiver subdomínio separado
-      process.env.FRONTEND_URL
-    ].filter(Boolean)
+    // 🔒 PRODUÇÃO - Apenas domínios oficiais
+    'https://www.scopsy.com.br',
+    'https://scopsy.com.br',
+    'https://lab.scopsy.com.br',
+    'https://app.scopsy.com.br', // Se tiver subdomínio separado
+    process.env.FRONTEND_URL
+  ].filter(Boolean)
   : [
-      // 🛠️ DESENVOLVIMENTO - Portas locais comuns
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'http://localhost:3002',
-      'http://localhost:5500',  // VSCode Live Server
-      'http://localhost:5501',
-      'http://localhost:5502',
-      'http://localhost:5503',
-      'http://localhost:5504',
-      'http://localhost:5505',
-      'http://localhost:5173',  // Vite
-      'http://localhost:8080',  // Webpack dev server
-      'http://localhost:8000',  // Python/outros
-      'http://localhost:4200',  // Angular
-      'http://127.0.0.1:3000',
-      'http://127.0.0.1:3001',
-      'http://127.0.0.1:3002',
-      'http://127.0.0.1:5500',  // VSCode Live Server
-      'http://127.0.0.1:5501',
-      'http://127.0.0.1:5502',
-      'http://127.0.0.1:5503',
-      'http://127.0.0.1:5504',
-      'http://127.0.0.1:5505',
-      'http://127.0.0.1:5173',
-      'http://127.0.0.1:8080',
-      'http://127.0.0.1:8000',
-      'http://127.0.0.1:4200',
-      'https://www.scopsy.com.br',
-      'https://scopsy.com.br',
-      process.env.FRONTEND_URL
-    ].filter(Boolean);
+    // 🛠️ DESENVOLVIMENTO - Portas locais comuns
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'http://localhost:5500',  // VSCode Live Server
+    'http://localhost:5501',
+    'http://localhost:5502',
+    'http://localhost:5503',
+    'http://localhost:5504',
+    'http://localhost:5505',
+    'http://localhost:5173',  // Vite
+    'http://localhost:8080',  // Webpack dev server
+    'http://localhost:8000',  // Python/outros
+    'http://localhost:4200',  // Angular
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001',
+    'http://127.0.0.1:3002',
+    'http://127.0.0.1:5500',  // VSCode Live Server
+    'http://127.0.0.1:5501',
+    'http://127.0.0.1:5502',
+    'http://127.0.0.1:5503',
+    'http://127.0.0.1:5504',
+    'http://127.0.0.1:5505',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:8080',
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:4200',
+    'https://www.scopsy.com.br',
+    'https://scopsy.com.br',
+    process.env.FRONTEND_URL
+  ].filter(Boolean);
 
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     // 🔓 DESENVOLVIMENTO: Permite requisições sem origin (arquivos locais, Postman, etc)
     if (!origin && process.env.NODE_ENV !== 'production') {
       logger.info('✅ CORS permitido: requisição sem origin (arquivo local ou Postman)');
