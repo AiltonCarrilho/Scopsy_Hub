@@ -173,24 +173,6 @@
   text-align: left;
 }
 
-.plan-features {
-  list-style: none;
-  padding: 0;
-  margin: 30px 0;
-  text-align: left;
-}
-
-.plan-features li {
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border-light);
-  font-size: 1rem;
-  color: var(--text-secondary);
-}
-
-.plan-features li:last-child {
-  border-bottom: none;
-}
-
 .gap-quote {
   font-size: 1.15rem;
   font-weight: 600;
@@ -209,17 +191,6 @@
   font-size: 1.3rem;
   max-width: 720px;
   margin: 0 auto;
-}
-
-/* ==== SECTION CLOSING ==== */
-.section-closing {
-  text-align: center;
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-  margin-top: 48px;
-  font-weight: 500;
-  opacity: 0.9;
-  line-height: 1.6;
 }
 
 /* ==== SOLUÇÃO ==== */
@@ -248,32 +219,6 @@
 .solucao-steps .step:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-hover);
-}
-
-.step-icon {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 20px;
-  color: var(--color-primary);
-  display: block;
-}
-
-.step-card-icon {
-  width: 56px;
-  height: 56px;
-  margin-bottom: 24px;
-  color: var(--color-secondary);
-  background: rgba(140, 82, 255, 0.1);
-  padding: 12px;
-  border-radius: 12px;
-  display: inline-block;
-}
-
-.step-card p {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  opacity: 0.9;
 }
 
 .solucao-cta {
@@ -363,39 +308,6 @@
   margin: 50px auto;
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-light);
-}
-
-/* ==== PRICING SECTION ==== */
-.pricing-section {
-  padding: 120px 20px;
-  background: var(--bg-card);
-}
-
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-  max-width: 1100px;
-  margin: 60px auto 40px;
-}
-
-.pricing-card-single {
-  max-width: 500px;
-  margin: 60px auto 40px;
-  background: var(--bg-subtle);
-  border-radius: var(--radius-lg);
-  padding: 50px 40px;
-  text-align: center;
-  border: 2px solid var(--color-primary);
-  background: linear-gradient(135deg, rgba(140, 82, 255, 0.05) 0%, rgba(0, 194, 255, 0.05) 100%);
-  box-shadow: 0 8px 30px rgba(140, 82, 255, 0.15);
-  position: relative;
-  transition: var(--transition);
-}
-
-.pricing-card-single:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(140, 82, 255, 0.25);
 }
 
 /* ==== PROVA SOCIAL ==== */
