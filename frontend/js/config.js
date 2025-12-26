@@ -39,12 +39,11 @@
             ENVIRONMENT: 'development'
         },
         production: {
-            // Frontend em app.scopsy.com.br (Vercel)
-            // Vercel faz proxy de /api/* para scopsy-hub.onrender.com
-            API_URL: 'https://app.scopsy.com.br',
+            // Backend hospedado no Render com domínio customizado
+            API_URL: 'https://lab.scopsy.com.br',
 
-            // WebSocket através do Vercel
-            WS_URL: 'wss://app.scopsy.com.br',
+            // WebSocket com protocolo seguro (wss)
+            WS_URL: 'wss://lab.scopsy.com.br',
 
             ENVIRONMENT: 'production'
         }
