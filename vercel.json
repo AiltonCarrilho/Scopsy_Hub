@@ -2,7 +2,7 @@
     "rewrites": [
         {
             "source": "/api/:path*",
-            "destination": "https://lab.scopsy.com.br/api/:path*"
+            "destination": "https://scopsy-hub.onrender.com/api/:path*"
         },
         {
             "source": "/",
