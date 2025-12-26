@@ -250,7 +250,10 @@
     </div>
 
     <script>
-        // API_URL vem do config.js (window.API_URL)
+        // Garantir que API_URL está definido (fallback se config.js falhar)
+        const API_URL = window.API_URL || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000'
+            : 'https://app.scopsy.com.br');
 
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
