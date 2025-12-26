@@ -148,44 +148,13 @@ function displayUserInfo(user) {
         }
 
         // Configurar Botão de Upgrade no Modal
-        // Shared Upgrade Handler
-        const handleUpgrade = async (e) => {
+        // Redirecionar diretamente para Kiwify
+        const handleUpgrade = (e) => {
             e.preventDefault();
-            const btn = e.currentTarget;
-            const originalText = btn.textContent;
 
-            btn.textContent = 'Processando...';
-            btn.style.opacity = '0.7';
-            btn.style.pointerEvents = 'none';
-
-            try {
-                const token = localStorage.getItem('token');
-                const res = await fetch(`${API_URL}/api/payments/create-checkout-session`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ returnUrl: window.location.href })
-                });
-
-                const data = await res.json();
-
-                if (data.url) {
-                    window.location.href = data.url;
-                } else {
-                    alert('Erro ao iniciar pagamento: ' + (data.error || 'Erro desconhecido'));
-                    btn.textContent = originalText;
-                    btn.style.opacity = '1';
-                    btn.style.pointerEvents = 'auto';
-                }
-            } catch (err) {
-                console.error('Erro de checkout:', err);
-                alert('Erro de conexão com o sistema de pagamento.');
-                btn.textContent = originalText;
-                btn.style.opacity = '1';
-                btn.style.pointerEvents = 'auto';
-            }
+            // Checkout Kiwify
+            const KIWIFY_CHECKOUT = 'https://pay.kiwify.com.br/Q10ghYM';
+            window.open(KIWIFY_CHECKOUT, '_blank');
         };
 
         // Attach to Modal Button
