@@ -57,48 +57,11 @@
         return remaining > 0 ? remaining : 0;
     }
 
-    async function handleUpgradeClick(e) {
+    function handleUpgradeClick(e) {
         e.preventDefault();
-        const btn = e.currentTarget;
-        const originalText = btn.textContent;
 
-        btn.textContent = 'Processando...';
-        btn.style.opacity = '0.7';
-        btn.style.pointerEvents = 'none';
-
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            const res = await fetch(`${API_URL}/api/payments/create-checkout-session`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            const data = await res.json();
-
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                alert('Erro ao iniciar pagamento: ' + (data.error || 'Erro desconhecido'));
-                resetBtn(btn, originalText);
-            }
-        } catch (err) {
-            console.error('Erro de checkout:', err);
-            alert('Erro de conexão com o sistema de pagamento.');
-            resetBtn(btn, originalText);
-        }
-    }
-
-    function resetBtn(btn, text) {
-        btn.textContent = text;
-        btn.style.opacity = '1';
-        btn.style.pointerEvents = 'auto';
+        // Redirecionar diretamente para checkout Kiwify
+        const KIWIFY_CHECKOUT = 'https://pay.kiwify.com.br/Q10ghYM';
+        window.open(KIWIFY_CHECKOUT, '_blank');
     }
 })();
