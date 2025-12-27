@@ -40,10 +40,10 @@
         },
         production: {
             // Backend hospedado no Render com domínio customizado
-            API_URL: 'https://lab.scopsy.com.br',
+            API_URL: 'https://app.scopsy.com.br',
 
             // WebSocket com protocolo seguro (wss)
-            WS_URL: 'wss://lab.scopsy.com.br',
+            WS_URL: 'wss://app.scopsy.com.br',
 
             ENVIRONMENT: 'production'
         }

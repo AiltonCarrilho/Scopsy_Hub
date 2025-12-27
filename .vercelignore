@@ -1,0 +1,9 @@
+node_modules
+src
+tests
+docs
+*.md
+.git
+.env
+package.json
+package-lock.json
