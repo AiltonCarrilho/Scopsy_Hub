@@ -23,12 +23,22 @@
       <div class="logo">
         <h1>Scopsy Lab<span class="registered">®</span></h1>
       </div>
+      <button class="mobile-menu-btn" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <nav class="nav">
         <a href="#recursos">Recursos</a>
         <a href="#como-funciona">Como Funciona</a>
-        <a href="dashboard.html" class="btn btn-secondary">Entrar</a>
-        <a href="signup.html" class="btn btn-primary"><span>Começar Grátis</span></a>
+        <div class="nav-buttons">
+          <a href="dashboard.html" class="btn btn-secondary">Entrar</a>
+          <a href="signup.html" class="btn btn-primary"><span>Começar Grátis</span></a>
+        </div>
       </nav>
+    </div>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay"></div>
     </div>
   </header>
 
@@ -187,38 +197,6 @@
           Não substitui supervisão ou estágio — complementa com prática ilimitada.
         </p>
       </div>
-
-      <table class="comparativo-table">
-        <thead>
-          <tr>
-            <th>Recurso</th>
-            <th>Limitações</th>
-            <th>Como Scopsy Lab Complementa</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Cursos teóricos</td>
-            <td>Foco em conceitos, pouca prática</td>
-            <td>Aplicação prática imediata</td>
-          </tr>
-          <tr>
-            <td>Supervisão</td>
-            <td>Encontros semanais/quinzenais</td>
-            <td>Prática diária ilimitada</td>
-          </tr>
-          <tr>
-            <td>Estágio clínico</td>
-            <td>Poucos casos, sem espaço para erro</td>
-            <td>Muitos casos, pode errar à vontade</td>
-          </tr>
-          <tr>
-            <td>Roleplay</td>
-            <td>Depende de disponibilidade de colegas</td>
-            <td>Disponível 24/7</td>
-          </tr>
-        </tbody>
-      </table>
 
       <div class="exemplo-renata">
         <h3>Exemplo: Jornada Clínica de 12 Sessões</h3>
@@ -387,6 +365,30 @@
         header.classList.remove('scrolled');
       }
     });
+
+    // Mobile Menu Toggle
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
+    const nav = document.querySelector('.nav');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+
+    function toggleMenu() {
+      mobileBtn.classList.toggle('active');
+      nav.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+    }
+
+    if (mobileBtn) {
+      mobileBtn.addEventListener('click', toggleMenu);
+      overlay.addEventListener('click', toggleMenu);
+
+      // Close menu when clicking links
+      document.querySelectorAll('.nav a').forEach(link => {
+        link.addEventListener('click', toggleMenu);
+      });
+    }
+
+
   </script>
 </body>
 

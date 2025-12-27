@@ -87,6 +87,14 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+/* Smooth scroll with offset for sticky header */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 a {
@@ -185,6 +193,23 @@ svg {
   background-clip: text;
 }
 
+.text-center {
+  text-align: center;
+}
+
+/* --- Spacing Utilities --- */
+.mt-xl {
+  margin-top: var(--space-xl);
+}
+
+.mt-2xl {
+  margin-top: var(--space-2xl);
+}
+
+.mb-xl {
+  margin-bottom: var(--space-xl);
+}
+
 /* --- Global Header (Standardized) --- */
 .header {
   background: var(--bg-dark);
@@ -216,7 +241,7 @@ svg {
   letter-spacing: -0.02em;
 }
 
-.registred {
+.registered {
   font-size: 0.5em;
   vertical-align: super;
   opacity: 0.7;

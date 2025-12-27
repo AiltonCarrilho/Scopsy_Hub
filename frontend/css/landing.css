@@ -37,8 +37,10 @@
 .hero {
   background: var(--bg-dark);
   color: var(--text-white);
-  padding: 140px 20px 100px;
+  padding: 120px 20px 100px;
+  padding-top: max(120px, calc(80px + env(safe-area-inset-top)));
   text-align: center;
+  margin-top: 0;
 }
 
 .hero-title {
@@ -124,6 +126,10 @@
 }
 
 /* ==== SEÇÕES GERAIS ==== */
+section {
+  scroll-margin-top: 80px;
+}
+
 .section-title {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
@@ -270,34 +276,10 @@
   color: var(--text-main);
 }
 
-/* ==== DIFERENCIAL + TABELA ==== */
+/* ==== DIFERENCIAL ==== */
 .diferencial {
   padding: 120px 20px;
   background: var(--bg-subtle);
-}
-
-.comparativo-table {
-  width: 100%;
-  max-width: 900px;
-  margin: 50px auto;
-  border-collapse: collapse;
-  font-size: 1.1rem;
-  background: var(--bg-card);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-
-.comparativo-table th,
-.comparativo-table td {
-  padding: 18px;
-  text-align: left;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.comparativo-table th {
-  background: var(--color-primary);
-  color: var(--text-white);
 }
 
 .exemplo-renata {
@@ -305,15 +287,37 @@
   padding: 40px;
   border-radius: var(--radius-md);
   max-width: 800px;
-  margin: 50px auto;
+  margin: 0 auto;
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-light);
+}
+
+.exemplo-renata h3 {
+  color: var(--text-main);
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+}
+
+.exemplo-renata p {
+  margin-bottom: 12px;
+  line-height: 1.7;
+  color: var(--text-secondary);
 }
 
 /* ==== PROVA SOCIAL ==== */
 .prova-social {
   padding: 120px 20px;
   background: var(--bg-card);
+}
+
+.credencial-fundador {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 32px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-primary);
 }
 
 .depoimentos {
@@ -426,9 +430,10 @@ details p {
 }
 
 .cta-final h2 {
-  font-size: clamp(2.2rem, 6vw, 3.5rem);
+  font-size: clamp(2rem, 6vw, 3.5rem);
   margin-bottom: 20px;
   font-weight: 800;
+  line-height: 1.2;
 }
 
 .cta-note {
@@ -438,9 +443,12 @@ details p {
 }
 
 .cta-final-subtitle {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 3vw, 1.2rem);
   margin-bottom: 40px;
   opacity: 0.95;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .cta-guarantee {
@@ -485,4 +493,286 @@ details p {
   text-align: center;
   padding-top: 30px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS UPDATES
+   ========================================================================== */
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1002;
+  padding: 0;
+}
+
+.mobile-menu-btn span {
+  width: 100%;
+  height: 2px;
+  background-color: var(--text-white);
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+
+/* ==========================================================================
+   MEDIA QUERIES (TABLET & MOBILE)
+   ========================================================================== */
+
+/* Tablet Landscape & Medium Screens */
+@media (max-width: 992px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .hero {
+    padding: 120px 20px 80px;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+  }
+
+  .gap-cards,
+  .solucao-steps,
+  .beneficios-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Adjust scroll offset for mobile */
+  html {
+    scroll-padding-top: 70px;
+  }
+
+  section {
+    scroll-margin-top: 70px;
+  }
+
+  /* Header & Navigation */
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
+    background: var(--bg-dark);
+    flex-direction: column;
+    padding: 80px 24px;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav.active {
+    right: 0;
+  }
+
+  .nav a {
+    margin: 0 0 20px 0;
+    font-size: 1.1rem;
+    display: block;
+  }
+
+  /* Hamburger Animation */
+  .mobile-menu-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -6px);
+  }
+
+  /* Buttons inside Nav */
+  .nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .nav .btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* Hero Section */
+  .hero {
+    padding: 90px 20px 60px;
+    padding-top: max(90px, calc(70px + env(safe-area-inset-top)));
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 2.5rem);
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .hero-cta-group .btn {
+    width: 100%;
+  }
+
+  /* Section Spacing */
+  section {
+    padding: 60px 20px !important;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    margin-bottom: 40px;
+  }
+
+  /* Grids */
+  .gap-cards,
+  .solucao-steps,
+  .steps-grid,
+  .beneficios-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .gap-card,
+  .step,
+  .beneficio-card {
+    padding: 24px;
+  }
+
+  /* The Gap */
+  .gap-title {
+    font-size: 1.8rem;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 60px 20px 30px;
+    text-align: left;
+  }
+
+  .footer-col {
+    margin-bottom: 30px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  /* Ensure proper touch targets (min 44px) */
+  .btn,
+  .nav a,
+  summary {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* Extra Small Devices (Small Phones) */
+@media (max-width: 480px) {
+  .hero-badge {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+  }
+
+  .hero-trust {
+    gap: 16px;
+    font-size: 0.85rem;
+  }
+
+  .step-number {
+    font-size: 2.5rem;
+  }
+
+  .btn-large {
+    padding: 14px 32px;
+    font-size: 1rem;
+  }
+
+  .gap-quote {
+    font-size: 1.05rem;
+  }
+
+  .exemplo-renata {
+    padding: 24px;
+  }
+
+  .credencial-fundador {
+    padding: 20px;
+  }
+
+  .credencial-fundador p {
+    font-size: 1rem !important;
+  }
+
+  .cta-final {
+    padding: 80px 20px;
+  }
+
+  .cta-final h2 br {
+    display: none;
+  }
+
+  /* Prevent horizontal scroll on very small screens */
+  body {
+    overflow-x: hidden;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
 }
