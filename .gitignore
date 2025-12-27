@@ -119,3 +119,5 @@ uploads/temp/
 migrations/*_seed_data.sql
 test-key.js
 SECURITY_ALERT.md
+.vercel
+.env*.local

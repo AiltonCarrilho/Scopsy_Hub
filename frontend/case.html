@@ -29,8 +29,7 @@
     </div>
   </header>
 
-  <!-- Trial Banner Container -->
-  <div class="container">
+    <!-- Banner Trial -->
     <div id="trialBanner" class="trial-banner" style="display: none;">
       <div class="trial-content">
         <i data-lucide="clock"></i>
@@ -38,7 +37,6 @@
       </div>
       <a href="#" class="btn-upgrade">Assinar Premium</a>
     </div>
-  </div>
 
   <!-- Hero -->
   <section class="hero">
@@ -142,7 +140,54 @@
   </div>
 
   <script src="js/trial-banner.js"></script>
-  <script>lucide.createIcons();</script>
+  <script>
+    // Configurar botão de upgrade para Kiwify
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnUpgrade = document.querySelector('.btn-upgrade');
+
+      if (btnUpgrade) {
+        btnUpgrade.onclick = async (e) => {
+          e.preventDefault();
+          const originalText = btnUpgrade.textContent;
+
+          btnUpgrade.textContent = 'Processando...';
+          btnUpgrade.style.opacity = '0.7';
+          btnUpgrade.style.pointerEvents = 'none';
+
+          try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URL}/api/payments/create-checkout-session`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ returnUrl: window.location.href })
+            });
+
+            const data = await res.json();
+
+            if (data.url) {
+              window.location.href = data.url;
+            } else {
+              alert('Erro ao iniciar pagamento: ' + (data.error || 'Erro desconhecido'));
+              btnUpgrade.textContent = originalText;
+              btnUpgrade.style.opacity = '1';
+              btnUpgrade.style.pointerEvents = 'auto';
+            }
+          } catch (err) {
+            console.error('Erro de checkout:', err);
+            alert('Erro de conexão com o sistema de pagamento.');
+            btnUpgrade.textContent = originalText;
+            btnUpgrade.style.opacity = '1';
+            btnUpgrade.style.pointerEvents = 'auto';
+          }
+        };
+      }
+    });
+
+    lucide.createIcons();
+  </script>
 </body>
 
 </html>
