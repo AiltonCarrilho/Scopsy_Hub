@@ -89,6 +89,9 @@ body {
   -webkit-font-smoothing: antialiased;
   padding-top: 0;
   margin-top: 0;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
 }
 
 /* Smooth scroll with offset for sticky header */
@@ -115,6 +118,7 @@ svg {
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 var(--space-md);
+  box-sizing: border-box;
 }
 
 /* --- Component: Buttons --- */
