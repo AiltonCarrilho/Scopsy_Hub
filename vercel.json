@@ -1,5 +1,19 @@
 {
+    "buildCommand": null,
+    "devCommand": null,
+    "installCommand": null,
+    "framework": null,
+    "outputDirectory": "frontend",
     "headers": [
+        {
+            "source": "/js/config.js",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=0, must-revalidate"
+                }
+            ]
+        },
         {
             "source": "/js/(.*)",
             "headers": [
