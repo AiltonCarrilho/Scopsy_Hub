@@ -578,9 +578,29 @@ details p {
     scroll-margin-top: 70px;
   }
 
+  /* Header Fix - Prevent horizontal scroll */
+  .header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+  }
+
+  .logo {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .logo h1 {
+    font-size: 1.3rem;
+    white-space: nowrap;
+  }
+
   /* Header & Navigation */
   .mobile-menu-btn {
     display: flex;
+    flex-shrink: 0;
   }
 
   .nav {
@@ -597,6 +617,7 @@ details p {
     z-index: 1001;
     box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
     border-left: 1px solid rgba(255, 255, 255, 0.1);
+    align-items: stretch;
   }
 
   .nav.active {
@@ -724,6 +745,10 @@ details p {
 
 /* Extra Small Devices (Small Phones) */
 @media (max-width: 480px) {
+  .logo h1 {
+    font-size: 1.1rem;
+  }
+
   .hero-badge {
     font-size: 0.8rem;
     padding: 5px 12px;
@@ -768,11 +793,19 @@ details p {
   }
 
   /* Prevent horizontal scroll on very small screens */
-  body {
+  html, body {
     overflow-x: hidden;
+    max-width: 100vw;
   }
 
   .container {
     padding: 0 16px;
+    max-width: 100%;
+  }
+
+  /* Ensure all sections don't cause overflow */
+  section {
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 }
