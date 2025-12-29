@@ -102,6 +102,26 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
         .eq('id', cachedCase.id)
         .then(() => console.log(`[Diagnostic] ✅ Contador atualizado`));
 
+      // 🆕 REGISTRAR VISUALIZAÇÃO (anti-repetição)
+      await supabase
+        .from('user_case_interactions')
+        .insert({
+          user_id: userId,
+          case_id: cachedCase.id,
+          is_correct: null,  // Ainda não respondeu
+          user_answer: null,
+          time_spent_seconds: 0,
+          difficulty_level: level,
+          disorder_category: category
+        })
+        .then(({ error }) => {
+          if (error) {
+            console.error('[Diagnostic] ⚠️ Erro ao registrar visualização:', error.message);
+          } else {
+            console.log('[Diagnostic] ✅ Visualização registrada (anti-repetição)');
+          }
+        });
+
       return res.json({
         success: true,
         case: cachedCase.case_content,
@@ -277,19 +297,40 @@ router.post('/submit-answer', authenticateRequest, async (req, res) => {
 
     console.log(`[Diagnostic] Resposta: user=${userId}, correct=${is_correct}`);
 
-    // Registrar interação (assíncrono para não bloquear)
+    // 🆕 TENTAR ATUALIZAR REGISTRO EXISTENTE (visualização prévia)
     supabase
       .from('user_case_interactions')
-      .insert({
-        user_id: userId,
-        case_id,
+      .update({
+        is_correct,
         user_diagnosis: user_answer,
         user_answer: user_answer,
         correct_diagnosis,
-        is_correct,
         time_spent_seconds,
-        difficulty_level: case_data.metadata?.difficulty_level || 'intermediate',
-        disorder_category: case_data.metadata?.category || 'unknown'
+        updated_at: new Date().toISOString()
+      })
+      .eq('user_id', userId)
+      .eq('case_id', case_id)
+      .is('is_correct', null)
+      .then(({ data, error }) => {
+        // Se não encontrou registro para atualizar, criar novo (fallback)
+        if (!data || data.length === 0) {
+          console.log('[Diagnostic] ℹ️ Nenhuma visualização prévia, criando novo registro');
+          return supabase
+            .from('user_case_interactions')
+            .insert({
+              user_id: userId,
+              case_id,
+              user_diagnosis: user_answer,
+              user_answer: user_answer,
+              correct_diagnosis,
+              is_correct,
+              time_spent_seconds,
+              difficulty_level: case_data.metadata?.difficulty_level || 'intermediate',
+              disorder_category: case_data.metadata?.category || 'unknown'
+            });
+        } else {
+          console.log('[Diagnostic] ✅ Visualização atualizada com resposta');
+        }
       })
       .then(() => console.log('[Diagnostic] ✅ Interação registrada'));
 

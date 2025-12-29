@@ -181,6 +181,27 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           }
         });
 
+      // 🆕 REGISTRAR VISUALIZAÇÃO (anti-repetição)
+      // Marca caso como "visto" antes de retornar para evitar repetição
+      await supabase
+        .from('user_case_interactions')
+        .insert({
+          user_id: userId,
+          case_id: selectedCase.id,
+          is_correct: null,  // Ainda não respondeu
+          user_answer: null,
+          time_spent_seconds: 0,
+          difficulty_level: level,
+          disorder_category: moment_type || disorder_category || null
+        })
+        .then(({ error }) => {
+          if (error) {
+            console.error('[Case] ⚠️ Erro ao registrar visualização:', error.message);
+          } else {
+            console.log('[Case] ✅ Visualização registrada (anti-repetição)');
+          }
+        });
+
       // RETORNO DIFERENTE para micro-momentos vs conceituação
       if (isMicroMoment) {
         // DESAFIOS: Retorna só case_content (compatibilidade)
@@ -419,10 +440,37 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
       is_correct: interactionData.is_correct
     });
 
-    const { data: savedInteraction, error: interError } = await supabase
+    // 🆕 TENTAR ATUALIZAR REGISTRO EXISTENTE (visualização prévia)
+    const { data: updatedInteraction, error: updateError } = await supabase
       .from('user_case_interactions')
-      .insert(interactionData)
+      .update({
+        is_correct: interactionData.is_correct,
+        user_answer: interactionData.user_answer,
+        correct_diagnosis: interactionData.correct_diagnosis,
+        time_spent_seconds: interactionData.time_spent_seconds,
+        updated_at: new Date().toISOString()
+      })
+      .eq('user_id', userId)
+      .eq('case_id', interactionData.case_id)
+      .is('is_correct', null)  // Só atualizar se ainda não foi respondido
       .select();
+
+    let savedInteraction = updatedInteraction;
+    let interError = updateError;
+
+    // Se não encontrou registro para atualizar, criar novo (fallback)
+    if (!updatedInteraction || updatedInteraction.length === 0) {
+      console.log('[Case] ℹ️ Nenhuma visualização prévia encontrada, criando novo registro');
+      const { data: insertedInteraction, error: insertError } = await supabase
+        .from('user_case_interactions')
+        .insert(interactionData)
+        .select();
+
+      savedInteraction = insertedInteraction;
+      interError = insertError;
+    } else {
+      console.log('[Case] ✅ Registro de visualização atualizado com resposta');
+    }
 
     if (interError) {
       console.error('[Case] ❌ ERRO ao salvar interação:', interError.message);
