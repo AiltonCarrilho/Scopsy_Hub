@@ -187,7 +187,7 @@ function hidePremiumTrialWarnings() {
 // ========================================
 
 async function generateNewMoment() {
-    document.getElementById('momentContainer').innerHTML = '<div class="loading">Gerando momento crítico...</div>';
+    document.getElementById('momentContainer').innerHTML = '<div class="loading">🔍 Carregando caso...</div>';
     document.getElementById('feedbackContainer').innerHTML = '';
 
     try {

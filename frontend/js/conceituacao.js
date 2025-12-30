@@ -238,10 +238,10 @@ async function generateCustomCase() {
 
 async function generateCase(config) {
     try {
-        console.log('📋 Gerando caso:', config);
+        console.log('📋 Carregando caso:', config);
 
         document.getElementById('caseContainer').innerHTML =
-            '<div class="loading"><div class="spinner"></div><p>Gerando caso clínico personalizado...</p></div>';
+            '<div class="loading"><div class="spinner"></div><p>🔍 Carregando caso clínico...</p></div>';
         document.getElementById('feedbackContainer').innerHTML = '';
 
         const token = localStorage.getItem('token');

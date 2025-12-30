@@ -132,16 +132,20 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       }
     }
 
-    // CRÍTICO: Filtrar casos já vistos - SINTAXE CORRETA do Supabase
-    if (seenCaseIds.length > 0) {
-      // Passar array direto (Supabase cuida da formatação SQL)
-      casesQuery = casesQuery.not('id', 'in', `(${seenCaseIds.join(',')})`);
-      console.log(`[Case] 🚫 Filtrando ${seenCaseIds.length} IDs já vistos`);
+    // Buscar TODOS os casos que atendem critérios (SEM filtrar vistos ainda)
+    const { data: allCases, error: queryError } = await casesQuery
+      .order('times_used', { ascending: true });
+
+    // Filtrar casos já vistos DEPOIS da query (mais confiável)
+    let availableCases = allCases || [];
+    if (seenCaseIds.length > 0 && availableCases.length > 0) {
+      const beforeFilter = availableCases.length;
+      availableCases = availableCases.filter(c => !seenCaseIds.includes(c.id));
+      console.log(`[Case] 🚫 Filtrou ${beforeFilter - availableCases.length} casos já vistos (${availableCases.length} disponíveis)`);
     }
 
-    const { data: availableCases, error: queryError } = await casesQuery
-      .order('times_used', { ascending: true })
-      .limit(10);
+    // Limitar a 10 casos
+    availableCases = availableCases.slice(0, 10);
 
     if (queryError) {
       console.error('[Case] ❌ Erro na query:', queryError.message);
