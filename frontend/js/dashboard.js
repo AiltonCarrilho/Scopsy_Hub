@@ -683,6 +683,13 @@ async function loadMissions() {
         const res = await fetch(`${API_URL}/missions`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
+
+        // ✅ Verificar se resposta é JSON válido
+        if (!res.ok) {
+            console.log('[Missions] Rota não disponível ainda (404)');
+            return;
+        }
+
         const data = await res.json();
 
         if (data.success && data.missions) {
@@ -807,6 +814,13 @@ async function loadStreak() {
         const res = await fetch(`${API_URL}/streaks`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
+
+        // ✅ Verificar se resposta é JSON válido
+        if (!res.ok) {
+            console.log('[Streaks] Rota não disponível ainda (404)');
+            return;
+        }
+
         const data = await res.json();
 
         if (data.success && data.streak) {
