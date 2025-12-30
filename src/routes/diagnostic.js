@@ -61,14 +61,19 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
       .eq('category', category);
 
     // Filtrar casos já vistos
-    if (seenCaseIds.length > 0) {
-      casesQuery = casesQuery.not('id', 'in', `(${seenCaseIds.join(',')})`);
-      console.log(`[Diagnostic] 🚫 Filtrando ${seenCaseIds.length} IDs já vistos`);
+    // Buscar TODOS os casos (filtrar vistos DEPOIS)
+    const { data: allCases, error: queryError } = await casesQuery
+      .order('times_used', { ascending: true });
+
+    // Filtrar casos já vistos
+    let availableCases = allCases || [];
+    if (seenCaseIds.length > 0 && availableCases.length > 0) {
+      const beforeFilter = availableCases.length;
+      availableCases = availableCases.filter(c => !seenCaseIds.includes(c.id));
+      console.log(`[Diagnostic] 🚫 Filtrou ${beforeFilter - availableCases.length} casos já vistos (${availableCases.length} disponíveis)`);
     }
 
-    const { data: availableCases, error: queryError } = await casesQuery
-      .order('times_used', { ascending: true })
-      .limit(10);
+    availableCases = availableCases.slice(0, 10);
 
     if (queryError) {
       console.error('[Diagnostic] ❌ Erro na query:', queryError.message);

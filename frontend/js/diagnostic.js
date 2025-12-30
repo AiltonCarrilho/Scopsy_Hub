@@ -134,7 +134,7 @@ async function fetchStatsAndRender(panel, isTrial) {
 // ========================================
 async function generateNewCase() {
     try {
-        document.getElementById('caseContainer').innerHTML = '<div class="loading">⏳ Gerando caso diagnóstico...<br><small>Isso pode levar 10-15 segundos</small></div>';
+        document.getElementById('caseContainer').innerHTML = '<div class="loading">🔍 Carregando caso diagnóstico...</div>';
         document.getElementById('feedbackContainer').innerHTML = '';
 
         const token = localStorage.getItem('token');
