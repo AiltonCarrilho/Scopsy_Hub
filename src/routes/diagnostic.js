@@ -369,7 +369,8 @@ router.post('/submit-answer', authenticateRequest, async (req, res) => {
       // NÃO quebra o fluxo - feedback é mais importante
     }
 
-    const xpGained = is_correct ? 30 : 10;
+    // ✅ Usar valores REAIS que são salvos no banco
+    const xpGained = is_correct ? 5 : 1; // Diagnóstico: +5 acerto, +1 erro
 
     // ⚡ Feedback RÁPIDO com gpt-4o-mini
     let feedback = null;
