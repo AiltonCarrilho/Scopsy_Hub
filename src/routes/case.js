@@ -495,7 +495,8 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
     }
 
     // XP (legacy - agora são cognits)
-    const xpGained = is_correct ? 40 : 15;
+    // ✅ Usar valores REAIS que são salvos no banco
+    const xpGained = is_correct ? 8 : 2; // Desafios: +8 acerto, +2 erro
 
     // Feedback estruturado
     const feedback = {
