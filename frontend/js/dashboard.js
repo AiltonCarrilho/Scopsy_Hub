@@ -506,32 +506,22 @@ async function populateCompactMetrics() {
             return;
         }
 
-        // Buscar progresso
-        const progressRes = await fetch(`${API_URL}/api/progress/summary`, {
+        // Buscar progresso (inclui cognits, freshness, streak)
+        const progressRes = await fetch(`${API_URL}/progress/summary`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
         if (progressRes.ok) {
             const data = await progressRes.json();
-            const totalCognits = data.total_cognits || 0;
-            document.getElementById('cognitsMini').textContent = formatNumber(totalCognits);
+
+            // ✅ Freshness/Vigor (pegar do user no localStorage)
+            const userFreshness = user.freshness_multiplier || 1.0;
+            document.getElementById('freshnessMini').textContent = Math.round(userFreshness * 100) + '%';
+
+            // ✅ Streak (pegar do user)
+            const streakDays = user.streak_days || 0;
+            document.getElementById('streakMini').textContent = streakDays;
         }
-
-        // Buscar vigor
-        const freshnessRes = await fetch(`${API_URL}/api/freshness/status`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (freshnessRes.ok) {
-            const data = await freshnessRes.json();
-            if (data.success && data.freshness) {
-                document.getElementById('freshnessMini').textContent = data.freshness.percentage + '%';
-            }
-        }
-
-        // Streak (calculado localmente ou via API)
-        const streakDays = user.streak_days || 0;
-        document.getElementById('streakMini').textContent = streakDays;
 
         // Mostrar container
         container.style.display = 'flex';
