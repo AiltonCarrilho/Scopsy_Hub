@@ -121,3 +121,37 @@ test-key.js
 SECURITY_ALERT.md
 .vercel
 .env*.local
+
+# ==========================================
+# SISTEMA DE REVISÃO - Dados e Exports
+# ==========================================
+# Backups de casos
+backup-*.json
+backup-cases-*.json
+
+# Análises e relatórios gerados
+analise-*.json
+relatorio-*.json
+review-results.json
+review-report.html
+tracking-*.csv
+
+# Exports de casos
+casos-expert-*.json
+casos-expert-*.csv
+casos-expert-*.txt
+casos-para-*.csv
+
+# Scripts temporários (one-off)
+check-*.js
+fix-*.js
+test-*.js
+diagnose-*.js
+investigate-*.js
+
+# SQL scripts de deleção específica (não reutilizáveis)
+sql-delete-*.sql
+sql-mark-*.sql
+
+# Windows NUL file
+NUL
