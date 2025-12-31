@@ -399,10 +399,19 @@ TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
     });
 
   } catch (error) {
-    console.error('[Case] ❌ Erro:', error);
+    console.error('[Case] ❌ ERRO COMPLETO:', error);
+    console.error('[Case] ❌ Stack:', error.stack);
+    console.error('[Case] ❌ Message:', error.message);
+
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+      debug: {
+        hasOpenAIKey: !!process.env.OPENAI_API_KEY,
+        hasSupabaseURL: !!process.env.SUPABASE_URL,
+        nodeEnv: process.env.NODE_ENV
+      }
     });
   }
 });
