@@ -218,7 +218,9 @@ app.get('/health', (req, res) => {
   res.json({
     status: 'OK',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    commit: 'a40e01b',
+    message: 'Deploy revertido - geração deve funcionar'
   });
 });
 
