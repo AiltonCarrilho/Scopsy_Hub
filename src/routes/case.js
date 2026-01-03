@@ -1,4 +1,5 @@
 const express = require('express');
+const logger = require('../config/logger');
 const router = express.Router();
 const OpenAI = require('openai');
 const { createClient } = require('@supabase/supabase-js');
@@ -67,10 +68,10 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     const isMicroMoment = moment_type !== null;
     const isConceptualization = category === 'clinical_moment';
 
-    console.log(`\n[Case] ${isMicroMoment ? '🎬 Micro-momento' : '📋 Conceituação'}: ${moment_type || category}, level=${level}, disorder=${disorder_category || 'qualquer'}, user=${userId}`);
+    logger.debug(`\n[Case] ${isMicroMoment ? '🎬 Micro-momento' : '📋 Conceituação'}: ${moment_type || category}, level=${level}, disorder=${disorder_category || 'qualquer'}, user=${userId}`);
 
     if (isConceptualization) {
-      console.log('[Case] 📚 Filtrando apenas casos de conceituação completos (vinhetas 300-400 palavras)');
+      logger.debug('[Case] 📚 Filtrando apenas casos de conceituação completos (vinhetas 300-400 palavras)');
     }
 
     // 1️⃣ BUSCAR MICRO-MOMENTOS QUE O USUÁRIO JÁ VIU
@@ -119,11 +120,11 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           .filter(id => id != null)  // ← CRÍTICO: Remove null/undefined para evitar erro SQL
       : [];
 
-    console.log(`[Case] 👁️ Usuário já viu: ${seenCaseIds.length} micro-momentos`);
+    logger.debug(`[Case] 👁️ Usuário já viu: ${seenCaseIds.length} micro-momentos`);
     if (seenCaseIds.length > 0) {
-      console.log(`[Case] 📋 Últimos 5 IDs vistos:`);
+      logger.debug(`[Case] 📋 Últimos 5 IDs vistos:`);
       interactions.slice(0, 5).forEach((inter, idx) => {
-        console.log(`  ${idx + 1}. ${inter.case_id} (${inter.created_at})`);
+        logger.debug(`  ${idx + 1}. ${inter.case_id} (${inter.created_at})`);
       });
     }
 
@@ -159,7 +160,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
         if (patterns && patterns.length > 0) {
           // Usar primeiro padrão (mais genérico)
           casesQuery = casesQuery.ilike('disorder', `%${patterns[0]}%`);
-          console.log(`[Case] 🎯 Filtrando por categoria: ${disorder_category} (padrão: ${patterns[0]})`);
+          logger.debug(`[Case] 🎯 Filtrando por categoria: ${disorder_category} (padrão: ${patterns[0]})`);
         }
       }
     }
@@ -184,7 +185,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
 
     if (seenCaseIds.length > 0) {
       casesQuery = casesQuery.not('id', 'in', `(${seenCaseIds.join(',')})`);
-      console.log(`[Case] 🚫 SQL Filter: Excluindo ${seenCaseIds.length} casos já vistos`);
+      logger.debug(`[Case] 🚫 SQL Filter: Excluindo ${seenCaseIds.length} casos já vistos`);
     }
 
     // Buscar apenas 10 casos JÁ FILTRADOS pelo SQL (eficiente!)
@@ -197,11 +198,11 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       console.error('[Case] ❌ Detalhes:', queryError);
     }
 
-    console.log(`[Case] 📦 Casos disponíveis no cache: ${availableCases ? availableCases.length : 0}`);
+    logger.debug(`[Case] 📦 Casos disponíveis no cache: ${availableCases ? availableCases.length : 0}`);
     if (availableCases && availableCases.length > 0) {
-      console.log(`[Case] 📋 IDs disponíveis (top 5):`);
+      logger.debug(`[Case] 📋 IDs disponíveis (top 5):`);
       availableCases.slice(0, 5).forEach((c, idx) => {
-        console.log(`  ${idx + 1}. ${c.id} (usado ${c.times_used}x)`);
+        logger.debug(`  ${idx + 1}. ${c.id} (usado ${c.times_used}x)`);
       });
     }
 
@@ -213,7 +214,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       const topCases = availableCases.slice(0, Math.min(3, availableCases.length));
       selectedCase = topCases[Math.floor(Math.random() * topCases.length)];
 
-      console.log(`[Case] ✅ Caso do cache selecionado (id: ${selectedCase.id}, usado ${selectedCase.times_used}x)`);
+      logger.debug(`[Case] ✅ Caso do cache selecionado (id: ${selectedCase.id}, usado ${selectedCase.times_used}x)`);
 
       // Incrementar contador (assíncrono - não bloqueia resposta)
       supabase
@@ -226,7 +227,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           if (error) {
             console.error('[Case] ❌ Erro ao atualizar contador:', error.message);
           } else {
-            console.log(`[Case] ✅ Contador atualizado`);
+            logger.debug(`[Case] ✅ Contador atualizado`);
           }
         });
 
@@ -247,7 +248,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           if (error) {
             console.error('[Case] ⚠️ Erro ao registrar visualização:', error.message);
           } else {
-            console.log('[Case] ✅ Visualização registrada (anti-repetição)');
+            logger.debug('[Case] ✅ Visualização registrada (anti-repetição)');
           }
         });
 
@@ -288,13 +289,13 @@ ${cm.non_verbal || 'Não registrado'}
 
 TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
 
-              console.log('[Case] ✅ Vinheta montada a partir de micro-momento');
+              logger.debug('[Case] ✅ Vinheta montada a partir de micro-momento');
             } else {
-              console.log('[Case] ⚠️ Caso sem vinheta e sem dados de micro-momento');
+              logger.debug('[Case] ⚠️ Caso sem vinheta e sem dados de micro-momento');
             }
           }
         } else {
-          console.log('[Case] ✅ Usando vinheta completa do banco');
+          logger.debug('[Case] ✅ Usando vinheta completa do banco');
         }
 
         return res.json({
@@ -310,7 +311,7 @@ TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
 
     // Para CONCEITUAÇÃO: Não gerar on-demand, retornar mensagem
     if (isConceptualization) {
-      console.log('[Case] ⚠️ Nenhum caso de conceituação disponível para estes critérios');
+      logger.debug('[Case] ⚠️ Nenhum caso de conceituação disponível para estes critérios');
       return res.status(404).json({
         success: false,
         error: 'Nenhum caso disponível',
@@ -320,7 +321,7 @@ TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
     }
 
     // Para MICRO-MOMENTOS: Gerar on-demand
-    console.log('[Case] ⏳ Cache vazio - Gerando novo micro-momento...');
+    logger.debug('[Case] ⏳ Cache vazio - Gerando novo micro-momento...');
 
     const momentInfo = MOMENTOS_CRITICOS[moment_type] || MOMENTOS_CRITICOS['resistencia_tecnica'];
 
@@ -411,7 +412,7 @@ NÍVEL ${level}: ${level === 'basic' ? 'Padrão claro' : level === 'intermediate
     if (insertError) {
       console.error('[Case] Erro ao salvar:', insertError);
     } else {
-      console.log(`[Case] ✅ Novo micro-momento salvo (id: ${newCase.id})`);
+      logger.debug(`[Case] ✅ Novo micro-momento salvo (id: ${newCase.id})`);
     }
 
     // MONTAR VINHETA COMPLETA para retorno
@@ -477,7 +478,7 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
 
     const is_correct = user_choice === case_data.expert_choice;
 
-    console.log(`\n[Case] 📊 Análise: user=${userId}, escolha=${user_choice}, expert=${case_data.expert_choice}, correto=${is_correct}`);
+    logger.debug(`\n[Case] 📊 Análise: user=${userId}, escolha=${user_choice}, expert=${case_data.expert_choice}, correto=${is_correct}`);
 
     // CRÍTICO: Salvar interação
     const interactionData = {
@@ -492,7 +493,7 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
       // user_analysis removido temporariamente - verificar schema
     };
 
-    console.log(`[Case] 💾 Salvando interação:`, {
+    logger.debug(`[Case] 💾 Salvando interação:`, {
       user_id: interactionData.user_id,
       case_id: interactionData.case_id,
       is_correct: interactionData.is_correct
@@ -518,7 +519,7 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
 
     // Se não encontrou registro para atualizar, criar novo (fallback)
     if (!updatedInteraction || updatedInteraction.length === 0) {
-      console.log('[Case] ℹ️ Nenhuma visualização prévia encontrada, criando novo registro');
+      logger.debug('[Case] ℹ️ Nenhuma visualização prévia encontrada, criando novo registro');
       const { data: insertedInteraction, error: insertError } = await supabase
         .from('user_case_interactions')
         .insert(interactionData)
@@ -527,7 +528,7 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
       savedInteraction = insertedInteraction;
       interError = insertError;
     } else {
-      console.log('[Case] ✅ Registro de visualização atualizado com resposta');
+      logger.debug('[Case] ✅ Registro de visualização atualizado com resposta');
     }
 
     if (interError) {
@@ -535,14 +536,14 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
       console.error('[Case] ❌ Detalhes:', interError);
       console.error('[Case] ❌ Dados enviados:', interactionData);
     } else {
-      console.log('[Case] ✅ Interação salva com ID:', savedInteraction[0]?.id);
+      logger.debug('[Case] ✅ Interação salva com ID:', savedInteraction[0]?.id);
     }
 
     // ✅ Atualizar progresso (NÃO quebra se falhar)
     try {
-      console.log('[Case] 🔄 Atualizando progresso do usuário...');
+      logger.debug('[Case] 🔄 Atualizando progresso do usuário...');
       await updateUserProgress(userId, 'case', is_correct);
-      console.log('[Case] ✅ Progresso atualizado');
+      logger.debug('[Case] ✅ Progresso atualizado');
     } catch (progressError) {
       console.error('[Case] ⚠️ AVISO: Erro ao atualizar progresso, mas continuando...', progressError.message);
       // NÃO quebra o fluxo - feedback é mais importante
@@ -610,7 +611,7 @@ router.post('/conceptualize', authenticateRequest, async (req, res) => {
     } = req.body;
     const userId = req.user.userId;
 
-    console.log(`\n[Case] 🧩 Analisando conceituação: user=${userId}`);
+    logger.debug(`\n[Case] 🧩 Analisando conceituação: user=${userId}`);
 
     // Montar vinheta se for caso de micro-momento
     let vignetteText = case_data.vignette || case_data.clinical_content?.vignette;
@@ -635,7 +636,7 @@ ${cm.non_verbal || 'Não registrado'}
 
 TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
 
-      console.log('[Case] ✅ Vinheta montada a partir de case_content');
+      logger.debug('[Case] ✅ Vinheta montada a partir de case_content');
     }
 
     // Registrar interação (sem user_analysis por enquanto)
@@ -649,7 +650,7 @@ TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
         disorder_category: 'conceptualization'
         // user_analysis: JSON.stringify(conceptualization) - verificar schema
       })
-      .then(() => console.log('[Case] ✅ Conceituação registrada'));
+      .then(() => logger.debug('[Case] ✅ Conceituação registrada'));
 
     // Feedback formativo com gpt-4o
     const feedbackCompletion = await openai.chat.completions.create({
@@ -701,7 +702,7 @@ Forneça feedback formativo em JSON.`
     let feedback;
     try {
       const responseText = feedbackCompletion.choices[0].message.content;
-      console.log('[Case] 📝 Resposta OpenAI recebida');
+      logger.debug('[Case] 📝 Resposta OpenAI recebida');
       feedback = JSON.parse(responseText);
     } catch (parseError) {
       console.error('[Case] ❌ Erro ao fazer parse do feedback:', parseError.message);
@@ -718,9 +719,9 @@ Forneça feedback formativo em JSON.`
 
     // ✅ Atualizar progresso (NÃO quebra se falhar)
     try {
-      console.log('[Case] 🔄 Atualizando progresso (conceituação)...');
+      logger.debug('[Case] 🔄 Atualizando progresso (conceituação)...');
       await updateUserProgress(userId, 'case_conceptualization', null);
-      console.log('[Case] ✅ Progresso de conceituação atualizado');
+      logger.debug('[Case] ✅ Progresso de conceituação atualizado');
     } catch (progressError) {
       console.error('[Case] ⚠️ AVISO: Erro ao atualizar progresso, mas continuando...', progressError.message);
       // NÃO quebra o fluxo - feedback é mais importante
@@ -765,7 +766,7 @@ router.get('/moment-types', authenticateRequest, async (req, res) => {
 // ========================================
 async function updateUserProgress(userId, assistantType, isCorrect) {
   try {
-    console.log(`\n[updateUserProgress] 🎯 INICIANDO:`, { userId, assistantType, isCorrect });
+    logger.debug(`\n[updateUserProgress] 🎯 INICIANDO:`, { userId, assistantType, isCorrect });
 
     const { data: existing, error: selectError } = await supabase
       .from('user_progress')
@@ -793,11 +794,11 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
 
     // 💧 APLICAR MULTIPLICADOR DE FRESCOR (atualiza last_practice_date e recupera frescor gradualmente)
     const finalCognits = await applyFreshnessMultiplier(userId, baseCognits);
-    console.log(`[updateUserProgress] 💧 Frescor aplicado: ${baseCognits} × multiplicador = ${finalCognits} cognits`);
+    logger.debug(`[updateUserProgress] 💧 Frescor aplicado: ${baseCognits} × multiplicador = ${finalCognits} cognits`);
 
     if (existing) {
-      console.log('[updateUserProgress] 📝 Registro existe, atualizando...');
-      console.log('[updateUserProgress] 📊 ANTES:', {
+      logger.debug('[updateUserProgress] 📝 Registro existe, atualizando...');
+      logger.debug('[updateUserProgress] 📊 ANTES:', {
         total_cases: existing.total_cases,
         correct_diagnoses: existing.correct_diagnoses,
         cognits: existing.cognits
@@ -810,7 +811,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
         last_activity_date: new Date().toISOString().split('T')[0]
       };
 
-      console.log('[updateUserProgress] 📊 DEPOIS:', newData);
+      logger.debug('[updateUserProgress] 📊 DEPOIS:', newData);
 
       const { error: updateError } = await supabase
         .from('user_progress')
@@ -822,9 +823,9 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
         throw updateError;
       }
 
-      console.log('[updateUserProgress] ✅ ATUALIZADO COM SUCESSO!');
+      logger.debug('[updateUserProgress] ✅ ATUALIZADO COM SUCESSO!');
     } else {
-      console.log('[updateUserProgress] ➕ Registro NÃO existe, criando novo...');
+      logger.debug('[updateUserProgress] ➕ Registro NÃO existe, criando novo...');
 
       const newData = {
         user_id: userId,
@@ -835,7 +836,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
         last_activity_date: new Date().toISOString().split('T')[0]
       };
 
-      console.log('[updateUserProgress] 📊 CRIANDO:', newData);
+      logger.debug('[updateUserProgress] 📊 CRIANDO:', newData);
 
       const { error: insertError } = await supabase
         .from('user_progress')
@@ -846,7 +847,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
         throw insertError;
       }
 
-      console.log('[updateUserProgress] ✅ CRIADO COM SUCESSO!');
+      logger.debug('[updateUserProgress] ✅ CRIADO COM SUCESSO!');
     }
   } catch (error) {
     console.error('[updateUserProgress] ❌ ERRO:', error.message);
@@ -866,9 +867,9 @@ router.get('/series', authenticateRequest, async (req, res) => {
       disorder_category
     } = req.query;
 
-    console.log(`\n[Case Series] 📚 Listando séries disponíveis`);
-    if (difficulty_level) console.log(`   Filtro: difficulty=${difficulty_level}`);
-    if (disorder_category) console.log(`   Filtro: category=${disorder_category}`);
+    logger.debug(`\n[Case Series] 📚 Listando séries disponíveis`);
+    if (difficulty_level) logger.debug(`   Filtro: difficulty=${difficulty_level}`);
+    if (disorder_category) logger.debug(`   Filtro: category=${disorder_category}`);
 
     let query = supabase
       .from('case_series')
@@ -904,7 +905,7 @@ router.get('/series', authenticateRequest, async (req, res) => {
       };
     }));
 
-    console.log(`[Case Series] ✅ ${series.length} séries encontradas\n`);
+    logger.debug(`[Case Series] ✅ ${series.length} séries encontradas\n`);
 
     res.json({
       success: true,
@@ -930,7 +931,7 @@ router.get('/series/:series_id/next', authenticateRequest, async (req, res) => {
     const { series_id } = req.params;
     const userId = req.user.userId;
 
-    console.log(`\n[Case Series] 🎬 Próximo episódio da série ${series_id}, user=${userId}`);
+    logger.debug(`\n[Case Series] 🎬 Próximo episódio da série ${series_id}, user=${userId}`);
 
     // 1. Buscar série
     const { data: series, error: seriesError } = await supabase
@@ -947,7 +948,7 @@ router.get('/series/:series_id/next', authenticateRequest, async (req, res) => {
       });
     }
 
-    console.log(`[Case Series] 📚 Série: ${series.series_name}`);
+    logger.debug(`[Case Series] 📚 Série: ${series.series_name}`);
 
     // 2. Buscar episódios já vistos pelo usuário
     const { data: seenEpisodes } = await supabase
@@ -958,7 +959,7 @@ router.get('/series/:series_id/next', authenticateRequest, async (req, res) => {
 
     const seenCaseIds = seenEpisodes ? seenEpisodes.map(e => e.case_id) : [];
 
-    console.log(`[Case Series] 👁️ Usuário já viu ${seenCaseIds.length} episódios desta série`);
+    logger.debug(`[Case Series] 👁️ Usuário já viu ${seenCaseIds.length} episódios desta série`);
 
     // 3. Buscar próximo episódio não visto
     let query = supabase
@@ -977,7 +978,7 @@ router.get('/series/:series_id/next', authenticateRequest, async (req, res) => {
     if (episodesError) throw episodesError;
 
     if (!episodes || episodes.length === 0) {
-      console.log(`[Case Series] 🏁 Todos os episódios já foram vistos!`);
+      logger.debug(`[Case Series] 🏁 Todos os episódios já foram vistos!`);
       return res.json({
         success: true,
         completed: true,
@@ -988,7 +989,7 @@ router.get('/series/:series_id/next', authenticateRequest, async (req, res) => {
 
     const nextEpisode = episodes[0];
 
-    console.log(`[Case Series] ✅ Próximo episódio: #${nextEpisode.episode_number} - ${nextEpisode.episode_title}`);
+    logger.debug(`[Case Series] ✅ Próximo episódio: #${nextEpisode.episode_number} - ${nextEpisode.episode_title}`);
 
     // Incrementar contador (assíncrono)
     supabase
@@ -1032,7 +1033,7 @@ router.get('/series/:series_id/progress', authenticateRequest, async (req, res) 
     const { series_id } = req.params;
     const userId = req.user.userId;
 
-    console.log(`\n[Case Series] 📊 Progresso na série ${series_id}, user=${userId}`);
+    logger.debug(`\n[Case Series] 📊 Progresso na série ${series_id}, user=${userId}`);
 
     // Buscar série
     const { data: series } = await supabase
@@ -1072,7 +1073,7 @@ router.get('/series/:series_id/progress', authenticateRequest, async (req, res) 
     const completed = progress.filter(p => p.completed).length;
     const total = allEpisodes.length;
 
-    console.log(`[Case Series] ✅ Progresso: ${completed}/${total} episódios`);
+    logger.debug(`[Case Series] ✅ Progresso: ${completed}/${total} episódios`);
 
     res.json({
       success: true,

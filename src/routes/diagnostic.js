@@ -1,4 +1,5 @@
 const express = require('express');
+const logger = require('../config/logger');
 const router = express.Router();
 const OpenAI = require('openai');
 const { createClient } = require('@supabase/supabase-js');
@@ -28,7 +29,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
 
     const userId = req.user.userId;
 
-    console.log(`[Diagnostic] Buscando caso: level=${level}, category=${category}, user=${userId}`);
+    logger.debug(`[Diagnostic] Buscando caso: level=${level}, category=${category}, user=${userId}`);
 
     // 1️⃣ BUSCAR CASOS QUE O USUÁRIO JÁ VIU
     const { data: interactions, error: interError } = await supabase
@@ -62,11 +63,11 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
           .filter(id => id != null)  // ← CRÍTICO: Remove null/undefined
       : [];
 
-    console.log(`[Diagnostic] 👁️ Usuário já viu: ${seenCaseIds.length} casos diagnósticos`);
+    logger.debug(`[Diagnostic] 👁️ Usuário já viu: ${seenCaseIds.length} casos diagnósticos`);
     if (seenCaseIds.length > 0) {
-      console.log(`[Diagnostic] 📋 Últimos 5 IDs vistos:`);
+      logger.debug(`[Diagnostic] 📋 Últimos 5 IDs vistos:`);
       interactions.slice(0, 5).forEach((inter, idx) => {
-        console.log(`  ${idx + 1}. ${inter.case_id} (${inter.created_at})`);
+        logger.debug(`  ${idx + 1}. ${inter.case_id} (${inter.created_at})`);
       });
     }
 
@@ -81,7 +82,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
     // 🎯 Filtro SQL otimizado - NOT IN executado no PostgreSQL
     if (seenCaseIds.length > 0) {
       casesQuery = casesQuery.not('id', 'in', `(${seenCaseIds.join(',')})`);
-      console.log(`[Diagnostic] 🚫 SQL Filter: Excluindo ${seenCaseIds.length} casos já vistos`);
+      logger.debug(`[Diagnostic] 🚫 SQL Filter: Excluindo ${seenCaseIds.length} casos já vistos`);
     }
 
     // Buscar apenas 10 casos JÁ FILTRADOS pelo SQL (eficiente!)
@@ -93,11 +94,11 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
       console.error('[Diagnostic] ❌ Erro na query:', queryError.message);
     }
 
-    console.log(`[Diagnostic] 📦 Casos disponíveis no cache: ${availableCases ? availableCases.length : 0}`);
+    logger.debug(`[Diagnostic] 📦 Casos disponíveis no cache: ${availableCases ? availableCases.length : 0}`);
     if (availableCases && availableCases.length > 0) {
-      console.log(`[Diagnostic] 📋 IDs disponíveis (top 5):`);
+      logger.debug(`[Diagnostic] 📋 IDs disponíveis (top 5):`);
       availableCases.slice(0, 5).forEach((c, idx) => {
-        console.log(`  ${idx + 1}. ${c.id} (usado ${c.times_used}x)`);
+        logger.debug(`  ${idx + 1}. ${c.id} (usado ${c.times_used}x)`);
       });
     }
 
@@ -109,7 +110,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
       const topCases = availableCases.slice(0, Math.min(3, availableCases.length));
       cachedCase = topCases[Math.floor(Math.random() * topCases.length)];
 
-      console.log(`[Diagnostic] ✅ Caso selecionado (id: ${cachedCase.id}, usado ${cachedCase.times_used}x)`);
+      logger.debug(`[Diagnostic] ✅ Caso selecionado (id: ${cachedCase.id}, usado ${cachedCase.times_used}x)`);
 
       // Incrementar times_used (assíncrono, não bloqueia resposta)
       supabase
@@ -119,7 +120,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
           last_used_at: new Date().toISOString()
         })
         .eq('id', cachedCase.id)
-        .then(() => console.log(`[Diagnostic] ✅ Contador atualizado`));
+        .then(() => logger.debug(`[Diagnostic] ✅ Contador atualizado`));
 
       // 🆕 REGISTRAR VISUALIZAÇÃO (anti-repetição)
       await supabase
@@ -137,7 +138,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
           if (error) {
             console.error('[Diagnostic] ⚠️ Erro ao registrar visualização:', error.message);
           } else {
-            console.log('[Diagnostic] ✅ Visualização registrada (anti-repetição)');
+            logger.debug('[Diagnostic] ✅ Visualização registrada (anti-repetição)');
           }
         });
 
@@ -150,7 +151,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
     }
 
     // ⚠️ Cache MISS: Gerar novo caso (lento, mas salva para próximas)
-    console.log('[Diagnostic] ⏳ Cache MISS - Gerando novo caso...');
+    logger.debug('[Diagnostic] ⏳ Cache MISS - Gerando novo caso...');
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini", // RÁPIDO e barato
@@ -279,7 +280,7 @@ PORTUGUÊS BRASILEIRO. Casos realistas. DSM-5-TR. ESCOLHA 1 FORMATO ALEATORIAMEN
       .select()
       .single();
 
-    console.log(`[Diagnostic] ✅ Caso novo salvo (id: ${newCase?.id})`);
+    logger.debug(`[Diagnostic] ✅ Caso novo salvo (id: ${newCase?.id})`);
 
     res.json({
       success: true,
@@ -314,7 +315,7 @@ router.post('/submit-answer', authenticateRequest, async (req, res) => {
 
     const is_correct = user_answer.toLowerCase().trim() === correct_diagnosis.toLowerCase().trim();
 
-    console.log(`[Diagnostic] Resposta: user=${userId}, correct=${is_correct}`);
+    logger.debug(`[Diagnostic] Resposta: user=${userId}, correct=${is_correct}`);
 
     // 🆕 TENTAR ATUALIZAR REGISTRO EXISTENTE (visualização prévia)
     supabase
@@ -333,7 +334,7 @@ router.post('/submit-answer', authenticateRequest, async (req, res) => {
       .then(({ data, error }) => {
         // Se não encontrou registro para atualizar, criar novo (fallback)
         if (!data || data.length === 0) {
-          console.log('[Diagnostic] ℹ️ Nenhuma visualização prévia, criando novo registro');
+          logger.debug('[Diagnostic] ℹ️ Nenhuma visualização prévia, criando novo registro');
           return supabase
             .from('user_case_interactions')
             .insert({
@@ -348,10 +349,10 @@ router.post('/submit-answer', authenticateRequest, async (req, res) => {
               disorder_category: case_data.metadata?.category || 'unknown'
             });
         } else {
-          console.log('[Diagnostic] ✅ Visualização atualizada com resposta');
+          logger.debug('[Diagnostic] ✅ Visualização atualizada com resposta');
         }
       })
-      .then(() => console.log('[Diagnostic] ✅ Interação registrada'));
+      .then(() => logger.debug('[Diagnostic] ✅ Interação registrada'));
 
     // Atualizar métricas (assíncrono)
     if (case_id) {
@@ -375,9 +376,9 @@ router.post('/submit-answer', authenticateRequest, async (req, res) => {
 
     // ✅ Atualizar progresso (NÃO quebra se falhar)
     try {
-      console.log('[Diagnostic] 🔄 Atualizando progresso do usuário...');
+      logger.debug('[Diagnostic] 🔄 Atualizando progresso do usuário...');
       await updateUserProgress(userId, 'diagnostic', is_correct);
-      console.log('[Diagnostic] ✅ Progresso atualizado');
+      logger.debug('[Diagnostic] ✅ Progresso atualizado');
     } catch (progressError) {
       console.error('[Diagnostic] ⚠️ AVISO: Erro ao atualizar progresso, mas continuando...', progressError.message);
       // NÃO quebra o fluxo - feedback é mais importante
@@ -521,7 +522,7 @@ router.get('/stats', authenticateRequest, async (req, res) => {
 // ========================================
 async function updateUserProgress(userId, assistantType, isCorrect) {
   try {
-    console.log(`\n[updateUserProgress] 🎯 INICIANDO:`, { userId, assistantType, isCorrect });
+    logger.debug(`\n[updateUserProgress] 🎯 INICIANDO:`, { userId, assistantType, isCorrect });
 
     const { data: existing, error: selectError } = await supabase
       .from('user_progress')
@@ -540,10 +541,10 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
 
     // 💧 APLICAR MULTIPLICADOR DE FRESCOR (atualiza last_practice_date e recupera frescor gradualmente)
     const finalCognits = await applyFreshnessMultiplier(userId, baseCognits);
-    console.log(`[updateUserProgress] 💧 Frescor aplicado: ${baseCognits} × multiplicador = ${finalCognits} cognits`);
+    logger.debug(`[updateUserProgress] 💧 Frescor aplicado: ${baseCognits} × multiplicador = ${finalCognits} cognits`);
 
     if (existing) {
-      console.log('[updateUserProgress] 📝 Registro existe, atualizando...');
+      logger.debug('[updateUserProgress] 📝 Registro existe, atualizando...');
 
       const { error: updateError } = await supabase
         .from('user_progress')
@@ -560,9 +561,9 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
         throw updateError;
       }
 
-      console.log('[updateUserProgress] ✅ ATUALIZADO COM SUCESSO!');
+      logger.debug('[updateUserProgress] ✅ ATUALIZADO COM SUCESSO!');
     } else {
-      console.log('[updateUserProgress] ➕ Registro NÃO existe, criando novo...');
+      logger.debug('[updateUserProgress] ➕ Registro NÃO existe, criando novo...');
 
       const { error: insertError } = await supabase
         .from('user_progress')
@@ -580,7 +581,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
         throw insertError;
       }
 
-      console.log('[updateUserProgress] ✅ CRIADO COM SUCESSO!');
+      logger.debug('[updateUserProgress] ✅ CRIADO COM SUCESSO!');
     }
   } catch (error) {
     console.error('[updateUserProgress] ❌ ERRO:', error.message);

@@ -15,7 +15,7 @@ router.get('/list', async (req, res) => {
   try {
     const { module } = req.query;
 
-    console.log('\n[Skills] 📋 Listando habilidades:', { module });
+    logger.debug('\n[Skills] 📋 Listando habilidades:', { module });
 
     let query = supabase
       .from('skills')
@@ -37,7 +37,7 @@ router.get('/list', async (req, res) => {
       return acc;
     }, {});
 
-    console.log(`[Skills] ✅ ${skills.length} habilidades encontradas`);
+    logger.debug(`[Skills] ✅ ${skills.length} habilidades encontradas`);
 
     res.json({
       success: true,
@@ -63,7 +63,7 @@ router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log(`\n[Skills] 🔍 Buscando skill: ${id}`);
+    logger.debug(`\n[Skills] 🔍 Buscando skill: ${id}`);
 
     const { data: skill, error } = await supabase
       .from('skills')
@@ -73,7 +73,7 @@ router.get('/:id', async (req, res) => {
 
     if (error) throw error;
 
-    console.log(`[Skills] ✅ Skill encontrada: ${skill.name}`);
+    logger.debug(`[Skills] ✅ Skill encontrada: ${skill.name}`);
 
     res.json({
       success: true,
@@ -97,7 +97,7 @@ router.get('/user/:user_id/progress', async (req, res) => {
   try {
     const { user_id } = req.params;
 
-    console.log(`\n[Skills] 📊 Progresso do usuário: ${user_id}`);
+    logger.debug(`\n[Skills] 📊 Progresso do usuário: ${user_id}`);
 
     // Buscar progresso do usuário
     const { data: progress, error: progressError } = await supabase
@@ -159,7 +159,7 @@ router.get('/user/:user_id/progress', async (req, res) => {
       expert: completeProgress.filter(p => p.mastery_level === 'expert').length
     };
 
-    console.log(`[Skills] ✅ Progresso calculado: ${practiced.length}/15 habilidades praticadas`);
+    logger.debug(`[Skills] ✅ Progresso calculado: ${practiced.length}/15 habilidades praticadas`);
 
     res.json({
       success: true,
@@ -195,8 +195,8 @@ router.post('/user/:user_id/progress/:skill_id', async (req, res) => {
     const { user_id, skill_id } = req.params;
     const { performance } = req.body; // 0.0 a 1.0
 
-    console.log(`\n[Skills] 📝 Atualizando progresso: User ${user_id}, Skill ${skill_id}`);
-    console.log(`   Performance: ${(performance * 100).toFixed(0)}%`);
+    logger.debug(`\n[Skills] 📝 Atualizando progresso: User ${user_id}, Skill ${skill_id}`);
+    logger.debug(`   Performance: ${(performance * 100).toFixed(0)}%`);
 
     // Verificar se já existe registro
     const { data: existing } = await supabase
@@ -236,7 +236,7 @@ router.post('/user/:user_id/progress/:skill_id', async (req, res) => {
 
       if (error) throw error;
 
-      console.log(`[Skills] ✅ Progresso atualizado: ${newTimesPracticed}x, média ${(newAvgPerformance * 100).toFixed(0)}%, ${newMasteryLevel}`);
+      logger.debug(`[Skills] ✅ Progresso atualizado: ${newTimesPracticed}x, média ${(newAvgPerformance * 100).toFixed(0)}%, ${newMasteryLevel}`);
 
       res.json({
         success: true,
@@ -265,7 +265,7 @@ router.post('/user/:user_id/progress/:skill_id', async (req, res) => {
 
       if (error) throw error;
 
-      console.log(`[Skills] ✅ Primeiro registro criado: ${(newAvgPerformance * 100).toFixed(0)}%, ${newMasteryLevel}`);
+      logger.debug(`[Skills] ✅ Primeiro registro criado: ${(newAvgPerformance * 100).toFixed(0)}%, ${newMasteryLevel}`);
 
       res.json({
         success: true,
