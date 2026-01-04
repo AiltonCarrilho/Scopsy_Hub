@@ -418,30 +418,47 @@ function attachNextMomentListener() {
 // ========================================
 async function goToUpgrade() {
     const btn = document.querySelector('.upgrade-btn');
-    if (btn) btn.textContent = 'Processando...';
+    if (btn) {
+        btn.textContent = 'Redirecionando...';
+        btn.style.opacity = '0.7';
+        btn.style.pointerEvents = 'none';
+    }
 
     try {
+        // Link direto do Kiwify
+        const KIWIFY_CHECKOUT_URL = 'https://pay.kiwify.com.br/cMd4tVk';
+
+        // Pegar email do usuário se estiver logado
         const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/payments/create-checkout-session`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+        let userEmail = '';
+
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                userEmail = payload.email || '';
+            } catch (e) {
+                console.warn('Erro ao decodificar token:', e);
             }
-        });
-
-        const data = await res.json();
-
-        if (data.url) {
-            window.location.href = data.url;
-        } else {
-            alert('Erro ao iniciar upgrade: ' + (data.error || 'Tente novamente'));
-            if (btn) btn.textContent = 'Fazer Upgrade Agora';
         }
+
+        // Montar URL com email
+        const checkoutUrl = userEmail
+            ? `${KIWIFY_CHECKOUT_URL}?email=${encodeURIComponent(userEmail)}`
+            : KIWIFY_CHECKOUT_URL;
+
+        // Aguardar 300ms para UX
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // Redirecionar
+        window.location.href = checkoutUrl;
     } catch (e) {
         console.error('Erro de upgrade:', e);
-        alert('Erro de conexão.');
-        if (btn) btn.textContent = 'Fazer Upgrade Agora';
+        alert('Erro ao redirecionar para checkout.');
+        if (btn) {
+            btn.textContent = 'Fazer Upgrade Agora';
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+        }
     }
 }
 
