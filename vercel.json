@@ -1,7 +1,7 @@
 {
-    "buildCommand": null,
+    "buildCommand": "echo 'No build required - static site'",
     "devCommand": null,
-    "installCommand": null,
+    "installCommand": "echo 'No dependencies to install'",
     "framework": null,
     "outputDirectory": "frontend",
     "headers": [
