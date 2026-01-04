@@ -31,7 +31,7 @@
       <nav class="nav">
         <a href="#como-funciona">Como Funciona</a>
         <div class="nav-buttons">
-          <a href="login.html" class="btn btn-secondary">Entrar</a>
+          <a href="dashboard.html" class="btn btn-secondary">Entrar</a>
           <a href="signup.html" class="btn btn-primary"><span>Começar Grátis →</span></a>
         </div>
       </nav>
@@ -54,6 +54,27 @@
       <div class="hero-cta-group">
         <a href="signup.html" class="btn btn-primary btn-large"><span>Testar 7 Dias Grátis →</span></a>
         <p style="margin-top: 12px; color: var(--text-light); font-size: 0.9rem;">Sem cartão · Depois R$ 47/mês · Cancele quando quiser</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VÍDEO EXPLICATIVO -->
+  <section class="video-section">
+    <div class="container">
+      <h2 class="video-title">Veja como funciona na prática</h2>
+      <div class="video-wrapper">
+        <video id="scopsy-video" controls preload="auto">
+          <source src="VIDEO/ScopsyLab Video.mp4" type="video/mp4">
+          Seu navegador não suporta a reprodução de vídeos.
+        </video>
+        <div class="video-play-overlay" id="play-overlay">
+          <div class="play-button">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="40" r="40" fill="rgba(140, 82, 255, 0.9)"/>
+              <path d="M32 25L55 40L32 55V25Z" fill="white"/>
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -234,6 +255,33 @@
       // Close menu when clicking links
       document.querySelectorAll('.nav a').forEach(link => {
         link.addEventListener('click', toggleMenu);
+      });
+    }
+
+    // Video Player Controls
+    const video = document.getElementById('scopsy-video');
+    const playOverlay = document.getElementById('play-overlay');
+
+    if (video && playOverlay) {
+      // Click no overlay para tocar o vídeo
+      playOverlay.addEventListener('click', () => {
+        video.play();
+        playOverlay.classList.add('hidden');
+      });
+
+      // Quando o vídeo tocar, esconder overlay
+      video.addEventListener('play', () => {
+        playOverlay.classList.add('hidden');
+      });
+
+      // Quando pausar, mostrar overlay novamente
+      video.addEventListener('pause', () => {
+        playOverlay.classList.remove('hidden');
+      });
+
+      // Quando terminar, mostrar overlay
+      video.addEventListener('ended', () => {
+        playOverlay.classList.remove('hidden');
       });
     }
   </script>
