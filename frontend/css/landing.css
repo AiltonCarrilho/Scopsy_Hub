@@ -146,6 +146,73 @@ section {
   margin: 0 auto 60px;
 }
 
+/* ==== VÍDEO EXPLICATIVO ==== */
+.video-section {
+  padding: 80px 20px;
+  background: var(--bg-dark);
+  text-align: center;
+}
+
+.video-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 40px;
+}
+
+.video-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(140, 82, 255, 0.3);
+  position: relative;
+  background: #000;
+  aspect-ratio: 16 / 9; /* Força proporção 16:9 */
+}
+
+.video-wrapper video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Overlay com botão de play */
+.video-play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.video-play-overlay:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.play-button {
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+.video-play-overlay:hover .play-button {
+  transform: scale(1.1);
+}
+
+.video-play-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ==== THE GAP ==== */
 .the-gap {
   padding: 120px 20px;
@@ -687,6 +754,26 @@ details p {
   /* Section Spacing */
   section {
     padding: 60px 20px !important;
+  }
+
+  /* Video Section Mobile */
+  .video-section {
+    padding: 40px 16px !important;
+  }
+
+  .video-title {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+  }
+
+  .video-wrapper {
+    border-radius: var(--radius-md);
+    border-width: 1px;
+  }
+
+  .play-button svg {
+    width: 60px;
+    height: 60px;
   }
 
   .section-title {
