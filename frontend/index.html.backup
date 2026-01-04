@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scopsy Lab - Treinamento Clínico com simulado para Psicólogos</title>
+  <meta name="description"
+    content="Pratique TCC com simulações clínicas realistas. Desenvolva confiança antes de atender pacientes reais." />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- CSS Extraído -->
+  <link rel="stylesheet" href="css/core.css?v=2" />
+  <link rel="stylesheet" href="css/landing.css?v=2" />
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <h1>Scopsy Lab<span class="registered">®</span></h1>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="nav">
+        <a href="#recursos">Recursos</a>
+        <a href="#como-funciona">Como Funciona</a>
+        <div class="nav-buttons">
+          <a href="dashboard.html" class="btn btn-secondary">Entrar</a>
+          <a href="signup.html" class="btn btn-primary"><span>Começar Grátis</span></a>
+        </div>
+      </nav>
+    </div>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay"></div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        <span>Plataforma em Beta · Primeiros Usuários</span>
+      </div>
+
+      <h1 class="hero-title">
+        Desenvolva confiança clínica<br />
+        <span class="text-gradient">praticando com segurança.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Treine conceitualização de casos, diagnósticos DSM-5 e jornadas completas de tratamento com simulações clínicas
+        realistas. Para estudantes, recém-formados e psicólogos buscando aperfeiçoamento em TCC.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="signup.html" class="btn btn-primary btn-large"><span>Começar Agora Grátis</span></a>
+        <a href="#como-funciona" class="btn btn-secondary btn-large">Ver Como Funciona</a>
+      </div>
+
+      <div class="hero-trust">
+        <span class="hero-trust-item">
+          <span class="hero-trust-check">✓</span>
+          Teste grátis
+        </span>
+        <span class="hero-trust-item">
+          <span class="hero-trust-check">✓</span>
+          Baseado em evidências
+        </span>
+        <span class="hero-trust-item">
+          <span class="hero-trust-check">✓</span>
+          Acesso imediato
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE GAP -->
+  <section class="the-gap">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">
+          Do conhecimento teórico<br />
+          para a <span class="text-gradient">prática segura</span>
+        </h2>
+        <p class="section-subtitle">
+          A transição da teoria para a prática clínica é desafiadora. O Scopsy Lab oferece um ambiente seguro para
+          desenvolver suas habilidades.
+        </p>
+      </div>
+
+      <div class="gap-cards">
+        <div class="gap-card">
+          <span class="gap-quote">"Quero praticar antes de atender meu primeiro paciente real."</span>
+          <p class="gap-author">— Estudante em estágio</p>
+        </div>
+
+        <div class="gap-card">
+          <span class="gap-quote">"Preciso de mais prática em conceituação de casos complexos."</span>
+          <p class="gap-author">— Psicóloga recém-formada</p>
+        </div>
+
+        <div class="gap-card">
+          <span class="gap-quote">"Quero aperfeiçoar minhas habilidades em diagnóstico diferencial."</span>
+          <p class="gap-author">— Psicólogo em formação TCC</p>
+        </div>
+      </div>
+
+      <p class="gap-close">
+        Pratique quantas vezes precisar, sem riscos. O Scopsy Lab é o seu laboratório clínico pessoal.
+      </p>
+
+      <div class="text-center mt-xl">
+        <a href="#recursos" class="btn btn-secondary btn-large">Conheça os Recursos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECURSOS -->
+  <section id="recursos" class="solucao">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">
+          3 Módulos de <span class="text-gradient">Treinamento Clínico</span>
+        </h2>
+        <p class="section-subtitle">
+          Cada módulo foi desenvolvido para trabalhar uma habilidade clínica específica, com feedback imediato e
+          progressão adaptativa.
+        </p>
+      </div>
+
+      <div class="solucao-steps">
+        <div class="step" data-number="🎯">
+          <strong>Treino de Olhar Clínico</strong><br />
+          Casos interativos com múltiplas fases. Tome decisões clínicas e veja o impacto no paciente.
+        </div>
+        <div class="step" data-number="🧠">
+          <strong>Diagnostic Training</strong><br />
+          Vinhetas DSM-5 com sistema de repetição espaçada. Aprimore diagnóstico diferencial.
+        </div>
+        <div class="step" data-number="🌱">
+          <strong>Jornada Clínica</strong><br />
+          Acompanhe tratamentos completos de 12 sessões. Pratique do assessment ao encerramento.
+        </div>
+      </div>
+
+      <div class="solucao-cta">
+        <a href="signup.html" class="btn btn-primary btn-large"><span>Experimentar os 3 Módulos</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFÍCIOS -->
+  <section class="beneficios">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Por que <span class="text-gradient">praticar com simulações</span>?</h2>
+      </div>
+
+      <div class="beneficios-grid">
+        <div class="beneficio-card">
+          <div class="beneficio-icon">🛡️</div>
+          <h3>Ambiente Seguro</h3>
+          <p>Pratique e erre quantas vezes precisar, sem qualquer risco para pacientes reais.</p>
+        </div>
+
+        <div class="beneficio-card">
+          <div class="beneficio-icon">⚡</div>
+          <h3>Feedback Imediato</h3>
+          <p>Receba feedback formativo baseado em evidências logo após cada decisão clínica.</p>
+        </div>
+
+        <div class="beneficio-card">
+          <div class="beneficio-icon">📊</div>
+          <h3>Progressão Estruturada</h3>
+          <p>Do iniciante ao avançado, com casos de diferentes níveis de complexidade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFERENCIAL -->
+  <section class="diferencial">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">
+          Como o Scopsy Lab <span class="text-gradient">complementa</span> sua formação
+        </h2>
+        <p class="section-subtitle">
+          Não substitui supervisão ou estágio — complementa com prática ilimitada.
+        </p>
+      </div>
+
+      <div class="exemplo-renata">
+        <h3>Exemplo: Jornada Clínica de 12 Sessões</h3>
+        <p>Acompanhe o caso completo de Marina (TAG) do assessment inicial até o encerramento.</p>
+        <p>
+          <strong>Cada sessão:</strong> Contexto clínico → 4 opções de intervenção → Feedback formativo → Métricas de
+          progresso
+        </p>
+        <p>Ao final, você recebe um score de efetividade terapêutica e análise detalhada de suas decisões.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="como-funciona" class="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Comece em 2 minutos</h2>
+        <p class="section-subtitle">Sem instalação. Sem cartão. 100% online.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Acesse a Plataforma</h3>
+          <p>Clique em "Começar Grátis" e acesse o dashboard.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Escolha um Módulo</h3>
+          <p>Treino de Olhar Clínico, Diagnostic ou Jornada Clínica.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Pratique e Evolua</h3>
+          <p>Receba feedback imediato e acompanhe seu progresso.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVA SOCIAL -->
+  <section class="prova-social">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">
+          Plataforma em <span class="text-gradient">Beta</span>
+        </h2>
+        <p class="section-subtitle">
+          Estamos em fase de testes com os primeiros usuários. Seu feedback é essencial para melhorarmos!
+        </p>
+      </div>
+
+      <div class="credencial-fundador">
+        <p style="font-size: 1.125rem; color: var(--color-text-secondary);">
+          Desenvolvido por <strong style="color: var(--color-primary-start);">Ailton Alves</strong> — Psicólogo com mais
+          de 20 anos de experiência clínica, supervisor e pastor. Especialista em TCC com formação pela FBTC.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Perguntas Frequentes</h2>
+      </div>
+
+      <div class="faq-list">
+        <details>
+          <summary>A experiência com Scopsy Lab substitui o paciente real?</summary>
+          <p>Não. O Scopsy Lab é um simulador de prática clínica — como pilotos treinam em simuladores antes de voar com
+            passageiros. O objetivo é desenvolver habilidades em ambiente seguro antes de aplicá-las com pacientes
+            reais.</p>
+        </details>
+
+        <details>
+          <summary>Preciso pagar para usar?</summary>
+          <p>A plataforma está em Beta e atualmente é gratuita. Futuramente teremos planos pagos com recursos
+            adicionais, mas sempre haverá um plano gratuito disponível.</p>
+        </details>
+
+        <details>
+          <summary>É adequado para psicólogos experientes?</summary>
+          <p>Sim! A plataforma oferece casos de diferentes níveis de complexidade. Psicólogos experientes podem praticar
+            situações desafiadoras, testar novas técnicas e aprimorar diagnóstico diferencial.</p>
+        </details>
+
+        <details>
+          <summary>Os casos são baseados em evidências?</summary>
+          <p>Sim. Todo conteúdo segue protocolos da FBTC e literatura científica atualizada. Os feedbacks são formativos
+            e baseados em melhores práticas de TCC.</p>
+        </details>
+
+        <details>
+          <summary>Como posso dar feedback?</summary>
+          <p>Use o botão de feedback em qualquer página da plataforma ou entre em contato através do email de suporte.
+            Seu feedback é fundamental para melhorarmos!</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-final">
+    <div class="container">
+      <h2>Pronto para começar<br />sua prática clínica?</h2>
+      <p class="cta-final-subtitle">Junte-se aos primeiros psicólogos que estão treinando no Scopsy Lab.</p>
+
+      <a href="signup.html" class="btn btn-primary btn-large">
+        <span>Começar Agora — É Grátis</span>
+      </a>
+
+      <p class="cta-guarantee">
+        🔬 Plataforma em Beta · Acesso Gratuito · Feedback Bem-Vindo
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-col">
+          <h3>Scopsy Lab <span class="registered">®</span></h3>
+          <p>Treinamento clínico simulado para psicólogos</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Produto</h4>
+          <a href="#recursos">Recursos</a>
+          <a href="#como-funciona">Como Funciona</a>
+          <a href="dashboard.html">Acessar Plataforma</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Suporte</h4>
+          <a href="#">Ajuda</a>
+          <a href="#">Contato</a>
+          <a href="#">FAQ</a>
+        </div>
+
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#">Termos de Uso</a>
+          <a href="#">Política de Privacidade</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2025 Scopsy. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('.header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile Menu Toggle
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
+    const nav = document.querySelector('.nav');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+
+    function toggleMenu() {
+      mobileBtn.classList.toggle('active');
+      nav.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+    }
+
+    if (mobileBtn) {
+      mobileBtn.addEventListener('click', toggleMenu);
+      overlay.addEventListener('click', toggleMenu);
+
+      // Close menu when clicking links
+      document.querySelectorAll('.nav a').forEach(link => {
+        link.addEventListener('click', toggleMenu);
+      });
+    }
+
+
+  </script>
+</body>
+
+</html>
