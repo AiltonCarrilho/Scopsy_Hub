@@ -154,34 +154,40 @@ function displayUserInfo(user) {
             const btn = e.currentTarget;
             const originalText = btn.textContent;
 
-            btn.textContent = 'Processando...';
+            btn.textContent = 'Redirecionando...';
             btn.style.opacity = '0.7';
             btn.style.pointerEvents = 'none';
 
             try {
+                // Link direto do Kiwify
+                const KIWIFY_CHECKOUT_URL = 'https://pay.kiwify.com.br/cMd4tVk';
+
+                // Pegar email do usuário se estiver logado
                 const token = localStorage.getItem('token');
-                const res = await fetch(`${API_URL}/api/payments/create-checkout-session`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ returnUrl: window.location.href })
-                });
+                let userEmail = '';
 
-                const data = await res.json();
-
-                if (data.url) {
-                    window.location.href = data.url;
-                } else {
-                    alert('Erro ao iniciar pagamento: ' + (data.error || 'Erro desconhecido'));
-                    btn.textContent = originalText;
-                    btn.style.opacity = '1';
-                    btn.style.pointerEvents = 'auto';
+                if (token) {
+                    try {
+                        const payload = JSON.parse(atob(token.split('.')[1]));
+                        userEmail = payload.email || '';
+                    } catch (e) {
+                        console.warn('Erro ao decodificar token:', e);
+                    }
                 }
+
+                // Montar URL com email
+                const checkoutUrl = userEmail
+                    ? `${KIWIFY_CHECKOUT_URL}?email=${encodeURIComponent(userEmail)}`
+                    : KIWIFY_CHECKOUT_URL;
+
+                // Aguardar 300ms para UX
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                // Redirecionar
+                window.location.href = checkoutUrl;
             } catch (err) {
                 console.error('Erro de checkout:', err);
-                alert('Erro de conexão com o sistema de pagamento.');
+                alert('Erro ao redirecionar para checkout.');
                 btn.textContent = originalText;
                 btn.style.opacity = '1';
                 btn.style.pointerEvents = 'auto';
