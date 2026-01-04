@@ -7,6 +7,7 @@
     <title>Jornada Clínica - Scopsy Lab</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <link rel="stylesheet" href="css/core.css">
     <link rel="stylesheet" href="css/jornada.css">
@@ -25,6 +26,15 @@
             </a>
         </div>
     </header>
+
+    <!-- Banner Trial -->
+    <div id="trialBanner" class="trial-banner" style="display: none;">
+        <div class="trial-content">
+            <i data-lucide="clock"></i>
+            <span><strong id="trialDaysLeft">0</strong> dias restantes no seu período de teste.</span>
+        </div>
+        <a href="#" class="btn-upgrade">Assinar Premium</a>
+    </div>
 
     <div class="container">
         <!-- LAYOUT COM MENU LATERAL -->
@@ -86,6 +96,7 @@
     <!-- Carregar configuração centralizada e utilitários de auth -->
     <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/trial-banner.js"></script>
 
     <script>
         // API_URL definida globalmente em config.js
@@ -1079,6 +1090,9 @@
         // INIT
         // ========================================
         init();
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
     </script>
 </body>
 
