@@ -1,49 +1,63 @@
-
 /**
- * trial-banner.js
- * Handles the display and logic of the trial warning banner across pages.
+ * trial-banner.js - VERSÃO LIMPA KIWIFY
+ * Redirecionamento DIRETO sem API
  */
 
-(() => {
-    // API_URL vem do config.js (window.API_URL)
+(function() {
+    'use strict';
 
-    document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔵 trial-banner.js NOVO carregado');
+
+    document.addEventListener('DOMContentLoaded', function() {
         initTrialBanner();
     });
 
     function initTrialBanner() {
         const userJson = localStorage.getItem('user');
-        if (!userJson) return;
+        if (!userJson) {
+            console.log('⚠️ Sem usuário logado');
+            return;
+        }
 
         try {
             const user = JSON.parse(userJson);
+            console.log('👤 Usuário:', user.email, 'Plano:', user.plan);
 
-            // Only show for free plan users
-            // Adjust condition based on your actual plan values (e.g. 'free', null, undefined)
+            // Mostrar apenas para FREE
             const isPremium = user.plan === 'premium' || user.plan === 'pro';
-            if (isPremium) return;
+            if (isPremium) {
+                console.log('✅ Usuário premium - banner oculto');
+                return;
+            }
 
             const banner = document.getElementById('trialBanner');
-            if (!banner) return; // Banner HTML not present on page
+            if (!banner) {
+                console.warn('⚠️ Banner #trialBanner não encontrado');
+                return;
+            }
 
-            // Show banner
+            // Mostrar banner
             banner.style.display = 'flex';
+            console.log('✅ Banner trial exibido');
 
-            // Update days
+            // Atualizar dias
             const daysElement = document.getElementById('trialDaysLeft');
             if (daysElement) {
                 const days = calculateTrialDaysLeft(user.created_at);
                 daysElement.textContent = days;
+                console.log('📅 Dias restantes:', days);
             }
 
-            // Attach Click Handler to Upgrade Button(s)
+            // Anexar evento aos botões
             const upgradeBtns = document.querySelectorAll('.btn-upgrade');
+            console.log('🔘 Botões encontrados:', upgradeBtns.length);
+
             upgradeBtns.forEach(btn => {
                 btn.addEventListener('click', handleUpgradeClick);
             });
 
         } catch (e) {
-            console.error('TrialBanner error:', e);
+            console.error('❌ Erro no trial banner:', e);
         }
     }
 
@@ -57,8 +71,10 @@
         return remaining > 0 ? remaining : 0;
     }
 
-    async function handleUpgradeClick(e) {
+    function handleUpgradeClick(e) {
         e.preventDefault();
+        console.log('🎯 Botão upgrade clicado');
+
         const btn = e.currentTarget;
         const originalText = btn.textContent;
 
@@ -66,43 +82,34 @@
         btn.style.opacity = '0.7';
         btn.style.pointerEvents = 'none';
 
-        try {
-            // Link direto do Kiwify
-            const KIWIFY_CHECKOUT_URL = 'https://pay.kiwify.com.br/cMd4tVk';
+        // REDIRECIONAMENTO DIRETO - SEM API
+        const KIWIFY_URL = 'https://pay.kiwify.com.br/cMd4tVk';
 
-            // Pegar email do usuário se estiver logado
-            const token = localStorage.getItem('token');
-            let userEmail = '';
+        // Pegar email do token
+        const token = localStorage.getItem('token');
+        let userEmail = '';
 
-            if (token) {
-                try {
-                    const payload = JSON.parse(atob(token.split('.')[1]));
-                    userEmail = payload.email || '';
-                } catch (e) {
-                    console.warn('Erro ao decodificar token:', e);
-                }
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                userEmail = payload.email || '';
+                console.log('📧 Email:', userEmail);
+            } catch (e) {
+                console.warn('⚠️ Erro ao decodificar token:', e);
             }
-
-            // Montar URL com email
-            const checkoutUrl = userEmail
-                ? `${KIWIFY_CHECKOUT_URL}?email=${encodeURIComponent(userEmail)}`
-                : KIWIFY_CHECKOUT_URL;
-
-            // Aguardar 300ms para UX
-            await new Promise(resolve => setTimeout(resolve, 300));
-
-            // Redirecionar
-            window.location.href = checkoutUrl;
-        } catch (err) {
-            console.error('Erro de checkout:', err);
-            alert('Erro ao redirecionar para checkout.');
-            resetBtn(btn, originalText);
         }
+
+        // Montar URL final
+        const finalUrl = userEmail
+            ? `${KIWIFY_URL}?email=${encodeURIComponent(userEmail)}`
+            : KIWIFY_URL;
+
+        console.log('🚀 Redirecionando para:', finalUrl);
+
+        // Aguardar 300ms e redirecionar
+        setTimeout(function() {
+            window.location.href = finalUrl;
+        }, 300);
     }
 
-    function resetBtn(btn, text) {
-        btn.textContent = text;
-        btn.style.opacity = '1';
-        btn.style.pointerEvents = 'auto';
-    }
 })();
