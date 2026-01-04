@@ -57,11 +57,11 @@
         },
         {
             "source": "/",
-            "destination": "/frontend/index.html"
+            "destination": "/index.html"
         },
         {
             "source": "/:path*",
-            "destination": "/frontend/:path*"
+            "destination": "/:path*"
         }
     ]
 }
