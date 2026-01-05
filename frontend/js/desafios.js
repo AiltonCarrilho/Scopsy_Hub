@@ -616,7 +616,7 @@ function showFeedback(f, userChoice) {
             <!-- ========================================
                  NÍVEL 3: EXPANSÍVEL (Aprendizado Profundo)
                  ======================================== -->
-            ${lp ? `
+            ${lp && (safePattern || safeInstantResponse || safeCommonMistake) ? `
                 <details class="feedback-expandable">
                     <summary class="feedback-summary">
                         <span class="summary-icon">🎯</span>
@@ -624,23 +624,27 @@ function showFeedback(f, userChoice) {
                         <span class="summary-chevron">▼</span>
                     </summary>
                     <div class="feedback-expandable-content" style="background: #ecfdf5;">
-                        <div style="margin-bottom: 16px;">
-                            <h5 style="margin: 0 0 8px; color: #047857; font-size: 0.95rem;">
-                                🔍 Padrão a Reconhecer
-                            </h5>
-                            <p style="margin: 0; color: #065f46;">
-                                ${safePattern}
-                            </p>
-                        </div>
+                        ${safePattern ? `
+                            <div style="margin-bottom: 16px;">
+                                <h5 style="margin: 0 0 8px; color: #047857; font-size: 0.95rem;">
+                                    🔍 Padrão a Reconhecer
+                                </h5>
+                                <p style="margin: 0; color: #065f46;">
+                                    ${safePattern}
+                                </p>
+                            </div>
+                        ` : ''}
 
-                        <div style="margin-bottom: 16px;">
-                            <h5 style="margin: 0 0 8px; color: #047857; font-size: 0.95rem;">
-                                ⚡ Resposta Ideal
-                            </h5>
-                            <p style="margin: 0; color: #065f46;">
-                                ${safeInstantResponse}
-                            </p>
-                        </div>
+                        ${safeInstantResponse ? `
+                            <div style="margin-bottom: 16px;">
+                                <h5 style="margin: 0 0 8px; color: #047857; font-size: 0.95rem;">
+                                    ⚡ Resposta Ideal
+                                </h5>
+                                <p style="margin: 0; color: #065f46;">
+                                    ${safeInstantResponse}
+                                </p>
+                            </div>
+                        ` : ''}
 
                         ${safeCommonMistake ? `
                             <div style="
@@ -654,6 +658,23 @@ function showFeedback(f, userChoice) {
                                 </h5>
                                 <p style="margin: 0; color: #7f1d1d;">
                                     ${safeCommonMistake}
+                                </p>
+                            </div>
+                        ` : ''}
+
+                        ${!safePattern && !safeInstantResponse && !safeCommonMistake ? `
+                            <div style="
+                                background: #fef9c3;
+                                border-left: 4px solid #eab308;
+                                padding: 16px;
+                                border-radius: 6px;
+                                text-align: center;
+                            ">
+                                <p style="margin: 0; color: #713f12; font-size: 0.95rem;">
+                                    📝 Este caso ainda não tem pontos de aprendizagem cadastrados.<br>
+                                    <span style="font-size: 0.85rem; opacity: 0.8;">
+                                        Estamos atualizando nosso banco de casos com insights mais profundos!
+                                    </span>
                                 </p>
                             </div>
                         ` : ''}

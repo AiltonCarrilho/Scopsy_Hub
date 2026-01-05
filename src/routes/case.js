@@ -309,12 +309,13 @@ router.post('/generate', authenticateRequest, async (req, res) => {
 
       // 🆕 REGISTRAR VISUALIZAÇÃO (anti-repetição)
       // Marca caso como "visto" antes de retornar para evitar repetição
+      // NOTA: NÃO incluir is_correct=null (coluna não aceita NULL)
       await supabase
         .from('user_case_interactions')
         .insert({
           user_id: userId,
           case_id: selectedCase.id,
-          is_correct: null,  // Ainda não respondeu
+          // is_correct será preenchido quando usuário responder
           user_answer: null,
           time_spent_seconds: 0,
           difficulty_level: finalLevel, // 🎯 Usa nível adaptativo
@@ -606,7 +607,7 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
       })
       .eq('user_id', userId)
       .eq('case_id', interactionData.case_id)
-      .is('is_correct', null)  // Só atualizar se ainda não foi respondido
+      .is('user_answer', null)  // Só atualizar se ainda não respondeu (user_answer null)
       .select();
 
     let savedInteraction = updatedInteraction;
