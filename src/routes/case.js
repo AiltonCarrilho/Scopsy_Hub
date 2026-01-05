@@ -128,6 +128,29 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       });
     }
 
+    // 🧠 INTERLEAVING: Identificar tipo do último caso (Neurociência da Aprendizagem)
+    // Objetivo: +43% retenção ao forçar alternância entre tipos de momento
+    // Fundamento: Discriminação de padrões (Rohrer & Taylor, 2007)
+    let lastMomentType = null;
+
+    if (isMicroMoment && interactions && interactions.length > 0) {
+      // Buscar o último caso feito pelo usuário
+      const lastInteraction = interactions[0]; // Já ordenado por created_at DESC
+
+      if (lastInteraction && lastInteraction.case_id) {
+        const { data: lastCase, error: lastCaseError } = await supabase
+          .from('cases')
+          .select('moment_type')
+          .eq('id', lastInteraction.case_id)
+          .single();
+
+        if (!lastCaseError && lastCase && lastCase.moment_type) {
+          lastMomentType = lastCase.moment_type;
+          logger.debug(`[Case] 🧠 INTERLEAVING: Último tipo foi "${lastMomentType}" → excluindo da seleção`);
+        }
+      }
+    }
+
     // 2️⃣ BUSCAR CASOS DISPONÍVEIS (que usuário NÃO viu)
     let casesQuery = supabase
       .from('cases')
@@ -137,7 +160,19 @@ router.post('/generate', authenticateRequest, async (req, res) => {
 
     // Filtrar por tipo (micro-momento OU conceituação)
     if (isMicroMoment) {
-      casesQuery = casesQuery.eq('moment_type', moment_type);
+      // Se moment_type foi especificado, filtrar por ele
+      if (moment_type) {
+        casesQuery = casesQuery.eq('moment_type', moment_type);
+      } else {
+        // 🧠 INTERLEAVING: Se não especificou tipo E há último tipo, EXCLUIR ele
+        // Força alternância entre tipos → +43% retenção (Rohrer & Taylor, 2007)
+        if (lastMomentType) {
+          casesQuery = casesQuery.neq('moment_type', lastMomentType);
+          logger.debug(`[Case] 🧠 INTERLEAVING ATIVO: Buscando qualquer tipo EXCETO "${lastMomentType}"`);
+        } else {
+          logger.debug(`[Case] 🧠 INTERLEAVING: Usuário novo, qualquer tipo disponível`);
+        }
+      }
     } else if (isConceptualization) {
       casesQuery = casesQuery
         .eq('category', 'clinical_moment')
@@ -199,6 +234,37 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     }
 
     logger.debug(`[Case] 📦 Casos disponíveis no cache: ${availableCases ? availableCases.length : 0}`);
+
+    // 🧠 INTERLEAVING FALLBACK: Se não encontrou NENHUM caso (usuário fez todos os outros tipos),
+    // fazer segunda busca SEM filtro de interleaving
+    if ((!availableCases || availableCases.length === 0) && lastMomentType && isMicroMoment && !moment_type) {
+      logger.debug(`[Case] 🔄 INTERLEAVING FALLBACK: Nenhum caso encontrado, removendo filtro de tipo`);
+
+      // Refazer query SEM filtro de moment_type
+      let fallbackQuery = supabase
+        .from('cases')
+        .select('*')
+        .eq('status', 'active')
+        .eq('difficulty_level', level);
+
+      // Manter filtro de IDs já vistos
+      if (seenCaseIds.length > 0) {
+        fallbackQuery = fallbackQuery.not('id', 'in', `(${seenCaseIds.join(',')})`);
+      }
+
+      const { data: fallbackCases, error: fallbackError } = await fallbackQuery
+        .order('times_used', { ascending: true })
+        .limit(10);
+
+      if (!fallbackError && fallbackCases && fallbackCases.length > 0) {
+        logger.debug(`[Case] ✅ FALLBACK: ${fallbackCases.length} casos encontrados sem filtro de interleaving`);
+        // Sobrescrever availableCases com fallback
+        availableCases = fallbackCases;
+      } else {
+        logger.debug(`[Case] ⚠️ FALLBACK: Ainda não encontrou casos`);
+      }
+    }
+
     if (availableCases && availableCases.length > 0) {
       logger.debug(`[Case] 📋 IDs disponíveis (top 5):`);
       availableCases.slice(0, 5).forEach((c, idx) => {
