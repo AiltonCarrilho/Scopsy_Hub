@@ -514,6 +514,7 @@ async function submitDecision() {
 }
 
 function showFeedback(f, userChoice) {
+    // Marcar opções corretas/incorretas
     document.querySelectorAll('.option-card').forEach(card => {
         card.style.pointerEvents = 'none';
         const letter = card.querySelector('.option-letter').textContent;
@@ -532,32 +533,148 @@ function showFeedback(f, userChoice) {
     const safeCorePrinciple = er.core_principle ? sanitizeHTML(er.core_principle) : '';
     const safePattern = lp ? sanitizeHTML(lp.pattern_to_recognize) : '';
     const safeInstantResponse = lp ? sanitizeHTML(lp.instant_response) : '';
+    const safeCommonMistake = lp ? sanitizeHTML(lp.common_mistake) : '';
 
+    // 🧠 CHUNKING: Feedback em 3 níveis expansíveis (Teoria Carga Cognitiva)
+    // Objetivo: -50% carga cognitiva + usuário controla profundidade
     const fb = `
         <div class="feedback-card">
-          <div class="feedback-header ${f.is_correct ? 'correct' : 'incorrect'}">
-            <h2>${safeImmediateFeedback}</h2>
-            <p style="margin-top:12px; font-size:1.2rem;">
-              ${f.is_correct ? 'Você pensou como um clínico experiente!' : 'Vamos crescer juntos com este aprendizado'}
-            </p>
-          </div>
+            <!-- ========================================
+                 NÍVEL 1: SEMPRE VISÍVEL (Feedback Imediato)
+                 ======================================== -->
+            <div class="feedback-header ${f.is_correct ? 'correct' : 'incorrect'}">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="font-size: 3rem;">
+                        ${f.is_correct ? '✅' : '💡'}
+                    </div>
+                    <div>
+                        <h2 style="margin: 0;">${safeImmediateFeedback}</h2>
+                        <p style="margin: 8px 0 0; font-size: 1.1rem; opacity: 0.9;">
+                            ${f.is_correct
+                                ? 'Você pensou como um clínico experiente!'
+                                : 'Vamos crescer juntos com este aprendizado'
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-          ${safeUserReasoning ? `<div class="feedback-section"><h4>Seu Raciocínio</h4><p style="font-style:italic;">${safeUserReasoning}</p></div>` : ''}
+            <!-- Análise do raciocínio do usuário (se houver) -->
+            ${safeUserReasoning ? `
+                <div class="feedback-level-1" style="
+                    background: #f0f9ff;
+                    border-left: 4px solid #0ea5e9;
+                    padding: 16px;
+                    margin: 16px 0;
+                    border-radius: 8px;
+                ">
+                    <h4 style="margin: 0 0 8px; color: #0369a1; font-size: 1rem;">
+                        💭 Seu Raciocínio
+                    </h4>
+                    <p style="margin: 0; font-style: italic; color: #333;">
+                        ${safeUserReasoning}
+                    </p>
+                </div>
+            ` : ''}
 
-          <div class="feedback-section"><h4>Por que ${safeExpertChoice} é a melhor escolha</h4><p>${safeWhyWorks}</p></div>
+            <!-- ========================================
+                 NÍVEL 2: EXPANSÍVEL (Raciocínio do Expert)
+                 ======================================== -->
+            <details class="feedback-expandable" open>
+                <summary class="feedback-summary">
+                    <span class="summary-icon">📖</span>
+                    <span class="summary-text">Por que <strong>${safeExpertChoice}</strong> é a melhor escolha</span>
+                    <span class="summary-chevron">▼</span>
+                </summary>
+                <div class="feedback-expandable-content">
+                    <p>${safeWhyWorks}</p>
 
-          ${safeCorePrinciple ? `<div class="principle-box">PRINCÍPIO CLÍNICO: "${safeCorePrinciple}"</div>` : ''}
+                    ${safeCorePrinciple ? `
+                        <div class="principle-box" style="
+                            background: linear-gradient(135deg, #fef3c7, #fde68a);
+                            border-left: 4px solid #f59e0b;
+                            padding: 16px;
+                            margin: 16px 0;
+                            border-radius: 8px;
+                        ">
+                            <div style="display: flex; align-items: start; gap: 12px;">
+                                <div style="font-size: 1.5rem;">💡</div>
+                                <div>
+                                    <div style="font-size: 0.85rem; color: #92400e; font-weight: 600; text-transform: uppercase; margin-bottom: 6px;">
+                                        Princípio Clínico
+                                    </div>
+                                    <div style="font-size: 1.1rem; font-weight: 600; color: #78350f;">
+                                        "${safeCorePrinciple}"
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            </details>
 
-          ${lp ? `<div class="feedback-section" style="background:#ecfdf5;"><h4>Aprendizado</h4><p><strong>Padrão:</strong> ${safePattern}</p><p><strong>Resposta ideal:</strong> ${safeInstantResponse}</p></div>` : ''}
+            <!-- ========================================
+                 NÍVEL 3: EXPANSÍVEL (Aprendizado Profundo)
+                 ======================================== -->
+            ${lp ? `
+                <details class="feedback-expandable">
+                    <summary class="feedback-summary">
+                        <span class="summary-icon">🎯</span>
+                        <span class="summary-text">Ponto de Aprendizagem</span>
+                        <span class="summary-chevron">▼</span>
+                    </summary>
+                    <div class="feedback-expandable-content" style="background: #ecfdf5;">
+                        <div style="margin-bottom: 16px;">
+                            <h5 style="margin: 0 0 8px; color: #047857; font-size: 0.95rem;">
+                                🔍 Padrão a Reconhecer
+                            </h5>
+                            <p style="margin: 0; color: #065f46;">
+                                ${safePattern}
+                            </p>
+                        </div>
 
-          <button class="next-moment-btn" id="nextMomentBtn">Próximo Momento Crítico</button>
+                        <div style="margin-bottom: 16px;">
+                            <h5 style="margin: 0 0 8px; color: #047857; font-size: 0.95rem;">
+                                ⚡ Resposta Ideal
+                            </h5>
+                            <p style="margin: 0; color: #065f46;">
+                                ${safeInstantResponse}
+                            </p>
+                        </div>
+
+                        ${safeCommonMistake ? `
+                            <div style="
+                                background: #fef2f2;
+                                border-left: 4px solid #ef4444;
+                                padding: 12px;
+                                border-radius: 6px;
+                            ">
+                                <h5 style="margin: 0 0 8px; color: #991b1b; font-size: 0.95rem;">
+                                    ⚠️ Erro Comum
+                                </h5>
+                                <p style="margin: 0; color: #7f1d1d;">
+                                    ${safeCommonMistake}
+                                </p>
+                            </div>
+                        ` : ''}
+                    </div>
+                </details>
+            ` : ''}
+
+            <!-- Botão de próximo caso -->
+            <button class="next-moment-btn" id="nextMomentBtn" style="margin-top: 24px;">
+                Próximo Momento Crítico →
+            </button>
         </div>`;
 
     document.getElementById('feedbackContainer').innerHTML = fb;
     document.getElementById('feedbackContainer').scrollIntoView({ behavior: 'smooth' });
 
-    // ✅ Adicionar listener ao botão de próximo momento
+    // ✅ Adicionar listener ao botão
     attachNextMomentListener();
+
+    // 🎯 Inicializar animações dos expandables
+    initializeExpandableAnimations();
 }
 
 function attachNextMomentListener() {
@@ -565,6 +682,39 @@ function attachNextMomentListener() {
     if (nextBtn) {
         nextBtn.addEventListener('click', generateNewMoment);
     }
+}
+
+/**
+ * Inicializa animações suaves para elementos expansíveis <details>
+ * Objetivo: Transições fluidas ao expandir/recolher conteúdo
+ */
+function initializeExpandableAnimations() {
+    const expandables = document.querySelectorAll('.feedback-expandable');
+
+    expandables.forEach(details => {
+        const summary = details.querySelector('.feedback-summary');
+        const chevron = summary?.querySelector('.summary-chevron');
+
+        // Atualizar chevron no estado inicial
+        if (chevron) {
+            chevron.textContent = details.open ? '▲' : '▼';
+        }
+
+        // Listener para toggle
+        details.addEventListener('toggle', () => {
+            if (chevron) {
+                chevron.textContent = details.open ? '▲' : '▼';
+            }
+        });
+
+        // Adicionar classe para animação CSS
+        const content = details.querySelector('.feedback-expandable-content');
+        if (content) {
+            content.style.animation = details.open
+                ? 'fadeIn 0.3s ease forwards'
+                : 'fadeOut 0.2s ease forwards';
+        }
+    });
 }
 
 // ========================================

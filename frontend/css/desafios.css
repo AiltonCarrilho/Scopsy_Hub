@@ -455,3 +455,125 @@
         transform: translateY(0);
     }
 }
+
+/* ========================================
+   🧠 CHUNKING - FEEDBACK EXPANSÍVEL
+   ======================================== */
+
+/* Expandable container */
+.feedback-expandable {
+    background: var(--bg-card);
+    border: 2px solid var(--border-light);
+    border-radius: 16px;
+    margin: 20px 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.feedback-expandable:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15);
+}
+
+.feedback-expandable[open] {
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+}
+
+/* Summary (o "botão" clicável) */
+.feedback-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 24px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none; /* Remove seta padrão do <details> */
+    transition: background 0.2s ease;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.feedback-summary:hover {
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.feedback-summary::-webkit-details-marker {
+    display: none; /* Remove seta padrão no Chrome/Safari */
+}
+
+.summary-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+}
+
+.summary-text {
+    flex: 1;
+}
+
+.summary-chevron {
+    font-size: 0.9rem;
+    color: var(--color-primary);
+    transition: transform 0.3s ease;
+    font-weight: 700;
+}
+
+.feedback-expandable[open] .summary-chevron {
+    transform: rotate(180deg);
+}
+
+/* Conteúdo expansível */
+.feedback-expandable-content {
+    padding: 0 24px 24px;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* Nível 1 - Feedback Imediato (sempre visível) */
+.feedback-level-1 {
+    background: #f0f9ff;
+    border-left: 4px solid #0ea5e9;
+    padding: 16px;
+    margin: 16px 0;
+    border-radius: 8px;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .feedback-summary {
+        padding: 14px 16px;
+        font-size: 1rem;
+    }
+
+    .feedback-expandable-content {
+        padding: 0 16px 16px;
+    }
+
+    .summary-icon {
+        font-size: 1.3rem;
+    }
+}
