@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     lucide.createIcons();
     loadProgress(); // Carregar painel de progresso ao iniciar
+    loadAdaptiveLevelIndicator(); // 🎯 Carregar nível adaptativo
 });
 
 // Detectar ambiente (desenvolvimento vs produção)
@@ -181,6 +182,151 @@ function hidePremiumTrialWarnings() {
     }
 }
 
+// ========================================
+// 🎯 NÍVEL ADAPTATIVO (Neurociência)
+// ========================================
+
+/**
+ * Carrega e exibe indicador de nível adaptativo
+ * Objetivo: Mostrar progresso tangível e motivar upgrade
+ */
+async function loadAdaptiveLevelIndicator() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+        const res = await fetch(`${API_URL}/case/adaptive-level`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            renderAdaptiveLevelUI(data.adaptive_level, data.accuracy, data.progress_to_next);
+        }
+    } catch (e) {
+        console.error('❌ Erro ao carregar nível adaptativo:', e);
+    }
+}
+
+/**
+ * Renderiza UI do nível adaptativo no painel de progresso
+ * @param {string} level - 'basic', 'intermediate', 'advanced'
+ * @param {number} accuracy - Acurácia dos últimos 10 casos (0-100)
+ * @param {number} progressToNext - Progresso para próximo nível (0-100)
+ */
+function renderAdaptiveLevelUI(level, accuracy, progressToNext) {
+    const panel = document.getElementById('progressPanel');
+    if (!panel) return;
+
+    const levelNames = {
+        basic: 'Iniciante',
+        intermediate: 'Intermediário',
+        advanced: 'Avançado'
+    };
+
+    const levelColors = {
+        basic: '#10b981',        // Verde
+        intermediate: '#f59e0b', // Laranja
+        advanced: '#8b5cf6'      // Roxo
+    };
+
+    const levelName = levelNames[level] || 'Intermediário';
+    const levelColor = levelColors[level] || '#f59e0b';
+
+    // Mensagem de progresso
+    let progressMessage = '';
+    if (level === 'basic' && progressToNext < 100) {
+        progressMessage = `Faltam ${Math.ceil((100 - progressToNext) * 0.8)}% de acurácia para Intermediário`;
+    } else if (level === 'intermediate' && progressToNext < 100) {
+        progressMessage = `Faltam ${Math.ceil((100 - progressToNext) * 0.85)}% de acurácia para Avançado`;
+    } else if (level === 'advanced') {
+        progressMessage = 'Continue assim para manter o nível! 🏆';
+    } else {
+        progressMessage = 'Você está pronto para o próximo nível!';
+    }
+
+    // Adicionar indicador no topo do painel (se ainda não existe)
+    const existingIndicator = panel.querySelector('.adaptive-level-indicator');
+
+    const levelIndicatorHTML = `
+        <div class="adaptive-level-indicator" style="
+            background: linear-gradient(135deg, ${levelColor}15, ${levelColor}05);
+            border-left: 4px solid ${levelColor};
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        ">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 0.85rem; color: #666; margin-bottom: 4px;">
+                        Nível Atual
+                    </div>
+                    <div style="font-size: 1.2rem; font-weight: 700; color: ${levelColor};">
+                        ${levelName}
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 0.85rem; color: #666; margin-bottom: 4px;">
+                        Acurácia
+                    </div>
+                    <div style="font-size: 1.2rem; font-weight: 700; color: #333;">
+                        ${accuracy.toFixed(0)}%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de progresso para próximo nível -->
+            <div style="margin-top: 12px;">
+                <div style="font-size: 0.75rem; color: #666; margin-bottom: 6px;">
+                    ${progressMessage}
+                </div>
+                <div style="
+                    width: 100%;
+                    height: 6px;
+                    background: #e5e7eb;
+                    border-radius: 3px;
+                    overflow: hidden;
+                ">
+                    <div style="
+                        width: ${progressToNext}%;
+                        height: 100%;
+                        background: ${levelColor};
+                        transition: width 0.3s ease;
+                    "></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Inserir ou atualizar
+    if (existingIndicator) {
+        existingIndicator.outerHTML = levelIndicatorHTML;
+    } else {
+        panel.insertAdjacentHTML('afterbegin', levelIndicatorHTML);
+    }
+}
+
+/**
+ * Calcula progresso para o próximo nível baseado em accuracy atual
+ * @param {string} currentLevel - Nível atual ('basic', 'intermediate', 'advanced')
+ * @param {number} accuracy - Acurácia atual (0-100)
+ * @returns {number} - Progresso (0-100)
+ */
+function calculateProgressToNext(currentLevel, accuracy) {
+    if (currentLevel === 'basic') {
+        // Precisa 80% para subir para intermediário
+        return Math.min((accuracy / 80) * 100, 100);
+    }
+    if (currentLevel === 'intermediate') {
+        // Precisa 85% para subir para avançado
+        return Math.min((accuracy / 85) * 100, 100);
+    }
+    if (currentLevel === 'advanced') {
+        // Já está no topo, mostrar manutenção (70%)
+        return Math.min((accuracy / 70) * 100, 100);
+    }
+    return 0;
+}
 
 // ========================================
 // LÓGICA DOS CASOS (EXISTENTE)
@@ -203,6 +349,14 @@ async function generateNewMoment() {
             currentMoment = { ...data.case, case_id: data.case_id };
             selectedChoice = null;
             startTime = Date.now();
+
+            // 🎯 Atualizar indicador de nível adaptativo se dados disponíveis
+            if (data.adaptive_level && data.performance_summary) {
+                const accuracy = data.performance_summary.recent_accuracy || 0;
+                const progressToNext = calculateProgressToNext(data.adaptive_level, accuracy);
+                renderAdaptiveLevelUI(data.adaptive_level, accuracy, progressToNext);
+            }
+
             renderMoment(currentMoment);
         } else {
             document.getElementById('momentContainer').innerHTML = `<div class="moment-card"><p style="color:#ef4444">Erro: ${data.error}</p></div>`;
