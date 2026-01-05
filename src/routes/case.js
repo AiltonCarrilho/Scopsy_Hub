@@ -74,6 +74,16 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       logger.debug('[Case] 📚 Filtrando apenas casos de conceituação completos (vinhetas 300-400 palavras)');
     }
 
+    // 🎯 DIFICULDADE ADAPTATIVA: Calcular nível baseado em performance
+    // Objetivo: Flow state (+40% engajamento) = desafio = habilidade
+    const adaptiveLevel = await calculateAdaptiveLevel(userId, supabase);
+
+    // Permitir override manual (para testes ou preferência do usuário)
+    const useAdaptive = req.body.adaptive !== false; // Default true
+    const finalLevel = useAdaptive ? adaptiveLevel : (level || 'intermediate');
+
+    logger.debug(`[Case] 🎯 Nível adaptativo calculado: "${adaptiveLevel}" → usando: "${finalLevel}" (adaptive=${useAdaptive})`);
+
     // 1️⃣ BUSCAR MICRO-MOMENTOS QUE O USUÁRIO JÁ VIU
     const { data: interactions, error: interError } = await supabase
       .from('user_case_interactions')
@@ -156,7 +166,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       .from('cases')
       .select('*')
       .eq('status', 'active')
-      .eq('difficulty_level', level);
+      .eq('difficulty_level', finalLevel); // 🎯 Usa nível adaptativo
 
     // Filtrar por tipo (micro-momento OU conceituação)
     if (isMicroMoment) {
@@ -245,7 +255,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
         .from('cases')
         .select('*')
         .eq('status', 'active')
-        .eq('difficulty_level', level);
+        .eq('difficulty_level', finalLevel); // 🎯 Usa nível adaptativo
 
       // Manter filtro de IDs já vistos
       if (seenCaseIds.length > 0) {
@@ -307,7 +317,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           is_correct: null,  // Ainda não respondeu
           user_answer: null,
           time_spent_seconds: 0,
-          difficulty_level: level,
+          difficulty_level: finalLevel, // 🎯 Usa nível adaptativo
           disorder_category: moment_type || disorder_category || null
         })
         .then(({ error }) => {
@@ -320,12 +330,31 @@ router.post('/generate', authenticateRequest, async (req, res) => {
 
       // RETORNO DIFERENTE para micro-momentos vs conceituação
       if (isMicroMoment) {
-        // DESAFIOS: Retorna só case_content (compatibilidade)
+        // Calcular acurácia e progresso para retornar
+        const { data: last10Cases } = await supabase
+          .from('user_case_interactions')
+          .select('is_correct')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(10);
+
+        const recentAccuracy = last10Cases && last10Cases.length > 0
+          ? (last10Cases.filter(c => c.is_correct).length / last10Cases.length) * 100
+          : 0;
+
+        // DESAFIOS: Retorna caso + dados de nível adaptativo
         return res.json({
           success: true,
           case: selectedCase.case_content,
           case_id: selectedCase.id,
-          from_cache: true
+          from_cache: true,
+          // 🎯 NOVOS DADOS: Nível adaptativo e performance
+          adaptive_level: adaptiveLevel,
+          level_used: finalLevel,
+          performance_summary: {
+            recent_accuracy: recentAccuracy,
+            cases_analyzed: last10Cases?.length || 0
+          }
         });
       } else {
         // CONCEITUAÇÃO: Usar vignette existente ou montar se necessário
@@ -817,6 +846,105 @@ Forneça feedback formativo em JSON.`
 });
 
 // ========================================
+// 🎯 DIFICULDADE ADAPTATIVA (Neurociência)
+// ========================================
+
+/**
+ * Calcula nível adaptativo baseado em performance recente
+ * Objetivo: Flow state (+40% engajamento) = desafio ligeiramente acima da habilidade
+ * Fundamento: Zona de Desenvolvimento Proximal (Vygotsky)
+ *
+ * @param {number} userId - ID do usuário
+ * @param {object} supabase - Cliente Supabase
+ * @returns {Promise<string>} - 'basic', 'intermediate', ou 'advanced'
+ */
+async function calculateAdaptiveLevel(userId, supabase) {
+  try {
+    // 1. Buscar últimos 15 casos (janela de análise)
+    const { data: recentCases, error } = await supabase
+      .from('user_case_interactions')
+      .select('is_correct, difficulty_level')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(15);
+
+    if (error || !recentCases || recentCases.length < 5) {
+      // Se menos de 5 casos, começar no básico
+      logger.debug(`[Adaptive] Usuário novo ou poucos casos (${recentCases?.length || 0}), retornando 'basic'`);
+      return 'basic';
+    }
+
+    // 2. Calcular acurácia dos últimos 10 casos
+    const last10 = recentCases.slice(0, 10);
+    const correctCount = last10.filter(c => c.is_correct).length;
+    const accuracy = (correctCount / last10.length) * 100;
+
+    logger.debug(`[Adaptive] Acurácia últimos 10 casos: ${accuracy.toFixed(1)}% (${correctCount}/${last10.length})`);
+
+    // 3. Identificar nível atual predominante
+    const currentLevels = last10.map(c => c.difficulty_level);
+    const levelCounts = {
+      basic: currentLevels.filter(l => l === 'basic').length,
+      intermediate: currentLevels.filter(l => l === 'intermediate').length,
+      advanced: currentLevels.filter(l => l === 'advanced').length
+    };
+
+    const currentLevel = Object.keys(levelCounts).reduce((a, b) =>
+      levelCounts[a] > levelCounts[b] ? a : b
+    );
+
+    logger.debug(`[Adaptive] Nível atual predominante: ${currentLevel}`, levelCounts);
+
+    // 4. Lógica de adaptação baseada em thresholds
+    let adaptiveLevel = currentLevel;
+
+    if (currentLevel === 'basic') {
+      // Se está no básico e acerta 80%+, sobe para intermediário
+      if (accuracy >= 80) {
+        adaptiveLevel = 'intermediate';
+        logger.debug(`[Adaptive] ⬆️ UPGRADE: basic → intermediate (acurácia ${accuracy.toFixed(1)}% >= 80%)`);
+      } else if (accuracy >= 50) {
+        adaptiveLevel = 'basic';
+        logger.debug(`[Adaptive] ➡️ MANTÉM: basic (acurácia ${accuracy.toFixed(1)}% entre 50-79%)`);
+      } else {
+        adaptiveLevel = 'basic';
+        logger.debug(`[Adaptive] ➡️ MANTÉM: basic (acurácia ${accuracy.toFixed(1)}% < 50%, não desce mais)`);
+      }
+    } else if (currentLevel === 'intermediate') {
+      // Se acerta 85%+, sobe para avançado
+      if (accuracy >= 85) {
+        adaptiveLevel = 'advanced';
+        logger.debug(`[Adaptive] ⬆️ UPGRADE: intermediate → advanced (acurácia ${accuracy.toFixed(1)}% >= 85%)`);
+      } else if (accuracy >= 40) {
+        adaptiveLevel = 'intermediate';
+        logger.debug(`[Adaptive] ➡️ MANTÉM: intermediate (acurácia ${accuracy.toFixed(1)}% entre 40-84%)`);
+      } else {
+        adaptiveLevel = 'basic';
+        logger.debug(`[Adaptive] ⬇️ DOWNGRADE: intermediate → basic (acurácia ${accuracy.toFixed(1)}% < 40%)`);
+      }
+    } else if (currentLevel === 'advanced') {
+      // Se acerta 70%+, mantém avançado
+      if (accuracy >= 70) {
+        adaptiveLevel = 'advanced';
+        logger.debug(`[Adaptive] ➡️ MANTÉM: advanced (acurácia ${accuracy.toFixed(1)}% >= 70%)`);
+      } else if (accuracy >= 35) {
+        adaptiveLevel = 'intermediate';
+        logger.debug(`[Adaptive] ⬇️ DOWNGRADE: advanced → intermediate (acurácia ${accuracy.toFixed(1)}% entre 35-69%)`);
+      } else {
+        adaptiveLevel = 'basic';
+        logger.debug(`[Adaptive] ⬇️⬇️ RESET: advanced → basic (acurácia ${accuracy.toFixed(1)}% < 35%)`);
+      }
+    }
+
+    return adaptiveLevel;
+
+  } catch (error) {
+    console.error('[Adaptive] ❌ Erro ao calcular nível:', error.message);
+    return 'intermediate'; // Fallback seguro
+  }
+}
+
+// ========================================
 // GET /api/case/moment-types
 // Lista tipos de momentos disponíveis
 // ========================================
@@ -825,6 +953,54 @@ router.get('/moment-types', authenticateRequest, async (req, res) => {
     success: true,
     moment_types: MOMENTOS_CRITICOS
   });
+});
+
+// ========================================
+// GET /api/case/adaptive-level
+// Retorna nível adaptativo atual do usuário
+// ========================================
+router.get('/adaptive-level', authenticateRequest, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // Calcular nível adaptativo
+    const adaptiveLevel = await calculateAdaptiveLevel(userId, supabase);
+
+    // Buscar últimos 10 casos para acurácia
+    const { data: recentCases } = await supabase
+      .from('user_case_interactions')
+      .select('is_correct')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    const correctCount = recentCases?.filter(c => c.is_correct).length || 0;
+    const accuracy = recentCases?.length > 0
+      ? (correctCount / recentCases.length) * 100
+      : 0;
+
+    // Calcular progresso para próximo nível
+    let progressToNext = 0;
+    if (adaptiveLevel === 'basic') {
+      progressToNext = Math.min((accuracy / 80) * 100, 100);
+    } else if (adaptiveLevel === 'intermediate') {
+      progressToNext = Math.min((accuracy / 85) * 100, 100);
+    } else if (adaptiveLevel === 'advanced') {
+      progressToNext = Math.min((accuracy / 70) * 100, 100);
+    }
+
+    res.json({
+      success: true,
+      adaptive_level: adaptiveLevel,
+      accuracy: accuracy,
+      progress_to_next: progressToNext,
+      cases_analyzed: recentCases?.length || 0
+    });
+
+  } catch (error) {
+    console.error('[Case] ❌ Erro ao calcular nível adaptativo:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 // ========================================
