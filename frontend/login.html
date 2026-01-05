@@ -236,14 +236,20 @@
             try {
                 console.log('📡 Enviando login...');
 
+                // Timeout de 10 segundos para login
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+
                 const response = await fetch(`${API_URL}/api/auth/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ email, password }),
+                    signal: controller.signal
                 });
 
+                clearTimeout(timeoutId);
                 const data = await response.json();
 
                 if (!response.ok) {
@@ -267,7 +273,13 @@
 
             } catch (error) {
                 console.error('❌ Erro no login:', error);
-                errorDiv.textContent = error.message;
+
+                if (error.name === 'AbortError') {
+                    errorDiv.textContent = 'Tempo esgotado. Verifique sua conexão e tente novamente.';
+                } else {
+                    errorDiv.textContent = error.message || 'Erro ao conectar com servidor';
+                }
+
                 errorDiv.style.display = 'block';
                 loginBtn.disabled = false;
                 loading.style.display = 'none';
@@ -277,21 +289,27 @@
         // Verificar se já está logado (apenas ao carregar página)
         window.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
-            
+
             if (token) {
                 console.log('🔑 Token encontrado, verificando validade...');
-                
+
                 // Mostrar mensagem enquanto verifica
                 const successDiv = document.getElementById('successMessage');
                 successDiv.textContent = 'Verificando sessão...';
                 successDiv.style.display = 'block';
-                
+
+                // Timeout de 3 segundos para evitar travamento
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000);
+
                 fetch(`${API_URL}/api/auth/me`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
-                    }
+                    },
+                    signal: controller.signal
                 })
                 .then(r => {
+                    clearTimeout(timeoutId);
                     if (!r.ok) {
                         throw new Error('Token inválido');
                     }
@@ -301,7 +319,7 @@
                     if (data.user) {
                         console.log('✅ Sessão válida, redirecionando...');
                         successDiv.textContent = `Bem-vindo de volta, ${data.user.name}!`;
-                        
+
                         // Aguardar 1 segundo antes de redirecionar
                         setTimeout(() => {
                             window.location.href = 'dashboard.html';
@@ -309,7 +327,12 @@
                     }
                 })
                 .catch((error) => {
-                    console.log('❌ Token inválido ou expirado, removendo...');
+                    clearTimeout(timeoutId);
+                    if (error.name === 'AbortError') {
+                        console.log('⏱️ Timeout: servidor não respondeu, removendo token...');
+                    } else {
+                        console.log('❌ Token inválido ou expirado, removendo...');
+                    }
                     localStorage.removeItem('token');
                     localStorage.removeItem('user');
                     successDiv.style.display = 'none';
