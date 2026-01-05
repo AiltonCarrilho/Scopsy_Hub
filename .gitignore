@@ -155,3 +155,11 @@ sql-mark-*.sql
 
 # Windows NUL file
 NUL
+
+# ==========================================
+# ARQUIVOS DE MÍDIA PESADOS (Backups)
+# ==========================================
+# Backups de vídeos originais (não comprimidos)
+*-ORIGINAL.mp4
+*-original.mp4
+*-backup.mp4
