@@ -9,7 +9,14 @@ const logger = require('../config/logger');
 // Resend SDK (instalar: npm install resend)
 const { Resend } = require('resend');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Inicializar Resend apenas se API key estiver configurada
+let resend = null;
+if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 're_placeholder_for_dev') {
+  resend = new Resend(process.env.RESEND_API_KEY);
+  logger.info('✅ Resend email service initialized');
+} else {
+  logger.warn('⚠️ Resend API key not configured - emails will be logged only');
+}
 
 /**
  * Envia email de boas-vindas para novo assinante
