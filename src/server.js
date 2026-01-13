@@ -185,6 +185,7 @@ const caseRoutes = require('./routes/case');
 const journeyRoutes = require('./routes/journey');
 const skillsRoutes = require('./routes/skills');
 const webhooksRoutes = require('./routes/webhooks');
+const healthRoutes = require('./routes/health');
 
 // ✅ ROTAS COM RATE LIMITING E PROTEÇÃO
 
@@ -212,15 +213,20 @@ app.use('/api/journey', apiLimiter, journeyRoutes);
 app.use('/api/webhooks', webhookLimiter, webhooksRoutes);
 
 // ========================================
-// 4. HEALTH CHECK
+// 4. HEALTH CHECK (Keep-Alive Supabase)
 // ========================================
+// ⚠️ IMPORTANTE: Este endpoint faz ping no Supabase para evitar 
+// que o projeto seja pausado após 7 dias de inatividade.
+// Configure UptimeRobot ou similar para chamar /api/health a cada 5 min
+app.use('/api/health', healthRoutes);
+
+// Manter o endpoint /health legado para compatibilidade
 app.get('/health', (req, res) => {
   res.json({
     status: 'OK',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    commit: 'a40e01b',
-    message: 'Deploy revertido - geração deve funcionar'
+    message: 'Use /api/health for full health check with Supabase ping'
   });
 });
 
