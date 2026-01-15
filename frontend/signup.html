@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - Scopsy</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png" />
+    <link rel="shortcut icon" href="favicon.png" />
     <!-- Config deve ser carregado PRIMEIRO -->
     <script src="js/config.js"></script>
     <link rel="stylesheet" href="css/style.css">
@@ -156,11 +163,17 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="signup-container">
         <div class="logo">
@@ -174,61 +187,30 @@
         <form id="signupForm">
             <div class="form-group">
                 <label for="name">Nome Completo</label>
-                <input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    placeholder="Dr. João Silva"
-                    required
-                >
+                <input type="text" id="name" name="name" placeholder="Dr. João Silva" required>
             </div>
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    placeholder="seu@email.com"
-                    required
-                    autocomplete="email"
-                >
+                <input type="email" id="email" name="email" placeholder="seu@email.com" required autocomplete="email">
             </div>
 
             <div class="form-group">
                 <label for="crp">CRP (opcional)</label>
-                <input 
-                    type="text" 
-                    id="crp" 
-                    name="crp" 
-                    placeholder="06/123456"
-                >
+                <input type="text" id="crp" name="crp" placeholder="06/123456">
                 <small>Exemplo: 06/123456</small>
             </div>
 
             <div class="form-group">
                 <label for="password">Senha</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    placeholder="••••••••"
-                    required
-                    minlength="8"
-                >
+                <input type="password" id="password" name="password" placeholder="••••••••" required minlength="8">
                 <small>Mínimo 8 caracteres</small>
             </div>
 
             <div class="form-group">
                 <label for="confirmPassword">Confirmar Senha</label>
-                <input 
-                    type="password" 
-                    id="confirmPassword" 
-                    name="confirmPassword" 
-                    placeholder="••••••••"
-                    required
-                    minlength="8"
-                >
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required
+                    minlength="8">
             </div>
 
             <div class="loading" id="loading">
@@ -298,9 +280,9 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ 
-                        name, 
-                        email, 
+                    body: JSON.stringify({
+                        name,
+                        email,
                         password,
                         crp: crp || undefined
                     })
@@ -317,7 +299,7 @@
                 // Salvar token e usuário
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
-                
+
                 // Mensagem de sucesso
                 successDiv.textContent = `Conta criada com sucesso! Bem-vindo, ${data.user.name}!`;
                 successDiv.style.display = 'block';
@@ -339,14 +321,14 @@
         // Verificar se já está logado
         window.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
-            
+
             if (token) {
                 console.log('🔑 Usuário já está logado, redirecionando...');
-                
+
                 const successDiv = document.getElementById('successMessage');
                 successDiv.textContent = 'Você já está logado! Redirecionando...';
                 successDiv.style.display = 'block';
-                
+
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
                 }, 1500);
@@ -354,4 +336,5 @@
         });
     </script>
 </body>
+
 </html>
