@@ -45,43 +45,60 @@ router.get('/stats', authenticateRequest, async (req, res) => {
       logger.error('Erro ao buscar user_stats', { error: statsError.message });
     }
 
-    // --- CÁLCULO DAS MÉTRICAS ESPECÍFICAS ---
+    // --- CÁLCULO DAS MÉTRICAS DOS 4 MÓDULOS ---
 
-    // 1. Raciocínio Clínico = Desafios Clínicos ('case') + Conceituação ('case_conceptualization')
-    // Soma de CASOS (total_cases)
-    const raciocinioData = progressData?.filter(p => 
-      p.assistant_type === 'case' || p.assistant_type === 'case_conceptualization'
-    ) || [];
-    const raciocinioTotal = raciocinioData.reduce((sum, p) => sum + (p.total_cases || 0), 0);
+    // 1. Desafios Clínicos = 'case'
+    const desafiosData = progressData?.find(p => p.assistant_type === 'case');
+    const desafiosCasos = desafiosData?.total_cases || 0;
+    const desafiosXP = desafiosData?.xp_points || 0;
 
-    // 2. Radar Diagnóstico = 'diagnostic'
-    // Soma de CASOS (total_cases)
+    // 2. Conceituação Cognitiva = 'case_conceptualization'
+    const conceituacaoData = progressData?.find(p => p.assistant_type === 'case_conceptualization');
+    const conceituacaoCasos = conceituacaoData?.total_cases || 0;
+    const conceituacaoXP = conceituacaoData?.xp_points || 0;
+
+    // 3. Radar Diagnóstico = 'diagnostic'
     const radarData = progressData?.find(p => p.assistant_type === 'diagnostic');
-    const radarTotal = radarData?.total_cases || 0;
+    const radarCasos = radarData?.total_cases || 0;
+    const radarXP = radarData?.xp_points || 0;
 
-    // 3. Jornada Terapêutica = 'journey'
-    // Soma de COGNITS (cognits) - +25 cognits por sessão completada
+    // 4. Jornada Terapêutica = 'journey'
     const jornadaData = progressData?.find(p => p.assistant_type === 'journey');
-    const jornadaPontos = jornadaData?.cognits || 0; // ✅ Mudança: xp_points → cognits
+    const jornadaSessoes = jornadaData?.total_sessions || 0;
+    const jornadaXP = jornadaData?.xp_points || 0;
 
-    // Outros dados (badges)
+    // Badges
     const badges = statsData?.badges || [];
-    
-    // Retornar JSON estrutura para o frontend
+
+    // Retornar JSON com 4 módulos separados
     res.json({
-      raciocinio_clinico: raciocinioTotal,
-      radar_diagnostico: radarTotal,
-      jornada_terapeutica: jornadaPontos,
-      badges: badges.length, // Retornando contagem de badges
+      desafios_clinicos: {
+        total_cases: desafiosCasos,
+        xp_points: desafiosXP
+      },
+      conceituacao_cognitiva: {
+        total_cases: conceituacaoCasos,
+        xp_points: conceituacaoXP
+      },
+      radar_diagnostico: {
+        total_cases: radarCasos,
+        xp_points: radarXP
+      },
+      jornada_terapeutica: {
+        total_sessions: jornadaSessoes,
+        xp_points: jornadaXP
+      },
+      badges: badges.length,
       badges_list: badges
     });
 
   } catch (error) {
     logger.error('Erro ao buscar stats', { error: error.message });
     res.json({
-      raciocinio_clinico: 0,
-      radar_diagnostico: 0,
-      jornada_terapeutica: 0,
+      desafios_clinicos: { total_cases: 0, xp_points: 0 },
+      conceituacao_cognitiva: { total_cases: 0, xp_points: 0 },
+      radar_diagnostico: { total_cases: 0, xp_points: 0 },
+      jornada_terapeutica: { total_sessions: 0, xp_points: 0 },
       badges: 0,
       badges_list: []
     });

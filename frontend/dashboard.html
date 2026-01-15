@@ -195,7 +195,7 @@
 
         <div class="assistants-grid">
 
-            <!-- 1. Raciocínio Clínico -->
+            <!-- 1. Desafios Clínicos -->
             <a href="case.html?assistant=case" class="assistant-card" id="cardRaciocinio">
                 <div class="card-header">
                     <div class="card-icon">
@@ -220,9 +220,9 @@
                     </div>
                     <span class="card-badge">Interativo</span>
                 </div>
-                <h3>Raciocínio Clínico</h3>
-                <p class="card-description">Desenvolva seu raciocínio clínico através de simulações interativas com
-                    feedback formativo em tempo real</p>
+                <h3>Desafios Clínicos</h3>
+                <p class="card-description">Micro-decisões clínicas (30-60s) em situações críticas com
+                    feedback formativo imediato</p>
                 <div class="card-features">
                     <span class="feature-tag"><i data-lucide="zap"></i> Simulação de reação</span>
                     <span class="feature-tag"><i data-lucide="message-square"></i> Feedback formativo</span>
@@ -240,7 +240,46 @@
                 </div>
             </a>
 
-            <!-- 2. Radar Diagnóstico -->
+            <!-- 2. Conceituação Cognitiva (NOVO!) -->
+            <a href="conceituacao.html" class="assistant-card" id="cardConceituacao">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg width="68" height="68" viewBox="0 0 100 100" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#8c52ff" />
+                                    <stop offset="100%" stop-color="#00c2ff" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="50" cy="35" r="25" stroke="url(#grad4)" stroke-width="3" fill="none" />
+                            <path d="M35 35 L50 50 L65 35" stroke="url(#grad4)" stroke-width="3" fill="none" />
+                            <path d="M30 45 L50 60 L70 45" stroke="url(#grad4)" stroke-width="3" fill="none" />
+                            <circle cx="50" cy="35" r="8" fill="url(#grad4)" />
+                        </svg>
+                    </div>
+                    <span class="card-badge">TCC Profundo</span>
+                </div>
+                <h3>Conceituação Cognitiva</h3>
+                <p class="card-description">Formulação completa TCC: tríade cognitiva, crenças e plano de intervenção
+                    estruturado</p>
+                <div class="card-features">
+                    <span class="feature-tag"><i data-lucide="brain"></i> Formulação TCC</span>
+                    <span class="feature-tag"><i data-lucide="layers"></i> 4 componentes</span>
+                    <span class="feature-tag"><i data-lucide="file-text"></i> Feedback detalhado</span>
+                </div>
+                <div class="trial-limit-info" style="display: none;">
+                    <div class="limit-bar-container">
+                        <div class="limit-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="limit-text">Restam 7 de 7 acessos</span>
+                </div>
+                <div class="card-footer">
+                    <i data-lucide="file-text"></i> Conceituação Beck
+                </div>
+            </a>
+
+            <!-- 3. Radar Diagnóstico -->
             <a href="diagnostic.html" class="assistant-card" id="cardRadar">
                 <div class="card-header">
                     <div class="card-icon">
@@ -284,7 +323,7 @@
                 </div>
             </a>
 
-            <!-- 3. Jornada Clínica -->
+            <!-- 4. Jornada Clínica -->
             <!-- Voltando para ser um card normal visualmente, o JS controlará o clique -->
             <a href="#" class="assistant-card" id="cardJornada">
                 <div class="card-header">
