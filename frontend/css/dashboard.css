@@ -90,9 +90,9 @@
 
 .assistants-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(280px, 380px));
+    grid-template-columns: repeat(2, minmax(320px, 480px));
     gap: var(--space-xl);
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     justify-content: center;
 }
