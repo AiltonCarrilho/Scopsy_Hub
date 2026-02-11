@@ -4,6 +4,7 @@
     "installCommand": "echo 'No dependencies to install'",
     "framework": null,
     "outputDirectory": "frontend",
+    "cleanUrls": true,
     "headers": [
         {
             "source": "/js/config.js",
