@@ -3,6 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🌍 Ambiente:', IS_DEV ? 'DESENVOLVIMENTO' : 'PRODUÇÃO');
     console.log('🔗 API_URL:', API_URL);
 
+    // ✅ STRICT AUTH CHECK
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'login.html';
+        return;
+    }
+
     // ✅ Adicionar listener ao botão principal de novo momento
     const newMomentBtn = document.getElementById('newMomentBtn');
     if (newMomentBtn) {
@@ -338,11 +345,17 @@ async function generateNewMoment() {
 
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/case/generate`, {
+        if (!token) throw new Error("Token não encontrado. Faça login novamente.");
+
+        // Fallback para API local se necessário
+        const apiUrl = API_URL.startsWith('http') ? API_URL : window.location.origin + API_URL;
+
+        const res = await fetch(`${apiUrl}/case/generate`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({ level: 'intermediate', moment_type: 'resistencia_tecnica' })
         });
+
         const data = await res.json();
 
         if (data.success) {
@@ -359,10 +372,12 @@ async function generateNewMoment() {
 
             renderMoment(currentMoment);
         } else {
-            document.getElementById('momentContainer').innerHTML = `<div class="moment-card"><p style="color:#ef4444">Erro: ${data.error}</p></div>`;
+            console.error('Erro backend:', data);
+            document.getElementById('momentContainer').innerHTML = `<div class="moment-card"><p style="color:#ef4444">Erro ao gerar caso: ${data.error || 'Erro desconhecido'}</p></div>`;
         }
     } catch (e) {
-        document.getElementById('momentContainer').innerHTML = '<div class="moment-card"><p style="color:#ef4444">Erro de conexão</p></div>';
+        console.error('Erro de conexão:', e);
+        document.getElementById('momentContainer').innerHTML = `<div class="moment-card"><p style="color:#ef4444">Erro de conexão: ${e.message}</p></div>`;
     }
 }
 
@@ -436,7 +451,7 @@ function attachOptionListeners() {
     const optionCards = document.querySelectorAll('.option-card');
 
     optionCards.forEach(card => {
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function () {
             selectOption(this);
         });
     });
@@ -551,9 +566,9 @@ function showFeedback(f, userChoice) {
                         <h2 style="margin: 0;">${safeImmediateFeedback}</h2>
                         <p style="margin: 8px 0 0; font-size: 1.1rem; opacity: 0.9;">
                             ${f.is_correct
-                                ? 'Você pensou como um clínico experiente!'
-                                : 'Vamos crescer juntos com este aprendizado'
-                            }
+            ? 'Você pensou como um clínico experiente!'
+            : 'Vamos crescer juntos com este aprendizado'
+        }
                         </p>
                     </div>
                 </div>
