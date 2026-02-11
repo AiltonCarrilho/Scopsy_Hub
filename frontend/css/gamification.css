@@ -5,22 +5,22 @@
 
 :root {
     /* Cores do Espectro Clínico */
-    --scopsy-blue: #2952CC;
-    --module-act: #0891B2;
-    --module-dbt: #7C3AED;
+    --scopsy-blue: #008CE2;
+    --module-act: #2DD4BF;
+    --module-dbt: #1A2B48;
 
     /* Gradientes de Gamificação */
-    --cognit-gradient: linear-gradient(135deg, #0891B2 0%, #2952CC 50%, #7C3AED 100%);
-    --streak-gradient: linear-gradient(135deg, #7C3AED 0%, #2952CC 50%, #0891B2 100%);
-    --levelup-gradient: linear-gradient(135deg, #0891B2 0%, #2952CC 50%, #7C3AED 100%);
+    --cognit-gradient: linear-gradient(135deg, #008CE2 0%, #2DD4BF 100%);
+    --streak-gradient: linear-gradient(135deg, #1A2B48 0%, #008CE2 100%);
+    --levelup-gradient: linear-gradient(135deg, #008CE2 0%, #2DD4BF 100%);
 
     /* Estados */
-    --success: #059669;
+    --success: #2DD4BF;
     --error: #DC2626;
     --warning: #F59E0B;
 
     /* Neutros */
-    --text-primary: #1E293B;
+    --text-primary: #1A2B48;
     --text-secondary: #64748B;
     --bg-tertiary: #F1F5F9;
     --border-light: #E2E8F0;
@@ -31,8 +31,8 @@
    ========================================= */
 
 .level-card {
-    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
-    border: 2px solid #e0e7ff;
+    background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+    border: 2px solid #e0efff;
     border-radius: 16px;
     padding: 24px;
     position: relative;
@@ -45,8 +45,8 @@
 
 .level-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
-    border-color: #c7d2fe;
+    box-shadow: 0 8px 24px rgba(0, 140, 226, 0.15);
+    border-color: #bae6fd;
 }
 
 .level-header {
@@ -71,14 +71,14 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #6366f1;
+    color: #008CE2;
     margin: 0 0 4px 0;
 }
 
 .level-name {
     font-size: 20px; /* MESMO TAMANHO */
     font-weight: 700; /* MESMO PESO */
-    color: #1e293b;
+    color: #1A2B48;
     margin: 0;
     line-height: 1.2;
 }
@@ -91,7 +91,7 @@
 .progress-bar {
     width: 100%;
     height: 12px;
-    background: #e0e7ff;
+    background: #e0efff;
     border-radius: 6px;
     overflow: hidden;
     position: relative;
@@ -100,7 +100,7 @@
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+    background: linear-gradient(90deg, #008CE2 0%, #2DD4BF 100%);
     border-radius: 6px;
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -137,7 +137,7 @@
 
 .progress-text .current {
     font-weight: 700;
-    color: #6366f1;
+    color: #008CE2;
     font-size: 16px;
 }
 
@@ -163,12 +163,12 @@
 }
 
 .level-next strong {
-    color: #6366f1;
+    color: #008CE2;
     font-weight: 700;
 }
 
 .level-next .next-level {
-    color: #8b5cf6;
+    color: #2DD4BF;
     font-weight: 600;
 }
 
@@ -176,7 +176,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(0, 140, 226, 0.1);
     padding: 6px 12px;
     border-radius: 20px;
     cursor: help;
@@ -190,7 +190,7 @@
 .cognit-amount {
     font-size: 16px;
     font-weight: 700;
-    color: #6366f1;
+    color: #008CE2;
 }
 
 /* ============================================
@@ -304,7 +304,7 @@
     align-items: center;
     gap: 4px;
     font-weight: 700;
-    color: #0891B2;
+    color: #008CE2;
     /* Scopsy Blue */
     font-size: 0.9rem;
     background: #ECFEFF;

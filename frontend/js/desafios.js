@@ -234,7 +234,7 @@ function renderAdaptiveLevelUI(level, accuracy, progressToNext) {
     const levelColors = {
         basic: '#10b981',        // Verde
         intermediate: '#f59e0b', // Laranja
-        advanced: '#8b5cf6'      // Roxo
+        advanced: '#008CE2'      // Scopsy Blue
     };
 
     const levelName = levelNames[level] || 'Intermediário';

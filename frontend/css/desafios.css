@@ -45,12 +45,12 @@
     font-weight: 800;
     cursor: pointer;
     transition: var(--transition);
-    box-shadow: 0 15px 35px rgba(139, 92, 246, .3);
+    box-shadow: 0 15px 35px rgba(0, 140, 226, .3);
 }
 
 .new-moment-btn:hover {
     transform: translateY(-8px);
-    box-shadow: 0 25px 50px rgba(139, 92, 246, .4);
+    box-shadow: 0 25px 50px rgba(0, 140, 226, .4);
 }
 
 /* Card do Momento */
@@ -65,7 +65,7 @@
 .context-badge {
     display: inline-block;
     padding: 8px 20px;
-    background: rgba(139, 92, 246, .1);
+    background: rgba(0, 140, 226, .1);
     color: var(--color-primary);
     border-radius: 30px;
     font-size: 0.9rem;
@@ -74,7 +74,7 @@
 }
 
 .context-section {
-    background: rgba(139, 92, 246, .05);
+    background: rgba(0, 140, 226, .05);
     padding: 24px;
     border-radius: 20px;
     border-left: 6px solid var(--color-primary);
@@ -142,8 +142,8 @@
 
 .option-card.selected {
     border-color: var(--color-primary);
-    background: rgba(139, 92, 246, .08);
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, .2);
+    background: rgba(0, 140, 226, .08);
+    box-shadow: 0 0 0 4px rgba(0, 140, 226, .2);
 }
 
 .option-card.correct {
@@ -199,7 +199,7 @@
 .reasoning-textarea:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, .15);
+    box-shadow: 0 0 0 4px rgba(0, 140, 226, .15);
 }
 
 /* Botões */
@@ -258,7 +258,7 @@
 }
 
 .feedback-section {
-    background: rgba(139, 92, 246, .05);
+    background: rgba(0, 140, 226, .05);
     padding: 28px;
     border-radius: 20px;
     margin: 24px 0;
@@ -266,7 +266,7 @@
 }
 
 .principle-box {
-    background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
+    background: linear-gradient(135deg, #f0f7ff, #e0efff);
     border-left: 6px solid var(--color-primary);
     padding: 24px;
     margin: 28px 0;
@@ -316,7 +316,7 @@
 
 /* ITEM INDIVIDUAL */
 .progress-item {
-    background: rgba(139, 92, 246, 0.05);
+    background: rgba(0, 140, 226, 0.05);
     border-radius: 18px;
     padding: 20px;
     text-align: center;
@@ -327,7 +327,7 @@
 .progress-item:hover {
     transform: translateY(-6px);
     border-color: var(--color-primary);
-    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 10px 25px rgba(0, 140, 226, 0.15);
 }
 
 .progress-item strong {
@@ -472,12 +472,12 @@
 
 .feedback-expandable:hover {
     border-color: var(--color-primary);
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 6px 20px rgba(0, 140, 226, 0.15);
 }
 
 .feedback-expandable[open] {
     border-color: var(--color-primary);
-    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 140, 226, 0.2);
 }
 
 /* Summary (o "botão" clicável) */
@@ -496,7 +496,7 @@
 }
 
 .feedback-summary:hover {
-    background: rgba(139, 92, 246, 0.05);
+    background: rgba(0, 140, 226, 0.05);
 }
 
 .feedback-summary::-webkit-details-marker {
