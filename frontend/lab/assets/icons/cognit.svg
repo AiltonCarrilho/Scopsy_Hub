@@ -1,0 +1,31 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cognitGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0891B2"/>
+      <stop offset="50%" stop-color="#2952CC"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Cristal Principal -->
+  <path d="M32 8 L48 24 L48 40 L32 56 L16 40 L16 24 Z" 
+        fill="url(#cognitGradient)" 
+        filter="url(#glow)"
+        opacity="0.9"/>
+  
+  <!-- Facetas (Brilho) -->
+  <path d="M32 8 L40 16 L32 24 Z" fill="#FFFFFF" opacity="0.3"/>
+  <path d="M32 8 L24 16 L32 24 Z" fill="#FFFFFF" opacity="0.2"/>
+  
+  <!-- Sparkles -->
+  <circle cx="52" cy="12" r="2" fill="#0891B2" opacity="0.8"/>
+  <circle cx="12" cy="52" r="2" fill="#7C3AED" opacity="0.8"/>
+</svg>
