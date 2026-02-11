@@ -2,11 +2,11 @@
 <html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scopsy Lab - Pratique Terapias Cognitivas com Segurança Antes do Primeiro Paciente Real</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scopsy Lab - Pratique Terapias Cognitivas com Seguran&ccedil;a Antes do Primeiro Paciente Real</title>
   <meta name="description"
-    content="Simulador de prática clínica para psicólogos. Desenvolva confiança em diagnóstico, conceituação e condução terapêutica com feedback imediato. Usado por 200+ psicólogos em formação." />
+    content="Simulador de pr&aacute;tica cl&iacute;nica para psic&oacute;logos. Desenvolva confian&ccedil;a em diagn&oacute;stico, conceitua&ccedil;&atilde;o e condu&ccedil;&atilde;o terap&ecirc;utica com feedback formativo imediato." />
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
@@ -15,70 +15,200 @@
   <link rel="shortcut icon" href="favicon.png" />
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 
-  <!-- CSS do Sistema -->
-  <link rel="stylesheet" href="css/core.css?v=2" />
-  <link rel="stylesheet" href="css/landing.css?v=2" />
+  <!-- CSS - Landing V2 (isolated from core.css) -->
+  <link rel="stylesheet" href="css/landing-system.css?v=1" />
+  <link rel="stylesheet" href="css/landing-v2.css?v=1" />
 </head>
 
 <body>
-  <!-- HEADER -->
+  <!-- ============ Header ============ -->
   <header class="header">
     <div class="container">
-      <div class="logo">
-        <h1>Scopsy Lab<span class="registered">®</span></h1>
-      </div>
-      <button class="mobile-menu-btn" aria-label="Menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
       <nav class="nav">
-        <a href="#como-funciona">Como Funciona</a>
-        <div class="nav-buttons">
-          <a href="dashboard.html" class="btn btn-secondary">Entrar</a>
-          <a href="signup.html" class="btn btn-primary"><span>Começar Grátis →</span></a>
+        <a href="#" class="logo">
+          <img src="assets/logo.png" alt="Scopsy Lab" class="logo-icon-img">
+          <span>Scopsy<span class="text-gradient">Lab</span></span>
+        </a>
+
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="#modulos">M&oacute;dulos</a></li>
+          <li><a href="#metodo">M&eacute;todo</a></li>
+          <li><a href="#preco">Pre&ccedil;o</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+
+        <div class="nav-actions" id="nav-actions">
+          <a href="dashboard.html" class="btn btn-ghost btn-sm">Entrar</a>
+          <a href="signup.html" class="btn btn-primary btn-sm">Come&ccedil;ar Gr&aacute;tis</a>
         </div>
+
+        <button class="nav-toggle" id="nav-toggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
       </nav>
     </div>
-    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu-overlay" id="mobile-overlay"></div>
   </header>
 
-  <!-- HERO -->
+  <!-- ============ Hero ============ -->
   <section class="hero">
-    <div class="hero-content">
-      <h1 class="hero-title">
-        Pratique casos clínicos reais<br />
-        <span class="text-gradient">sem arriscar pacientes reais.</span>
-      </h1>
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Pare de ter medo de <span class="text-gradient">errar com pacientes</span></h1>
 
-      <p class="hero-subtitle">
-        Simulador com 4 módulos de treino: Radar Diagnóstico, Desafios Clínicos, Conceituação e Jornadas Terapêuticas
-        Completas. Feedback imediato. Ambiente seguro para errar e evoluir.
-      </p>
+          <p class="hero-subtitle">
+            Pratique decis&otilde;es cl&iacute;nicas em casos simulados. <strong>Receba feedback imediato</strong> e
+            constru&atilde; confian&ccedil;a antes de atender de verdade.
+          </p>
 
-      <div class="hero-cta-group">
-        <a href="signup.html" class="btn btn-primary btn-large"><span>Testar 7 Dias Grátis →</span></a>
-        <p style="margin-top: 12px; color: var(--text-light); font-size: 0.9rem;">Sem cartão · Depois R$ 47/mês ·
-          Cancele quando quiser</p>
+          <div class="hero-cta">
+            <a href="signup.html" class="btn btn-primary btn-lg">
+              Come&ccedil;ar Treinamento Gr&aacute;tis
+            </a>
+            <span class="cta-note">&#10003; 7 dias gr&aacute;tis &middot; Sem cart&atilde;o</span>
+          </div>
+
+          <!-- Pain Points -->
+          <div class="pain-points">
+            <div class="pain-item">
+              <span class="pain-icon">&bull;</span>
+              <span>Inseguro nas sess&otilde;es?</span>
+            </div>
+            <div class="pain-item">
+              <span class="pain-icon">&bull;</span>
+              <span>Muita teoria, pouca pr&aacute;tica?</span>
+            </div>
+            <div class="pain-item">
+              <span class="pain-icon">&bull;</span>
+              <span>Medo de errar?</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Visual: Interactive Demo Card -->
+        <div class="hero-visual">
+          <div class="demo-card">
+            <!-- Medical Header -->
+            <div class="demo-header-clinical">
+              <div class="patient-id">
+                <span class="id-label">PACIENTE ID</span>
+                <span class="id-value">#8492-A</span>
+              </div>
+              <div class="clinical-breadcrumbs">
+                <span class="crumb active">Hist&oacute;rico</span>
+                <span class="crumb">Sintomas</span>
+                <span class="crumb">Diagn&oacute;stico</span>
+              </div>
+            </div>
+
+            <div class="demo-patient-clinical">
+              <div class="patient-avatar-small">A</div>
+              <div class="patient-details">
+                <strong class="patient-name">Ana Silva</strong>
+                <span class="patient-meta">28 anos &bull; Feminino &bull; Enc: Dr. Marcos</span>
+              </div>
+              <div class="session-timer">
+                <span class="timer-icon">&#9201;&#65039;</span> 04:20
+              </div>
+            </div>
+
+            <div class="demo-clinical-content">
+              <span class="content-label">QUEIXA PRINCIPAL</span>
+              <p class="patient-quote">&ldquo;Eu n&atilde;o aguento mais... fico o dia inteiro esperando algo ruim
+                acontecer, mas n&atilde;o sei dizer o que &eacute;.&rdquo;</p>
+            </div>
+
+            <div class="demo-clinical-action">
+              <strong class="action-label">DECIS&Atilde;O CL&Iacute;NICA (TCC)</strong>
+              <div class="demo-options-clinical">
+                <div class="demo-option">
+                  <span class="option-check"></span>
+                  <span>Sugerir respira&ccedil;&atilde;o diafragm&aacute;tica</span>
+                </div>
+                <div class="demo-option selected">
+                  <span class="option-check">&#10003;</span>
+                  <span>Explorar a natureza vaga da amea&ccedil;a</span>
+                  <span class="option-badge">CORRETO</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="demo-feedback-clinical">
+              <div class="feedback-icon icon-bulb sprite-icon-small"></div>
+              <div class="feedback-text">
+                <strong>Feedback Formativo:</strong>
+                <p>Explorar a vaguidade &eacute; crucial no TAG. A paciente catastrofiza sem objeto definido. &Oacute;tima
+                  interven&ccedil;&atilde;o diagn&oacute;stica.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating Stats -->
+          <div class="floating-stat stat-1">
+            <span class="stat-icon icon-flame sprite-icon-small"></span>
+            <span class="stat-value">7</span>
+            <span class="stat-label">dias</span>
+          </div>
+
+          <div class="floating-stat stat-2">
+            <span class="stat-icon icon-target sprite-icon-small"></span>
+            <span class="stat-value">+25 XP</span>
+          </div>
+
+          <div class="floating-stat stat-3">
+            <span class="stat-icon icon-trophy sprite-icon-small"></span>
+            <span class="stat-value">Nv. 5</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- VÍDEO EXPLICATIVO -->
+  <!-- ============ Stats Bar ============ -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <span class="stat-label">M&oacute;dulos de treino</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">TCC</span>
+          <span class="stat-label">ACT &middot; DBT &middot; Diagn&oacute;stico</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">12</span>
+          <span class="stat-label">Sess&otilde;es por jornada</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">24/7</span>
+          <span class="stat-label">Pratique quando quiser</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Video ============ -->
   <section class="video-section">
     <div class="container">
-      <h2 class="video-title">Veja como funciona na prática</h2>
+      <h2 class="video-title">Veja como funciona na pr&aacute;tica</h2>
       <div class="video-wrapper">
         <video id="scopsy-video" controls preload="none">
           <source src="VIDEO/ScopsyLab Video.mp4" type="video/mp4">
-          Seu navegador não suporta a reprodução de vídeos.
+          Seu navegador n&atilde;o suporta a reprodu&ccedil;&atilde;o de v&iacute;deos.
         </video>
         <div class="video-play-overlay" id="play-overlay">
           <div class="play-button">
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="40" cy="40" r="40" fill="rgba(140, 82, 255, 0.9)" />
+              <circle cx="40" cy="40" r="40" fill="rgba(37, 99, 235, 0.9)" />
               <path d="M32 25L55 40L32 55V25Z" fill="white" />
             </svg>
           </div>
@@ -87,150 +217,270 @@
     </div>
   </section>
 
-  <!-- PROBLEMA -->
-  <section class="the-gap">
+  <!-- ============ Problem/Solution ============ -->
+  <section class="problem-section section">
     <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">
-          Volume de prática <span class="text-gradient">constrói confiança clínica.</span>
-        </h2>
-        <p class="section-subtitle">
-          Sua supervisão te dá 1 caso por mês. Aqui você pratica 50. Iniciantes ganham repertório antes do primeiro
-          paciente real. Experientes mantêm habilidades afiadas e testam técnicas sem risco.
-        </p>
+      <div class="section-header text-center">
+        <span class="section-badge">O PROBLEMA</span>
+        <h2>A faculdade ensina teoria. <br><span class="text-gradient">Voc&ecirc; precisa de pr&aacute;tica.</span></h2>
+      </div>
+
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-icon-wrap icon-flame sprite-icon-medium" style="margin: 0 auto; display: block;"></div>
+          <h4>Inseguran&ccedil;a Cl&iacute;nica</h4>
+          <p>Saber a teoria n&atilde;o significa saber aplicar. Voc&ecirc; congela na hora H porque nunca praticou de verdade.</p>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-icon-wrap icon-target sprite-icon-medium" style="margin: 0 auto; display: block;"></div>
+          <h4>Medo de Errar</h4>
+          <p>Cada erro com paciente real tem consequ&ecirc;ncias. Voc&ecirc; evita t&eacute;cnicas novas por medo de fazer errado.</p>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-icon-wrap icon-bulb sprite-icon-medium" style="margin: 0 auto; display: block;"></div>
+          <h4>Falta de Feedback</h4>
+          <p>Voc&ecirc; pratica sozinho e n&atilde;o sabe se est&aacute; no caminho certo. Falta um retorno estruturado sobre suas decis&otilde;es cl&iacute;nicas.</p>
+        </div>
+      </div>
+
+      <div class="solution-arrow">&darr;</div>
+
+      <div class="section-header text-center">
+        <span class="section-badge accent">A SOLU&Ccedil;&Atilde;O</span>
+        <h2>Pratique decis&otilde;es cl&iacute;nicas <span class="text-gradient">sem risco real</span></h2>
+        <p class="section-subtitle">Simula&ccedil;&atilde;o interativa com feedback imediato. Erre aqui, acerte no consult&oacute;rio.</p>
       </div>
     </div>
   </section>
 
-  <!-- SOLUÇÃO (BENEFITS, NÃO FEATURES) -->
-  <section id="como-funciona" class="solucao">
+  <!-- ============ Modules ============ -->
+  <section id="modulos" class="modules-section section">
     <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">
-          4 Módulos que Desenvolvem <span class="text-gradient">Automatismo Clínico</span>
-        </h2>
-        <p class="section-subtitle">
-          Cada módulo trabalha uma habilidade clínica crítica. Não é teoria passiva. É treino com feedback corretivo em
-          tempo real.
-        </p>
+      <div class="section-header text-center">
+        <span class="section-badge">4 M&Oacute;DULOS</span>
+        <h2>Treinamento completo em <span class="text-gradient">habilidades cl&iacute;nicas</span></h2>
       </div>
 
-      <div class="solucao-steps" style="grid-template-columns: repeat(2, 1fr); max-width: 1100px;">
-        <div class="step" data-number="🎯">
-          <strong>Radar Diagnóstico</strong><br />
-          Vinhetas clínicas com repetição espaçada. Você aprende a diferenciar TAG de TDM, identificar comorbidades, e
-          reconhecer red flags de risco.<br /><br />
-          <em style="color: var(--color-primary);">→ Ganhe velocidade e precisão diagnóstica.</em>
+      <div class="modules-grid">
+        <!-- M1 -->
+        <div class="module-card">
+          <div class="module-icon-wrap icon-flame sprite-icon-medium"></div>
+          <h3>Desafios Cl&iacute;nicos</h3>
+          <p>Micro-momentos de 2-5 minutos. Pratique decis&otilde;es r&aacute;pidas em situa&ccedil;&otilde;es cr&iacute;ticas de sess&atilde;o.</p>
+          <ul class="module-features">
+            <li>&#10003; 100+ cen&aacute;rios</li>
+            <li>&#10003; Feedback imediato</li>
+            <li>&#10003; N&iacute;veis de dificuldade</li>
+          </ul>
+          <div class="module-skills">
+            <span class="skill-tag">Alian&ccedil;a terap&ecirc;utica</span>
+            <span class="skill-tag">Manejo de crise</span>
+          </div>
         </div>
 
-        <div class="step" data-number="⚡">
-          <strong>Desafios Clínicos</strong><br />
-          Micro-momentos críticos que exigem decisão imediata: paciente em crise, resistência técnica, ruptura
-          terapêutica. Você decide sob pressão.<br /><br />
-          <em style="color: var(--color-primary);">→ Aprenda a pensar rápido em situações críticas.</em>
+        <!-- M2 -->
+        <div class="module-card">
+          <div class="module-icon-wrap icon-target sprite-icon-medium"></div>
+          <h3>Radar Diagn&oacute;stico</h3>
+          <p>Vinhetas cl&iacute;nicas para diagn&oacute;stico diferencial. Identifique transtornos e descarte hip&oacute;teses.</p>
+          <ul class="module-features">
+            <li>&#10003; 50+ vinhetas</li>
+            <li>&#10003; DSM-5 integrado</li>
+            <li>&#10003; Casos at&iacute;picos</li>
+          </ul>
+          <div class="module-skills">
+            <span class="skill-tag">Diagn&oacute;stico diferencial</span>
+            <span class="skill-tag">Comorbidades</span>
+          </div>
         </div>
 
-        <div class="step" data-number="🧠">
-          <strong>Conceituação</strong><br />
-          Casos interativos com múltiplas fases. Você formula hipóteses, escolhe intervenções, e vê o impacto nas
-          sessões seguintes.<br /><br />
-          <em style="color: var(--color-primary);">→ Desenvolva raciocínio clínico estruturado.</em>
+        <!-- M3 - Featured -->
+        <div class="module-card featured">
+          <div class="featured-badge">&#128293; MAIS POPULAR</div>
+          <div class="module-icon-wrap icon-trophy sprite-icon-medium"></div>
+          <h3>Jornada Cl&iacute;nica</h3>
+          <p>Acompanhe um paciente por 12 sess&otilde;es completas. Viva a evolu&ccedil;&atilde;o terap&ecirc;utica do in&iacute;cio ao fim.</p>
+          <ul class="module-features">
+            <li>&#10003; Casos longitudinais</li>
+            <li>&#10003; Decis&otilde;es com consequ&ecirc;ncias</li>
+            <li>&#10003; Feedback formativo detalhado</li>
+          </ul>
+          <div class="module-skills">
+            <span class="skill-tag">Plano de tratamento</span>
+            <span class="skill-tag">Alta terap&ecirc;utica</span>
+          </div>
         </div>
 
-        <div class="step" data-number="🌱">
-          <strong>Jornada Terapêutica</strong><br />
-          Acompanhe tratamentos de 12 sessões, do acolhimento à alta. Suas decisões moldam a evolução do paciente
-          simulado.<br /><br />
-          <em style="color: var(--color-primary);">→ Pratique condução terapêutica longitudinal.</em>
+        <!-- M4 -->
+        <div class="module-card">
+          <div class="module-icon-wrap icon-bulb sprite-icon-medium"></div>
+          <h3>Conceitualiza&ccedil;&atilde;o</h3>
+          <p>Constru&atilde; formula&ccedil;&otilde;es de caso TCC completas. Integre hist&oacute;ria, cren&ccedil;as e padr&otilde;es cognitivos.</p>
+          <ul class="module-features">
+            <li>&#10003; Diagramas interativos</li>
+            <li>&#10003; Templates guiados</li>
+            <li>&#10003; Casos complexos</li>
+          </ul>
+          <div class="module-skills">
+            <span class="skill-tag">Formula&ccedil;&atilde;o TCC</span>
+            <span class="skill-tag">Cren&ccedil;as nucleares</span>
+          </div>
         </div>
-      </div>
-
-      <div class="solucao-cta">
-        <a href="signup.html" class="btn btn-primary btn-large"><span>Experimentar os 4 Módulos →</span></a>
       </div>
     </div>
   </section>
 
-  <!-- PRICING + FAQ -->
-  <section class="faq">
+  <!-- ============ Method ============ -->
+  <section id="metodo" class="method-section section">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header text-center">
+        <span class="section-badge">METODOLOGIA</span>
+        <h2>Por que Scopsy Lab <span class="text-gradient">funciona</span></h2>
+      </div>
+
+      <div class="method-grid">
+        <div class="method-card">
+          <div class="method-number">1</div>
+          <h4>Pr&aacute;tica Deliberada</h4>
+          <p>Baseado em ci&ecirc;ncia do aprendizado. Repeti&ccedil;&atilde;o espa&ccedil;ada + feedback imediato = reten&ccedil;&atilde;o duradoura.</p>
+        </div>
+
+        <div class="method-card">
+          <div class="method-number">2</div>
+          <h4>Erro Sem Risco</h4>
+          <p>Simula&ccedil;&atilde;o permite errar sem consequ&ecirc;ncias reais. Voc&ecirc; aprende com os erros sem prejudicar ningu&eacute;m.</p>
+        </div>
+
+        <div class="method-card">
+          <div class="method-number">3</div>
+          <h4>Feedback Estruturado</h4>
+          <p>Cada decis&atilde;o recebe explica&ccedil;&atilde;o detalhada. Entenda n&atilde;o s&oacute; O QUE fazer, mas POR QUE funciona.</p>
+        </div>
+
+        <div class="method-card">
+          <div class="method-number">4</div>
+          <h4>Gamifica&ccedil;&atilde;o Inteligente</h4>
+          <p>XP, streaks e n&iacute;veis mant&ecirc;m voc&ecirc; engajado. Treinar vira h&aacute;bito, n&atilde;o obriga&ccedil;&atilde;o.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Pricing ============ -->
+  <section id="preco" class="pricing-section section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge">PRE&Ccedil;O SIMPLES</span>
+        <h2>Invista menos que <span class="text-gradient">uma pizza por m&ecirc;s</span></h2>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <span class="pricing-badge">7 DIAS GR&Aacute;TIS</span>
+          <div class="pricing-price">
+            <span class="price-currency">R$</span>
+            <span class="price-value">47</span>
+            <span class="price-period">/m&ecirc;s</span>
+          </div>
+          <p class="pricing-subtitle">Cancele quando quiser. Sem pegadinhas.</p>
+        </div>
+
+        <ul class="pricing-features">
+          <li>&#10003; Acesso a todos os 4 m&oacute;dulos</li>
+          <li>&#10003; 200+ casos cl&iacute;nicos</li>
+          <li>&#10003; Jornadas completas de 12 sess&otilde;es</li>
+          <li>&#10003; Feedback detalhado em cada decis&atilde;o</li>
+          <li>&#10003; Sistema de XP, streaks e conquistas</li>
+          <li>&#10003; Novos casos toda semana</li>
+          <li>&#10003; Suporte por WhatsApp</li>
+        </ul>
+
+        <a href="signup.html" class="btn btn-primary btn-lg btn-full">Come&ccedil;ar 7 Dias Gr&aacute;tis</a>
+
+        <p class="pricing-guarantee">&#128737;&#65039; Garantia de 30 dias. N&atilde;o gostou? Devolvemos seu dinheiro.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ (Preserved from v1 with categories) ============ -->
+  <section id="faq" class="faq-section section">
+    <div class="container">
+      <div class="section-header text-center">
         <div class="faq-badge">Perguntas Frequentes</div>
-        <h2 class="section-title">Tire suas dúvidas</h2>
+        <h2>Tire suas d&uacute;vidas</h2>
         <p class="section-subtitle">
-          Tudo o que você precisa saber sobre o Scopsy Lab® e como ele vai transformar sua prática clínica
+          Tudo o que voc&ecirc; precisa saber sobre o Scopsy Lab&reg; e como ele vai transformar sua pr&aacute;tica cl&iacute;nica
         </p>
       </div>
 
-      <!-- Filtros por categoria -->
+      <!-- Category Filters -->
       <div class="faq-categories">
         <button class="category-btn active" data-category="all">Todas</button>
         <button class="category-btn" data-category="product">Produto</button>
-        <button class="category-btn" data-category="pricing">Preços</button>
-        <button class="category-btn" data-category="technical">Técnico</button>
+        <button class="category-btn" data-category="pricing">Pre&ccedil;os</button>
+        <button class="category-btn" data-category="technical">T&eacute;cnico</button>
         <button class="category-btn" data-category="learning">Aprendizado</button>
       </div>
 
       <div class="faq-list">
 
-        <!-- FAQ 1: O que é o Scopsy Lab -->
+        <!-- FAQ 1 -->
         <div class="faq-item" data-category="product">
           <div class="faq-question">
             <div class="faq-question-text">
-              <h3>O que é o Scopsy Lab®?</h3>
+              <h3>O que &eacute; o Scopsy Lab&reg;?</h3>
               <p>Entenda o conceito e a proposta</p>
             </div>
             <div class="faq-toggle"></div>
           </div>
           <div class="faq-answer">
             <div class="faq-answer-content">
-              <p>O Scopsy Lab® é um <strong>laboratório virtual de prática clínica</strong> que funciona como um
-                "Duolingo para psicólogos". Aqui você treina suas habilidades clínicas através de <span
-                  class="highlight">simulações realistas</span> e recebe feedback formativo imediato.</p>
-              <p>Diferente de cursos teóricos tradicionais, no Scopsy Lab® você:</p>
+              <p>O Scopsy Lab&reg; &eacute; um <strong>simulador de treino cl&iacute;nico</strong> para psic&oacute;logos.
+                Aqui voc&ecirc; treina suas habilidades cl&iacute;nicas atrav&eacute;s de <span
+                  class="highlight">casos simulados realistas</span> e recebe feedback formativo imediato.</p>
+              <p>Diferente de cursos te&oacute;ricos tradicionais, no Scopsy Lab&reg; voc&ecirc;:</p>
               <ul>
-                <li><strong>Pratica com casos clínicos reais</strong> gerados por IA especializada</li>
-                <li><strong>Recebe feedback instantâneo</strong> sobre suas decisões clínicas</li>
-                <li><strong>Desenvolve raciocínio clínico</strong> através da repetição deliberada</li>
-                <li><strong>Acompanha seu progresso</strong> com métricas e gamificação</li>
+                <li><strong>Pratica com casos cl&iacute;nicos simulados</strong> baseados em situa&ccedil;&otilde;es reais de consult&oacute;rio</li>
+                <li><strong>Recebe feedback formativo</strong> sobre suas decis&otilde;es cl&iacute;nicas</li>
+                <li><strong>Desenvolve racioc&iacute;nio cl&iacute;nico</strong> atrav&eacute;s da repeti&ccedil;&atilde;o deliberada</li>
+                <li><strong>Acompanha seu progresso</strong> com m&eacute;tricas e gamifica&ccedil;&atilde;o</li>
               </ul>
-              <p>É como ter um supervisor clínico disponível 24/7 para treinar suas habilidades.</p>
+              <p>&Eacute; um ambiente seguro para praticar e errar quantas vezes precisar, sem risco para pacientes reais.</p>
             </div>
           </div>
         </div>
 
-        <!-- FAQ 2: Para quem é -->
+        <!-- FAQ 2 -->
         <div class="faq-item" data-category="product">
           <div class="faq-question">
             <div class="faq-question-text">
-              <h3>O Scopsy Lab® é para mim?</h3>
-              <p>Veja se o produto é adequado para você</p>
+              <h3>O Scopsy Lab&reg; &eacute; para mim?</h3>
+              <p>Veja se o produto &eacute; adequado para voc&ecirc;</p>
             </div>
             <div class="faq-toggle"></div>
           </div>
           <div class="faq-answer">
             <div class="faq-answer-content">
-              <p>O Scopsy Lab® é perfeito para você se:</p>
+              <p>O Scopsy Lab&reg; foi feito para psic&oacute;logos em qualquer est&aacute;gio da carreira:</p>
               <ul>
-                <li>✅ Você é <strong>estudante de psicologia</strong> e quer se preparar melhor para a prática clínica
-                </li>
-                <li>✅ Você é <strong>psicólogo recém-formado</strong> e quer ganhar confiança no atendimento</li>
-                <li>✅ Você já atende mas quer <strong>aprimorar técnicas específicas</strong> (TCC, ACT, DBT)</li>
-                <li>✅ Você quer <strong>treinar diagnóstico diferencial</strong> com casos complexos</li>
-                <li>✅ Você busca <strong>prática deliberada</strong> sem expor pacientes reais</li>
+                <li>&#10004; <strong>Estudantes de psicologia</strong> que querem chegar preparados para a pr&aacute;tica cl&iacute;nica</li>
+                <li>&#10004; <strong>Rec&eacute;m-formados</strong> que querem ganhar confian&ccedil;a e repert&oacute;rio antes de atender</li>
+                <li>&#10004; <strong>Profissionais experientes</strong> que querem se testar com desafios de qualidade e manter habilidades afiadas</li>
+                <li>&#10004; <strong>Quem quer se atualizar</strong> em TCC, ACT e DBT com pr&aacute;tica, n&atilde;o s&oacute; teoria</li>
               </ul>
-              <p><strong>Não importa seu nível de experiência</strong> – nossos módulos se adaptam desde iniciantes até
-                profissionais experientes que querem refinar habilidades específicas.</p>
+              <p>Os m&oacute;dulos oferecem desafios para todos os n&iacute;veis &ndash; desde casos introdut&oacute;rios at&eacute; situa&ccedil;&otilde;es complexas que exigem racioc&iacute;nio cl&iacute;nico apurado.</p>
             </div>
           </div>
         </div>
 
-        <!-- FAQ 3: Diferença Trial vs Premium -->
+        <!-- FAQ 3 -->
         <div class="faq-item" data-category="pricing">
           <div class="faq-question">
             <div class="faq-question-text">
-              <h3>Quanto custa? Qual a diferença entre Trial e Premium?</h3>
-              <p>Compare os planos disponíveis</p>
+              <h3>Quanto custa? Qual a diferen&ccedil;a entre Trial e Premium?</h3>
+              <p>Compare os planos dispon&iacute;veis</p>
             </div>
             <div class="faq-toggle"></div>
           </div>
@@ -238,103 +488,69 @@
             <div class="faq-answer-content">
               <p><span class="answer-badge badge-trial">Trial Gratuito - 7 dias</span></p>
               <ul>
-                <li>30 acessos aos módulos de treino</li>
-                <li>Casos clínicos básicos</li>
+                <li>30 acessos aos m&oacute;dulos de treino</li>
+                <li>Casos cl&iacute;nicos b&aacute;sicos</li>
                 <li>Feedback formativo limitado</li>
                 <li>Ideal para conhecer a plataforma</li>
               </ul>
-
-              <p><span class="answer-badge badge-premium">Premium - R$ 47/mês</span></p>
+              <p><span class="answer-badge badge-premium">Premium - R$ 47/m&ecirc;s</span></p>
               <ul>
-                <li><strong>Acessos ilimitados</strong> a todos os módulos</li>
-                <li><strong>Sistema completo de gamificação</strong> (cognits, níveis, vigor clínico)</li>
-                <li><strong>Casos complexos</strong> e simulações avançadas</li>
-                <li><strong>Feedback detalhado</strong> com análise aprofundada</li>
-                <li><strong>Missões diárias</strong> personalizadas</li>
+                <li><strong>Acessos ilimitados</strong> a todos os m&oacute;dulos</li>
+                <li><strong>Sistema completo de gamifica&ccedil;&atilde;o</strong> (cognits, n&iacute;veis, vigor cl&iacute;nico)</li>
+                <li><strong>Casos complexos</strong> e simula&ccedil;&otilde;es avan&ccedil;adas</li>
+                <li><strong>Feedback detalhado</strong> com an&aacute;lise aprofundada</li>
+                <li><strong>Miss&otilde;es di&aacute;rias</strong> personalizadas</li>
                 <li><strong>Conquistas e badges</strong> de progresso</li>
-                <li><strong>Histórico completo</strong> de evolução</li>
+                <li><strong>Hist&oacute;rico completo</strong> de evolu&ccedil;&atilde;o</li>
               </ul>
-
-              <p>💡 <strong>Dica:</strong> Comece no Trial para experimentar, e quando sentir que está pronto para
-                prática regular, migre para o Premium. Menos que 2 cafés por semana!</p>
+              <p>&#128161; <strong>Dica:</strong> Comece no Trial para experimentar, e quando sentir que est&aacute; pronto para
+                pr&aacute;tica regular, migre para o Premium. Menos que 2 caf&eacute;s por semana!</p>
             </div>
           </div>
         </div>
 
-        <!-- FAQ 4: Como funciona a IA -->
-        <div class="faq-item" data-category="technical">
-          <div class="faq-question">
-            <div class="faq-question-text">
-              <h3>Como funciona a inteligência artificial?</h3>
-              <p>Tecnologia por trás da plataforma</p>
-            </div>
-            <div class="faq-toggle"></div>
-          </div>
-          <div class="faq-answer">
-            <div class="faq-answer-content">
-              <p>O Scopsy Lab® usa <strong>4 assistentes especializados de IA</strong> treinados com conhecimento em
-                psicologia clínica:</p>
-              <ul>
-                <li><strong>Radar Diagnóstico:</strong> Treina diagnóstico diferencial DSM-5</li>
-                <li><strong>Desafios Clínicos:</strong> Micro-momentos críticos que exigem decisão imediata</li>
-                <li><strong>Conceituação:</strong> Casos interativos com formulação de hipóteses</li>
-                <li><strong>Jornada Terapêutica:</strong> Simula atendimentos completos de 12 sessões</li>
-              </ul>
-              <p>Cada assistente foi desenvolvido com <span class="highlight">20+ anos de experiência clínica</span> e
-                validado por psicólogos especializados em TCC, ACT e DBT.</p>
-              <p><strong>Resultado:</strong> Você recebe feedback que parece vir de um supervisor experiente, não de um
-                robô genérico.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- FAQ 5: Quanto tempo para ver resultados -->
+        <!-- FAQ 5 -->
         <div class="faq-item" data-category="learning">
           <div class="faq-question">
             <div class="faq-question-text">
-              <h3>Quanto tempo até ver resultados?</h3>
-              <p>Expectativas realistas de progresso</p>
+              <h3>Como funciona a pr&aacute;tica no Scopsy Lab&reg;?</h3>
+              <p>Entenda a din&acirc;mica de treino</p>
             </div>
             <div class="faq-toggle"></div>
           </div>
           <div class="faq-answer">
             <div class="faq-answer-content">
-              <p>A ciência da <strong>prática deliberada</strong> mostra que você pode ver melhorias significativas em:
-              </p>
+              <p>O Scopsy Lab&reg; &eacute; baseado no princ&iacute;pio da <strong>pr&aacute;tica deliberada</strong>: voc&ecirc; toma decis&otilde;es cl&iacute;nicas em cen&aacute;rios simulados e recebe feedback formativo ap&oacute;s cada escolha.</p>
+              <p>A plataforma oferece diferentes formatos de treino:</p>
               <ul>
-                <li><strong>1 semana:</strong> Maior confiança na condução de entrevistas</li>
-                <li><strong>2 semanas:</strong> Raciocínio clínico mais estruturado</li>
-                <li><strong>1 mês:</strong> Identificação mais rápida de padrões diagnósticos</li>
-                <li><strong>3 meses:</strong> Mudança perceptível na qualidade dos atendimentos</li>
+                <li><strong>Desafios r&aacute;pidos:</strong> Micro-cen&aacute;rios de poucos minutos para decis&otilde;es pontuais</li>
+                <li><strong>Vinhetas diagn&oacute;sticas:</strong> Casos para treinar racioc&iacute;nio diferencial</li>
+                <li><strong>Jornadas completas:</strong> Acompanhamento de casos ao longo de 12 sess&otilde;es</li>
               </ul>
-              <p><strong>Recomendação:</strong> 15-20 minutos diários de prática consistente geram mais resultados que
-                horas de estudo teórico esporádico.</p>
-              <p>💪 O sistema de <span class="highlight">gamificação</span> foi criado justamente para incentivar
-                prática regular e manter você motivado.</p>
+              <p>O sistema de <span class="highlight">gamifica&ccedil;&atilde;o</span> (XP, streaks, conquistas) ajuda a manter a regularidade no treino.</p>
             </div>
           </div>
         </div>
 
-        <!-- FAQ 6: Posso cancelar -->
+        <!-- FAQ 6 -->
         <div class="faq-item" data-category="pricing">
           <div class="faq-question">
             <div class="faq-question-text">
               <h3>Posso cancelar quando quiser?</h3>
-              <p>Política de cancelamento</p>
+              <p>Pol&iacute;tica de cancelamento</p>
             </div>
             <div class="faq-toggle"></div>
           </div>
           <div class="faq-answer">
             <div class="faq-answer-content">
-              <p><strong>Sim, você pode cancelar a qualquer momento</strong>, sem burocracias ou taxas de cancelamento.
-              </p>
-              <p>Acreditamos que você deve permanecer porque está vendo valor real no seu desenvolvimento, não porque
-                está "preso" em um contrato.</p>
+              <p><strong>Sim, voc&ecirc; pode cancelar a qualquer momento</strong>, sem burocracias ou taxas de cancelamento.</p>
+              <p>Acreditamos que voc&ecirc; deve permanecer porque est&aacute; vendo valor real no seu desenvolvimento, n&atilde;o porque
+                est&aacute; &ldquo;preso&rdquo; em um contrato.</p>
               <ul>
-                <li>✅ Cancelamento instantâneo pelo email</li>
-                <li>✅ Sem período mínimo de permanência</li>
-                <li>✅ Sem taxas ou multas</li>
-                <li>✅ Acesso mantido até o fim do período pago</li>
+                <li>&#10004; Cancelamento instant&acirc;neo pelo email</li>
+                <li>&#10004; Sem per&iacute;odo m&iacute;nimo de perman&ecirc;ncia</li>
+                <li>&#10004; Sem taxas ou multas</li>
+                <li>&#10004; Acesso mantido at&eacute; o fim do per&iacute;odo pago</li>
               </ul>
               <p><strong>Email:</strong> <a href="mailto:suporte.scopsy@gmail.com"
                   class="link">suporte.scopsy@gmail.com</a></p>
@@ -342,56 +558,54 @@
           </div>
         </div>
 
-        <!-- FAQ 7: Substitui supervisão -->
+        <!-- FAQ 7 -->
         <div class="faq-item" data-category="learning">
           <div class="faq-question">
             <div class="faq-question-text">
-              <h3>O Scopsy Lab® substitui supervisão clínica?</h3>
-              <p>Relação com supervisão tradicional</p>
+              <h3>O Scopsy Lab&reg; substitui supervis&atilde;o cl&iacute;nica?</h3>
+              <p>Rela&ccedil;&atilde;o com supervis&atilde;o tradicional</p>
             </div>
             <div class="faq-toggle"></div>
           </div>
           <div class="faq-answer">
             <div class="faq-answer-content">
-              <p><strong>Não, o Scopsy Lab® complementa a supervisão, não substitui.</strong></p>
-              <p>Pense nele como um <span class="highlight">"simulador de voo" para psicólogos</span>:</p>
+              <p><strong>N&atilde;o, o Scopsy Lab&reg; complementa a supervis&atilde;o, n&atilde;o substitui.</strong></p>
+              <p>Pense nele como um <span class="highlight">&ldquo;simulador de voo&rdquo; para psic&oacute;logos</span>:</p>
               <ul>
-                <li>🎮 <strong>Scopsy Lab®:</strong> Treino de habilidades técnicas em ambiente seguro</li>
-                <li>👨‍⚕️ <strong>Supervisão:</strong> Discussão de casos reais e questões éticas/pessoais</li>
+                <li>&#127918; <strong>Scopsy Lab&reg;:</strong> Treino de habilidades t&eacute;cnicas em ambiente seguro</li>
+                <li>&#128104;&#8205;&#9877;&#65039; <strong>Supervis&atilde;o:</strong> Discuss&atilde;o de casos reais e quest&otilde;es &eacute;ticas/pessoais</li>
               </ul>
-              <p>Assim como pilotos usam simuladores ANTES de voar com passageiros, você usa o Scopsy Lab® para:</p>
+              <p>Assim como pilotos usam simuladores ANTES de voar com passageiros, voc&ecirc; usa o Scopsy Lab&reg; para:</p>
               <ul>
-                <li>Treinar habilidades específicas sem riscos</li>
-                <li>Ganhar confiança antes de casos reais</li>
-                <li>Praticar situações difíceis repetidamente</li>
-                <li>Chegar mais preparado nas supervisões</li>
+                <li>Treinar habilidades espec&iacute;ficas sem riscos</li>
+                <li>Ganhar confian&ccedil;a antes de casos reais</li>
+                <li>Praticar situa&ccedil;&otilde;es dif&iacute;ceis repetidamente</li>
+                <li>Chegar mais preparado nas supervis&otilde;es</li>
               </ul>
-              <p><strong>Resultado:</strong> Suas supervisões ficam mais produtivas porque você já domina o básico.</p>
+              <p><strong>Resultado:</strong> Suas supervis&otilde;es ficam mais produtivas porque voc&ecirc; j&aacute; domina o b&aacute;sico.</p>
             </div>
           </div>
         </div>
 
-        <!-- FAQ 8: Funciona offline -->
+        <!-- FAQ 8 -->
         <div class="faq-item" data-category="technical">
           <div class="faq-question">
             <div class="faq-question-text">
               <h3>Funciona no celular? Precisa de internet?</h3>
-              <p>Requisitos técnicos</p>
+              <p>Requisitos t&eacute;cnicos</p>
             </div>
             <div class="faq-toggle"></div>
           </div>
           <div class="faq-answer">
             <div class="faq-answer-content">
               <p><strong>Sim, funciona perfeitamente no celular, tablet e computador!</strong></p>
-              <p>A plataforma é 100% responsiva e otimizada para qualquer dispositivo.</p>
+              <p>A plataforma &eacute; 100% responsiva e otimizada para qualquer dispositivo.</p>
               <p><strong>Requisitos:</strong></p>
               <ul>
-                <li>✅ Conexão com internet (necessária para IA funcionar)</li>
-                <li>✅ Navegador moderno (Chrome, Safari, Firefox, Edge)</li>
-                <li>✅ Nenhum download ou instalação necessária</li>
+                <li>&#10004; Conex&atilde;o com internet</li>
+                <li>&#10004; Navegador moderno (Chrome, Safari, Firefox, Edge)</li>
+                <li>&#10004; Nenhum download ou instala&ccedil;&atilde;o necess&aacute;ria</li>
               </ul>
-              <p>💡 <strong>Dica:</strong> Muitos usuários praticam no celular durante o trajeto casa-trabalho. 15
-                minutos no ônibus = 1 caso clínico completo!</p>
             </div>
           </div>
         </div>
@@ -400,65 +614,72 @@
 
       <!-- CTA no FAQ -->
       <div class="faq-cta">
-        <h3>Ainda tem dúvidas?</h3>
-        <p>Experimente grátis por 7 dias ou entre em contato</p>
-        <a href="signup.html" class="btn btn-primary btn-large"><span>Testar 7 Dias Grátis →</span></a>
+        <h3>Ainda tem d&uacute;vidas?</h3>
+        <p>Experimente gr&aacute;tis por 7 dias ou entre em contato</p>
+        <a href="signup.html" class="btn btn-primary btn-lg">Testar 7 Dias Gr&aacute;tis &rarr;</a>
       </div>
 
     </div>
   </section>
 
-  <!-- CTA FINAL -->
-  <section class="cta-final">
+  <!-- ============ Final CTA ============ -->
+  <section id="cta" class="cta-section section">
+    <div class="cta-glow"></div>
     <div class="container">
-      <h2>Comece a praticar hoje.<br />Veja a diferença amanhã.</h2>
-      <p class="cta-final-subtitle">
-        7 dias grátis. Sem cartão. Cancele quando quiser.
-      </p>
+      <div class="cta-content text-center">
+        <h2>Chega de inseguran&ccedil;a. <br>Comece a treinar <span class="text-accent">hoje.</span></h2>
+        <p>Pratique decis&otilde;es cl&iacute;nicas reais com feedback formativo. Sem risco.</p>
 
-      <a href="signup.html" class="btn btn-primary btn-large">
-        <span>Testar 7 Dias Grátis →</span>
-      </a>
+        <form class="cta-form" action="#" method="POST">
+          <input type="email" class="cta-input" placeholder="Seu melhor e-mail" required>
+          <button type="submit" class="btn btn-accent btn-lg">Come&ccedil;ar Gr&aacute;tis &rarr;</button>
+        </form>
 
-      <p class="cta-guarantee">
-        Depois R$ 47/mês · Menos que 2 cafés por semana
-      </p>
+        <div class="cta-features">
+          <span>&#10003; 7 dias gr&aacute;tis</span>
+          <span>&#10003; Sem cart&atilde;o de cr&eacute;dito</span>
+          <span>&#10003; Cancele quando quiser</span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- ============ Footer ============ -->
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
-        <div class="footer-col">
-          <h3>Scopsy Lab <span class="registered">®</span></h3>
-          <p>Simulador de prática clínica para psicólogos</p>
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <img src="assets/logo.png" alt="Scopsy Lab" class="logo-icon-img">
+            <span>Scopsy<span style="color: var(--color-accent);">Lab</span></span>
+          </a>
+          <p>Treinamento cl&iacute;nico gamificado para psic&oacute;logos que querem atender com confian&ccedil;a.</p>
         </div>
 
-        <div class="footer-col">
-          <h4>Produto</h4>
-          <a href="#como-funciona">Como Funciona</a>
-          <a href="signup.html">Criar Conta</a>
-          <a href="login.html">Entrar</a>
-        </div>
+        <div class="footer-links">
+          <div class="footer-column">
+            <h6>Produto</h6>
+            <a href="#modulos">M&oacute;dulos</a>
+            <a href="#metodo">M&eacute;todo</a>
+            <a href="#faq">FAQ</a>
+          </div>
 
-        <div class="footer-col">
-          <h4>Suporte</h4>
-          <a href="mailto:contato@scopsylab.com">Contato</a>
-          <a href="#faq">FAQ</a>
-        </div>
+          <div class="footer-column">
+            <h6>Empresa</h6>
+            <a href="#">Sobre</a>
+            <a href="mailto:contato@scopsylab.com">Contato</a>
+          </div>
 
-        <div class="footer-col">
-          <h4>Legal</h4>
-          <a href="#">Termos de Uso</a>
-          <a href="#">Política de Privacidade</a>
+          <div class="footer-column">
+            <h6>Legal</h6>
+            <a href="#">Termos de Uso</a>
+            <a href="#">Privacidade</a>
+          </div>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <p>© 2025 Scopsy Lab. Todos os direitos reservados.</p>
-        <p style="margin-top: 12px; font-size: 0.9rem; opacity: 0.7;">Feedback bem-vindo · Desenvolvido com ❤️ para
-          psicólogos</p>
+        <p>&copy; 2025 Scopsy Lab. Todos os direitos reservados.</p>
       </div>
     </div>
   </footer>
@@ -468,56 +689,65 @@
     window.addEventListener('scroll', () => {
       const header = document.querySelector('.header');
       if (window.scrollY > 50) {
-        header.classList.add('scrolled');
+        header.style.borderBottomColor = 'var(--color-border)';
       } else {
-        header.classList.remove('scrolled');
+        header.style.borderBottomColor = 'var(--color-border-light)';
       }
     });
 
     // Mobile Menu Toggle
-    const mobileBtn = document.querySelector('.mobile-menu-btn');
-    const nav = document.querySelector('.nav');
-    const overlay = document.querySelector('.mobile-menu-overlay');
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    const navActions = document.getElementById('nav-actions');
+    const mobileOverlay = document.getElementById('mobile-overlay');
 
-    function toggleMenu() {
-      mobileBtn.classList.toggle('active');
-      nav.classList.toggle('active');
-      overlay.classList.toggle('active');
-      document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+    function toggleMobileMenu() {
+      navToggle.classList.toggle('active');
+      navMenu.classList.toggle('active');
+      navActions.classList.toggle('active');
+      mobileOverlay.classList.toggle('active');
+      document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
     }
 
-    if (mobileBtn) {
-      mobileBtn.addEventListener('click', toggleMenu);
-      overlay.addEventListener('click', toggleMenu);
+    if (navToggle) {
+      navToggle.addEventListener('click', toggleMobileMenu);
+      mobileOverlay.addEventListener('click', toggleMobileMenu);
 
       // Close menu when clicking links
-      document.querySelectorAll('.nav a').forEach(link => {
-        link.addEventListener('click', toggleMenu);
+      navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', toggleMobileMenu);
       });
     }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
 
     // Video Player Controls
     const video = document.getElementById('scopsy-video');
     const playOverlay = document.getElementById('play-overlay');
 
     if (video && playOverlay) {
-      // Click no overlay para tocar o vídeo
       playOverlay.addEventListener('click', () => {
         video.play();
         playOverlay.classList.add('hidden');
       });
 
-      // Quando o vídeo tocar, esconder overlay
       video.addEventListener('play', () => {
         playOverlay.classList.add('hidden');
       });
 
-      // Quando pausar, mostrar overlay novamente
       video.addEventListener('pause', () => {
         playOverlay.classList.remove('hidden');
       });
 
-      // Quando terminar, mostrar overlay
       video.addEventListener('ended', () => {
         playOverlay.classList.remove('hidden');
       });
@@ -529,30 +759,30 @@
         const item = question.closest('.faq-item');
         const isOpen = item.classList.contains('open');
 
-        // Fecha todos
+        // Close all
         document.querySelectorAll('.faq-item').forEach(i => {
           i.classList.remove('open');
         });
 
-        // Abre o clicado se estava fechado
+        // Open clicked if was closed
         if (!isOpen) {
           item.classList.add('open');
         }
       });
     });
 
-    // Filtro por categoria no FAQ
+    // FAQ Category Filter
     document.querySelectorAll('.category-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const category = btn.dataset.category;
 
-        // Atualiza botão ativo
+        // Update active button
         document.querySelectorAll('.category-btn').forEach(b => {
           b.classList.remove('active');
         });
         btn.classList.add('active');
 
-        // Filtra itens
+        // Filter items
         document.querySelectorAll('.faq-item').forEach(item => {
           if (category === 'all' || item.dataset.category === category) {
             item.style.display = 'block';
@@ -562,6 +792,20 @@
           }
         });
       });
+    });
+
+    // Animate on scroll (IntersectionObserver)
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in-up');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.module-card, .method-card, .problem-card').forEach(el => {
+      observer.observe(el);
     });
   </script>
 </body>
