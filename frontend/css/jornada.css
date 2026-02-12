@@ -1114,6 +1114,7 @@ h1 {
 @media (max-width: 768px) {
     .journey-layout {
         flex-direction: column !important;
+        align-items: stretch !important;
     }
 
     .sessions-sidebar {
@@ -1123,8 +1124,9 @@ h1 {
         margin-bottom: 16px;
         position: relative !important;
         top: auto !important;
-        flex-shrink: initial !important;
-        z-index: 1;
+        flex-shrink: 0 !important;
+        flex-grow: 0 !important;
+        flex-basis: auto !important;
     }
 
     /* Collapsible: hide session list by default on mobile */
@@ -1145,7 +1147,16 @@ h1 {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
         -webkit-tap-highlight-color: transparent;
+    }
+
+    .sessions-sidebar.expanded .sidebar-header {
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border-subtle);
     }
 
     .sidebar-header::after {
@@ -1161,7 +1172,8 @@ h1 {
 
     .main-content {
         width: 100% !important;
-        z-index: 0;
+        flex: none !important;
+        min-height: 200px;
     }
 
     .trial-banner {
