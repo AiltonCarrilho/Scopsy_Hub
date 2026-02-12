@@ -54,8 +54,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(140, 82, 255, 0.1);
-  border: 1px solid rgba(140, 82, 255, 0.2);
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.2);
   padding: 6px 16px;
   border-radius: 20px;
   margin-bottom: 24px;
@@ -166,7 +166,7 @@ section {
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  border: 2px solid rgba(140, 82, 255, 0.3);
+  border: 2px solid rgba(37, 99, 235, 0.3);
   position: relative;
   background: #000;
   aspect-ratio: 16 / 9; /* Força proporção 16:9 */
@@ -526,8 +526,8 @@ section {
 }
 
 .faq-item:hover {
-  border-color: rgba(140, 82, 255, 0.3);
-  box-shadow: 0 4px 16px rgba(140, 82, 255, 0.1);
+  border-color: rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
 }
 
 .faq-item.open {
