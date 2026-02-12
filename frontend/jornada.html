@@ -959,7 +959,7 @@
 
             if (restartBtn) restartBtn.addEventListener('click', restartJourney);
             if (dashboardBtn) dashboardBtn.addEventListener('click', () => window.location.href = '/lab');
-            if (treinoLivreBtn) treinoLivreBtn.addEventListener('click', () => window.location.href = 'treino-livre.html');
+            if (treinoLivreBtn) treinoLivreBtn.addEventListener('click', () => window.location.href = 'desafios.html');
         }
 
         // ========================================
@@ -1034,7 +1034,7 @@
                     </div>
                 `;
 
-                const response = await fetch(`${API_URL}/journey/${currentJourneyId}/restart`, {
+                const response = await fetch(`${JOURNEY_API_URL}/journey/${currentJourneyId}/restart`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ user_id: USER_ID })
@@ -1051,7 +1051,7 @@
                 // Limpar cache de sessões para forçar reload
                 sessionsCache = {};
                 lastLoadedJourney = null;
-                lastLoadedFilter = null;
+                // lastLoadedFilter removido (variavel nao utilizada)
 
                 // Garantir que localStorage está atualizado
                 localStorage.setItem('scopsy_current_journey_id', currentJourneyId);
