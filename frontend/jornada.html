@@ -1087,8 +1087,43 @@
         }
 
         // ========================================
+        // MOBILE: COLLAPSIBLE SIDEBAR
+        // ========================================
+        function setupMobileSidebar() {
+            const sidebar = document.getElementById('sessionsSidebar');
+            const header = sidebar?.querySelector('.sidebar-header');
+            if (!sidebar || !header) return;
+
+            function isMobile() {
+                return window.matchMedia('(max-width: 768px)').matches;
+            }
+
+            header.addEventListener('click', function (e) {
+                if (!isMobile()) return;
+                e.stopPropagation();
+                sidebar.classList.toggle('expanded');
+            });
+
+            // Close sidebar when a session is selected on mobile
+            sidebar.addEventListener('click', function (e) {
+                if (!isMobile()) return;
+                if (e.target.closest('.session-menu-item')) {
+                    setTimeout(() => sidebar.classList.remove('expanded'), 200);
+                }
+            });
+
+            // Ensure sidebar is not collapsed on desktop
+            window.addEventListener('resize', function () {
+                if (!isMobile()) {
+                    sidebar.classList.remove('expanded');
+                }
+            });
+        }
+
+        // ========================================
         // INIT
         // ========================================
+        setupMobileSidebar();
         init();
 
         // Initialize Lucide Icons
