@@ -141,7 +141,7 @@ h1 {
 }
 
 .metric-value {
-    font-size: 1.75rem;
+    font-size: clamp(1.25rem, 4.5vw, 1.75rem);
     font-weight: 800;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
@@ -165,7 +165,7 @@ h1 {
 }
 
 .session-title {
-    font-size: 1.6rem;
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
     color: var(--text-main);
     margin-bottom: 12px;
     font-weight: 800;
@@ -451,24 +451,24 @@ h1 {
 }
 
 .completion-icon {
-    font-size: 80px;
+    font-size: clamp(48px, 12vw, 80px);
     margin-bottom: 24px;
 }
 
 .completion-title {
-    font-size: 2.25rem;
+    font-size: clamp(1.5rem, 5vw, 2.25rem);
     font-weight: 800;
     margin-bottom: 16px;
 }
 
 .completion-score {
-    font-size: 4rem;
+    font-size: clamp(2.5rem, 8vw, 4rem);
     font-weight: 900;
     margin: 24px 0;
 }
 
 .completion-effectiveness {
-    font-size: 1.5rem;
+    font-size: clamp(1.1rem, 3.5vw, 1.5rem);
     margin-bottom: 32px;
     opacity: 0.95;
     font-weight: 600;
@@ -496,7 +496,7 @@ h1 {
 }
 
 .completion-metric-value {
-    font-size: 2.25rem;
+    font-size: clamp(1.5rem, 5vw, 2.25rem);
     font-weight: 900;
 }
 
@@ -508,6 +508,23 @@ h1 {
 }
 
 /* ========== RESPONSIVE ========== */
+
+/* --- Tablets (iPad Air ~820px) --- */
+@media (max-width: 968px) {
+    .metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .completion-metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .feedback-impact {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* --- Mobile (< 768px) --- */
 @media (max-width: 768px) {
     .container {
         padding: 16px;
@@ -531,6 +548,54 @@ h1 {
 
     .session-title {
         font-size: 1.4rem;
+    }
+
+    .progress-container {
+        padding: 20px;
+    }
+
+    .completion-card {
+        padding: 32px 20px;
+    }
+
+    .completion-metrics {
+        gap: 12px;
+    }
+
+    .completion-metric {
+        padding: 16px;
+    }
+
+    .context-section {
+        padding: 16px;
+    }
+
+    .decision-prompt {
+        padding: 16px;
+        font-size: 1rem;
+    }
+
+    .option {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .feedback-body {
+        padding: 20px;
+    }
+
+    .feedback-header {
+        padding: 16px 20px;
+    }
+
+    .btn {
+        padding: 14px 24px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .actions {
+        flex-direction: column;
     }
 
     /* CONTROLES RESPONSIVOS */
@@ -561,6 +626,78 @@ h1 {
 
     .main-content {
         width: 100%;
+    }
+}
+
+/* --- Phones pequenos (iPhone SE ~375px) --- */
+@media (max-width: 480px) {
+    .container {
+        padding: 12px;
+    }
+
+    .session-card {
+        padding: 16px;
+    }
+
+    .metrics {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .metric {
+        padding: 10px;
+    }
+
+    .completion-metrics {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .completion-metric {
+        padding: 12px;
+    }
+
+    .completion-card {
+        padding: 24px 16px;
+    }
+
+    .option-label {
+        width: 36px;
+        height: 36px;
+        font-size: 0.95rem;
+    }
+
+    .session-header {
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+    }
+
+    .context-section {
+        margin-bottom: 20px;
+    }
+
+    .sessions-sidebar {
+        max-height: 200px;
+        padding: 12px;
+    }
+
+    .feedback-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+
+    .impact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header-top {
+        padding: 0 12px;
+    }
+
+    .back-btn {
+        padding: 10px 16px;
+        font-size: 0.85rem;
     }
 }
 
@@ -924,9 +1061,51 @@ h1 {
     .impact-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .feedback-header {
         flex-direction: column;
         text-align: center;
+    }
+
+    .feedback-card-premium {
+        margin-top: 20px;
+    }
+
+    .supervisor-insight {
+        padding: 20px 16px;
+    }
+
+    .client-reaction-box {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .feedback-body {
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .feedback-header {
+        padding: 14px 16px;
+        gap: 10px;
+    }
+
+    .feedback-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+
+    .feedback-title-group h3 {
+        font-size: 1.1rem;
+    }
+
+    .impact-metric-card {
+        padding: 12px;
+    }
+
+    .supervisor-insight {
+        padding: 16px 12px;
     }
 }
