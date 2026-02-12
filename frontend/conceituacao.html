@@ -43,113 +43,21 @@
         <h1>🧩 Conceituação de Caso</h1>
         <p>Análise profunda • Formulação conceitual • Desenvolvimento de competências</p>
 
-        <!-- Botões de ação -->
+        <!-- Botão de ação -->
         <div class="action-buttons">
             <button class="btn-primary" onclick="generateNewCase()">
                 🎲 Gerar Novo Caso
-            </button>
-            <button class="btn-secondary" onclick="openCustomizeModal()">
-                ⚙️ Personalizar
             </button>
         </div>
 
         <div id="caseContainer">
             <div class="empty-state">
                 <h2>Pronto para análise profunda?</h2>
-                <p>Clique em "Gerar Novo Caso" ou "Personalizar" para começar</p>
+                <p>Clique em "Gerar Novo Caso" para começar</p>
             </div>
         </div>
 
         <div id="feedbackContainer"></div>
-    </div>
-
-    <!-- Modal de Personalização -->
-    <div id="customizeModal" class="modal">
-        <div class="modal-content">
-            <h3>⚙️ Personalizar Caso</h3>
-
-            <!-- Nível de Dificuldade -->
-            <div class="form-group">
-                <label for="levelSelect">📊 Nível de Dificuldade:</label>
-                <select id="levelSelect">
-                    <option value="basic">Básico - Padrões claros e evidentes</option>
-                    <option value="intermediate" selected>Intermediário - Nuances e sobreposições</option>
-                    <option value="advanced">Avançado - Complexidade e atipicidade</option>
-                </select>
-            </div>
-
-            <!-- Foco de Treino -->
-            <div class="form-group">
-                <label>🎯 Foco de Treino:</label>
-                <div class="focus-options">
-                    <div class="focus-option active" onclick="selectFocus('conceituacao')">
-                        <div class="focus-label">
-                            <input type="radio" name="focus" value="conceituacao" checked>
-                            <span>Conceituação Cognitiva (TCC)</span>
-                        </div>
-                    </div>
-
-                    <div class="focus-option disabled">
-                        <div class="focus-label">
-                            <input type="radio" name="focus" value="tecnicas_tcc" disabled>
-                            <span>Técnicas de TCC</span>
-                        </div>
-                        <span class="premium-badge">💎 PREMIUM</span>
-                    </div>
-
-                    <div class="focus-option disabled">
-                        <div class="focus-label">
-                            <input type="radio" name="focus" value="act" disabled>
-                            <span>Habilidades ACT</span>
-                        </div>
-                        <span class="premium-badge">💎 PREMIUM</span>
-                    </div>
-
-                    <div class="focus-option disabled">
-                        <div class="focus-label">
-                            <input type="radio" name="focus" value="dbt" disabled>
-                            <span>Habilidades DBT</span>
-                        </div>
-                        <span class="premium-badge">💎 PREMIUM</span>
-                    </div>
-
-                    <div class="focus-option disabled">
-                        <div class="focus-label">
-                            <input type="radio" name="focus" value="esquemas" disabled>
-                            <span>Terapia Focada em Esquemas</span>
-                        </div>
-                        <span class="premium-badge">💎 PREMIUM</span>
-                    </div>
-
-                    <div class="focus-option disabled">
-                        <div class="focus-label">
-                            <input type="radio" name="focus" value="alianca" disabled>
-                            <span>Aliança Terapêutica</span>
-                        </div>
-                        <span class="premium-badge">💎 PREMIUM</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Categoria de Transtorno -->
-            <div class="form-group">
-                <label for="categorySelect">🏥 Categoria de Transtorno:</label>
-                <select id="categorySelect">
-                    <option value="anxiety">Transtornos de Ansiedade</option>
-                    <option value="mood">Transtornos de Humor</option>
-                    <option value="trauma">Trauma e Estressores</option>
-                    <option value="personality">Transtornos de Personalidade</option>
-                    <option value="psychotic">Transtornos Psicóticos</option>
-                    <option value="eating">Transtornos Alimentares</option>
-                    <option value="substance">Uso de Substâncias</option>
-                </select>
-            </div>
-
-            <div class="modal-buttons">
-                <button class="btn-cancel" onclick="closeCustomizeModal()">Cancelar</button>
-                <button class="btn btn-primary" onclick="generateCustomCase()">Gerar Caso</button>
-            </div>
-        </div>
     </div>
 
     <!-- Modal Premium Upgrade -->
