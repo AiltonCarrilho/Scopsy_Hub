@@ -74,7 +74,7 @@
 }
 
 .btn-secondary:hover {
-    background: rgba(140, 82, 255, 0.05);
+    background: rgba(37, 99, 235, 0.05);
     transform: translateY(-2px);
 }
 
@@ -177,7 +177,7 @@
 
 .focus-option.active {
     border-color: var(--color-primary);
-    background: rgba(140, 82, 255, 0.05);
+    background: rgba(37, 99, 235, 0.05);
 }
 
 .focus-option.disabled {
