@@ -130,21 +130,6 @@ async function fetchStatsAndRender(panel, isTrial) {
     }
 }
 
-// ========================================
-// MODAL DE PERSONALIZAÇÃO
-// ========================================
-function openCustomizeModal() {
-    const modal = document.getElementById('customizeModal');
-    modal.style.display = 'block';
-
-    // Verificar plano e habilitar/desabilitar opções
-    checkPremiumFeaturesAccess();
-}
-
-function closeCustomizeModal() {
-    document.getElementById('customizeModal').style.display = 'none';
-}
-
 function closePremiumModal() {
     document.getElementById('premiumUpgradeModal').style.display = 'none';
 }
@@ -153,87 +138,11 @@ function showPremiumModal() {
     document.getElementById('premiumUpgradeModal').style.display = 'block';
 }
 
-/**
- * Verifica plano do usuário e habilita/desabilita opções premium
- */
-function checkPremiumFeaturesAccess() {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const isPremium = user.plan === 'premium' || user.plan === 'pro';
-
-    const premiumOptions = document.querySelectorAll('.focus-option.disabled');
-
-    premiumOptions.forEach(option => {
-        const input = option.querySelector('input[type="radio"]');
-        const badge = option.querySelector('.premium-badge');
-
-        if (isPremium) {
-            // USUÁRIO PREMIUM: Habilitar opção
-            option.classList.remove('disabled');
-            if (input) input.disabled = false;
-            if (badge) badge.style.display = 'none';
-
-            // Adicionar click handler para seleção
-            option.onclick = function() {
-                selectFocus(input.value);
-            };
-        } else {
-            // USUÁRIO TRIAL: Manter desabilitado, adicionar modal de upgrade
-            option.onclick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                showPremiumModal();
-            };
-            option.style.cursor = 'pointer';
-        }
-    });
-}
-
-function selectFocus(focusType) {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const isPremium = user.plan === 'premium' || user.plan === 'pro';
-
-    // Verificar se é opção premium
-    const premiumFocuses = ['tecnicas_tcc', 'act', 'dbt', 'esquemas', 'alianca'];
-    const isPremiumFocus = premiumFocuses.includes(focusType);
-
-    // Se é premium focus e usuário não é premium, mostrar modal
-    if (isPremiumFocus && !isPremium) {
-        showPremiumModal();
-        return;
-    }
-
-    // Permitir seleção
-    const options = document.querySelectorAll('.focus-option');
-    options.forEach(opt => opt.classList.remove('active'));
-
-    // Encontrar e ativar a opção correta
-    const targetInput = document.querySelector(`input[value="${focusType}"]`);
-    if (targetInput) {
-        targetInput.checked = true;
-        const parentOption = targetInput.closest('.focus-option');
-        if (parentOption) {
-            parentOption.classList.add('active');
-        }
-    }
-}
-
 // ========================================
 // GERAÇÃO DE CASOS
 // ========================================
 async function generateNewCase() {
     await generateCase(caseConfig);
-    closeCustomizeModal();
-}
-
-async function generateCustomCase() {
-    caseConfig = {
-        level: document.getElementById('levelSelect').value,
-        focus: document.querySelector('input[name="focus"]:checked').value,
-        category: document.getElementById('categorySelect').value
-    };
-
-    await generateCase(caseConfig);
-    closeCustomizeModal();
 }
 
 async function generateCase(config) {
@@ -279,8 +188,8 @@ async function generateCase(config) {
                     <div style="padding: 20px; text-align: center;">
                         <h3 style="color: #f57c00; margin-bottom: 16px;">⚠️ Nenhum Caso Disponível</h3>
                         <p style="color: #666; margin-bottom: 20px;">${errorMsg}</p>
-                        <button onclick="openCustomizeModal()" style="background: #9C27B0; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px;">
-                            ⚙️ Tentar Outra Categoria
+                        <button onclick="generateNewCase()" style="background: #2563EB; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                            🎲 Tentar Novamente
                         </button>
                     </div>
                 </div>`;
@@ -527,8 +436,8 @@ function showFeedback(feedback) {
 // MODAL
 // ========================================
 window.onclick = function (event) {
-    const modal = document.getElementById('customizeModal');
+    const modal = document.getElementById('premiumUpgradeModal');
     if (event.target === modal) {
-        closeCustomizeModal();
+        closePremiumModal();
     }
 };
