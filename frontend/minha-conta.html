@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Conta - Scopsy Lab</title>
+    <meta name="description" content="Gerencie seu perfil e assinatura do Scopsy Lab">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png?v=2" />
+
+    <!-- Config -->
+    <script src="js/config.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/core.css?v=3">
+    <link rel="stylesheet" href="css/minha-conta.css?v=1">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="dashboard.html" class="logo-link">
+                    <img src="assets/logo.png" alt="Scopsy Lab" class="logo-icon-img">
+                    <h1>Scopsy<span class="text-gradient">Lab</span></h1>
+                </a>
+            </div>
+            <nav class="nav">
+                <a href="dashboard.html" class="btn-back">
+                    <i data-lucide="arrow-left" width="16" height="16"></i>
+                    Dashboard
+                </a>
+                <button class="btn-logout" id="logoutBtn">Sair</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="container account-page">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title"><span class="icon">⚙️</span> Minha Conta</h1>
+        </div>
+
+        <!-- Account Grid -->
+        <div class="account-grid">
+
+            <!-- CARD 1: Perfil -->
+            <div class="account-card" id="profileCard">
+                <div class="card-title">
+                    <h2><span class="card-icon">👤</span> Meu Perfil</h2>
+                    <button class="btn-edit" id="btnEditProfile" onclick="toggleEditMode()">
+                        <i data-lucide="pencil" width="14" height="14"></i>
+                        Editar
+                    </button>
+                </div>
+
+                <!-- View Mode -->
+                <div id="profileView">
+                    <div class="profile-field">
+                        <span class="field-label">Nome</span>
+                        <span class="field-value" id="profileName">
+                            <div class="skeleton"></div>
+                        </span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Email</span>
+                        <span class="field-value" id="profileEmail">
+                            <div class="skeleton wide"></div>
+                        </span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">CRP</span>
+                        <span class="field-value" id="profileCRP">
+                            <div class="skeleton short"></div>
+                        </span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Cadastro</span>
+                        <span class="field-value" id="profileCreatedAt">
+                            <div class="skeleton short"></div>
+                        </span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="field-label">Último login</span>
+                        <span class="field-value" id="profileLastLogin">
+                            <div class="skeleton short"></div>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Edit Mode -->
+                <form class="edit-form" id="profileEditForm" onsubmit="saveProfile(event)">
+                    <div class="form-group">
+                        <label for="editName">Nome Completo</label>
+                        <input type="text" id="editName" placeholder="Seu nome completo" required minlength="2"
+                            maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="editEmail">Email</label>
+                        <input type="email" id="editEmail" readonly>
+                        <p class="field-hint">O email não pode ser alterado</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCRP">CRP (opcional)</label>
+                        <input type="text" id="editCRP" placeholder="Ex: 06/123456">
+                        <p class="field-hint">Formato: XX/XXXXXX</p>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save" id="btnSaveProfile">Salvar Alterações</button>
+                        <button type="button" class="btn-cancel-edit" onclick="toggleEditMode()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- CARD 2: Assinatura -->
+            <div class="account-card" id="subscriptionCard">
+                <div class="card-title">
+                    <h2><span class="card-icon">💎</span> Minha Assinatura</h2>
+                </div>
+
+                <!-- Plan Badge -->
+                <div id="planBadgeContainer">
+                    <div class="skeleton badge"></div>
+                </div>
+
+                <!-- Subscription Details -->
+                <div id="subscriptionDetails">
+                    <div class="subscription-detail">
+                        <span class="detail-icon">📊</span>
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value" id="subStatus">
+                            <div class="skeleton short"></div>
+                        </span>
+                    </div>
+                    <div class="subscription-detail" id="subStartedRow">
+                        <span class="detail-icon">📅</span>
+                        <span class="detail-label">Membro desde</span>
+                        <span class="detail-value" id="subStarted">
+                            <div class="skeleton short"></div>
+                        </span>
+                    </div>
+                    <div class="subscription-detail" id="subNextBillingRow" style="display: none;">
+                        <span class="detail-icon">💳</span>
+                        <span class="detail-label">Próxima cobrança</span>
+                        <span class="detail-value" id="subNextBilling"></span>
+                    </div>
+                    <div class="subscription-detail" id="subEndedRow" style="display: none;">
+                        <span class="detail-icon">🚫</span>
+                        <span class="detail-label">Encerrada em</span>
+                        <span class="detail-value danger" id="subEnded"></span>
+                    </div>
+                    <div class="subscription-detail" id="subTrialRow" style="display: none;">
+                        <span class="detail-icon">⏱️</span>
+                        <span class="detail-label">Trial restante</span>
+                        <span class="detail-value warning" id="subTrialDays"></span>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="subscription-cta" id="subscriptionCTA">
+                    <!-- Dinamicamente preenchido pelo JS -->
+                </div>
+            </div>
+
+            <!-- CARD 3: Ações -->
+            <div class="account-card full-width" id="actionsCard">
+                <div class="card-title">
+                    <h2><span class="card-icon">⚡</span> Ações Rápidas</h2>
+                </div>
+
+                <a class="action-item" href="#" onclick="openPasswordModal(event)">
+                    <span class="action-icon">🔑</span>
+                    <div class="action-text">
+                        <strong>Alterar Senha</strong>
+                        <span>Redefinir sua senha de acesso</span>
+                    </div>
+                    <i data-lucide="chevron-right" width="16" height="16" style="color: var(--text-light)"></i>
+                </a>
+
+                <a class="action-item" href="mailto:contato@scopsy.com.br?subject=Preciso de ajuda - Scopsy Lab"
+                    id="actionSupport">
+                    <span class="action-icon">📧</span>
+                    <div class="action-text">
+                        <strong>Preciso de Ajuda</strong>
+                        <span>Enviar email para o suporte</span>
+                    </div>
+                    <i data-lucide="external-link" width="16" height="16" style="color: var(--text-light)"></i>
+                </a>
+
+                <a class="action-item" href="dashboard.html">
+                    <span class="action-icon">🏠</span>
+                    <div class="action-text">
+                        <strong>Voltar ao Dashboard</strong>
+                        <span>Continuar treinando</span>
+                    </div>
+                    <i data-lucide="arrow-right" width="16" height="16" style="color: var(--text-light)"></i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal Alterar Senha -->
+    <div id="passwordModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closePasswordModal()">&times;</button>
+            <h2>🔑 Alterar Senha</h2>
+            <form id="passwordForm" onsubmit="changePassword(event)">
+                <div class="form-group">
+                    <label for="currentPassword">Senha Atual</label>
+                    <input type="password" id="currentPassword" required minlength="8" autocomplete="current-password">
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Nova Senha</label>
+                    <input type="password" id="newPassword" required minlength="8" autocomplete="new-password">
+                    <p class="field-hint">Mínimo 8 caracteres</p>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Nova Senha</label>
+                    <input type="password" id="confirmPassword" required minlength="8" autocomplete="new-password">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-save" id="btnChangePassword">Alterar Senha</button>
+                    <button type="button" class="btn-cancel-edit" onclick="closePasswordModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DOMPurify -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    <script src="js/sanitize.js"></script>
+
+    <!-- Page Logic -->
+    <script src="js/minha-conta.js"></script>
+    <script>
+        lucide.createIcons();
+
+        // Logout
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        });
+    </script>
+
+</body>
+
+</html>

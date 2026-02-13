@@ -46,6 +46,26 @@
     font-size: 15px;
 }
 
+.btn-minha-conta {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    background: transparent;
+}
+
+.btn-minha-conta:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+}
+
 .user-name {
     font-weight: 500;
     color: rgba(255, 255, 255, 0.8);
@@ -274,6 +294,7 @@
 }
 
 @media (max-width: 768px) {
+
     .assistants-grid,
     .stats-grid {
         grid-template-columns: 1fr;
@@ -303,6 +324,7 @@
 }
 
 @media (max-width: 640px) {
+
     .level-card,
     .freshness-indicator {
         padding: 20px;
@@ -338,6 +360,7 @@
 
 /* Reduzir animações se o usuário preferir */
 @media (prefers-reduced-motion: reduce) {
+
     .progress-fill,
     .freshness-fill,
     .freshness-icon,
@@ -889,10 +912,12 @@
         opacity: 1;
         transform: translateY(0) scale(1);
     }
+
     50% {
         opacity: 1;
         transform: translateY(-60px) scale(1.2);
     }
+
     100% {
         opacity: 0;
         transform: translateY(-120px) scale(0.8);
@@ -913,12 +938,10 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.3) 50%,
-        transparent 100%
-    );
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 100%);
     animation: shimmer 2s infinite;
 }
 
@@ -930,6 +953,7 @@
     0% {
         left: -100%;
     }
+
     100% {
         left: 200%;
     }
@@ -944,18 +968,36 @@
 }
 
 /* Cascade delay for each card */
-.assistant-card:nth-child(1) { animation-delay: 0.1s; }
-.assistant-card:nth-child(2) { animation-delay: 0.2s; }
-.assistant-card:nth-child(3) { animation-delay: 0.3s; }
-.assistant-card:nth-child(4) { animation-delay: 0.4s; }
-.assistant-card:nth-child(5) { animation-delay: 0.5s; }
-.assistant-card:nth-child(6) { animation-delay: 0.6s; }
+.assistant-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.assistant-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.assistant-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.assistant-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.assistant-card:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+.assistant-card:nth-child(6) {
+    animation-delay: 0.6s;
+}
 
 @keyframes cardFadeIn {
     from {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -968,11 +1010,9 @@
     inset: 0;
     border-radius: var(--radius-lg);
     opacity: 0;
-    background: radial-gradient(
-        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        rgba(37, 99, 235, 0.15),
-        transparent 40%
-    );
+    background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+            rgba(37, 99, 235, 0.15),
+            transparent 40%);
     transition: opacity 0.3s;
     pointer-events: none;
 }
@@ -1026,17 +1066,20 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(
-        circle,
-        rgba(37, 99, 235, 0.1) 0%,
-        transparent 70%
-    );
+    background: radial-gradient(circle,
+            rgba(37, 99, 235, 0.1) 0%,
+            transparent 70%);
     animation: rotateGlow 8s linear infinite;
 }
 
 @keyframes rotateGlow {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes badgePopIn {
@@ -1044,9 +1087,11 @@
         transform: scale(0.5) rotate(-10deg);
         opacity: 0;
     }
+
     50% {
         transform: scale(1.1) rotate(5deg);
     }
+
     100% {
         transform: scale(1) rotate(0deg);
         opacity: 1;
@@ -1063,9 +1108,12 @@
 }
 
 @keyframes badgeBounce {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0) scale(1);
     }
+
     50% {
         transform: translateY(-10px) scale(1.05);
     }
@@ -1157,12 +1205,10 @@
 
 /* 5. SKELETON LOADING STATES */
 .skeleton {
-    background: linear-gradient(
-        90deg,
-        #f0f0f0 0%,
-        #e8e8e8 50%,
-        #f0f0f0 100%
-    );
+    background: linear-gradient(90deg,
+            #f0f0f0 0%,
+            #e8e8e8 50%,
+            #f0f0f0 100%);
     background-size: 200% 100%;
     animation: skeletonLoading 1.5s ease-in-out infinite;
     border-radius: 8px;
@@ -1172,6 +1218,7 @@
     0% {
         background-position: 200% 0;
     }
+
     100% {
         background-position: -200% 0;
     }
@@ -1234,10 +1281,14 @@
 }
 
 @keyframes dotPulse {
-    0%, 80%, 100% {
+
+    0%,
+    80%,
+    100% {
         opacity: 0.3;
         transform: scale(0.8);
     }
+
     40% {
         opacity: 1;
         transform: scale(1);
