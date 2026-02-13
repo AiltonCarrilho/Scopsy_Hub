@@ -190,6 +190,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 // 3. ROTAS
 // ========================================
 const authRoutes = require('./routes/auth');
+const accountRoutes = require('./routes/account');
 const dashboardRoutes = require('./routes/dashboard');
 const chatRoutes = require('./routes/chat');
 const diagnosticRoutes = require('./routes/diagnostic');
@@ -206,6 +207,7 @@ app.use('/api/auth', authLimiter, authRoutes);
 
 // Rotas gerais - Rate limit padrão da API
 app.use('/api/dashboard', apiLimiter, dashboardRoutes);
+app.use('/api/account', apiLimiter, accountRoutes);
 app.use('/api/chat', apiLimiter, chatRoutes);
 app.use('/api/progress', apiLimiter, require('./routes/progress'));
 app.use('/api/streaks', apiLimiter, require('./routes/streaks'));
