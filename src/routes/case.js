@@ -126,8 +126,8 @@ router.post('/generate', authenticateRequest, async (req, res) => {
 
     const seenCaseIds = interactions
       ? interactions
-          .map(i => i.case_id)
-          .filter(id => id != null)  // ← CRÍTICO: Remove null/undefined para evitar erro SQL
+        .map(i => i.case_id)
+        .filter(id => id != null)  // ← CRÍTICO: Remove null/undefined para evitar erro SQL
       : [];
 
     logger.debug(`[Case] 👁️ Usuário já viu: ${seenCaseIds.length} micro-momentos`);
@@ -416,128 +416,18 @@ TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
       });
     }
 
-    // Para MICRO-MOMENTOS: Gerar on-demand
-    logger.debug('[Case] ⏳ Cache vazio - Gerando novo micro-momento...');
-
-    const momentInfo = MOMENTOS_CRITICOS[moment_type] || MOMENTOS_CRITICOS['resistencia_tecnica'];
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // ⚡ RÁPIDO e barato para micro-momentos
-      response_format: { type: "json_object" },
-      temperature: 0.85,
-      max_tokens: 1200, // Reduzido também
-      messages: [
-        {
-          role: "system",
-          content: `Você cria MICRO-MOMENTOS clínicos críticos para treino de psicólogos.
-
-FORMATO: Momento específico de 30-60 segundos que exige DECISÃO IMEDIATA.
-
-TIPO: ${momentInfo.title} - ${momentInfo.description}
-
-SAÍDA JSON:
-{
-  "moment_type": "${moment_type}",
-  "context": {
-    "session_number": "Sessão 1-10",
-    "client_name": "Nome brasileiro",
-    "client_age": 20-60,
-    "diagnosis": "Diagnóstico breve",
-    "what_just_happened": "2-3 frases: O que aconteceu ANTES"
-  },
-  "critical_moment": {
-    "dialogue": "Fala do cliente (40-80 palavras). REALISTA.",
-    "non_verbal": "Linguagem corporal (1-2 frases)",
-    "emotional_tone": "Tom emocional"
-  },
-  "decision_point": "O QUE VOCÊ DIZ/FAZ NOS PRÓXIMOS 30 SEGUNDOS?",
-  "options": [
-    {"letter": "A", "response": "Resposta A (15-30 palavras)", "approach": "Nome abordagem"},
-    {"letter": "B", "response": "Resposta B (15-30 palavras)", "approach": "Nome abordagem"},
-    {"letter": "C", "response": "Resposta C (15-30 palavras)", "approach": "Nome abordagem"},
-    {"letter": "D", "response": "Resposta D (15-30 palavras)", "approach": "Nome abordagem"}
-  ],
-  "expert_choice": "A, B, C ou D",
-  "expert_reasoning": {
-    "why_this_works": "Por que funciona (3-4 frases)",
-    "why_others_fail": {
-      "option_X": "Por que falha (1-2 frases)",
-      "option_Y": "Por que falha",
-      "option_Z": "Por que falha"
-    },
-    "core_principle": "Princípio marcante (1 frase)",
-    "what_happens_next": "O que acontece depois (2-3 frases)"
-  },
-  "learning_point": {
-    "pattern_to_recognize": "Padrão futuro",
-    "instant_response": "Resposta automática",
-    "common_mistake": "Erro comum"
-  }
-}
-
-REGRAS: Português BR, diálogo realista, 4 opções plausíveis.
-NÍVEL ${level}: ${level === 'basic' ? 'Padrão claro' : level === 'intermediate' ? 'Nuances' : 'Complexo'}`
-        },
-        {
-          role: "user",
-          content: `Crie micro-momento "${moment_type}", nível ${level}. APENAS JSON.`
-        }
-      ]
-    });
-
-    const caseData = JSON.parse(completion.choices[0].message.content);
-
-    // Salvar no cache
-    const { data: newCase, error: insertError } = await supabase
-      .from('cases')
-      .insert({
-        disorder: caseData.context?.diagnosis || 'Micro-Momento',
-        difficulty_level: level,
-        category: 'clinical_moment',
-        moment_type: moment_type,
-        case_content: caseData,
-        vignette: caseData.critical_moment?.dialogue || '',
-        status: 'active',
-        times_used: 1,
-        quality_score: 4.0,
-        created_by: 'micro_moment_on_demand'
-      })
-      .select()
-      .single();
-
-    if (insertError) {
-      console.error('[Case] Erro ao salvar:', insertError);
-    } else {
-      logger.debug(`[Case] ✅ Novo micro-momento salvo (id: ${newCase.id})`);
-    }
-
-    // MONTAR VINHETA COMPLETA para retorno
-    const ctx = caseData.context || {};
-    const cm = caseData.critical_moment || {};
-
-    const fullVignette = `${ctx.session_number || 'Sessão'} com ${ctx.client_name || 'o cliente'}, ${ctx.client_age || '30'} anos.
-
-DIAGNÓSTICO: ${ctx.diagnosis || 'A definir'}
-
-CONTEXTO:
-${ctx.what_just_happened || 'Início da sessão.'}
-
-MOMENTO CLÍNICO:
-${cm.dialogue || 'Diálogo não disponível'}
-
-OBSERVAÇÕES NÃO-VERBAIS:
-${cm.non_verbal || 'Não registrado'}
-
-TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
-
-    res.json({
-      success: true,
-      case: {
-        ...caseData,
-        vignette: fullVignette
-      },
-      case_id: newCase?.id,
-      from_cache: false
+    // ❌ GERAÇÃO ON-DEMAND REMOVIDA (12/02/2026)
+    // Motivo: Casos gerados on-demand via gpt-4o-mini não passam pelo pipeline
+    // de qualidade (2 revisores + revisão humana) e produzem opções ambíguas.
+    // Todos os casos devem vir do projeto Orquestrador → revisados → Supabase.
+    logger.debug('[Case] ⚠️ Nenhum micro-momento disponível - NÃO gerar on-demand');
+    return res.status(404).json({
+      success: false,
+      error: 'Você completou todos os desafios disponíveis neste nível!',
+      message: `Parabéns! Você já praticou todos os micro-momentos disponíveis para o nível "${finalLevel}". Novos desafios estão sendo preparados pela nossa equipe de qualidade.`,
+      suggestion: 'Experimente outro nível de dificuldade ou volte em breve para novos casos.',
+      level_used: finalLevel,
+      cases_completed: seenCaseIds.length
     });
 
   } catch (error) {
