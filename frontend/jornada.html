@@ -9,6 +9,12 @@
         rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png" />
+    <link rel="shortcut icon" href="favicon.png" />
+
     <link rel="stylesheet" href="css/core.css">
     <link rel="stylesheet" href="css/jornada.css">
 </head>
@@ -18,8 +24,10 @@
     <header class="header">
         <div class="container">
             <div class="logo">
-                <h1>Scopsy Lab<span class="registered">®</span></h1>
-                <div style="color: #00ff00; font-size: 12px; margin-top: 4px;"></div>
+                <a href="dashboard.html" class="logo-link">
+                    <img src="assets/logo.png" alt="Scopsy Lab" class="logo-icon-img">
+                    <h1>Scopsy<span class="text-gradient">Lab</span></h1>
+                </a>
             </div>
             <a href="/lab" class="btn-back">
                 ← Voltar ao Dashboard
@@ -42,6 +50,7 @@
             <!-- MENU LATERAL DE SESSÕES -->
             <div class="sessions-sidebar" id="sessionsSidebar">
                 <div class="sidebar-header">
+                    <div class="icon-trophy sprite-icon-small" style="margin-bottom: 8px;"></div>
                     <h3>Sessões</h3>
                     <div class="sessions-count" id="sessionsCount">12 disponíveis</div>
                 </div>
