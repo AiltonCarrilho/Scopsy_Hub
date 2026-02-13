@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticateRequest } = require('../middleware/auth');
 const { getFromBoostspace, deleteFromBoostspace } = require('../services/database');
+const { getICCTier } = require('../services/iccService');
 const logger = require('../config/logger');
 
 // ===========================================
@@ -177,6 +178,17 @@ router.get('/summary', authenticateRequest, async (req, res) => {
             totalCorrect
         });
 
+        // ICC (Índice de Confiança Clínica)
+        const iccScore = Number(user.icc_score) || 0;
+        const icc = {
+            score: iccScore,
+            acuracia: Number(user.icc_acuracia) || 0,
+            consistencia: Number(user.icc_consistencia) || 0,
+            variedade: Number(user.icc_variedade) || 0,
+            complexidade: Number(user.icc_complexidade) || 0,
+            ...getICCTier(iccScore)
+        };
+
         return res.json({
             success: true,
             plan: userPlan,
@@ -184,11 +196,13 @@ router.get('/summary', authenticateRequest, async (req, res) => {
             cognits: totalCognits,
             level: level,
             clinical_title: title,
-            accuracy: accuracy,  // ✅ NOVO: Acurácia percentual
+            accuracy: accuracy,
+
+            icc: icc,
 
             breakdown: breakdown,
 
-            stats: {  // ✅ NOVO: Estatísticas detalhadas
+            stats: {
                 total_cases: totalCases,
                 correct_cases: totalCorrect,
                 accuracy_rate: accuracy

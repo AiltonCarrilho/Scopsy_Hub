@@ -11,13 +11,33 @@ function getTodayDate() {
     return new Date().toLocaleDateString('en-CA', { timeZone: TIMEZONE }); // YYYY-MM-DD
 }
 
-// Definições de Missões Possíveis (Pool)
+// Pool de Missões (20 missões: 7 easy + 7 medium + 6 hard)
 const MISSION_POOL = [
-    { type: 'challenge', description: 'Analise 1 Caso Clínico', target: 1, reward: 20, difficulty: 'easy' },
-    { type: 'challenge', description: 'Analise 3 Casos Clínicos', target: 3, reward: 50, difficulty: 'medium' },
+    // === EASY (7) ===
+    { type: 'challenge', description: 'Analise 1 Desafio Clínico', target: 1, reward: 15, difficulty: 'easy' },
+    { type: 'journey', description: 'Complete 1 Sessão de Jornada', target: 1, reward: 15, difficulty: 'easy' },
+    { type: 'conceptualization', description: 'Realize 1 Conceituação', target: 1, reward: 15, difficulty: 'easy' },
+    { type: 'diagnostic', description: 'Tente 1 Diagnóstico', target: 1, reward: 15, difficulty: 'easy' },
+    { type: 'challenge', description: 'Analise 2 Desafios Clínicos', target: 2, reward: 20, difficulty: 'easy' },
+    { type: 'explore', description: 'Pratique em 2 módulos diferentes', target: 2, reward: 20, difficulty: 'easy' },
+    { type: 'any', description: 'Complete qualquer caso hoje', target: 1, reward: 10, difficulty: 'easy' },
+
+    // === MEDIUM (7) ===
+    { type: 'challenge', description: 'Analise 3 Desafios Clínicos', target: 3, reward: 40, difficulty: 'medium' },
     { type: 'diagnostic', description: 'Acerte 1 Diagnóstico', target: 1, reward: 40, difficulty: 'medium' },
-    { type: 'conceptualization', description: 'Realize 1 Conceituação', target: 1, reward: 30, difficulty: 'easy' },
-    { type: 'diagnostic', description: 'Acerte 3 Diagnósticos', target: 3, reward: 100, difficulty: 'hard' }
+    { type: 'journey', description: 'Complete 2 Sessões de Jornada', target: 2, reward: 40, difficulty: 'medium' },
+    { type: 'challenge_streak', description: 'Acerte 2 Desafios seguidos', target: 2, reward: 50, difficulty: 'medium' },
+    { type: 'new_disorder', description: 'Explore um transtorno novo', target: 1, reward: 30, difficulty: 'medium' },
+    { type: 'advanced_case', description: 'Complete 1 caso avançado', target: 1, reward: 40, difficulty: 'medium' },
+    { type: 'conceptualization', description: 'Realize 2 Conceituações', target: 2, reward: 45, difficulty: 'medium' },
+
+    // === HARD (6) ===
+    { type: 'diagnostic', description: 'Acerte 3 Diagnósticos', target: 3, reward: 80, difficulty: 'hard' },
+    { type: 'challenge', description: 'Complete 5 Desafios Clínicos', target: 5, reward: 80, difficulty: 'hard' },
+    { type: 'perfect_streak', description: 'Acerte 3 casos sem errar', target: 3, reward: 100, difficulty: 'hard' },
+    { type: 'full_modules', description: 'Pratique nos 4 módulos hoje', target: 4, reward: 100, difficulty: 'hard' },
+    { type: 'diagnostic', description: 'Acerte 2 Diagnósticos avançados', target: 2, reward: 90, difficulty: 'hard' },
+    { type: 'marathon', description: 'Complete 7 casos em um dia', target: 7, reward: 100, difficulty: 'hard' }
 ];
 
 /**
@@ -42,10 +62,12 @@ async function generateDailyMissions(userId) {
 
     logger.info('🎲 Gerando novas missões diárias', { userId, date: today });
 
-    // 2. Selecionar 3 missões aleatórias (1 easy, 1 medium, 1 hard ou random)
-    // Simplificação: Pegar as 3 primeiras do pool por enquanto ou randomizar
-    const shuffled = [...MISSION_POOL].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 3);
+    // 2. Selecionar 1 easy + 1 medium + 1 hard (balanceado)
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const easy = MISSION_POOL.filter(m => m.difficulty === 'easy');
+    const medium = MISSION_POOL.filter(m => m.difficulty === 'medium');
+    const hard = MISSION_POOL.filter(m => m.difficulty === 'hard');
+    const selected = [pick(easy), pick(medium), pick(hard)];
 
     const createdMissions = [];
 

@@ -8,6 +8,7 @@ const { authenticateRequest } = require('../middleware/auth');
 const { getUserBadges, getAllBadges, checkAndAwardBadges } = require('../services/badgeService');
 const { getDailyMissions } = require('../services/missionService');
 const { getFromBoostspace, supabase } = require('../services/database');
+const { getICCTier } = require('../services/iccService');
 const logger = require('../config/logger');
 
 /**
@@ -18,14 +19,17 @@ router.get('/profile', authenticateRequest, async (req, res) => {
     try {
         const userId = req.user.userId;
 
-        // 1. User Stats (Level, XP, Streak)
-        const { data: user } = await supabase.from('users').select('cognits, level, current_streak, longest_streak').eq('id', userId).single();
+        // 1. User Stats (Level, XP, Streak, ICC)
+        const { data: user } = await supabase.from('users').select('cognits, level, current_streak, longest_streak, icc_score, icc_acuracia, icc_consistencia, icc_variedade, icc_complexidade').eq('id', userId).single();
 
         // 2. Badges Earned
         const userBadges = await getUserBadges(userId);
 
         // 3. Daily Missions
         const missions = await getDailyMissions(userId);
+
+        // 4. ICC
+        const iccScore = Number(user?.icc_score) || 0;
 
         res.json({
             success: true,
@@ -34,6 +38,14 @@ router.get('/profile', authenticateRequest, async (req, res) => {
                 xp: user?.cognits || 0,
                 streak: user?.current_streak || 0,
                 longest_streak: user?.longest_streak || 0
+            },
+            icc: {
+                score: iccScore,
+                acuracia: Number(user?.icc_acuracia) || 0,
+                consistencia: Number(user?.icc_consistencia) || 0,
+                variedade: Number(user?.icc_variedade) || 0,
+                complexidade: Number(user?.icc_complexidade) || 0,
+                ...getICCTier(iccScore)
             },
             badges: userBadges,
             missions: missions

@@ -454,9 +454,11 @@ Feedback JSON.`
     try {
       const { checkAndUpdateStreak } = require('../services/streakService');
       const { updateMissionProgress } = require('../services/missionService');
+      const { recalculateICC } = require('../services/iccService');
 
       await checkAndUpdateStreak(userId, 'diagnostic');
       missionsCompleted = await updateMissionProgress(userId, 'diagnostic', is_correct) || [];
+      recalculateICC(userId).catch(e => console.error('ICC bg error:', e.message));
     } catch (e) { console.error('Erro gamification:', e); }
 
     res.json({
