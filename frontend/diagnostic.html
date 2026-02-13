@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Radar Diagnóstico - Scopsy</title>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png" />
+    <link rel="shortcut icon" href="favicon.png" />
+
     <link rel="stylesheet" href="css/core.css">
     <link rel="stylesheet" href="css/desafios.css">
     <link rel="stylesheet" href="css/diagnostic.css">
@@ -18,7 +24,10 @@
     <header class="header">
         <div class="container">
             <div class="logo">
-                <h1>Scopsy Lab<span class="registered">®</span></h1>
+                <a href="dashboard.html" class="logo-link">
+                    <img src="assets/logo.png" alt="Scopsy Lab" class="logo-icon-img">
+                    <h1>Scopsy<span class="text-gradient">Lab</span></h1>
+                </a>
             </div>
             <a href="/lab" class="btn-back">
                 ← Voltar ao Dashboard
@@ -36,7 +45,8 @@
             <a href="#" class="btn-upgrade">Assinar Premium</a>
         </div>
         <!-- Painel de Progresso -->
-        <h1>🎲 Radar Diagnóstico</h1>
+        <div class="icon-target sprite-icon-medium" style="margin-bottom: 12px;"></div>
+        <h1>Radar Diagnóstico</h1>
         <p>Treino de reconhecimento diagnóstico - repetição espaçada</p>
 
         <!-- Painel de Progresso Unificado -->

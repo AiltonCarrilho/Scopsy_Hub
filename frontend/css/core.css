@@ -238,6 +238,49 @@ svg {
   align-items: center;
 }
 
+/* --- Sprite Icons (shared from landing) --- */
+.sprite-icon-small {
+  width: 24px; height: 24px; background-repeat: no-repeat;
+  background-position: center; background-size: contain; border-radius: 4px; display: inline-block;
+}
+
+.sprite-icon-medium {
+  width: 48px; height: 48px; background-repeat: no-repeat;
+  background-position: center; background-size: contain; border-radius: 8px;
+  display: inline-block; flex-shrink: 0;
+}
+
+.sprite-icon-large {
+  width: 68px; height: 68px; background-repeat: no-repeat;
+  background-position: center; background-size: contain; border-radius: 12px;
+  display: inline-block; flex-shrink: 0;
+}
+
+.icon-bulb { background-image: url('../assets/icons/1.png'); }
+.icon-flame { background-image: url('../assets/icons/2.png'); }
+.icon-target { background-image: url('../assets/icons/3.png'); }
+.icon-trophy { background-image: url('../assets/icons/4.png'); }
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo a,
+.logo .logo-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo-icon-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
 .logo h1 {
   font-size: 1.5rem;
   font-weight: 800;
