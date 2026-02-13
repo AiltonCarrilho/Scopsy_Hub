@@ -11,7 +11,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 const express = require('express');
 const router = express.Router();
-const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
 const logger = require('../config/logger');
 const { sendWelcomeEmail, sendCancellationEmail, generateTemporaryPassword } = require('../services/emailService');
@@ -25,41 +24,20 @@ const supabase = createClient(
 );
 
 // ========================================
-// VALIDACAO DE ASSINATURA KIWIFY
+// VALIDACAO DE TOKEN KIWIFY
 // ========================================
 /**
  * Valida se webhook veio realmente da Kiwify
- * @param {Object} payload - Corpo da requisicao
- * @param {string} signature - Header X-Kiwify-Signature
- * @param {string} secret - Webhook secret da Kiwify
+ * Kiwify envia campo "token" no body do evento
+ * @param {string} receivedToken - Token recebido no body
+ * @param {string} expectedToken - Token configurado em KIWIFY_WEBHOOK_SECRET
  * @returns {boolean}
  */
-function validateKiwifySignature(payload, signature, secret) {
-  if (!signature || !secret) {
-    logger.warn('[WEBHOOK] Assinatura ou secret ausente');
+function validateKiwifyToken(receivedToken, expectedToken) {
+  if (!receivedToken || !expectedToken) {
     return false;
   }
-
-  try {
-    const expectedSignature = crypto
-      .createHmac('sha256', secret)
-      .update(JSON.stringify(payload))
-      .digest('hex');
-
-    const isValid = `sha256=${expectedSignature}` === signature;
-
-    if (!isValid) {
-      logger.warn('[WEBHOOK] Assinatura invalida', {
-        received: signature,
-        expected: `sha256=${expectedSignature}`
-      });
-    }
-
-    return isValid;
-  } catch (error) {
-    logger.error('[WEBHOOK] Erro ao validar assinatura', { error: error.message });
-    return false;
-  }
+  return receivedToken === expectedToken;
 }
 
 // ========================================
@@ -85,16 +63,13 @@ router.post('/kiwify', express.json(), async (req, res) => {
       customer_email: event.customer?.email || event.Customer?.email
     });
 
-    // 2. Validar assinatura Kiwify (se secret configurado)
+    // 2. Validar token Kiwify (enviado no body do evento)
     if (process.env.KIWIFY_WEBHOOK_SECRET) {
-      const signature = req.headers['x-kiwify-signature'];
-      const isValid = validateKiwifySignature(event, signature, process.env.KIWIFY_WEBHOOK_SECRET);
-
-      if (!isValid) {
-        logger.error('[WEBHOOK] Rejeitado: assinatura invalida');
-        return res.status(401).json({ error: 'Invalid signature' });
+      if (!validateKiwifyToken(event.token, process.env.KIWIFY_WEBHOOK_SECRET)) {
+        logger.error('[WEBHOOK] Rejeitado: token invalido');
+        return res.status(401).json({ error: 'Invalid token' });
       }
-      logger.info('[WEBHOOK] Assinatura validada com sucesso');
+      logger.info('[WEBHOOK] Token validado com sucesso');
     } else {
       logger.warn('[WEBHOOK] KIWIFY_WEBHOOK_SECRET nao configurado - validacao desabilitada');
     }
