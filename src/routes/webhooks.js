@@ -85,16 +85,19 @@ router.post('/kiwify', express.json(), async (req, res) => {
       customer_email: event.customer?.email || event.Customer?.email
     });
 
-    // 2. Validar assinatura (DESABILITADO - Kiwify não usa assinatura)
-    // const signature = req.headers['x-kiwify-signature'];
-    // const isValid = validateKiwifySignature(event, signature, process.env.KIWIFY_WEBHOOK_SECRET);
+    // 2. Validar assinatura Kiwify (se secret configurado)
+    if (process.env.KIWIFY_WEBHOOK_SECRET) {
+      const signature = req.headers['x-kiwify-signature'];
+      const isValid = validateKiwifySignature(event, signature, process.env.KIWIFY_WEBHOOK_SECRET);
 
-    // if (!isValid) {
-    //   logger.error('[WEBHOOK] Rejeitado: assinatura invalida');
-    //   return res.status(401).json({ error: 'Invalid signature' });
-    // }
-
-    logger.info('[WEBHOOK] Processando evento (validação desabilitada)');
+      if (!isValid) {
+        logger.error('[WEBHOOK] Rejeitado: assinatura invalida');
+        return res.status(401).json({ error: 'Invalid signature' });
+      }
+      logger.info('[WEBHOOK] Assinatura validada com sucesso');
+    } else {
+      logger.warn('[WEBHOOK] KIWIFY_WEBHOOK_SECRET nao configurado - validacao desabilitada');
+    }
 
     // 3. Processar evento baseado no tipo
     const eventType = event.event || event.webhook_event_type;
@@ -133,12 +136,16 @@ router.post('/kiwify', express.json(), async (req, res) => {
         logger.info('[WEBHOOK] Chargeback processado como reembolso');
         break;
 
+      // Assinatura atrasada - downgrade para free
+      case 'subscription_overdue':
+        await handleSubscriptionOverdue(event);
+        break;
+
       // Eventos que apenas logamos (não precisam ação)
       case 'billet_created': // Boleto gerado
       case 'pix_generated': // Pix gerado
       case 'cart_abandoned': // Carrinho abandonado
       case 'purchase_refused': // Compra recusada
-      case 'subscription_overdue': // Assinatura atrasada
         logger.info('[WEBHOOK] Evento informativo recebido', { event: eventType });
         break;
 
@@ -315,7 +322,7 @@ async function handleSubscriptionCanceled(event) {
 }
 
 /**
- * Assinatura renovada -> Manter Premium ativo
+ * Assinatura renovada -> Restaurar Premium ativo
  */
 async function handleSubscriptionRenewed(event) {
   const subscriptionId = event.subscription_id || event.subscription?.subscription_id;
@@ -328,6 +335,7 @@ async function handleSubscriptionRenewed(event) {
   const { error } = await supabase
     .from('users')
     .update({
+      plan: 'premium',
       subscription_status: 'active',
       subscription_next_billing: nextBillingDate ? new Date(nextBillingDate).toISOString() : null,
       updated_at: new Date().toISOString()
@@ -342,8 +350,54 @@ async function handleSubscriptionRenewed(event) {
     return;
   }
 
-  logger.info('[WEBHOOK] Assinatura renovada', {
+  logger.info('[WEBHOOK] Assinatura renovada e plano restaurado para premium', {
     subscription_id: subscriptionId
+  });
+}
+
+/**
+ * Assinatura atrasada -> Downgrade para Free
+ */
+async function handleSubscriptionOverdue(event) {
+  const subscriptionId = event.subscription_id || event.subscription?.subscription_id;
+
+  logger.info('[WEBHOOK] Processando subscription_overdue', {
+    subscription_id: subscriptionId
+  });
+
+  const { data: user, error: fetchError } = await supabase
+    .from('users')
+    .select('*')
+    .eq('kiwify_subscription_id', subscriptionId)
+    .single();
+
+  if (fetchError || !user) {
+    logger.warn('[WEBHOOK] Usuario nao encontrado para overdue', {
+      subscription_id: subscriptionId
+    });
+    return;
+  }
+
+  const { error: updateError } = await supabase
+    .from('users')
+    .update({
+      plan: 'free',
+      subscription_status: 'overdue',
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', user.id);
+
+  if (updateError) {
+    logger.error('[WEBHOOK] Erro ao fazer downgrade por atraso', {
+      error: updateError.message,
+      userId: user.id
+    });
+    return;
+  }
+
+  logger.info('[WEBHOOK] Assinatura atrasada, downgrade para Free', {
+    userId: user.id,
+    email: user.email
   });
 }
 

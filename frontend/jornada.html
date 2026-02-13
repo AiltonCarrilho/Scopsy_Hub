@@ -112,6 +112,12 @@
         // Criar constante local com sufixo /api para uso neste arquivo
         const JOURNEY_API_URL = window.API_URL + '/api';
 
+        // Helper para fetch autenticado
+        function authHeaders(extra = {}) {
+            const token = getToken();
+            return { 'Authorization': `Bearer ${token}`, ...extra };
+        }
+
         // Obter usuário logado dinamicamente
         const currentUser = getUser(); // Função do auth.js
         if (!currentUser) {
@@ -132,7 +138,9 @@
         // ========================================
         async function loadJourneys() {
             try {
-                const response = await fetch(`${JOURNEY_API_URL}/journey/list`);
+                const response = await fetch(`${JOURNEY_API_URL}/journey/list`, {
+                    headers: authHeaders()
+                });
                 const data = await response.json();
 
                 if (!data.success || data.journeys.length === 0) {
@@ -173,10 +181,12 @@
                     <div class="loading-small">Carregando sessões...</div>
                 `;
 
-                const url = `${JOURNEY_API_URL}/journey/${currentJourneyId}/sessions?user_id=${USER_ID}`;
+                const url = `${JOURNEY_API_URL}/journey/${currentJourneyId}/sessions`;
                 console.log('🔍 Carregando sessões da API:', url);
 
-                const response = await fetch(url);
+                const response = await fetch(url, {
+                    headers: authHeaders()
+                });
 
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -358,7 +368,9 @@
         // ========================================
         async function checkProgress() {
             try {
-                const response = await fetch(`${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`);
+                const response = await fetch(`${JOURNEY_API_URL}/journey/${currentJourneyId}/progress`, {
+                    headers: authHeaders()
+                });
                 const data = await response.json();
 
                 if (data.progress) {
@@ -389,10 +401,9 @@
             try {
                 const response = await fetch(`${JOURNEY_API_URL}/journey/start`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: authHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify({
-                        journey_id: currentJourneyId,
-                        user_id: USER_ID
+                        journey_id: currentJourneyId
                     })
                 });
 
@@ -435,12 +446,14 @@
                 currentSessionNumber = sessionNumber;
                 sessionStartTime = Date.now();
 
-                let url = `${JOURNEY_API_URL}/journey/${currentJourneyId}/session/${sessionNumber}?user_id=${USER_ID}`;
+                let url = `${JOURNEY_API_URL}/journey/${currentJourneyId}/session/${sessionNumber}`;
                 if (freeMode) {
-                    url += '&free_mode=true';
+                    url += '?free_mode=true';
                 }
 
-                const response = await fetch(url);
+                const response = await fetch(url, {
+                    headers: authHeaders()
+                });
                 const data = await response.json();
 
                 if (data.success) {
@@ -633,14 +646,13 @@
                 });
 
                 const response = await fetch(
-                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/session/${currentSessionNumber}/decide?user_id=${USER_ID}`,
+                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/session/${currentSessionNumber}/decide`,
                     {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: authHeaders({ 'Content-Type': 'application/json' }),
                         body: JSON.stringify({
                             option_chosen: selectedOption,
-                            time_taken_seconds: timeTaken,
-                            user_id: USER_ID
+                            time_taken_seconds: timeTaken
                         })
                     }
                 );
@@ -824,7 +836,8 @@
         async function refreshProgress() {
             try {
                 const response = await fetch(
-                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
+                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress`,
+                    { headers: authHeaders() }
                 );
                 const data = await response.json();
 
@@ -850,7 +863,8 @@
 
                 // Buscar progresso atualizado
                 const response = await fetch(
-                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
+                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress`,
+                    { headers: authHeaders() }
                 );
                 const data = await response.json();
 
@@ -1045,8 +1059,8 @@
 
                 const response = await fetch(`${JOURNEY_API_URL}/journey/${currentJourneyId}/restart`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: USER_ID })
+                    headers: authHeaders({ 'Content-Type': 'application/json' }),
+                    body: JSON.stringify({})
                 });
 
                 const data = await response.json();

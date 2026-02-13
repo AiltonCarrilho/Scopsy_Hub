@@ -166,7 +166,9 @@ app.use(cors({
 }));
 
 // Rate Limiters
-const { apiLimiter, openaiLimiter, authLimiter, webhookLimiter } = require('./middleware/rateLimiter');
+const { apiLimiter, openaiLimiter, authLimiter, webhookLimiter, createPlanBasedLimiter } = require('./middleware/rateLimiter');
+const { authenticateRequest } = require('./middleware/auth');
+const planLimiter = createPlanBasedLimiter({ free: 3, basic: 10, premium: 30 });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -212,9 +214,9 @@ app.use('/api/gamification', apiLimiter, require('./routes/gamification'));
 app.use('/api/freshness', apiLimiter, require('./routes/freshness'));
 app.use('/api/skills', apiLimiter, skillsRoutes);
 
-// ⚠️ ROTAS OPENAI - Rate limit MAIS AGRESSIVO (custo!)
-app.use('/api/diagnostic', openaiLimiter, diagnosticRoutes);
-app.use('/api/case', openaiLimiter, caseRoutes);
+// ⚠️ ROTAS OPENAI - Auth + Rate limit por IP + por plano (custo!)
+app.use('/api/diagnostic', openaiLimiter, authenticateRequest, planLimiter, diagnosticRoutes);
+app.use('/api/case', openaiLimiter, authenticateRequest, planLimiter, caseRoutes);
 
 // 📚 ROTAS JOURNEY - Rate limit padrão API (são apenas leituras de banco)
 app.use('/api/journey', apiLimiter, journeyRoutes);

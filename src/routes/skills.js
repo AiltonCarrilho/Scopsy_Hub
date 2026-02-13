@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
 const logger = require('../config/logger');
+const { authenticateRequest } = require('../middleware/auth');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -93,9 +94,9 @@ router.get('/:id', async (req, res) => {
 // ============================================
 // 3️⃣ OBTER PROGRESSO DO USUÁRIO EM TODAS AS HABILIDADES
 // ============================================
-router.get('/user/:user_id/progress', async (req, res) => {
+router.get('/user/:user_id/progress', authenticateRequest, async (req, res) => {
   try {
-    const { user_id } = req.params;
+    const user_id = req.user.userId;
 
     logger.debug(`\n[Skills] 📊 Progresso do usuário: ${user_id}`);
 
@@ -190,9 +191,10 @@ router.get('/user/:user_id/progress', async (req, res) => {
 // ============================================
 // 4️⃣ ATUALIZAR PROGRESSO EM UMA HABILIDADE
 // ============================================
-router.post('/user/:user_id/progress/:skill_id', async (req, res) => {
+router.post('/user/:user_id/progress/:skill_id', authenticateRequest, async (req, res) => {
   try {
-    const { user_id, skill_id } = req.params;
+    const user_id = req.user.userId;
+    const { skill_id } = req.params;
     const { performance } = req.body; // 0.0 a 1.0
 
     logger.debug(`\n[Skills] 📝 Atualizando progresso: User ${user_id}, Skill ${skill_id}`);
