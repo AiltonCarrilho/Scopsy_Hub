@@ -562,9 +562,11 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
     try {
       const { checkAndUpdateStreak } = require('../services/streakService');
       const { updateMissionProgress } = require('../services/missionService');
+      const { recalculateICC } = require('../services/iccService');
 
       await checkAndUpdateStreak(userId, 'challenge');
       missionsCompleted = await updateMissionProgress(userId, 'challenge', true) || [];
+      recalculateICC(userId).catch(e => console.error('ICC bg error:', e.message));
     } catch (e) { console.error('Erro gamification:', e); }
 
     res.json({
