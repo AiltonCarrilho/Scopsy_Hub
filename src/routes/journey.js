@@ -2,6 +2,7 @@ const express = require('express');
 const logger = require('../config/logger');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
+const { authenticateRequest } = require('../middleware/auth');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -11,7 +12,7 @@ const supabase = createClient(
 // ============================================
 // 1️⃣ LISTAR JORNADAS DISPONÍVEIS
 // ============================================
-router.get('/list', async (req, res) => {
+router.get('/list', authenticateRequest, async (req, res) => {
   try {
     const { disorder_category, difficulty_level } = req.query;
 
@@ -53,10 +54,10 @@ router.get('/list', async (req, res) => {
 // ============================================
 // 2️⃣ OBTER JORNADA ESPECÍFICA
 // ============================================
-router.get('/:id', async (req, res) => {
+router.get('/:id', authenticateRequest, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = parseInt(req.query.user_id) || 8;
+    const userId = req.user.userId;
 
     logger.debug(`\n[Journey] 🔍 Buscando jornada: ${id}, user: ${userId}`);
 
@@ -104,9 +105,10 @@ router.get('/:id', async (req, res) => {
 // ============================================
 // 3️⃣ INICIAR JORNADA
 // ============================================
-router.post('/start', async (req, res) => {
+router.post('/start', authenticateRequest, async (req, res) => {
   try {
-    const { journey_id, user_id = 8 } = req.body;
+    const { journey_id } = req.body;
+    const user_id = req.user.userId;
 
     logger.debug(`\n[Journey] 🚀 Iniciando jornada: ${journey_id}, user: ${user_id}`);
 
@@ -164,10 +166,10 @@ router.post('/start', async (req, res) => {
 // ============================================
 // 4️⃣ OBTER SESSÃO ESPECÍFICA
 // ============================================
-router.get('/:journey_id/session/:session_number', async (req, res) => {
+router.get('/:journey_id/session/:session_number', authenticateRequest, async (req, res) => {
   try {
     const { journey_id, session_number } = req.params;
-    const userId = parseInt(req.query.user_id) || 8;
+    const userId = req.user.userId;
 
     logger.debug(`\n[Journey] 📖 Sessão ${session_number}, jornada: ${journey_id}, user: ${userId}`);
 
@@ -234,10 +236,11 @@ router.get('/:journey_id/session/:session_number', async (req, res) => {
 // ============================================
 // 5️⃣ REGISTRAR DECISÃO
 // ============================================
-router.post('/:journey_id/session/:session_number/decide', async (req, res) => {
+router.post('/:journey_id/session/:session_number/decide', authenticateRequest, async (req, res) => {
   try {
     const { journey_id, session_number } = req.params;
-    const { option_chosen, time_taken_seconds, user_id = 8 } = req.body;
+    const { option_chosen, time_taken_seconds } = req.body;
+    const user_id = req.user.userId;
 
     logger.debug(`\n[Journey] ✍️  Decisão na sessão ${session_number}:`);
     logger.debug(`   Opção: ${option_chosen}, Tempo: ${time_taken_seconds}s`);
@@ -422,10 +425,10 @@ router.post('/:journey_id/session/:session_number/decide', async (req, res) => {
 // ============================================
 // 6️⃣ OBTER PROGRESSO
 // ============================================
-router.get('/:journey_id/progress', async (req, res) => {
+router.get('/:journey_id/progress', authenticateRequest, async (req, res) => {
   try {
     const { journey_id } = req.params;
-    const userId = parseInt(req.query.user_id) || 8;
+    const userId = req.user.userId;
 
     logger.debug(`\n[Journey] 📊 Progresso: jornada ${journey_id}, user ${userId}`);
 
@@ -467,11 +470,11 @@ router.get('/:journey_id/progress', async (req, res) => {
 // ============================================
 // 7️⃣ LISTAR TODAS AS SESSÕES DE UMA JORNADA (COM FILTRO POR SKILL)
 // ============================================
-router.get('/:journey_id/sessions', async (req, res) => {
+router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
   try {
     const { journey_id } = req.params;
     const { skill_module } = req.query;
-    const userId = parseInt(req.query.user_id) || 8;
+    const userId = req.user.userId;
 
     logger.debug(`\n[Journey] 📚 Listando sessões: jornada ${journey_id}`);
     if (skill_module) {
@@ -544,10 +547,10 @@ router.get('/:journey_id/sessions', async (req, res) => {
 // ============================================
 // 8️⃣ RECOMEÇAR JORNADA (RESET)
 // ============================================
-router.post('/:journey_id/restart', async (req, res) => {
+router.post('/:journey_id/restart', authenticateRequest, async (req, res) => {
   try {
     const { journey_id } = req.params;
-    const { user_id = 8 } = req.body;
+    const user_id = req.user.userId;
 
     logger.debug(`\n[Journey] 🔄 Recomeçando jornada: ${journey_id}, user: ${user_id}`);
 
