@@ -64,6 +64,18 @@
             ]
         }
     ],
+    "redirects": [
+        {
+            "source": "/lab/:path*",
+            "destination": "/dashboard",
+            "permanent": true
+        },
+        {
+            "source": "/lab",
+            "destination": "/dashboard",
+            "permanent": true
+        }
+    ],
     "rewrites": [
         {
             "source": "/api/:path*",
