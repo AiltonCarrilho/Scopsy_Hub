@@ -26,14 +26,31 @@ router.get('/me', authenticateRequest, async (req, res) => {
 
         logger.info('[ACCOUNT] Buscando perfil completo', { userId });
 
-        const { data: user, error } = await supabase
+        // Tentar query completa; se falhar (coluna inexistente), fallback para query básica
+        let user;
+        let queryError;
+
+        const fullQuery = await supabase
             .from('users')
             .select('id, email, name, crp, plan, subscription_status, subscription_started_at, subscription_ended_at, subscription_next_billing, kiwify_customer_id, created_at, last_login')
             .eq('id', userId)
             .single();
 
-        if (error || !user) {
-            logger.error('[ACCOUNT] Usuário não encontrado', { userId, error: error?.message });
+        if (fullQuery.error) {
+            logger.warn('[ACCOUNT] Query completa falhou, tentando fallback', { error: fullQuery.error.message });
+            const fallback = await supabase
+                .from('users')
+                .select('id, email, name, crp, plan, subscription_status, created_at')
+                .eq('id', userId)
+                .single();
+            user = fallback.data;
+            queryError = fallback.error;
+        } else {
+            user = fullQuery.data;
+        }
+
+        if (queryError || !user) {
+            logger.error('[ACCOUNT] Usuário não encontrado', { userId, error: queryError?.message });
             return res.status(404).json({ error: 'Usuário não encontrado' });
         }
 
