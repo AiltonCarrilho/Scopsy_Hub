@@ -70,14 +70,6 @@
             "destination": "https://scopsy-hub.onrender.com/api/:path*"
         },
         {
-            "source": "/lab",
-            "destination": "https://scopsy-dashboard.vercel.app/lab"
-        },
-        {
-            "source": "/lab/:path*",
-            "destination": "https://scopsy-dashboard.vercel.app/lab/:path*"
-        },
-        {
             "source": "/",
             "destination": "/index.html"
         }

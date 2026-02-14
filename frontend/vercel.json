@@ -51,10 +51,6 @@
             "destination": "https://scopsy-hub.onrender.com/api/:path*"
         },
         {
-            "source": "/lab/:path*",
-            "destination": "/lab/index.html"
-        },
-        {
             "source": "/",
             "destination": "/index.html"
         }
