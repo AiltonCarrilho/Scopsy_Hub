@@ -464,7 +464,7 @@ async function populateCompactMetrics() {
         }
 
         // Buscar progresso (inclui cognits, freshness, streak)
-        const progressRes = await fetch(`${API_URL}/progress/summary`, {
+        const progressRes = await fetch(`${API_URL}/api/progress/summary`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -637,7 +637,7 @@ function getNextLevelName(currentLevel) {
 async function loadMissions() {
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/missions`, {
+        const res = await fetch(`${API_URL}/api/missions`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -723,7 +723,7 @@ function startMissionTimer() {
 async function loadBadges() {
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/gamification/badges`, {
+        const res = await fetch(`${API_URL}/api/gamification/badges`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
@@ -768,7 +768,7 @@ function getBadgeIcon(iconName) {
 async function loadStreak() {
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/streaks`, {
+        const res = await fetch(`${API_URL}/api/streaks`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
