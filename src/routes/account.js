@@ -26,32 +26,35 @@ router.get('/me', authenticateRequest, async (req, res) => {
 
         logger.info('[ACCOUNT] Buscando perfil completo', { userId });
 
-        // Tentar query completa; se falhar (coluna inexistente), fallback para query básica
-        let user;
-        let queryError;
+        // Colunas que existem com certeza na tabela users
+        const baseCols = 'id, email, name, crp, plan, subscription_status, created_at, last_login';
+        // Colunas Kiwify (adicionadas via migration, podem não existir ainda)
+        const kiwifyCols = ', subscription_started_at, subscription_ended_at, subscription_next_billing, kiwify_customer_id';
 
+        let user;
         const fullQuery = await supabase
             .from('users')
-            .select('id, email, name, crp, plan, subscription_status, subscription_started_at, subscription_ended_at, subscription_next_billing, kiwify_customer_id, created_at, last_login')
+            .select(baseCols + kiwifyCols)
             .eq('id', userId)
             .single();
 
-        if (fullQuery.error) {
-            logger.warn('[ACCOUNT] Query completa falhou, tentando fallback', { error: fullQuery.error.message });
+        if (fullQuery.error && fullQuery.error.message.includes('does not exist')) {
+            logger.warn('[ACCOUNT] Colunas Kiwify ausentes, usando query base', { error: fullQuery.error.message });
             const fallback = await supabase
                 .from('users')
-                .select('id, email, name, crp, plan, subscription_status, created_at')
+                .select(baseCols)
                 .eq('id', userId)
                 .single();
+            if (fallback.error || !fallback.data) {
+                logger.error('[ACCOUNT] Usuário não encontrado', { userId, error: fallback.error?.message });
+                return res.status(404).json({ error: 'Usuário não encontrado' });
+            }
             user = fallback.data;
-            queryError = fallback.error;
+        } else if (fullQuery.error || !fullQuery.data) {
+            logger.error('[ACCOUNT] Usuário não encontrado', { userId, error: fullQuery.error?.message });
+            return res.status(404).json({ error: 'Usuário não encontrado' });
         } else {
             user = fullQuery.data;
-        }
-
-        if (queryError || !user) {
-            logger.error('[ACCOUNT] Usuário não encontrado', { userId, error: queryError?.message });
-            return res.status(404).json({ error: 'Usuário não encontrado' });
         }
 
         // Calcular dias restantes do trial (se free)
