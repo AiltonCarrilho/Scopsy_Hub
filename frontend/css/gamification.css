@@ -5,17 +5,17 @@
 
 :root {
     /* Cores do Espectro Clínico */
-    --scopsy-blue: #2563EB;
-    --module-act: #0EA5E9;
+    --scopsy-blue: #008CE2;
+    --module-act: #2DD4BF;
     --module-dbt: #1A2B48;
 
     /* Gradientes de Gamificação */
-    --cognit-gradient: linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%);
-    --streak-gradient: linear-gradient(135deg, #1A2B48 0%, #2563EB 100%);
-    --levelup-gradient: linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%);
+    --cognit-gradient: linear-gradient(135deg, #008CE2 0%, #2DD4BF 100%);
+    --streak-gradient: linear-gradient(135deg, #1A2B48 0%, #008CE2 100%);
+    --levelup-gradient: linear-gradient(135deg, #008CE2 0%, #2DD4BF 100%);
 
     /* Estados */
-    --success: #0EA5E9;
+    --success: #2DD4BF;
     --error: #DC2626;
     --warning: #F59E0B;
 
@@ -45,7 +45,7 @@
 
 .level-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 140, 226, 0.15);
     border-color: #bae6fd;
 }
 
@@ -71,7 +71,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #2563EB;
+    color: #008CE2;
     margin: 0 0 4px 0;
 }
 
@@ -100,7 +100,7 @@
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #2563EB 0%, #0EA5E9 100%);
+    background: linear-gradient(90deg, #008CE2 0%, #2DD4BF 100%);
     border-radius: 6px;
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -137,7 +137,7 @@
 
 .progress-text .current {
     font-weight: 700;
-    color: #2563EB;
+    color: #008CE2;
     font-size: 16px;
 }
 
@@ -163,12 +163,12 @@
 }
 
 .level-next strong {
-    color: #2563EB;
+    color: #008CE2;
     font-weight: 700;
 }
 
 .level-next .next-level {
-    color: #0EA5E9;
+    color: #2DD4BF;
     font-weight: 600;
 }
 
@@ -176,7 +176,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    background: rgba(37, 99, 235, 0.1);
+    background: rgba(0, 140, 226, 0.1);
     padding: 6px 12px;
     border-radius: 20px;
     cursor: help;
@@ -190,7 +190,7 @@
 .cognit-amount {
     font-size: 16px;
     font-weight: 700;
-    color: #2563EB;
+    color: #008CE2;
 }
 
 /* ============================================
@@ -304,7 +304,7 @@
     align-items: center;
     gap: 4px;
     font-weight: 700;
-    color: #2563EB;
+    color: #008CE2;
     /* Scopsy Blue */
     font-size: 0.9rem;
     background: #ECFEFF;
