@@ -567,7 +567,7 @@ COMMENT ON COLUMN users.subscription_ended_at IS 'Data de cancelamento da assina
   <!-- FOOTER -->
   <footer>
     <p>&copy; 2024 ScopsyLab. Todos os direitos reservados.</p>
-    <p>contato@scopsy.com.br</p>
+    <p>suporte@scopsy.com.br</p>
   </footer>
 
 </body>

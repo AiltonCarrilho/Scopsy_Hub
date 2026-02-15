@@ -77,19 +77,22 @@ async function sendSupportEmail(user, subject, message) {
             return true;
         }
 
+        // Sanitizar inputs para prevenir XSS no template HTML
+        const esc = (str) => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
         const { data, error } = await resend.emails.send({
             from: 'Scopsy App <noreply@scopsy.com.br>',
             reply_to: user.email,
             to: [supportEmail],
-            subject: `[Suporte] ${subject} - ${user.name}`,
+            subject: `[Suporte] ${esc(subject)} - ${esc(user.name)}`,
             html: `
                 <h2>Solicitação de Suporte</h2>
-                <p><strong>Usuário:</strong> ${user.name} (${user.email})</p>
-                <p><strong>ID:</strong> ${user.id}</p>
-                <p><strong>Plano:</strong> ${user.plan || 'N/A'}</p>
+                <p><strong>Usuário:</strong> ${esc(user.name)} (${esc(user.email)})</p>
+                <p><strong>ID:</strong> ${esc(user.id)}</p>
+                <p><strong>Plano:</strong> ${esc(user.plan || 'N/A')}</p>
                 <hr />
-                <h3>${subject}</h3>
-                <p style="white-space: pre-wrap;">${message}</p>
+                <h3>${esc(subject)}</h3>
+                <p style="white-space: pre-wrap;">${esc(message)}</p>
             `
         });
 
