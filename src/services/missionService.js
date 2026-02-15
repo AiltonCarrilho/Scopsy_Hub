@@ -47,15 +47,16 @@ const MISSION_POOL = [
 async function generateDailyMissions(userId) {
     const today = getTodayDate();
 
-    // 1. Verificar se já existem
-    const existing = await getFromBoostspace('user_daily_missions', {
-        user_id: userId,
-        reference_date: today
-    });
+    // 1. Verificar se já existem (usando Supabase direto para filtrar por reference_date)
+    const { data: existing, error: checkError } = await supabase
+        .from('user_daily_missions')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('reference_date', today);
 
-    // Filtro manual de data se getFromBoostspace não filtrar dia exato (ele filtra só por fields exatos)
-    // O ideal seria filtrar na query, mas 'reference_date' é string YYYY-MM-DD no banco? É DATE.
-    // O supabase driver lida bem com string 'YYYY-MM-DD' para colunas DATE.
+    if (checkError) {
+        logger.error('Erro ao verificar missões existentes', { error: checkError.message });
+    }
 
     if (existing && existing.length > 0) {
         return existing;
