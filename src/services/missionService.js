@@ -2,7 +2,8 @@
  * Mission Service
  * Gerencia missões diárias
  */
-const { getFromBoostspace, saveToBoostspace, updateInBoostspace, supabase } = require('./database');
+const { getFromBoostspace, saveToBoostspace, updateInBoostspace } = require('./database');
+const { supabase } = require('./supabase');
 const logger = require('../config/logger');
 
 const TIMEZONE = 'America/Sao_Paulo';
