@@ -582,8 +582,8 @@ chore: tarefas gerais (build, configs)
 ## 📞 Contato
 
 **Desenvolvedor:** Ailton  
-**Email:** [seu-email@example.com]  
-**Website:** [scopsy.com.br](https://scopsy.com.br) (em breve)
+**Email:** <suporte@scopsy.com.br>
+**Website:** [scopsy.com.br](https://scopsy.com.br)
 
 ---
 
@@ -591,13 +591,13 @@ chore: tarefas gerais (build, configs)
 
 Se você encontrar uma vulnerabilidade de segurança, **NÃO** abra uma issue pública.
 
-Entre em contato diretamente: [security@scopsy.com.br]
+Entre em contato diretamente: <suporte@scopsy.com.br>
 
 ---
 
 ## 🆘 Suporte
 
-- **Email:** [seu-email]
+- **Email:** <suporte@scopsy.com.br>
 - **Issues:** [GitHub Issues](https://github.com/seu-usuario/scopsy/issues)
 - **Documentação:** `/docs`
 

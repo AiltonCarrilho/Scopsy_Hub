@@ -199,6 +199,7 @@ const journeyRoutes = require('./routes/journey');
 const skillsRoutes = require('./routes/skills');
 const webhooksRoutes = require('./routes/webhooks');
 const healthRoutes = require('./routes/health');
+const supportRoutes = require('./routes/support');
 
 // ✅ ROTAS COM RATE LIMITING E PROTEÇÃO
 
@@ -215,6 +216,7 @@ app.use('/api/missions', apiLimiter, require('./routes/missions'));
 app.use('/api/gamification', apiLimiter, require('./routes/gamification'));
 app.use('/api/freshness', apiLimiter, require('./routes/freshness'));
 app.use('/api/skills', apiLimiter, skillsRoutes);
+app.use('/api/support', apiLimiter, supportRoutes);
 
 // ⚠️ ROTAS OPENAI - Auth + Rate limit por IP + por plano (custo!)
 app.use('/api/diagnostic', openaiLimiter, authenticateRequest, planLimiter, diagnosticRoutes);
