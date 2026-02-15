@@ -65,11 +65,35 @@ async function generateDailyMissions(userId) {
     logger.info('🎲 Gerando novas missões diárias', { userId, date: today });
 
     // 2. Selecionar 1 easy + 1 medium + 1 hard (balanceado)
+    // 2. Selecionar 1 easy + 1 medium + 1 hard (balanceado) com tipos únicos
     const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-    const easy = MISSION_POOL.filter(m => m.difficulty === 'easy');
-    const medium = MISSION_POOL.filter(m => m.difficulty === 'medium');
-    const hard = MISSION_POOL.filter(m => m.difficulty === 'hard');
-    const selected = [pick(easy), pick(medium), pick(hard)];
+
+    const easyPool = MISSION_POOL.filter(m => m.difficulty === 'easy');
+    const mediumPool = MISSION_POOL.filter(m => m.difficulty === 'medium');
+    const hardPool = MISSION_POOL.filter(m => m.difficulty === 'hard');
+
+    const selectedMissions = [];
+    const usedTypes = new Set();
+
+    // Pick Easy
+    const easyMission = pick(easyPool);
+    selectedMissions.push(easyMission);
+    usedTypes.add(easyMission.type);
+
+    // Pick Medium (exclude used types)
+    let availableMedium = mediumPool.filter(m => !usedTypes.has(m.type));
+    if (availableMedium.length === 0) availableMedium = mediumPool; // Fallback se esgotar
+    const mediumMission = pick(availableMedium);
+    selectedMissions.push(mediumMission);
+    usedTypes.add(mediumMission.type);
+
+    // Pick Hard (exclude used types)
+    let availableHard = hardPool.filter(m => !usedTypes.has(m.type));
+    if (availableHard.length === 0) availableHard = hardPool; // Fallback
+    const hardMission = pick(availableHard);
+    selectedMissions.push(hardMission);
+
+    const selected = selectedMissions;
 
     const createdMissions = [];
 
