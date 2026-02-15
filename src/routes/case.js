@@ -164,7 +164,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     // 2️⃣ BUSCAR CASOS DISPONÍVEIS (que usuário NÃO viu)
     let casesQuery = supabase
       .from('cases')
-      .select('*')
+      .select('id, times_used, moment_type, category, disorder, difficulty_level')
       .eq('status', 'active')
       .eq('difficulty_level', finalLevel); // 🎯 Usa nível adaptativo
 
@@ -234,7 +234,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     }
 
     // Buscar apenas 10 casos JÁ FILTRADOS pelo SQL (eficiente!)
-    const { data: availableCases, error: queryError } = await casesQuery
+    let { data: availableCases, error: queryError } = await casesQuery
       .order('times_used', { ascending: true })
       .limit(10);  // ← LIMIT executado no SQL (só transfere 10 casos pela rede)
 
@@ -253,7 +253,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       // Refazer query SEM filtro de moment_type
       let fallbackQuery = supabase
         .from('cases')
-        .select('*')
+        .select('id, times_used, moment_type, category, disorder, difficulty_level')
         .eq('status', 'active')
         .eq('difficulty_level', finalLevel); // 🎯 Usa nível adaptativo
 
@@ -307,10 +307,26 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           }
         });
 
+      // 🚀 OTIMIZAÇÃO: Buscar dados completos apenas do caso selecionado
+      // (query leve buscou 10 IDs com ~100 bytes cada, agora busca JSONB completo de 1 só)
+      const { data: fullCaseData, error: fullCaseError } = await supabase
+        .from('cases')
+        .select('*')
+        .eq('id', selectedCase.id)
+        .single();
+
+      if (fullCaseError || !fullCaseData) {
+        logger.error('[Case] ❌ Erro ao buscar dados completos:', fullCaseError?.message);
+        return res.status(500).json({ success: false, error: 'Erro ao carregar caso' });
+      }
+
+      selectedCase = fullCaseData;
+
       // 🆕 REGISTRAR VISUALIZAÇÃO (anti-repetição)
       // Marca caso como "visto" antes de retornar para evitar repetição
       // NOTA: NÃO incluir is_correct=null (coluna não aceita NULL)
-      await supabase
+      // Fire-and-forget: não bloqueia resposta (economia de ~50-100ms)
+      supabase
         .from('user_case_interactions')
         .insert({
           user_id: userId,

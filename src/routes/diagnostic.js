@@ -74,7 +74,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
     // 2️⃣ BUSCAR CASOS DISPONÍVEIS (que usuário NÃO viu)
     let casesQuery = supabase
       .from('cases')
-      .select('*')
+      .select('id, times_used, moment_type, category, disorder, difficulty_level')
       .eq('status', 'active')
       .eq('difficulty_level', level)
       .eq('category', category);
@@ -122,8 +122,23 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
         .eq('id', cachedCase.id)
         .then(() => logger.debug(`[Diagnostic] ✅ Contador atualizado`));
 
+      // 🚀 OTIMIZAÇÃO: Buscar dados completos apenas do caso selecionado
+      const { data: fullCaseData, error: fullCaseError } = await supabase
+        .from('cases')
+        .select('*')
+        .eq('id', cachedCase.id)
+        .single();
+
+      if (fullCaseError || !fullCaseData) {
+        logger.error('[Diagnostic] ❌ Erro ao buscar dados completos:', fullCaseError?.message);
+        return res.status(500).json({ success: false, error: 'Erro ao carregar caso' });
+      }
+
+      cachedCase = fullCaseData;
+
       // 🆕 REGISTRAR VISUALIZAÇÃO (anti-repetição)
-      await supabase
+      // Fire-and-forget: não bloqueia resposta (economia de ~50-100ms)
+      supabase
         .from('user_case_interactions')
         .insert({
           user_id: userId,
