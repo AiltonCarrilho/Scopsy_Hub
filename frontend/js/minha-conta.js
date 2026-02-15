@@ -440,3 +440,73 @@ async function changePassword(event) {
         btn.disabled = false;
     }
 }
+// ========================================
+// SUPORTE
+// ========================================
+function openSupportModal() {
+    const modal = document.getElementById('supportModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // Reset form
+        const form = document.getElementById('supportForm');
+        if (form) form.reset();
+        // Focus no assunto
+        setTimeout(() => document.getElementById('supportSubject').focus(), 100);
+    }
+}
+
+function closeSupportModal() {
+    const modal = document.getElementById('supportModal');
+    if (modal) modal.style.display = 'none';
+}
+
+// Fechar ao clicar fora
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('supportModal');
+    if (e.target === modal) closeSupportModal();
+});
+
+async function submitSupportRequest(event) {
+    event.preventDefault();
+
+    const btn = document.getElementById('btnSendSupport');
+    const originalText = btn.textContent;
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    try {
+        const subject = document.getElementById('supportSubject').value;
+        const message = document.getElementById('supportMessage').value;
+        const token = localStorage.getItem('token');
+
+        if (!subject || !message) {
+            showToast('Preencha todos os campos', 'error');
+            return;
+        }
+
+        const res = await fetch(`${API_URL}/api/support`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ subject, message })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || 'Erro ao enviar mensagem');
+        }
+
+        closeSupportModal();
+        showToast('✅ Mensagem enviada com sucesso! Responderemos em breve.', 'success');
+
+    } catch (error) {
+        console.error('[MinhaConta] Erro ao enviar suporte:', error);
+        showToast(error.message || 'Erro ao enviar mensagem', 'error');
+    } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}

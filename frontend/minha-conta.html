@@ -190,15 +190,15 @@
                     <i data-lucide="chevron-right" width="16" height="16" style="color: var(--text-light)"></i>
                 </a>
 
-                <a class="action-item" href="mailto:contato@scopsy.com.br?subject=Preciso de ajuda - Scopsy Lab"
-                    id="actionSupport">
+                <button class="action-item" onclick="openSupportModal()" id="actionSupport"
+                    style="width: 100%; border: none; background: none; text-align: left; cursor: pointer;">
                     <span class="action-icon">📧</span>
                     <div class="action-text">
                         <strong>Preciso de Ajuda</strong>
                         <span>Enviar email para o suporte</span>
                     </div>
-                    <i data-lucide="external-link" width="16" height="16" style="color: var(--text-light)"></i>
-                </a>
+                    <i data-lucide="chevron-right" width="16" height="16" style="color: var(--text-light)"></i>
+                </button>
 
                 <a class="action-item" href="dashboard.html">
                     <span class="action-icon">🏠</span>
@@ -244,7 +244,41 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
     <script src="js/sanitize.js"></script>
 
-    <!-- Page Logic -->
+    <!-- Modal de Suporte -->
+    <div id="supportModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>📧 Fale com o Suporte</h3>
+                <button class="btn-close" onclick="closeSupportModal()">
+                    <i data-lucide="x" width="20" height="20"></i>
+                </button>
+            </div>
+            <form id="supportForm" onsubmit="submitSupportRequest(event)">
+                <div class="form-group">
+                    <label for="supportSubject">Assunto</label>
+                    <select id="supportSubject" required>
+                        <option value="" disabled selected>Selecione um assunto...</option>
+                        <option value="Dúvida sobre a Plataforma">Dúvida sobre a Plataforma</option>
+                        <option value="Problema Técnico">Problema Técnico</option>
+                        <option value="Pagamentos e Assinatura">Pagamentos e Assinatura</option>
+                        <option value="Sugestão de Melhoria">Sugestão de Melhoria</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="supportMessage">Mensagem</label>
+                    <textarea id="supportMessage" rows="5" placeholder="Descreva sua solicitação com detalhes..."
+                        required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeSupportModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary" id="btnSendSupport">Enviar Mensagem</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="js/minha-conta.js"></script>
     <script>
         lucide.createIcons();

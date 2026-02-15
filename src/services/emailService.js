@@ -12,10 +12,10 @@ const { Resend } = require('resend');
 // Inicializar Resend apenas se API key estiver configurada
 let resend = null;
 if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 're_placeholder_for_dev') {
-  resend = new Resend(process.env.RESEND_API_KEY);
-  logger.info('✅ Resend email service initialized');
+    resend = new Resend(process.env.RESEND_API_KEY);
+    logger.info('✅ Resend email service initialized');
 } else {
-  logger.warn('⚠️ Resend API key not configured - emails will be logged only');
+    logger.warn('⚠️ Resend API key not configured - emails will be logged only');
 }
 
 /**
@@ -52,6 +52,65 @@ async function sendWelcomeEmail(user, temporaryPassword) {
         logger.error('[EMAIL] Exceção ao enviar email', {
             error: error.message,
             email: user.email
+        });
+        return false;
+    }
+}
+
+/**
+ * Envia email de solicitação de suporte
+ * @param {Object} user - Dados do usuário (nome, email, id, plan)
+ * @param {string} subject - Assunto da mensagem
+ * @param {string} message - Corpo da mensagem
+ */
+async function sendSupportEmail(user, subject, message) {
+    try {
+        const supportEmail = 'suporte@scopsy.com.br';
+
+        // Fallback para desenvolvimento (sem API Key)
+        if (!resend) {
+            logger.warn('[EMAIL] Resend não configurado - Simulação de envio de suporte', {
+                subject,
+                user: user.email,
+                message: message.substring(0, 50) + '...'
+            });
+            return true;
+        }
+
+        const { data, error } = await resend.emails.send({
+            from: 'Scopsy App <noreply@scopsy.com.br>',
+            reply_to: user.email,
+            to: [supportEmail],
+            subject: `[Suporte] ${subject} - ${user.name}`,
+            html: `
+                <h2>Solicitação de Suporte</h2>
+                <p><strong>Usuário:</strong> ${user.name} (${user.email})</p>
+                <p><strong>ID:</strong> ${user.id}</p>
+                <p><strong>Plano:</strong> ${user.plan || 'N/A'}</p>
+                <hr />
+                <h3>${subject}</h3>
+                <p style="white-space: pre-wrap;">${message}</p>
+            `
+        });
+
+        if (error) {
+            logger.error('[EMAIL] Erro ao enviar email de suporte', {
+                error: error.message,
+                userId: user.id
+            });
+            return false;
+        }
+
+        logger.info('[EMAIL] Email de suporte enviado', {
+            emailId: data.id,
+            from: user.email
+        });
+
+        return true;
+    } catch (error) {
+        logger.error('[EMAIL] Exceção ao enviar email de suporte', {
+            error: error.message,
+            userId: user.id
         });
         return false;
     }
@@ -224,6 +283,7 @@ function generateTemporaryPassword() {
 
 module.exports = {
     sendWelcomeEmail,
+    sendSupportEmail,
     sendCancellationEmail,
     generateTemporaryPassword
 };
