@@ -186,7 +186,8 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     } else if (isConceptualization) {
       casesQuery = casesQuery
         .eq('category', 'clinical_moment')
-        .eq('created_by', 'diverse_population_script'); // Só casos de conceituação completos
+        .eq('created_by', 'diverse_population_script')
+        .ilike('case_title', 'Conceitualizacao%'); // Apenas M4 (com rich_narrative + expert_conceptualization)
 
       // Filtrar por categoria de transtorno se especificado
       if (disorder_category) {
