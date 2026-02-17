@@ -374,19 +374,36 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           }
         });
       } else {
-        // CONCEITUAÇÃO: Usar vignette existente ou montar se necessário
+        // CONCEITUAÇÃO: Montar vinheta rica a partir de rich_narrative (M4) ou micro-momento
         let caseToReturn = { ...selectedCase };
+        const cc = selectedCase.case_content || {};
 
-        // Se NÃO tem vinheta completa, tentar montar de micro-momento
-        if (!selectedCase.vignette || selectedCase.vignette.length <= 100) {
-          if (selectedCase.case_content) {
-            const cc = selectedCase.case_content;
-            const ctx = cc.context || {};
-            const cm = cc.critical_moment || {};
+        if (cc.rich_narrative && typeof cc.rich_narrative === 'object') {
+          // M4: Montar vinheta completa a partir de rich_narrative (7 seções)
+          const rn = cc.rich_narrative;
+          const demo = cc.client_demographics || {};
+          const disorder = cc.primary_disorder || selectedCase.disorder || 'A definir';
 
-            // Só montar se tiver dados de micro-momento
-            if (ctx.what_just_happened || cm.dialogue) {
-              caseToReturn.vignette = `${ctx.session_number || 'Sessão'} com ${ctx.client_name || 'o cliente'}, ${ctx.client_age || '30'} anos.
+          const sections = [];
+          sections.push(`${demo.name || 'Cliente'}, ${demo.age || '30'} anos — ${disorder}`);
+          if (rn.presenting_complaint) sections.push(`\nQUEIXA PRINCIPAL:\n${rn.presenting_complaint}`);
+          if (rn.history_of_problem) sections.push(`\nHISTÓRIA DO PROBLEMA:\n${rn.history_of_problem}`);
+          if (rn.life_context) sections.push(`\nCONTEXTO DE VIDA:\n${rn.life_context}`);
+          if (rn.interpersonal_patterns) sections.push(`\nPADRÕES INTERPESSOAIS:\n${rn.interpersonal_patterns}`);
+          if (rn.coping_strategies) sections.push(`\nESTRATÉGIAS DE ENFRENTAMENTO:\n${rn.coping_strategies}`);
+          if (rn.previous_treatments) sections.push(`\nTRATAMENTOS ANTERIORES:\n${rn.previous_treatments}`);
+          if (rn.client_goals) sections.push(`\nOBJETIVOS DO CLIENTE:\n${rn.client_goals}`);
+
+          caseToReturn.vignette = sections.join('\n');
+          logger.debug(`[Case] ✅ Vinheta rica montada a partir de rich_narrative (${caseToReturn.vignette.length} chars)`);
+
+        } else if (!selectedCase.vignette || selectedCase.vignette.length <= 100) {
+          // Fallback: tentar montar de micro-momento (context/critical_moment)
+          const ctx = cc.context || {};
+          const cm = cc.critical_moment || {};
+
+          if (ctx.what_just_happened || cm.dialogue) {
+            caseToReturn.vignette = `${ctx.session_number || 'Sessão'} com ${ctx.client_name || 'o cliente'}, ${ctx.client_age || '30'} anos.
 
 DIAGNÓSTICO: ${ctx.diagnosis || selectedCase.disorder || 'A definir'}
 
@@ -401,10 +418,9 @@ ${cm.non_verbal || 'Não registrado'}
 
 TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
 
-              logger.debug('[Case] ✅ Vinheta montada a partir de micro-momento');
-            } else {
-              logger.debug('[Case] ⚠️ Caso sem vinheta e sem dados de micro-momento');
-            }
+            logger.debug('[Case] ✅ Vinheta montada a partir de micro-momento');
+          } else {
+            logger.debug('[Case] ⚠️ Caso sem vinheta e sem dados suficientes');
           }
         } else {
           logger.debug('[Case] ✅ Usando vinheta completa do banco');

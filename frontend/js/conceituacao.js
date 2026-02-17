@@ -202,10 +202,10 @@ async function generateCase(config) {
 }
 
 function renderCase(caseData) {
-    // Backend já envia vinheta montada
+    // Backend já envia vinheta montada (rich_narrative para M4, ou vignette simples)
     let vignette = caseData.vignette || 'Vinheta não disponível';
 
-    // Melhorar formatação da vinheta (SEM excesso)
+    // Melhorar formatação da vinheta
     if (vignette && vignette.length > 100) {
         const lineBreaks = (vignette.match(/\n/g) || []).length;
 
@@ -236,6 +236,12 @@ function renderCase(caseData) {
     // 🔒 SEGURANÇA XSS: Sanitizar vinheta do backend
     const safeVignette = sanitizeHTML(vignette);
 
+    // Formatar seções da vinheta rica (QUEIXA PRINCIPAL:, HISTÓRIA:, etc.)
+    // Converte headers de seção em <strong> e newlines em <br>
+    const formattedVignette = safeVignette
+        .replace(/\n((?:QUEIXA PRINCIPAL|HISTÓRIA DO PROBLEMA|CONTEXTO DE VIDA|PADRÕES INTERPESSOAIS|ESTRATÉGIAS DE ENFRENTAMENTO|TRATAMENTOS ANTERIORES|OBJETIVOS DO CLIENTE|DIAGNÓSTICO|CONTEXTO|MOMENTO CLÍNICO|OBSERVAÇÕES NÃO-VERBAIS|TOM EMOCIONAL):)/g, '<br><br><strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+
     document.getElementById('caseContainer').innerHTML = `
         <div class="case-card">
             <div style="margin-bottom: 16px;">
@@ -255,7 +261,7 @@ function renderCase(caseData) {
             </div>
 
             <h3>📋 Caso Clínico</h3>
-            <div class="vignette">${safeVignette}</div>
+            <div class="vignette">${formattedVignette}</div>
 
             <!-- 1. TRÍADE COGNITIVA -->
             <div class="analysis-section">
