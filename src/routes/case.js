@@ -656,32 +656,55 @@ TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
       })
       .then(() => logger.debug('[Case] ✅ Conceituação registrada'));
 
-    // Feedback formativo com gpt-4o
-    const feedbackCompletion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      response_format: { type: "json_object" },
-      temperature: 0.7,
-      max_tokens: 1500,
-      messages: [
-        {
-          role: "system",
-          content: `Você é um supervisor clínico experiente que avalia conceituações de caso em TCC.
+    // Extrair dados expert do caso (quando disponíveis)
+    const caseContent = case_data.case_content || case_data;
+    const expertModel = caseContent.expert_conceptualization || null;
+    const feedbackTemplates = caseContent.feedback_structure || null;
+    const difficultyLevel = case_data.difficulty_level || caseContent.difficulty_level || 'intermediate';
+
+    // Tom pedagógico calibrado por nível
+    const toneByLevel = {
+      basic: `TOM PEDAGÓGICO (BÁSICO — Acolhedor e Motivacional):
+- Valide cada acerto com entusiasmo genuíno: "Você demonstrou X, o que mostra [competência]."
+- Ao sugerir melhorias, use: "O próximo passo seria Y, porque..."
+- Evite jargão avançado. Explique conceitos ao sugerir.
+- Foco: construir confiança e vocabulário clínico.`,
+      intermediate: `TOM PEDAGÓGICO (INTERMEDIÁRIO — Formativo e Desafiador):
+- Compare diretamente a análise do estudante com o modelo expert.
+- Aponte nuances que faltaram: "Sua tríade captou X, mas o modelo expert inclui também Y porque..."
+- Questione com respeito: "O que aconteceria se considerássemos Z?"
+- Foco: profundidade analítica e pensamento integrativo.`,
+      advanced: `TOM PEDAGÓGICO (AVANÇADO — Validador e Provocativo):
+- Espere sofisticação clínica. Valide apenas o que é genuinamente forte.
+- Provoque reflexão: "Sua formulação é coerente, mas como explicaria a manutenção do ciclo via Z?"
+- Compare com modelo expert destacando nuances sutis.
+- Foco: refinamento clínico e pensamento sistêmico.`
+    };
+
+    // Montar system prompt enriquecido
+    let systemPrompt = `Você é um supervisor clínico experiente que avalia conceituações de caso em TCC.
+
+${toneByLevel[difficultyLevel] || toneByLevel.intermediate}
+
+REGRAS ANTI-PADRÃO:
+- NUNCA use "sim...mas..." — substitua por articulação que ensina (ex: "Você captou X. Para aprofundar, considere também Y porque...")
+- NUNCA dê feedback genérico. Referencie elementos concretos da análise do estudante.
+- Cada feedback deve conter pelo menos 1 exemplo específico do caso.
 
 SAÍDA JSON:
 {
-  "triade_feedback": "Feedback sobre a tríade cognitiva identificada (3-4 frases). Valide o que foi bem captado e sugira o que pode aprofundar.",
-  "crencas_feedback": "Feedback sobre as crenças identificadas (3-4 frases). Avalie a diferenciação entre centrais, intermediárias e automáticas.",
-  "formulacao_feedback": "Feedback sobre a formulação conceitual (4-5 frases). Avalie compreensão de vulnerabilidades, gatilhos e mantenedores.",
-  "intervencao_feedback": "Feedback sobre a estratégia proposta (3-4 frases). Avalie adequação das técnicas e timing.",
-  "strengths": "2-3 pontos fortes específicos da análise do estudante.",
-  "areas_to_develop": "2-3 áreas específicas para aprofundar estudo."
-}
+  "triade_feedback": "Feedback sobre a tríade cognitiva (4-6 frases). Compare com modelo expert quando disponível.",
+  "crencas_feedback": "Feedback sobre crenças (4-6 frases). Avalie diferenciação entre centrais, intermediárias e automáticas.",
+  "formulacao_feedback": "Feedback sobre formulação conceitual (5-7 frases). Avalie ciclo de manutenção, vulnerabilidades e gatilhos.",
+  "intervencao_feedback": "Feedback sobre estratégia proposta (4-6 frases). Avalie adequação, timing e sequenciamento.",
+  "strengths": "2-3 pontos fortes ESPECÍFICOS com exemplos concretos da análise.",
+  "next_challenge": "Seu Próximo Desafio: 2-3 desafios específicos formulados como convites ao crescimento, não como déficits.",
+  "comparison_with_expert": "2-3 frases comparando a análise do estudante com o modelo expert. Destaque convergências e divergências-chave.",
+  "difficulty_calibration": "${difficultyLevel}"
+}`;
 
-TOM: Validador e formativo. SEMPRE valide pontos fortes ANTES de sugerir melhorias.`
-        },
-        {
-          role: "user",
-          content: `CASO:
+    // Montar user message com dados expert injetados
+    let userMessage = `CASO:
 ${vignetteText || 'Caso não disponível'}
 
 CONCEITUAÇÃO DO ESTUDANTE:
@@ -696,10 +719,45 @@ FORMULAÇÃO:
 ${conceptualization.formulacao_conceitual}
 
 INTERVENÇÃO:
-${conceptualization.estrategia_intervencao}
+${conceptualization.estrategia_intervencao}`;
 
-Forneça feedback formativo em JSON.`
-        }
+    // Injetar expert_conceptualization quando disponível
+    if (expertModel) {
+      const triad = expertModel.cognitive_triad || {};
+      const beliefs = expertModel.core_beliefs || {};
+      const diagram = expertModel.formulation_diagram || {};
+      const strategy = expertModel.intervention_strategy || {};
+
+      userMessage += `
+
+MODELO DO ESPECIALISTA (use para comparar, NÃO copie no feedback):
+- Tríade: Pensamento="${triad.thoughts || 'N/A'}", Emoção="${triad.emotions || 'N/A'}", Comportamento="${triad.behaviors || 'N/A'}"
+- Crença Central: ${beliefs.belief_statement || JSON.stringify(beliefs)}
+- Ciclo de Manutenção: ${diagram.maintenance_cycle || JSON.stringify(diagram)}
+- Estratégia: ${typeof strategy === 'object' ? JSON.stringify(strategy) : strategy}`;
+    }
+
+    // Injetar feedback_structure como guia quando disponível
+    if (feedbackTemplates) {
+      userMessage += `
+
+TEMPLATES DE FEEDBACK (use como guia para calibrar seu tom):
+${JSON.stringify(feedbackTemplates, null, 2)}`;
+    }
+
+    userMessage += `
+
+Forneça feedback formativo em JSON.`;
+
+    // Feedback formativo com gpt-4o
+    const feedbackCompletion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      response_format: { type: "json_object" },
+      temperature: 0.7,
+      max_tokens: 2500,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage }
       ]
     });
 
@@ -717,7 +775,9 @@ Forneça feedback formativo em JSON.`
         formulacao_feedback: "Sua formulação capturou aspectos relevantes do caso. Continue integrando história, vulnerabilidades e fatores mantenedores.",
         intervencao_feedback: "As técnicas propostas são adequadas ao caso. Continue estudando o timing e sequenciamento de intervenções.",
         strengths: "Você demonstrou dedicação ao preencher todos os campos e aplicou conceitos teóricos ao caso prático.",
-        areas_to_develop: "Continue estudando a integração entre teoria e prática clínica, e aprofunde seu conhecimento sobre formulação de caso."
+        next_challenge: "Continue estudando a integração entre teoria e prática clínica, e aprofunde seu conhecimento sobre formulação de caso.",
+        comparison_with_expert: "",
+        difficulty_calibration: difficultyLevel
       };
     }
 

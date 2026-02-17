@@ -383,7 +383,25 @@ function showFeedback(feedback) {
     const safeFormulacao = sanitizeHTML(feedback.formulacao_feedback || 'Feedback sobre formulação');
     const safeIntervencao = sanitizeHTML(feedback.intervencao_feedback || 'Feedback sobre intervenção');
     const safeStrengths = sanitizeHTML(feedback.strengths || 'Continue desenvolvendo');
-    const safeAreas = sanitizeHTML(feedback.areas_to_develop || 'Continue praticando');
+    const safeNextChallenge = sanitizeHTML(feedback.next_challenge || feedback.areas_to_develop || 'Continue praticando');
+    const safeComparison = sanitizeHTML(feedback.comparison_with_expert || '');
+
+    // Seção de comparação com especialista (só exibe se houver conteúdo)
+    const comparisonSection = safeComparison ? `
+            <div class="feedback-section" style="background: #e3f2fd;">
+                <h4>🔬 Comparação com Especialista</h4>
+                <p>${safeComparison}</p>
+            </div>` : '';
+
+    // Botão "Ver Expert" — só exibe se currentCase tem expert_conceptualization
+    const expertData = window.currentCase?.case_content?.expert_conceptualization;
+    const expertButton = expertData ? `
+            <div class="feedback-section" style="background: #f3e5f5; cursor: pointer;" onclick="toggleExpertPanel(this)">
+                <h4 style="margin: 0;">🎓 Ver Conceitualização do Especialista ▼</h4>
+                <div class="expert-panel" style="display: none; margin-top: 12px; font-size: 0.9em; line-height: 1.6;">
+                    ${buildExpertHTML(expertData)}
+                </div>
+            </div>` : '';
 
     const feedbackHTML = `
         <div class="feedback-card">
@@ -414,10 +432,14 @@ function showFeedback(feedback) {
                 <p>${safeStrengths}</p>
             </div>
 
+            ${comparisonSection}
+
             <div class="feedback-section" style="background: #fff3e0;">
-                <h4>📚 Áreas para Aprofundar</h4>
-                <p>${safeAreas}</p>
+                <h4>🚀 Seu Próximo Desafio</h4>
+                <p>${safeNextChallenge}</p>
             </div>
+
+            ${expertButton}
 
             <button class="btn-primary" onclick="generateNewCase()" style="margin-top: 24px; width: 100%;">
                 📋 Próximo Caso
@@ -430,6 +452,41 @@ function showFeedback(feedback) {
         behavior: 'smooth',
         block: 'start'
     });
+}
+
+function toggleExpertPanel(container) {
+    const panel = container.querySelector('.expert-panel');
+    const header = container.querySelector('h4');
+    if (panel.style.display === 'none') {
+        panel.style.display = 'block';
+        header.textContent = '🎓 Ver Conceitualização do Especialista ▲';
+    } else {
+        panel.style.display = 'none';
+        header.textContent = '🎓 Ver Conceitualização do Especialista ▼';
+    }
+}
+
+function buildExpertHTML(expert) {
+    const parts = [];
+    const s = (v) => sanitizeHTML(typeof v === 'object' ? JSON.stringify(v) : String(v || ''));
+
+    if (expert.cognitive_triad) {
+        const t = expert.cognitive_triad;
+        parts.push(`<strong>Tríade Cognitiva:</strong><br>Pensamentos: ${s(t.thoughts)}<br>Emoções: ${s(t.emotions)}<br>Comportamentos: ${s(t.behaviors)}`);
+    }
+    if (expert.core_beliefs) {
+        const b = expert.core_beliefs;
+        parts.push(`<strong>Crenças Centrais:</strong><br>${s(b.belief_statement || b)}`);
+    }
+    if (expert.formulation_diagram) {
+        const f = expert.formulation_diagram;
+        parts.push(`<strong>Formulação:</strong><br>Ciclo de Manutenção: ${s(f.maintenance_cycle || f)}`);
+    }
+    if (expert.intervention_strategy) {
+        const i = expert.intervention_strategy;
+        parts.push(`<strong>Estratégia de Intervenção:</strong><br>${s(i)}`);
+    }
+    return parts.join('<hr style="border: none; border-top: 1px solid #ccc; margin: 8px 0;">');
 }
 
 // ========================================
