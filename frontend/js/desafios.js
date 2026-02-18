@@ -353,7 +353,7 @@ async function generateNewMoment() {
         const res = await fetch(`${apiUrl}/case/generate`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ level: 'intermediate', moment_type: 'resistencia_tecnica' })
+            body: JSON.stringify({ level: 'intermediate' })
         });
 
         const data = await res.json();
