@@ -220,7 +220,8 @@ app.use('/api/support', apiLimiter, supportRoutes);
 
 // ⚠️ ROTAS OPENAI - Auth + Rate limit por IP + por plano (custo!)
 app.use('/api/diagnostic', openaiLimiter, authenticateRequest, planLimiter, diagnosticRoutes);
-app.use('/api/case', openaiLimiter, authenticateRequest, planLimiter, caseRoutes);
+// /api/case não usa OpenAI desde 12/02 (geração on-demand removida) — apenas apiLimiter + planLimiter
+app.use('/api/case', apiLimiter, authenticateRequest, planLimiter, caseRoutes);
 
 // 📚 ROTAS JOURNEY - Rate limit padrão API (são apenas leituras de banco)
 app.use('/api/journey', apiLimiter, journeyRoutes);

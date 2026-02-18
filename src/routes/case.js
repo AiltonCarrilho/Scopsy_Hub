@@ -166,7 +166,8 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       .from('cases')
       .select('id, times_used, moment_type, category, disorder, difficulty_level')
       .eq('status', 'active')
-      .eq('difficulty_level', finalLevel); // 🎯 Usa nível adaptativo
+      .eq('difficulty_level', finalLevel) // 🎯 Usa nível adaptativo
+      .not('case_content', 'is', null); // 🛡️ Exclui casos com case_content null (evita erro no frontend)
 
     // Filtrar por tipo (micro-momento OU conceituação)
     if (isMicroMoment) {
@@ -256,7 +257,8 @@ router.post('/generate', authenticateRequest, async (req, res) => {
         .from('cases')
         .select('id, times_used, moment_type, category, disorder, difficulty_level')
         .eq('status', 'active')
-        .eq('difficulty_level', finalLevel); // 🎯 Usa nível adaptativo
+        .eq('difficulty_level', finalLevel) // 🎯 Usa nível adaptativo
+        .not('case_content', 'is', null); // 🛡️ Exclui casos com case_content null
 
       // Manter filtro de IDs já vistos
       if (seenCaseIds.length > 0) {
