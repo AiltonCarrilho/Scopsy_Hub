@@ -383,6 +383,15 @@ async function generateNewMoment() {
             }
 
             renderMoment(currentMoment);
+        } else if (data.message) {
+            // Casos esgotados — exibir como conquista, não como erro
+            document.getElementById('momentContainer').innerHTML = `
+                <div class="moment-card" style="text-align:center; padding:32px 24px;">
+                    <div style="font-size:48px; margin-bottom:16px;">🏆</div>
+                    <h3 style="color:#7c3aed; margin-bottom:12px;">${data.error}</h3>
+                    <p style="color:#555; margin-bottom:8px;">${data.message}</p>
+                    ${data.suggestion ? `<p style="color:#888; font-size:13px; margin-bottom:20px;">${data.suggestion}</p>` : ''}
+                </div>`;
         } else {
             console.error('Erro backend:', data);
             document.getElementById('momentContainer').innerHTML = `<div class="moment-card"><p style="color:#ef4444">Erro ao gerar caso: ${data.error || 'Erro desconhecido'}</p></div>`;

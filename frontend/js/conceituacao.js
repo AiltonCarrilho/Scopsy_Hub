@@ -180,19 +180,18 @@ async function generateCase(config) {
 
             caseStartTime = Date.now();
             renderCase(currentCase);
-        } else {
-            // Mensagem amigável quando não há casos
-            const errorMsg = data.message || data.error || 'Erro ao gerar caso';
-            document.getElementById('caseContainer').innerHTML =
-                `<div class="case-card">
-                    <div style="padding: 20px; text-align: center;">
-                        <h3 style="color: #f57c00; margin-bottom: 16px;">⚠️ Nenhum Caso Disponível</h3>
-                        <p style="color: #666; margin-bottom: 20px;">${errorMsg}</p>
-                        <button onclick="generateNewCase()" style="background: #2563EB; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px;">
-                            🎲 Tentar Novamente
-                        </button>
-                    </div>
+        } else if (data.message) {
+            // Casos esgotados — exibir como conquista, não como erro
+            document.getElementById('caseContainer').innerHTML = `
+                <div class="case-card" style="text-align:center; padding:32px 24px;">
+                    <div style="font-size:48px; margin-bottom:16px;">🏆</div>
+                    <h3 style="color:#7c3aed; margin-bottom:12px;">${data.error}</h3>
+                    <p style="color:#555; margin-bottom:8px;">${data.message}</p>
+                    ${data.suggestion ? `<p style="color:#888; font-size:13px;">${data.suggestion}</p>` : ''}
                 </div>`;
+        } else {
+            document.getElementById('caseContainer').innerHTML =
+                `<div class="case-card"><p style="color:#f44336;">Erro ao gerar caso: ${data.error || 'Erro desconhecido'}</p></div>`;
         }
     } catch (error) {
         console.error('Erro:', error);
