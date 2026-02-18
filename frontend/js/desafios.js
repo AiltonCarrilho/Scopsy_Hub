@@ -359,6 +359,18 @@ async function generateNewMoment() {
         const data = await res.json();
 
         if (data.success) {
+            // 🛡️ VALIDAÇÃO DE DADOS (Fix para erro "diagnosis of undefined")
+            if (!data.case || !data.case.context) {
+                console.error('❌ Erro crítico: Caso retornado sem contexto!', data);
+                document.getElementById('momentContainer').innerHTML = `
+                    <div class="moment-card">
+                        <h3 style="color:#ef4444">Erro nos dados do caso</h3>
+                        <p>O servidor retornou um caso incompleto. Por favor, tente gerar outro.</p>
+                        <button onclick="generateNewMoment()" class="submit-btn" style="margin-top:16px; width:auto;">Tentar Novamente</button>
+                    </div>`;
+                return;
+            }
+
             currentMoment = { ...data.case, case_id: data.case_id };
             selectedChoice = null;
             startTime = Date.now();
@@ -382,6 +394,12 @@ async function generateNewMoment() {
 }
 
 function renderMoment(m) {
+    // 🛡️ PROTEÇÃO ADICIONAL: Se chegar aqui sem contexto, não quebra
+    if (!m || !m.context) {
+        console.error('❌ renderMoment chamado com dados inválidos:', m);
+        return;
+    }
+
     const ctx = m.context;
     const cm = m.critical_moment;
 
