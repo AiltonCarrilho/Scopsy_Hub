@@ -559,9 +559,6 @@ function showFeedback(f, userChoice) {
                  ======================================== -->
             <div class="feedback-header ${f.is_correct ? 'correct' : 'incorrect'}">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="font-size: 3rem;">
-                        ${f.is_correct ? '✅' : '💡'}
-                    </div>
                     <div>
                         <h2 style="margin: 0;">${safeImmediateFeedback}</h2>
                         <p style="margin: 8px 0 0; font-size: 1.1rem; opacity: 0.9;">
