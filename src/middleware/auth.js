@@ -20,9 +20,9 @@ function verifyToken(token) {
 /**
  * Gerar token JWT
  */
-function generateToken(userId, plan = 'free') {
+function generateToken(userId, plan = 'free', email = '') {
   return jwt.sign(
-    { userId, plan },
+    { userId, plan, email },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
   );

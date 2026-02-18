@@ -94,7 +94,7 @@ router.post('/signup', async (req, res) => {
     });
 
     // Gerar tokens
-    const token = generateToken(savedUser.id, 'free');
+    const token = generateToken(savedUser.id, 'free', savedUser.email);
     const refreshToken = generateRefreshToken(savedUser.id);
 
     logger.info('Usuário criado com sucesso', {
@@ -182,7 +182,7 @@ router.post('/login', async (req, res) => {
     }).catch(err => console.error('Erro gamification login:', err));
 
     // Gerar tokens
-    const token = generateToken(user.id, user.plan);
+    const token = generateToken(user.id, user.plan, user.email);
     const refreshToken = generateRefreshToken(user.id);
 
     logger.info('Login bem-sucedido', {
