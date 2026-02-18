@@ -360,7 +360,7 @@ async function submitConceptualization() {
             // ⭐ NOVO - Exibir celebração
             if (data.cognits_gained) {
                 if (typeof showCelebration === 'function') {
-                    showCelebration(data.cognits_gained, true);
+                    showCelebration(data.cognits_gained, true, 'conceptualization');
                 } else if (typeof showCognitToast === 'function') {
                     showCognitToast(data.cognits_gained, '🎯 Conceituação Completa!');
                 }

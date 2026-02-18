@@ -491,3 +491,50 @@
 .badge-item:hover::after {
     opacity: 1;
 }
+
+/* ============================================
+   COMBO BADGE — Layer 3
+   ============================================ */
+
+.combo-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99997;
+    pointer-events: none;
+}
+
+.combo-badge {
+    background: linear-gradient(135deg, #F97316, #EF4444);
+    padding: 10px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 24px rgba(249, 115, 22, 0.4);
+    animation: combo-slam 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.combo-fire {
+    font-size: 22px;
+}
+
+.combo-number {
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+}
+
+.combo-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+@keyframes combo-slam {
+    0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
+    60%  { transform: scale(1.15) rotate(3deg); }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+}

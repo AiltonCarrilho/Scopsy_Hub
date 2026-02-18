@@ -2,6 +2,21 @@
    GAMIFICATION.JS - Funções Centrais
    ============================================ */
 
+// ─── Configuração por módulo ───────────────────────────────────────────────
+const MODULE_CONFIG = {
+    diagnostic:        { icon: '🎯', title: 'Decisão de Expert!',      colors: ['#0891B2','#06b6d4','#2952CC','#ffffff'] },
+    case:              { icon: '⚡', title: 'Análise Precisa!',         colors: ['#7C3AED','#8B5CF6','#EC4899','#ffffff'] },
+    conceptualization: { icon: '🧩', title: 'Conceituação Completa!',  colors: ['#10B981','#34D399','#FFD700','#ffffff'] },
+    journey:           { icon: '🛤️', title: 'Sessão Concluída!',       colors: ['#FFD700','#FFA500','#F97316','#ffffff'] },
+};
+
+// ─── Estado de sessão (front-end only, reset ao recarregar) ───────────────
+const celebrationState = {
+    streak: 0,
+    sessionCorrects: 0,
+    lastCelebrationTime: 0,
+};
+
 /**
  * Exibe toast de ganho de cognits
  * @param {number} amount - Quantidade de cognits ganhos
@@ -40,24 +55,60 @@ function showCognitToast(amount, reason = '') {
 }
 
 /**
- * Exibe celebração grande com confetti (apenas para acertos)
+ * Motor central de celebração com 4 camadas
  * @param {number} amount - Quantidade de cognits ganhos
  * @param {boolean} isCorrect - Se foi uma resposta correta
+ * @param {string} module - Módulo ativo ('case'|'diagnostic'|'conceptualization'|'journey')
  */
-function showCelebration(amount, isCorrect = true) {
+function showCelebration(amount, isCorrect = true, module = 'case') {
+    const cfg = MODULE_CONFIG[module] || MODULE_CONFIG.case;
+
     if (!isCorrect) {
-        // Para erros, apenas toast simples
-        showCognitToast(amount, '💡 Por tentar');
+        // Streak quebrado
+        celebrationState.streak = 0;
+        if (amount > 0) {
+            showCognitToast(amount, '💡 Por tentar');
+        }
         return;
     }
 
-    // Criar overlay
+    // Acerto: atualiza estado
+    celebrationState.streak++;
+    celebrationState.sessionCorrects++;
+
+    // ── Layer 3: Streak Combo ──────────────────────────────────────────────
+    if (celebrationState.streak >= 3) {
+        _playStreakCombo(celebrationState.streak, amount, cfg);
+        updateCognitCounter(amount);
+        return;
+    }
+
+    // ── Layer 1: Anti-fadiga (muitos acertos rápidos) ─────────────────────
+    const now = Date.now();
+    if (celebrationState.sessionCorrects > 10 && (now - celebrationState.lastCelebrationTime) < 5000) {
+        showCognitToast(amount, 'Resposta correta');
+        return;
+    }
+
+    // ── Layer 2: Confete + Overlay ─────────────────────────────────────────
+    _showCelebrationOverlay(cfg.icon, cfg.title, amount);
+    _playModuleConfetti(cfg.colors);
+    updateCognitCounter(amount);
+    celebrationState.lastCelebrationTime = Date.now();
+}
+
+// ─── Helpers privados ──────────────────────────────────────────────────────
+
+/**
+ * Exibe overlay modal de celebração
+ */
+function _showCelebrationOverlay(icon, title, amount) {
     const overlay = document.createElement('div');
     overlay.className = 'celebration-overlay';
     overlay.innerHTML = `
     <div class="celebration-content">
-      <div class="celebration-icon">🎯</div>
-      <h2 class="celebration-title">Decisão de Expert!</h2>
+      <div class="celebration-icon">${icon}</div>
+      <h2 class="celebration-title">${title}</h2>
       <div class="celebration-cognits">+${amount}</div>
       <p class="celebration-message">Cognits ganhos</p>
       <button class="celebration-btn" onclick="const ov = this.closest('.celebration-overlay'); ov.classList.add('hiding'); setTimeout(() => ov.remove(), 300);">
@@ -69,13 +120,6 @@ function showCelebration(amount, isCorrect = true) {
 
     document.body.appendChild(overlay);
 
-    // Confetti!
-    launchConfetti();
-
-    // Atualizar contador
-    updateCognitCounter(amount);
-
-    // Remover automaticamente após 4 segundos (ajustado para nova animação 3s + margem)
     setTimeout(() => {
         if (overlay && overlay.parentNode) {
             overlay.classList.add('hiding');
@@ -85,98 +129,114 @@ function showCelebration(amount, isCorrect = true) {
 }
 
 /**
- * Lança confetti ÉPICO na tela
+ * Lança confete com paleta de cores do módulo
+ * @param {string[]} colors - Array de cores hex
  */
-function launchConfetti() {
-    // Verificar se canvas-confetti está disponível
+function _playModuleConfetti(colors) {
     if (typeof confetti === 'undefined') {
         console.error('❌ canvas-confetti NÃO carregado! Verifique a importação no HTML.');
         return;
     }
 
-    console.log('🚀 Iniciando animação ÉPICA (3s)!');
-
-    // Ajustar o canvas para o overlay
     const canvas = document.getElementById('confetti-canvas');
     if (canvas) {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
 
-    const myConfetti = confetti.create(canvas, {
-        resize: true,
-        useWorker: true
-    });
+    const myConfetti = confetti.create(canvas, { resize: true, useWorker: true });
 
-    const colors = ['#0891B2', '#2952CC', '#7C3AED', '#EC4899', '#F97316', '#FFD700', '#ffffff'];
-
-    // 1. Efeito "School Pride" (Canhões laterais) - Imediato e INTENSO
-    const end = Date.now() + (2 * 1000); // 2 segundos
-
+    // Canhões laterais (2s)
+    const end = Date.now() + 2000;
     (function frame() {
-        myConfetti({
-            particleCount: 5,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0 },
-            colors: colors,
-            startVelocity: 60
-        });
-        myConfetti({
-            particleCount: 5,
-            angle: 120,
-            spread: 55,
-            origin: { x: 1 },
-            colors: colors,
-            startVelocity: 60
-        });
-
-        if (Date.now() < end) {
-            requestAnimationFrame(frame);
-        }
+        myConfetti({ particleCount: 5, angle: 60,  spread: 55, origin: { x: 0 }, colors, startVelocity: 60 });
+        myConfetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors, startVelocity: 60 });
+        if (Date.now() < end) requestAnimationFrame(frame);
     }());
 
-    // 2. Explosão Central Massiva (imediatamente)
-    myConfetti({
-        particleCount: 200,
-        spread: 180,
-        origin: { y: 0.6 },
-        colors: colors,
-        startVelocity: 50,
-        scalar: 1.2
-    });
+    // Explosão central
+    myConfetti({ particleCount: 200, spread: 180, origin: { y: 0.6 }, colors, startVelocity: 50, scalar: 1.2 });
 
-    // 3. Chuva Contínua e Aleatória (Curta)
+    // Chuva contínua (2s extra)
     setTimeout(() => {
-        const duration = 2000; // 2 segundos extra
-        const animationEnd = Date.now() + duration;
-
-        const interval = setInterval(function () {
-            const timeLeft = animationEnd - Date.now();
-
-            if (timeLeft <= 0) {
-                return clearInterval(interval);
-            }
-
-            const particleCount = 60;
-
-            myConfetti({
-                particleCount,
-                startVelocity: 40,
-                spread: 360,
-                origin: {
-                    x: Math.random(),
-                    y: Math.random() - 0.2
-                },
-                colors: colors,
-                scalar: randomInRange(0.8, 1.5)
-            });
+        const animEnd = Date.now() + 2000;
+        const iv = setInterval(() => {
+            if (Date.now() >= animEnd) { clearInterval(iv); return; }
+            myConfetti({ particleCount: 60, startVelocity: 40, spread: 360, origin: { x: Math.random(), y: Math.random() - 0.2 }, colors, scalar: _rand(0.8, 1.5) });
         }, 200);
     }, 200);
+}
 
-    function randomInRange(min, max) {
-        return Math.random() * (max - min) + min;
+/**
+ * Exibe combo badge + confete proporcional ao streak
+ * @param {number} streak - Streak atual
+ * @param {number} amount - Cognits ganhos
+ * @param {Object} cfg - Configuração do módulo atual
+ */
+function _playStreakCombo(streak, amount, cfg) {
+    if (typeof confetti === 'undefined') return;
+
+    // ── Combo badge ────────────────────────────────────────────────────────
+    const existing = document.querySelector('.combo-container');
+    if (existing) existing.remove();
+
+    const container = document.createElement('div');
+    container.className = 'combo-container';
+    container.innerHTML = `
+      <div class="combo-badge">
+        <span class="combo-fire">🔥</span>
+        <div>
+          <div class="combo-number">x${streak}</div>
+          <div class="combo-label">Combo</div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(container);
+    setTimeout(() => { if (container.parentNode) container.remove(); }, 2000);
+
+    // ── Confete por intensidade ────────────────────────────────────────────
+    let colors, particles, bursts;
+    if (streak >= 10) {
+        // Rainbow
+        colors = ['#FF0000','#FF7F00','#FFFF00','#00FF00','#0000FF','#8B00FF','#ffffff'];
+        particles = 120; bursts = 2;
+    } else if (streak >= 8) {
+        colors = ['#FF6B6B','#FFD700','#7C3AED','#00CED1','#ffffff'];
+        particles = 100; bursts = 2;
+    } else if (streak >= 5) {
+        colors = ['#F97316','#FCD34D','#FFA500','#ffffff'];
+        particles = 60; bursts = 1;
+    } else {
+        // streak 3–4: verde suave
+        colors = ['#10B981','#34D399','#6EE7B7','#ffffff'];
+        particles = 30; bursts = 0;
     }
+
+    // Burst principal
+    confetti({ particleCount: particles, spread: 90, origin: { y: 0.5 }, colors, startVelocity: 45 });
+
+    // Bursts extras
+    for (let i = 0; i < bursts; i++) {
+        setTimeout(() => {
+            confetti({ particleCount: Math.floor(particles * 0.6), spread: 120, origin: { x: Math.random(), y: _rand(0.3, 0.7) }, colors, startVelocity: 35 });
+        }, (i + 1) * 250);
+    }
+
+    // Overlay especial ao atingir 10+
+    if (streak >= 10) {
+        _showCelebrationOverlay('🔥', `COMBO x${streak}!`, amount);
+    }
+}
+
+/**
+ * Lança confetti ÉPICO na tela (compat. legada)
+ */
+function launchConfetti() {
+    _playModuleConfetti(['#0891B2', '#2952CC', '#7C3AED', '#EC4899', '#F97316', '#FFD700', '#ffffff']);
+}
+
+function _rand(min, max) {
+    return Math.random() * (max - min) + min;
 }
 
 /**
@@ -251,6 +311,6 @@ function animateNumber(element, from, to, duration) {
 // Exportar para uso global
 if (typeof window !== 'undefined') {
     window.showCognitToast = showCognitToast;
-    window.showCelebration = showCelebration; // Adicionado export
+    window.showCelebration = showCelebration;
     window.updateCognitCounter = updateCognitCounter;
 }

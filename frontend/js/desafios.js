@@ -539,7 +539,7 @@ async function submitDecision() {
             // ⭐ NOVO - Exibir celebração ou toast
             if (data.cognits_gained) {
                 if (data.feedback.is_correct && typeof showCelebration === 'function') {
-                    showCelebration(data.cognits_gained, true);
+                    showCelebration(data.cognits_gained, true, 'case');
                 } else if (typeof showCognitToast === 'function') {
                     showCognitToast(data.cognits_gained, '💡 Por tentar');
                 }

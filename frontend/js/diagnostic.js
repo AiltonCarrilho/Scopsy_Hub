@@ -267,7 +267,7 @@ async function submitAnswer() {
             // ⭐ NOVO - Exibir celebração
             if (data.cognits_gained) {
                 if (data.is_correct && typeof showCelebration === 'function') {
-                    showCelebration(data.cognits_gained, true);
+                    showCelebration(data.cognits_gained, true, 'diagnostic');
                 } else if (typeof showCognitToast === 'function') {
                     showCognitToast(data.cognits_gained, '💡 Por tentar');
                 }
