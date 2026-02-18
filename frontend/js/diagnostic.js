@@ -161,6 +161,15 @@ async function generateNewCase() {
             caseStartTime = Date.now();
             selectedAnswer = null;
             renderCase(currentCase);
+        } else if (data.message) {
+            // Casos esgotados — exibir como conquista, não como erro
+            document.getElementById('caseContainer').innerHTML = `
+                <div class="case-card" style="text-align:center; padding:32px 24px;">
+                    <div style="font-size:48px; margin-bottom:16px;">🏆</div>
+                    <h3 style="color:#7c3aed; margin-bottom:12px;">${data.error}</h3>
+                    <p style="color:#555; margin-bottom:8px;">${data.message}</p>
+                    ${data.suggestion ? `<p style="color:#888; font-size:13px;">${data.suggestion}</p>` : ''}
+                </div>`;
         } else {
             document.getElementById('caseContainer').innerHTML =
                 `<div class="error-message">Erro ao gerar caso: ${data.error}</div>`;
