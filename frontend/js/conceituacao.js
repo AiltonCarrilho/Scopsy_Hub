@@ -168,6 +168,8 @@ async function generateCase(config) {
             })
         });
 
+        if (response.status === 401) { showSessionExpired(); return; }
+
         const data = await response.json();
 
         if (data.success) {
@@ -354,6 +356,8 @@ async function submitConceptualization() {
             })
         });
 
+        if (response.status === 401) { showSessionExpired(); return; }
+
         const data = await response.json();
 
         if (data.success) {
@@ -370,11 +374,13 @@ async function submitConceptualization() {
             // ✅ Atualizar progresso após sucesso
             loadProgress();
         } else {
-            alert('Erro ao processar conceituação');
+            document.getElementById('feedbackContainer').innerHTML =
+                '<p style="color:#ef4444;text-align:center;padding:16px;">Não foi possível processar a conceituação. Tente novamente.</p>';
         }
     } catch (error) {
         console.error('Erro:', error);
-        alert('Erro ao conectar');
+        document.getElementById('feedbackContainer').innerHTML =
+            '<p style="color:#ef4444;text-align:center;padding:16px;">Erro de conexão. Verifique sua internet e tente novamente.</p>';
     }
 
     submitBtn.disabled = false;

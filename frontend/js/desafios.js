@@ -345,7 +345,7 @@ async function generateNewMoment() {
 
     try {
         const token = localStorage.getItem('token');
-        if (!token) throw new Error("Token não encontrado. Faça login novamente.");
+        if (!token) { showSessionExpired(); return; }
 
         // Fallback para API local se necessário
         const apiUrl = API_URL.startsWith('http') ? API_URL : window.location.origin + API_URL;
@@ -355,6 +355,8 @@ async function generateNewMoment() {
             headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({ level: 'intermediate' })
         });
+
+        if (res.status === 401) { showSessionExpired(); return; }
 
         const data = await res.json();
 

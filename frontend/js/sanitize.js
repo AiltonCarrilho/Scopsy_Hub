@@ -52,11 +52,37 @@ function escapeHTML(text) {
     return div.innerHTML;
 }
 
+/**
+ * Exibe overlay amigável de sessão expirada e redireciona para login.
+ * Limpa token do localStorage automaticamente.
+ */
+function showSessionExpired() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:99999;';
+    overlay.innerHTML = `
+        <div style="background:#fff;border-radius:16px;padding:40px 32px;text-align:center;max-width:360px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+            <div style="font-size:48px;margin-bottom:16px;">🔐</div>
+            <h3 style="margin:0 0 12px;color:#1e293b;font-size:1.25rem;font-weight:700;">Sessão expirada</h3>
+            <p style="margin:0 0 24px;color:#64748b;font-size:0.95rem;line-height:1.5;">
+                Por segurança, faça o login novamente para continuar de onde parou.
+            </p>
+            <button onclick="window.location.href='login.html'" style="background:#7c3aed;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;width:100%;">
+                Fazer Login
+            </button>
+        </div>`;
+    document.body.appendChild(overlay);
+    setTimeout(() => { window.location.href = 'login.html'; }, 4000);
+}
+
 // Exportar para uso global
 if (typeof window !== 'undefined') {
     window.sanitizeHTML = sanitizeHTML;
     window.safeSetInnerHTML = safeSetInnerHTML;
     window.escapeHTML = escapeHTML;
+    window.showSessionExpired = showSessionExpired;
 }
 
 // Exportar para módulos (se suportado)
