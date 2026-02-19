@@ -150,6 +150,8 @@ async function generateNewCase() {
             })
         });
 
+        if (response.status === 401) { showSessionExpired(); return; }
+
         const data = await response.json();
 
         if (data.success) {
@@ -261,6 +263,8 @@ async function submitAnswer() {
             })
         });
 
+        if (response.status === 401) { showSessionExpired(); return; }
+
         const data = await response.json();
 
         if (data.success) {
@@ -277,11 +281,13 @@ async function submitAnswer() {
             showResult(data.is_correct, data.feedback);
             loadProgress(); // ✅ Atualizar painel de progresso
         } else {
-            alert('Erro ao processar resposta');
+            document.getElementById('feedbackContainer').innerHTML =
+                '<p style="color:#ef4444;text-align:center;padding:16px;">Não foi possível processar sua resposta. Tente novamente.</p>';
         }
     } catch (error) {
         console.error('Erro ao enviar resposta:', error);
-        alert('Erro ao conectar com o servidor');
+        document.getElementById('feedbackContainer').innerHTML =
+            '<p style="color:#ef4444;text-align:center;padding:16px;">Erro de conexão. Verifique sua internet e tente novamente.</p>';
     }
 
     submitBtn.textContent = 'Enviar Resposta';
