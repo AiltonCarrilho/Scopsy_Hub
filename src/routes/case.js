@@ -167,7 +167,8 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       .select('id, times_used, moment_type, category, disorder, difficulty_level')
       .eq('status', 'active')
       .eq('difficulty_level', finalLevel) // 🎯 Usa nível adaptativo
-      .not('case_content', 'is', null); // 🛡️ Exclui casos com case_content null (evita erro no frontend)
+      .not('case_content', 'is', null) // 🛡️ Exclui casos com case_content null (evita erro no frontend)
+      .neq('category', 'journey'); // 🛡️ Exclui sessões de Jornada — pertencem ao módulo /journey, não a este endpoint
 
     // Filtrar por tipo (micro-momento OU conceituação)
     if (isMicroMoment) {
@@ -258,7 +259,8 @@ router.post('/generate', authenticateRequest, async (req, res) => {
         .select('id, times_used, moment_type, category, disorder, difficulty_level')
         .eq('status', 'active')
         .eq('difficulty_level', finalLevel) // 🎯 Usa nível adaptativo
-        .not('case_content', 'is', null); // 🛡️ Exclui casos com case_content null
+        .not('case_content', 'is', null) // 🛡️ Exclui casos com case_content null
+        .neq('category', 'journey'); // 🛡️ Exclui sessões de Jornada
 
       // Manter filtro de IDs já vistos
       if (seenCaseIds.length > 0) {
