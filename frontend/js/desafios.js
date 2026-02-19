@@ -1,3 +1,4 @@
+// v2026-02-19e
 document.addEventListener('DOMContentLoaded', () => {
     console.log('✅ desafios.js carregado');
     console.log('🌍 Ambiente:', IS_DEV ? 'DESENVOLVIMENTO' : 'PRODUÇÃO');
