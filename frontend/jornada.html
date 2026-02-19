@@ -105,6 +105,7 @@
     <!-- Carregar configuração centralizada e utilitários de auth -->
     <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/sanitize.js"></script>
     <script src="js/trial-banner.js"></script>
 
     <script>
@@ -116,6 +117,15 @@
         function authHeaders(extra = {}) {
             const token = getToken();
             return { 'Authorization': `Bearer ${token}`, ...extra };
+        }
+
+        // Toast de erro (substitui alert())
+        function showError(msg) {
+            const el = document.createElement('div');
+            el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#ef4444;color:#fff;padding:12px 24px;border-radius:8px;z-index:99998;font-size:0.95rem;box-shadow:0 4px 12px rgba(0,0,0,0.15);white-space:nowrap;';
+            el.textContent = msg;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 4000);
         }
 
         // Obter usuário logado dinamicamente
@@ -141,6 +151,7 @@
                 const response = await fetch(`${JOURNEY_API_URL}/journey/list`, {
                     headers: authHeaders()
                 });
+                if (response.status === 401) { showSessionExpired(); return; }
                 const data = await response.json();
 
                 if (!data.success || data.journeys.length === 0) {
@@ -188,6 +199,7 @@
                     headers: authHeaders()
                 });
 
+                if (response.status === 401) { showSessionExpired(); return; }
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
@@ -454,6 +466,7 @@
                 const response = await fetch(url, {
                     headers: authHeaders()
                 });
+                if (response.status === 401) { showSessionExpired(); return; }
                 const data = await response.json();
 
                 if (data.success) {
@@ -657,6 +670,7 @@
                     }
                 );
 
+                if (response.status === 401) { showSessionExpired(); return; }
                 const data = await response.json();
 
                 if (data.success) {
@@ -685,7 +699,7 @@
 
             } catch (error) {
                 console.error('❌ Erro ao submeter decisão:', error);
-                alert('Erro ao registrar decisão. Tente novamente.');
+                showError('Não foi possível registrar sua decisão. Tente novamente.');
 
                 // Re-habilitar botão em caso de erro
                 if (btn) {
@@ -866,6 +880,7 @@
                     `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress`,
                     { headers: authHeaders() }
                 );
+                if (response.status === 401) { showSessionExpired(); return; }
                 const data = await response.json();
 
                 if (data.progress.is_completed) {
@@ -889,7 +904,7 @@
                 }
             } catch (error) {
                 console.error('Erro ao avançar:', error);
-                alert('Erro ao carregar próxima sessão.');
+                showError('Erro ao carregar próxima sessão. Tente novamente.');
 
                 const btn = e?.target;
                 if (btn) {
@@ -1031,7 +1046,7 @@
 
             } catch (error) {
                 console.error('❌ Erro ao carregar novo caso:', error);
-                alert(`Erro: ${error.message}`);
+                showError('Erro ao carregar novo caso. Tente novamente.');
             }
         }
 
@@ -1062,7 +1077,7 @@
                     headers: authHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify({})
                 });
-
+                if (response.status === 401) { showSessionExpired(); return; }
                 const data = await response.json();
 
                 if (!data.success) {
@@ -1084,7 +1099,7 @@
 
             } catch (error) {
                 console.error('❌ Erro ao recomeçar:', error);
-                alert('Erro ao recomeçar: ' + error.message);
+                showError('Erro ao recomeçar. Tente novamente.');
             }
         }
 
