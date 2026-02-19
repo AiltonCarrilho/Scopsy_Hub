@@ -1,4 +1,4 @@
-// v2026-02-19f
+// v2026-02-19g
 document.addEventListener('DOMContentLoaded', () => {
     console.log('✅ desafios.js carregado');
     console.log('🌍 Ambiente:', IS_DEV ? 'DESENVOLVIMENTO' : 'PRODUÇÃO');
@@ -32,6 +32,8 @@ const API_URL = IS_DEV
 let currentMoment = null;
 let selectedChoice = null;
 let startTime = null;
+let autoRetryCount = 0;
+const MAX_AUTO_RETRIES = 3;
 
 // ========================================
 // LÓGICA DO PAINEL DE PROGRESSO (NOVO)
@@ -341,6 +343,11 @@ function calculateProgressToNext(currentLevel, accuracy) {
 // ========================================
 
 async function generateNewMoment() {
+    autoRetryCount = 0; // Reset no clique manual do usuário
+    await _fetchAndRenderMoment();
+}
+
+async function _fetchAndRenderMoment() {
     document.getElementById('momentContainer').innerHTML = '<div class="loading">🔍 Carregando caso...</div>';
     document.getElementById('feedbackContainer').innerHTML = '';
 
@@ -365,7 +372,19 @@ async function generateNewMoment() {
             // 🛡️ VALIDAÇÃO DE DADOS (Fix para erro "diagnosis of undefined")
             if (!data.case || !data.case.context) {
                 console.warn('⚠️ Caso sem context válido — tentando próximo automaticamente', data.case_id);
-                setTimeout(generateNewMoment, 500);
+                autoRetryCount++;
+                if (autoRetryCount < MAX_AUTO_RETRIES) {
+                    setTimeout(_fetchAndRenderMoment, 500);
+                } else {
+                    autoRetryCount = 0;
+                    document.getElementById('momentContainer').innerHTML = `
+                        <div class="moment-card" style="text-align:center; padding:32px 24px;">
+                            <div style="font-size:48px; margin-bottom:16px;">⚠️</div>
+                            <h3 style="color:#ef4444; margin-bottom:12px;">Problema ao carregar caso</h3>
+                            <p style="color:#555; margin-bottom:20px;">Os casos disponíveis estão sendo atualizados. Tente novamente em instantes.</p>
+                            <button onclick="generateNewMoment()" style="background:#7c3aed;color:#fff;border:none;padding:12px 24px;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;">Tentar novamente</button>
+                        </div>`;
+                }
                 return;
             }
 
