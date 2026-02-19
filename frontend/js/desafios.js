@@ -655,7 +655,7 @@ function showFeedback(f, userChoice) {
             <!-- ========================================
                  NÍVEL 3: EXPANSÍVEL (Aprendizado Profundo)
                  ======================================== -->
-            ${lp && (safePattern || safeInstantResponse || safeCommonMistake) ? `
+            ${lp ? `
                 <details class="feedback-expandable">
                     <summary class="feedback-summary">
                         <span class="summary-icon">🎯</span>
