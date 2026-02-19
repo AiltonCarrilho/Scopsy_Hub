@@ -65,8 +65,8 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     const userId = req.user.userId;
 
     // Determinar tipo de caso (micro-momento ou conceituação)
-    const isMicroMoment = moment_type !== null;
     const isConceptualization = category === 'clinical_moment';
+    const isMicroMoment = !isConceptualization; // Qualquer request que não seja conceituação é micro-momento
 
     logger.debug(`\n[Case] ${isMicroMoment ? '🎬 Micro-momento' : '📋 Conceituação'}: ${moment_type || category}, level=${level}, disorder=${disorder_category || 'qualquer'}, user=${userId}`);
 
