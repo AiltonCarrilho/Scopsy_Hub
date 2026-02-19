@@ -176,9 +176,9 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       if (moment_type) {
         casesQuery = casesQuery.eq('moment_type', moment_type);
       } else {
-        // 🛡️ CRÍTICO: Garantir que só seleciona M1/M2 (que TÊM moment_type)
-        // Sem este filtro, M4 (rich_narrative, sem context) seria selecionado e marcado como needs_review
-        casesQuery = casesQuery.not('moment_type', 'is', null);
+        // 🛡️ CRÍTICO: Só buscar M1/M2 (moment_types válidos do enum MOMENTOS_CRITICOS)
+        // M4 tem moment_type='conceptualization' — excluído explicitamente aqui
+        casesQuery = casesQuery.in('moment_type', Object.keys(MOMENTOS_CRITICOS));
 
         // 🧠 INTERLEAVING: Se não especificou tipo E há último tipo, EXCLUIR ele
         // Força alternância entre tipos → +43% retenção (Rohrer & Taylor, 2007)
@@ -265,7 +265,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
         .eq('difficulty_level', finalLevel) // 🎯 Usa nível adaptativo
         .not('case_content', 'is', null) // 🛡️ Exclui casos com case_content null
         .neq('category', 'journey') // 🛡️ Exclui sessões de Jornada
-        .not('moment_type', 'is', null); // 🛡️ Exclui M4 (que não tem moment_type)
+        .in('moment_type', Object.keys(MOMENTOS_CRITICOS)); // 🛡️ Só M1/M2 válidos
 
       // Manter filtro de IDs já vistos
       if (seenCaseIds.length > 0) {
