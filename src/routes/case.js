@@ -325,6 +325,24 @@ router.post('/generate', authenticateRequest, async (req, res) => {
 
       selectedCase = fullCaseData;
 
+      // 🛡️ VALIDAÇÃO: Garantir que caso tem estrutura válida para micro-momentos
+      if (isMicroMoment && (!selectedCase.case_content || !selectedCase.case_content.context)) {
+        logger.warn(`[Case] ⚠️ Caso ${selectedCase.id} com case_content inválido (sem context) — movendo para needs_review`);
+        supabase
+          .from('cases')
+          .update({ status: 'needs_review' })
+          .eq('id', selectedCase.id)
+          .then(({ error }) => {
+            if (error) logger.error('[Case] ❌ Erro ao marcar caso como needs_review:', error.message);
+            else logger.info(`[Case] ✅ Caso ${selectedCase.id} marcado como needs_review`);
+          });
+        return res.json({
+          success: false,
+          error: 'Caso em revisão',
+          message: 'Este caso está sendo atualizado pela equipe. Clique em tentar novamente para carregar outro!'
+        });
+      }
+
       // 🆕 REGISTRAR VISUALIZAÇÃO (anti-repetição)
       // Marca caso como "visto" antes de retornar para evitar repetição
       // NOTA: NÃO incluir is_correct=null (coluna não aceita NULL)
