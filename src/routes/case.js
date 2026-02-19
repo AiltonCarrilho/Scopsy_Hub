@@ -176,6 +176,10 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       if (moment_type) {
         casesQuery = casesQuery.eq('moment_type', moment_type);
       } else {
+        // 🛡️ CRÍTICO: Garantir que só seleciona M1/M2 (que TÊM moment_type)
+        // Sem este filtro, M4 (rich_narrative, sem context) seria selecionado e marcado como needs_review
+        casesQuery = casesQuery.not('moment_type', 'is', null);
+
         // 🧠 INTERLEAVING: Se não especificou tipo E há último tipo, EXCLUIR ele
         // Força alternância entre tipos → +43% retenção (Rohrer & Taylor, 2007)
         if (lastMomentType) {
@@ -253,14 +257,15 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     if ((!availableCases || availableCases.length === 0) && lastMomentType && isMicroMoment && !moment_type) {
       logger.debug(`[Case] 🔄 INTERLEAVING FALLBACK: Nenhum caso encontrado, removendo filtro de tipo`);
 
-      // Refazer query SEM filtro de moment_type
+      // Refazer query SEM filtro de interleaving, mas MANTENDO filtro de moment_type não-nulo
       let fallbackQuery = supabase
         .from('cases')
         .select('id, times_used, moment_type, category, disorder, difficulty_level')
         .eq('status', 'active')
         .eq('difficulty_level', finalLevel) // 🎯 Usa nível adaptativo
         .not('case_content', 'is', null) // 🛡️ Exclui casos com case_content null
-        .neq('category', 'journey'); // 🛡️ Exclui sessões de Jornada
+        .neq('category', 'journey') // 🛡️ Exclui sessões de Jornada
+        .not('moment_type', 'is', null); // 🛡️ Exclui M4 (que não tem moment_type)
 
       // Manter filtro de IDs já vistos
       if (seenCaseIds.length > 0) {
