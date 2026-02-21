@@ -54,7 +54,11 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/coverage/',
-    '/frontend/' // Frontend será testado separadamente
+    '/frontend/',
+    '/.aios-core/',
+    '/.antigravity/',
+    '/.agent/',
+    '/.codex/'
   ],
 
   // Exibir relatório de coverage no console
