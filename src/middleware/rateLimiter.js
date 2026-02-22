@@ -8,12 +8,11 @@ const logger = require('../config/logger');
 
 /**
  * Rate limiter geral para API
- * DESENVOLVIMENTO: 500 requisições por 15 minutos
- * PRODUÇÃO: 100 requisições por 15 minutos
+ * 100 requisições por 15 minutos (uniforme em todos os ambientes)
  */
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: process.env.NODE_ENV === 'development' ? 500 : 100, // Mais permissivo em dev
+  max: 100,
   message: {
     success: false,
     error: 'Muitas requisições',
@@ -41,16 +40,16 @@ const apiLimiter = rateLimit({
 
 /**
  * Rate limiter para rotas de OpenAI (CARAS!)
- * DESENVOLVIMENTO: 50 requisições por minuto (testes)
- * PRODUÇÃO: 5 requisições por minuto
+ * 10 requisições por minuto (uniforme em todos os ambientes)
+ * Nota: para testes automatizados, mocke o openai-service em vez de aumentar esse limite
  */
 const openaiLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minuto
-  max: process.env.NODE_ENV === 'development' ? 50 : 5, // Mais permissivo em dev
+  max: 10,
   message: {
     success: false,
     error: 'Muitas requisições',
-    message: 'Aguarde antes de gerar novo caso. Limite: 5 por minuto.',
+    message: 'Aguarde antes de gerar novo caso. Limite: 10 por minuto.',
     retry_after: 60
   },
   standardHeaders: true,

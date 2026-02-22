@@ -120,7 +120,7 @@ router.post('/signup', async (req, res) => {
     logger.error('Erro no signup', { error: error.message });
     res.status(500).json({
       error: 'Erro ao criar conta',
-      details: error.message
+      ...(process.env.NODE_ENV !== 'production' && { details: error.message })
     });
   }
 });
@@ -207,7 +207,7 @@ router.post('/login', async (req, res) => {
     logger.error('Erro no login', { error: error.message });
     res.status(500).json({
       error: 'Erro ao fazer login',
-      details: error.message
+      ...(process.env.NODE_ENV !== 'production' && { details: error.message })
     });
   }
 });

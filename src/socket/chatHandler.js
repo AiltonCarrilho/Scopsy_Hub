@@ -124,7 +124,7 @@ function initializeSocketHandlers(io) {
         socket.emit('error', {
           message: 'Erro ao processar mensagem',
           code: 'PROCESSING_ERROR',
-          details: error.message
+          ...(process.env.NODE_ENV !== 'production' && { details: error.message })
         });
       }
     });

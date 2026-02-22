@@ -15,10 +15,15 @@ const openai = new OpenAI({
 });
 
 // Inicializar Supabase
+// IMPORTANTE: Usar ANON_KEY + RLS habilitado nas tabelas chat_conversations e chat_messages
+// NÃO usar SERVICE_ROLE_KEY aqui — bypass de RLS expõe dados de todos os usuários
 const supabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
+    process.env.SUPABASE_ANON_KEY
 );
+
+// Validação de UUID (módulo-level — não recriar por request)
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // IDs dos assistentes
 const ASSISTANT_IDS = {
@@ -50,6 +55,10 @@ router.post('/message', authenticateRequest, async (req, res) => {
 
         if (!ASSISTANT_IDS[assistantType]) {
             return res.status(400).json({ error: 'Tipo de assistente inválido' });
+        }
+
+        if (conversationId && !UUID_REGEX.test(conversationId)) {
+            return res.status(400).json({ error: 'conversationId inválido' });
         }
 
         logger.info(`📨 Nova mensagem de usuário ${userId} para ${assistantType}: ${message.substring(0, 50)}...`);
@@ -205,7 +214,7 @@ router.post('/message', authenticateRequest, async (req, res) => {
         logger.error('❌ Erro ao processar mensagem:', error);
         res.status(500).json({
             error: 'Erro ao processar mensagem',
-            details: error.message
+            ...(process.env.NODE_ENV !== 'production' && { details: error.message })
         });
     }
 });
@@ -247,7 +256,7 @@ router.get('/conversations', authenticateRequest, async (req, res) => {
         logger.error('❌ Erro ao buscar conversas:', error);
         res.status(500).json({
             error: 'Erro ao buscar conversas',
-            details: error.message
+            ...(process.env.NODE_ENV !== 'production' && { details: error.message })
         });
     }
 });
@@ -296,7 +305,7 @@ router.get('/conversation/:id', authenticateRequest, async (req, res) => {
         logger.error('❌ Erro ao buscar conversa:', error);
         res.status(500).json({
             error: 'Erro ao buscar conversa',
-            details: error.message
+            ...(process.env.NODE_ENV !== 'production' && { details: error.message })
         });
     }
 });
@@ -308,10 +317,33 @@ router.get('/conversation/:id', authenticateRequest, async (req, res) => {
 
 router.post('/feedback', authenticateRequest, async (req, res) => {
     try {
+        const userId = req.userId;
         const { messageId, feedback } = req.body;
 
         if (!['helpful', 'not_helpful'].includes(feedback)) {
             return res.status(400).json({ error: 'Feedback inválido' });
+        }
+
+        // Verificar que a mensagem pertence a uma conversa do usuário
+        const { data: msg, error: findErr } = await supabase
+            .from('chat_messages')
+            .select('id, conversation_id')
+            .eq('id', messageId)
+            .single();
+
+        if (findErr || !msg) {
+            return res.status(404).json({ error: 'Mensagem não encontrada' });
+        }
+
+        const { data: conv, error: convErr } = await supabase
+            .from('chat_conversations')
+            .select('id')
+            .eq('id', msg.conversation_id)
+            .eq('user_id', userId)
+            .single();
+
+        if (convErr || !conv) {
+            return res.status(403).json({ error: 'Acesso negado' });
         }
 
         const { error } = await supabase
@@ -333,7 +365,7 @@ router.post('/feedback', authenticateRequest, async (req, res) => {
         logger.error('❌ Erro ao salvar feedback:', error);
         res.status(500).json({
             error: 'Erro ao salvar feedback',
-            details: error.message
+            ...(process.env.NODE_ENV !== 'production' && { details: error.message })
         });
     }
 });
@@ -368,7 +400,7 @@ router.delete('/conversation/:id', authenticateRequest, async (req, res) => {
         logger.error('❌ Erro ao arquivar conversa:', error);
         res.status(500).json({
             error: 'Erro ao arquivar conversa',
-            details: error.message
+            ...(process.env.NODE_ENV !== 'production' && { details: error.message })
         });
     }
 });

@@ -24,49 +24,33 @@ const app = express();
 app.set('trust proxy', 1);
 
 const server = http.createServer(app);
+
+// ========================================
+// CORS - Origins permitidas (fonte única)
+// ========================================
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [
+      'https://www.scopsy.com.br',
+      'https://scopsy.com.br',
+      'https://lab.scopsy.com.br',
+      'https://app.scopsy.com.br',
+      process.env.FRONTEND_URL,
+      /https:\/\/.*\.vercel\.app$/  // preview deployments
+    ].filter(Boolean)
+  : [
+      'http://localhost:3000',
+      'http://localhost:5500',  // VSCode Live Server
+      'http://localhost:5173',  // Vite
+      'http://localhost:8080',  // Webpack
+      'http://127.0.0.1:3000',
+      'http://127.0.0.1:5500',
+      'http://127.0.0.1:5173',
+      process.env.FRONTEND_URL
+    ].filter(Boolean);
+
 const io = socketIo(server, {
   cors: {
-    origin: process.env.NODE_ENV === 'production'
-      ? [
-        // 🔒 PRODUÇÃO - Apenas domínios oficiais
-        'https://www.scopsy.com.br',
-        'https://scopsy.com.br',
-        'https://lab.scopsy.com.br',
-        'https://app.scopsy.com.br',
-        process.env.FRONTEND_URL
-      ].filter(Boolean)
-      : [
-        // 🛠️ DESENVOLVIMENTO - Portas locais comuns
-        'http://localhost:3000',
-        'http://localhost:3001',
-        'http://localhost:3002',
-        'http://localhost:5500',  // VSCode Live Server
-        'http://localhost:5501',
-        'http://localhost:5502',
-        'http://localhost:5503',
-        'http://localhost:5504',
-        'http://localhost:5505',
-        'http://localhost:5173',  // Vite
-        'http://localhost:8080',  // Webpack dev server
-        'http://localhost:8000',  // Python/outros
-        'http://localhost:4200',  // Angular
-        'http://127.0.0.1:3000',
-        'http://127.0.0.1:3001',
-        'http://127.0.0.1:3002',
-        'http://127.0.0.1:5500',  // VSCode Live Server
-        'http://127.0.0.1:5501',
-        'http://127.0.0.1:5502',
-        'http://127.0.0.1:5503',
-        'http://127.0.0.1:5504',
-        'http://127.0.0.1:5505',
-        'http://127.0.0.1:5173',
-        'http://127.0.0.1:8080',
-        'http://127.0.0.1:8000',
-        'http://127.0.0.1:4200',
-        'https://www.scopsy.com.br',
-        'https://scopsy.com.br',
-        process.env.FRONTEND_URL
-      ].filter(Boolean),
+    origin: allowedOrigins,
     credentials: true
   }
 });
@@ -81,82 +65,33 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false
 }));
 
-// CORS - RESTRITO AO DOMÍNIO (Segurança!)
-const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? [
-    // 🔒 PRODUÇÃO - Apenas domínios oficiais
-    'https://www.scopsy.com.br',
-    'https://scopsy.com.br',
-    'https://lab.scopsy.com.br',
-    'https://app.scopsy.com.br', // Se tiver subdomínio separado
-    process.env.FRONTEND_URL,
-    // Vercel deployment URLs (para preview e produção)
-    /https:\/\/.*\.vercel\.app$/
-  ].filter(Boolean)
-  : [
-    // 🛠️ DESENVOLVIMENTO - Portas locais comuns
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://localhost:3002',
-    'http://localhost:5500',  // VSCode Live Server
-    'http://localhost:5501',
-    'http://localhost:5502',
-    'http://localhost:5503',
-    'http://localhost:5504',
-    'http://localhost:5505',
-    'http://localhost:5173',  // Vite
-    'http://localhost:8080',  // Webpack dev server
-    'http://localhost:8000',  // Python/outros
-    'http://localhost:4200',  // Angular
-    'http://127.0.0.1:3000',
-    'http://127.0.0.1:3001',
-    'http://127.0.0.1:3002',
-    'http://127.0.0.1:5500',  // VSCode Live Server
-    'http://127.0.0.1:5501',
-    'http://127.0.0.1:5502',
-    'http://127.0.0.1:5503',
-    'http://127.0.0.1:5504',
-    'http://127.0.0.1:5505',
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:8080',
-    'http://127.0.0.1:8000',
-    'http://127.0.0.1:4200',
-    'https://www.scopsy.com.br',
-    'https://scopsy.com.br',
-    process.env.FRONTEND_URL
-  ].filter(Boolean);
+// allowedOrigins definido acima, antes do socket.io
 
 app.use(cors({
   origin: function (origin, callback) {
-    // 🔓 DESENVOLVIMENTO: Permite requisições sem origin (arquivos locais, Postman, etc)
-    if (!origin && process.env.NODE_ENV !== 'production') {
-      logger.info('✅ CORS permitido: requisição sem origin (arquivo local ou Postman)');
-      return callback(null, true);
-    }
-
-    // 🔒 PRODUÇÃO: Permite requisições sem origin apenas de mobile apps
-    if (!origin && process.env.NODE_ENV === 'production') {
-      logger.info('✅ CORS permitido: requisição sem origin (mobile app)');
-      return callback(null, true);
+    // Sem origin: permitir apenas em desenvolvimento (Postman, curl, arquivos locais)
+    // Em produção: navegadores sempre enviam Origin — requisições sem origin são suspeitas
+    if (!origin) {
+      if (process.env.NODE_ENV !== 'production') {
+        logger.info('CORS: sem origin permitido em desenvolvimento (Postman/curl)');
+        return callback(null, true);
+      }
+      logger.warn('CORS: requisição sem origin bloqueada em produção');
+      return callback(new Error('Origin obrigatória'));
     }
 
     // Verificar se origin está na lista (suporta strings e regex)
     const isAllowed = allowedOrigins.some(allowed => {
-      if (typeof allowed === 'string') {
-        return allowed === origin;
-      }
-      if (allowed instanceof RegExp) {
-        return allowed.test(origin);
-      }
+      if (typeof allowed === 'string') return allowed === origin;
+      if (allowed instanceof RegExp) return allowed.test(origin);
       return false;
     });
 
     if (isAllowed) {
-      logger.info(`✅ CORS permitido: ${origin}`);
+      logger.info(`CORS permitido: ${origin}`);
       callback(null, true);
     } else {
-      logger.warn(`❌ CORS BLOQUEADO - Origin: "${origin}" não está na lista de permitidas`);
-      logger.warn(`📋 Origins permitidas: ${JSON.stringify(allowedOrigins, null, 2)}`);
+      logger.warn(`CORS bloqueado: ${origin}`);
       callback(new Error('Origin não permitida pelo CORS'));
     }
   },
@@ -209,7 +144,7 @@ app.use('/api/auth', authLimiter, authRoutes);
 // Rotas gerais - Rate limit padrão da API
 app.use('/api/dashboard', apiLimiter, dashboardRoutes);
 app.use('/api/account', apiLimiter, accountRoutes);
-app.use('/api/chat', apiLimiter, chatRoutes);
+app.use('/api/chat', apiLimiter, openaiLimiter, chatRoutes);
 app.use('/api/progress', apiLimiter, require('./routes/progress'));
 app.use('/api/streaks', apiLimiter, require('./routes/streaks'));
 app.use('/api/missions', apiLimiter, require('./routes/missions'));
@@ -269,10 +204,10 @@ app.set('io', io);
 // 6. TRATAMENTO DE ERROS
 // ========================================
 app.use((err, req, res, next) => {
-  logger.error('❌ Erro não tratado:', err);
+  logger.error('Erro não tratado', { message: err.message, stack: err.stack, path: req.path });
   res.status(500).json({
     error: 'Erro interno do servidor',
-    message: err.message
+    ...(process.env.NODE_ENV !== 'production' && { message: err.message })
   });
 });
 

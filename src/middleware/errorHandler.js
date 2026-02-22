@@ -16,7 +16,7 @@ function errorHandler(err, req, res, next) {
   if (err.name === 'ValidationError') {
     return res.status(400).json({
       error: 'Validation Error',
-      details: err.message
+      ...(process.env.NODE_ENV !== 'production' && { details: err.message })
     });
   }
 

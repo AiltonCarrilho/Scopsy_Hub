@@ -64,15 +64,16 @@ router.post('/kiwify', express.json(), async (req, res) => {
     });
 
     // 2. Validar token Kiwify (enviado no body do evento)
-    if (process.env.KIWIFY_WEBHOOK_SECRET) {
-      if (!validateKiwifyToken(event.token, process.env.KIWIFY_WEBHOOK_SECRET)) {
-        logger.error('[WEBHOOK] Rejeitado: token invalido');
-        return res.status(401).json({ error: 'Invalid token' });
-      }
-      logger.info('[WEBHOOK] Token validado com sucesso');
-    } else {
-      logger.warn('[WEBHOOK] KIWIFY_WEBHOOK_SECRET nao configurado - validacao desabilitada');
+    // Validação obrigatória — sem secret configurado, endpoint fica bloqueado
+    if (!process.env.KIWIFY_WEBHOOK_SECRET) {
+      logger.error('[WEBHOOK] KIWIFY_WEBHOOK_SECRET não configurado — endpoint bloqueado');
+      return res.status(503).json({ error: 'Webhook não configurado' });
     }
+    if (!validateKiwifyToken(event.token, process.env.KIWIFY_WEBHOOK_SECRET)) {
+      logger.error('[WEBHOOK] Rejeitado: token invalido');
+      return res.status(401).json({ error: 'Invalid token' });
+    }
+    logger.info('[WEBHOOK] Token validado com sucesso');
 
     // 3. Processar evento baseado no tipo
     const eventType = event.event || event.webhook_event_type;
