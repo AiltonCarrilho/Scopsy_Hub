@@ -39,10 +39,12 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
   : [
       'http://localhost:3000',
       'http://localhost:5500',  // VSCode Live Server
+      'http://localhost:5502',  // VSCode Live Server (alternative port)
       'http://localhost:5173',  // Vite
       'http://localhost:8080',  // Webpack
       'http://127.0.0.1:3000',
       'http://127.0.0.1:5500',
+      'http://127.0.0.1:5502',
       'http://127.0.0.1:5173',
       process.env.FRONTEND_URL
     ].filter(Boolean);
