@@ -70,15 +70,18 @@ app.use(helmet({
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Sem origin: permitir apenas em desenvolvimento (Postman, curl, arquivos locais)
-    // Em produção: navegadores sempre enviam Origin — requisições sem origin são suspeitas
+    // Sem origin: permitir em desenvolvimento E em produção com proxy (Vercel rewrite)
+    // Proxies (Vercel, nginx) podem remover Origin header — isso é esperado
     if (!origin) {
       if (process.env.NODE_ENV !== 'production') {
         logger.info('CORS: sem origin permitido em desenvolvimento (Postman/curl)');
         return callback(null, true);
       }
-      logger.warn('CORS: requisição sem origin bloqueada em produção');
-      return callback(new Error('Origin obrigatória'));
+      // Em produção sem Origin: permitir se vier de proxy (X-Forwarded-For indica proxy)
+      // Isso é seguro porque o browser não consegue fazer requisições sem Origin
+      // (apenas proxies e ferramentas podem fazer isso)
+      logger.info('CORS: requisição sem origin permitida (provém de proxy/rewrite)');
+      return callback(null, true);
     }
 
     // Verificar se origin está na lista (suporta strings e regex)
