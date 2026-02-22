@@ -32,7 +32,6 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
   ? [
       'https://www.scopsy.com.br',
       'https://scopsy.com.br',
-      'https://lab.scopsy.com.br',
       'https://app.scopsy.com.br',
       process.env.FRONTEND_URL,
       /https:\/\/.*\.vercel\.app$/  // preview deployments
@@ -109,15 +108,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const path = require('path'); // Ensure path is imported if not already, or use it here
 
-// 1. Novo Dashboard (Next.js static export)
-app.use('/lab', express.static(path.join(__dirname, '../frontend/lab')));
-
-// 1b. SPA Fallback - qualquer rota /lab/* que não seja arquivo estático serve index.html
-app.get('/lab/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/lab/index.html'));
-});
-
-// 2. Frontend Legado
+// Frontend Legado
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 
