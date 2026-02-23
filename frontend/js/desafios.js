@@ -1,17 +1,17 @@
-// v2026-02-19g
+// v2026-02-22
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('✅ desafios.js carregado');
-    console.log('🌍 Ambiente:', IS_DEV ? 'DESENVOLVIMENTO' : 'PRODUÇÃO');
-    console.log('🔗 API_URL:', API_URL);
+    console.log('desafios.js carregado');
+    console.log('Ambiente:', IS_DEV ? 'DESENVOLVIMENTO' : 'PRODUCAO');
+    console.log('API_URL:', API_URL);
 
-    // ✅ STRICT AUTH CHECK
+    // STRICT AUTH CHECK
     const token = localStorage.getItem('token');
     if (!token) {
         window.location.href = 'login.html';
         return;
     }
 
-    // ✅ Adicionar listener ao botão principal de novo momento
+    // Adicionar listener ao botão principal de novo momento
     const newMomentBtn = document.getElementById('newMomentBtn');
     if (newMomentBtn) {
         newMomentBtn.addEventListener('click', generateNewMoment);
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     lucide.createIcons();
     loadProgress(); // Carregar painel de progresso ao iniciar
-    loadAdaptiveLevelIndicator(); // 🎯 Carregar nível adaptativo
+    loadAdaptiveLevelIndicator(); // Carregar nível adaptativo
 });
 
 // Detectar ambiente (desenvolvimento vs produção)
@@ -39,16 +39,16 @@ const MAX_AUTO_RETRIES = 3;
 // LÓGICA DO PAINEL DE PROGRESSO (NOVO)
 // ========================================
 function loadProgress() {
-    console.log('🚀 loadProgress() iniciado');
+    console.log('loadProgress() iniciado');
 
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const panel = document.getElementById('progressPanel');
 
-    // 🛡️ FORÇAR ESCONDER AVISOS NO INÍCIO (style direto)
+    // FORÇAR ESCONDER AVISOS NO INÍCIO (style direto)
     const warning = document.getElementById('trialWarning');
     const expired = document.getElementById('trialExpired');
 
-    console.log('🔍 Elementos encontrados:', { warning: !!warning, expired: !!expired, panel: !!panel });
+    console.log('Elementos encontrados:', { warning: !!warning, expired: !!expired, panel: !!panel });
 
     if (warning) {
         warning.style.display = 'none';
@@ -91,11 +91,11 @@ async function fetchStatsAndRender(panel, isTrial) {
         const data = await res.json();
 
         if (!data || typeof data !== 'object') {
-            console.error('❌ Resposta inválida do backend:', data);
+            console.error('Resposta inválida do backend:', data);
             return;
         }
 
-        console.log('📊 Resposta /api/progress/summary:', data);
+        console.log('Resposta /api/progress/summary:', data);
 
         let html = '';
 
@@ -105,7 +105,7 @@ async function fetchStatsAndRender(panel, isTrial) {
             const remainingRaciocinio = Number(remaining.raciocinio) || 0;
             const remainingDays = Number(data.trial_days_left) || 0;
 
-            console.log('🎯 TRIAL - Desafios:', { remainingRaciocinio, remainingDays });
+            console.log('TRIAL - Desafios:', { remainingRaciocinio, remainingDays });
 
             html = `
                 <strong>Seu Progresso Trial</strong>
@@ -132,7 +132,7 @@ async function fetchStatsAndRender(panel, isTrial) {
             const desafiosConcluidos = Number(data.breakdown?.raciocinio) || 0;
             const accuracy = (Number(data.accuracy) || 0).toFixed(1);
 
-            console.log('💎 PREMIUM:', { cognits, level, title, accuracy });
+            console.log('PREMIUM:', { cognits, level, title, accuracy });
 
             html = `
                 <strong>${title} (Nível ${level})</strong>
@@ -152,24 +152,24 @@ async function fetchStatsAndRender(panel, isTrial) {
                 </div>
             `;
 
-            // 🔒 GARANTIR que avisos de trial estejam ESCONDIDOS para premium
+            // GARANTIR que avisos de trial estejam ESCONDIDOS para premium
             hidePremiumTrialWarnings();
         }
 
         panel.innerHTML = html;
 
     } catch (e) {
-        console.error("❌ Erro ao carregar stats:", e);
+        console.error("Erro ao carregar stats:", e);
     }
 }
 
-// 🔒 ESCONDER AVISOS DE TRIAL PARA USUÁRIOS PREMIUM
+// ESCONDER AVISOS DE TRIAL PARA USUÁRIOS PREMIUM
 function hidePremiumTrialWarnings() {
     const warning = document.getElementById('trialWarning');
     const expired = document.getElementById('trialExpired');
     const newMomentBtn = document.querySelector('.new-moment-btn');
 
-    console.log('💎 Escondendo avisos de trial para usuário premium');
+    console.log('Escondendo avisos de trial para usuário premium');
 
     if (warning) {
         warning.style.display = 'none';
@@ -193,7 +193,7 @@ function hidePremiumTrialWarnings() {
 }
 
 // ========================================
-// 🎯 NÍVEL ADAPTATIVO (Neurociência)
+// NÍVEL ADAPTATIVO (Neurociência)
 // ========================================
 
 /**
@@ -214,7 +214,7 @@ async function loadAdaptiveLevelIndicator() {
             renderAdaptiveLevelUI(data.adaptive_level, data.accuracy, data.progress_to_next);
         }
     } catch (e) {
-        console.error('❌ Erro ao carregar nível adaptativo:', e);
+        console.error('Erro ao carregar nível adaptativo:', e);
     }
 }
 
@@ -250,7 +250,7 @@ function renderAdaptiveLevelUI(level, accuracy, progressToNext) {
     } else if (level === 'intermediate' && progressToNext < 100) {
         progressMessage = `Faltam ${Math.ceil((100 - progressToNext) * 0.85)}% de acurácia para Avançado`;
     } else if (level === 'advanced') {
-        progressMessage = 'Continue assim para manter o nível! 🏆';
+        progressMessage = 'Continue assim para manter o nível!';
     } else {
         progressMessage = 'Você está pronto para o próximo nível!';
     }
@@ -348,7 +348,7 @@ async function generateNewMoment() {
 }
 
 async function _fetchAndRenderMoment() {
-    document.getElementById('momentContainer').innerHTML = '<div class="loading">🔍 Carregando caso...</div>';
+    document.getElementById('momentContainer').innerHTML = '<div class="loading">Carregando caso...</div>';
     document.getElementById('feedbackContainer').innerHTML = '';
 
     try {
@@ -369,9 +369,9 @@ async function _fetchAndRenderMoment() {
         const data = await res.json();
 
         if (data.success) {
-            // 🛡️ VALIDAÇÃO DE DADOS (Fix para erro "diagnosis of undefined")
+            // VALIDAÇÃO DE DADOS (Fix para erro "diagnosis of undefined")
             if (!data.case || !data.case.context) {
-                console.warn('⚠️ Caso sem context válido — tentando próximo automaticamente', data.case_id);
+                console.warn('Caso sem context válido — tentando próximo automaticamente', data.case_id);
                 autoRetryCount++;
                 if (autoRetryCount < MAX_AUTO_RETRIES) {
                     setTimeout(_fetchAndRenderMoment, 500);
@@ -392,7 +392,7 @@ async function _fetchAndRenderMoment() {
             selectedChoice = null;
             startTime = Date.now();
 
-            // 🎯 Atualizar indicador de nível adaptativo se dados disponíveis
+            // Atualizar indicador de nível adaptativo se dados disponíveis
             if (data.adaptive_level && data.performance_summary) {
                 const accuracy = data.performance_summary.recent_accuracy || 0;
                 const progressToNext = calculateProgressToNext(data.adaptive_level, accuracy);
@@ -420,16 +420,16 @@ async function _fetchAndRenderMoment() {
 }
 
 function renderMoment(m) {
-    // 🛡️ PROTEÇÃO ADICIONAL: Se chegar aqui sem contexto, não quebra
+    // PROTEÇÃO ADICIONAL: Se chegar aqui sem contexto, não quebra
     if (!m || !m.context) {
-        console.error('❌ renderMoment chamado com dados inválidos:', m);
+        console.error('renderMoment chamado com dados inválidos:', m);
         return;
     }
 
     const ctx = m.context;
     const cm = m.critical_moment;
 
-    // 🔒 SEGURANÇA XSS: Sanitizar dados do backend
+    // SEGURANÇA XSS: Sanitizar dados do backend
     const safeDiagnosis = escapeHTML(ctx.diagnosis || 'Momento Clínico');
     const safeClientName = escapeHTML(ctx.client_name);
     const safeWhatHappened = sanitizeHTML(ctx.what_just_happened);
@@ -439,7 +439,7 @@ function renderMoment(m) {
 
     let optionsHTML = '';
     m.options.forEach(opt => {
-        // 🔒 SEGURANÇA XSS: Sanitizar opções
+        // SEGURANÇA XSS: Sanitizar opções
         const safeApproach = escapeHTML(opt.approach);
         const safeResponse = escapeHTML(opt.response);
         const safeLetter = escapeHTML(opt.letter);
@@ -483,7 +483,7 @@ function renderMoment(m) {
           <button class="submit-btn" id="submitBtn" disabled>Confirmar Decisão</button>
         </div>`;
 
-    // ✅ Adicionar event listeners APÓS renderizar (delegação de eventos)
+    // Adicionar event listeners APÓS renderizar (delegação de eventos)
     attachOptionListeners();
     attachSubmitListener();
 }
@@ -553,12 +553,12 @@ async function submitDecision() {
         const data = await res.json();
 
         if (data.success) {
-            // ⭐ NOVO - Exibir celebração ou toast
+            // NOVO - Exibir celebração ou toast
             if (data.cognits_gained) {
                 if (data.feedback.is_correct && typeof showCelebration === 'function') {
                     showCelebration(data.cognits_gained, true, 'case');
                 } else if (typeof showCognitToast === 'function') {
-                    showCognitToast(data.cognits_gained, '💡 Por tentar');
+                    showCognitToast(data.cognits_gained, 'Por tentar');
                 }
             }
 
@@ -572,6 +572,17 @@ async function submitDecision() {
     btn.textContent = 'Confirmar Decisão';
 }
 
+// ========================================
+// HELPER: Extrai string não-vazia de campo de learning_point
+// Retorna '' se o campo for undefined, null ou string vazia após sanitização
+// ========================================
+function _lpField(lp, field) {
+    if (!lp || typeof lp !== 'object') return '';
+    const val = lp[field];
+    if (!val || typeof val !== 'string' || val.trim() === '') return '';
+    return sanitizeHTML(val);
+}
+
 function showFeedback(f, userChoice) {
     // Marcar opções corretas/incorretas
     document.querySelectorAll('.option-card').forEach(card => {
@@ -581,20 +592,36 @@ function showFeedback(f, userChoice) {
         else if (letter === userChoice && !f.is_correct) card.classList.add('incorrect');
     });
 
-    const er = f.expert_reasoning;
+    const er = f.expert_reasoning || {};
     const lp = f.learning_point;
 
-    // 🔒 SEGURANÇA XSS: Sanitizar feedback do backend
-    const safeImmediateFeedback = sanitizeHTML(f.immediate_feedback);
+    // SEGURANÇA XSS: Sanitizar feedback do backend
+    const safeImmediateFeedback = sanitizeHTML(f.immediate_feedback || '');
     const safeUserReasoning = f.user_reasoning_analysis ? sanitizeHTML(f.user_reasoning_analysis) : '';
-    const safeExpertChoice = escapeHTML(f.expert_choice);
+    const safeExpertChoice = escapeHTML(f.expert_choice || '');
     const safeWhyWorks = sanitizeHTML(er.why_this_works || '');
     const safeCorePrinciple = er.core_principle ? sanitizeHTML(er.core_principle) : '';
-    const safePattern = lp ? sanitizeHTML(lp.pattern_to_recognize) : '';
-    const safeInstantResponse = lp ? sanitizeHTML(lp.instant_response) : '';
-    const safeCommonMistake = lp ? sanitizeHTML(lp.common_mistake) : '';
 
-    // 🧠 CHUNKING: Feedback em 3 níveis expansíveis (Teoria Carga Cognitiva)
+    // FIX: Usar _lpField() que valida tipo e conteúdo do campo antes de sanitizar.
+    // Problema anterior: lp ? sanitizeHTML(lp.field) retornava '' para campos
+    // undefined sem sinalizar a ausência — a condicao de renderizacao ficava cega.
+    const safePattern = _lpField(lp, 'pattern_to_recognize');
+    const safeInstantResponse = _lpField(lp, 'instant_response');
+    const safeCommonMistake = _lpField(lp, 'common_mistake');
+
+    // FIX: A condicao agora avalia explicitamente se há ao menos 1 campo com
+    // conteúdo real — em vez de confiar em `lp` (objeto vazio é truthy).
+    const hasLearningPoint = safePattern !== '' || safeInstantResponse !== '' || safeCommonMistake !== '';
+
+    console.log('[showFeedback] learning_point check:', {
+        lp_received: lp,
+        safePattern,
+        safeInstantResponse,
+        safeCommonMistake,
+        hasLearningPoint
+    });
+
+    // CHUNKING: Feedback em 3 níveis expansíveis (Teoria Carga Cognitiva)
     // Objetivo: -50% carga cognitiva + usuário controla profundidade
     const fb = `
         <div class="feedback-card">
@@ -607,9 +634,9 @@ function showFeedback(f, userChoice) {
                         <h2 style="margin: 0;">${safeImmediateFeedback}</h2>
                         <p style="margin: 8px 0 0; font-size: 1.1rem; opacity: 0.9;">
                             ${f.is_correct
-            ? 'Você pensou como um clínico experiente!'
-            : 'Vamos crescer juntos com este aprendizado'
-        }
+                                ? 'Você pensou como um clínico experiente!'
+                                : 'Vamos crescer juntos com este aprendizado'
+                            }
                         </p>
                     </div>
                 </div>
@@ -625,7 +652,7 @@ function showFeedback(f, userChoice) {
                     border-radius: 8px;
                 ">
                     <h4 style="margin: 0 0 8px; color: #0369a1; font-size: 1rem;">
-                        💭 Seu Raciocínio
+                        Seu Raciocínio
                     </h4>
                     <p style="margin: 0; font-style: italic; color: #333;">
                         ${safeUserReasoning}
@@ -671,19 +698,21 @@ function showFeedback(f, userChoice) {
 
             <!-- ========================================
                  NÍVEL 3: EXPANSÍVEL (Aprendizado Profundo)
+                 FIX: Condicional usa hasLearningPoint (boolean real)
+                 em vez de `lp && (...)` que falha com objeto vazio {}
                  ======================================== -->
-            ${lp && (safePattern || safeInstantResponse || safeCommonMistake) ? `
-                <details class="feedback-expandable">
-                    <summary class="feedback-summary">
-                        <span class="summary-icon">🎯</span>
-                        <span class="summary-text">Ponto de Aprendizagem</span>
-                        <span class="summary-chevron">▼</span>
-                    </summary>
-                    <div class="feedback-expandable-content" style="background: #ecfdf5;">
+            <details class="feedback-expandable">
+                <summary class="feedback-summary">
+                    <span class="summary-icon">🎯</span>
+                    <span class="summary-text">Ponto de Aprendizagem</span>
+                    <span class="summary-chevron">▼</span>
+                </summary>
+                <div class="feedback-expandable-content" style="background: #ecfdf5;">
+                    ${hasLearningPoint ? `
                         ${safePattern ? `
                             <div style="margin-bottom: 16px;">
                                 <h5 style="margin: 0 0 8px; color: #047857; font-size: 0.95rem;">
-                                    🔍 Padrão a Reconhecer
+                                    Padrão a Reconhecer
                                 </h5>
                                 <p style="margin: 0; color: #065f46;">
                                     ${safePattern}
@@ -694,7 +723,7 @@ function showFeedback(f, userChoice) {
                         ${safeInstantResponse ? `
                             <div style="margin-bottom: 16px;">
                                 <h5 style="margin: 0 0 8px; color: #047857; font-size: 0.95rem;">
-                                    ⚡ Resposta Ideal
+                                    Resposta Ideal
                                 </h5>
                                 <p style="margin: 0; color: #065f46;">
                                     ${safeInstantResponse}
@@ -710,33 +739,31 @@ function showFeedback(f, userChoice) {
                                 border-radius: 6px;
                             ">
                                 <h5 style="margin: 0 0 8px; color: #991b1b; font-size: 0.95rem;">
-                                    ⚠️ Erro Comum
+                                    Erro Comum
                                 </h5>
                                 <p style="margin: 0; color: #7f1d1d;">
                                     ${safeCommonMistake}
                                 </p>
                             </div>
                         ` : ''}
-
-                        ${!safePattern && !safeInstantResponse && !safeCommonMistake ? `
-                            <div style="
-                                background: #fef9c3;
-                                border-left: 4px solid #eab308;
-                                padding: 16px;
-                                border-radius: 6px;
-                                text-align: center;
-                            ">
-                                <p style="margin: 0; color: #713f12; font-size: 0.95rem;">
-                                    📝 Este caso ainda não tem pontos de aprendizagem cadastrados.<br>
-                                    <span style="font-size: 0.85rem; opacity: 0.8;">
-                                        Estamos atualizando nosso banco de casos com insights mais profundos!
-                                    </span>
-                                </p>
-                            </div>
-                        ` : ''}
-                    </div>
-                </details>
-            ` : ''}
+                    ` : `
+                        <div style="
+                            background: #fef9c3;
+                            border-left: 4px solid #eab308;
+                            padding: 16px;
+                            border-radius: 6px;
+                            text-align: center;
+                        ">
+                            <p style="margin: 0; color: #713f12; font-size: 0.95rem;">
+                                Este caso ainda não tem pontos de aprendizagem cadastrados.<br>
+                                <span style="font-size: 0.85rem; opacity: 0.8;">
+                                    Estamos atualizando nosso banco de casos com insights mais profundos!
+                                </span>
+                            </p>
+                        </div>
+                    `}
+                </div>
+            </details>
 
             <!-- Botão de próximo caso -->
             <button class="next-moment-btn" id="nextMomentBtn" style="margin-top: 24px;">
@@ -747,10 +774,10 @@ function showFeedback(f, userChoice) {
     document.getElementById('feedbackContainer').innerHTML = fb;
     document.getElementById('feedbackContainer').scrollIntoView({ behavior: 'smooth' });
 
-    // ✅ Adicionar listener ao botão
+    // Adicionar listener ao botão
     attachNextMomentListener();
 
-    // 🎯 Inicializar animações dos expandables
+    // Inicializar animações dos expandables
     initializeExpandableAnimations();
 }
 
@@ -852,12 +879,12 @@ function updateTrialUI(remainingUsage, remainingDays) {
     // Elementos opcionais (caso não existam na página)
     if (!warning || !expired) return;
 
-    // 🛡️ BLINDAGEM CRÍTICA: Converter para número e garantir valores válidos
+    // BLINDAGEM CRÍTICA: Converter para número e garantir valores válidos
     const usage = Number(remainingUsage);
     const days = Number(remainingDays);
 
-    // 🐞 DEBUG EXPLÍCITO
-    console.log('🔍 VERIFICAÇÃO TRIAL:', {
+    // DEBUG EXPLÍCITO
+    console.log('VERIFICAÇÃO TRIAL:', {
         remainingUsage: usage,
         remainingDays: days,
         isNaN_usage: isNaN(usage),
@@ -868,7 +895,7 @@ function updateTrialUI(remainingUsage, remainingDays) {
 
     // Se valores inválidos, ASSUMIR QUE É USUÁRIO NOVO (modo seguro)
     if (isNaN(usage) || isNaN(days) || usage < 0 || days < 0) {
-        console.warn('⚠️ Valores inválidos detectados, assumindo trial novo');
+        console.warn('Valores inválidos detectados, assumindo trial novo');
         warning.style.display = 'none';
         warning.classList.add('hidden');
         expired.style.display = 'none';
@@ -876,7 +903,7 @@ function updateTrialUI(remainingUsage, remainingDays) {
         return;
     }
 
-    // 1. 🛡️ RESETAR ESTADO VISUAL (style direto + classe)
+    // 1. RESETAR ESTADO VISUAL (style direto + classe)
     warning.style.display = 'none';
     warning.classList.add('hidden');
     expired.style.display = 'none';
@@ -889,17 +916,17 @@ function updateTrialUI(remainingUsage, remainingDays) {
         newMomentBtn.title = "Gerar novo caso";
     }
 
-    // 2. ⚠️ REGRA DE BLOQUEIO CRÍTICA
+    // 2. REGRA DE BLOQUEIO CRÍTICA
     // Só bloqueia se EXPLICITAMENTE acabou (não por valores padrão)
     const isTimeExpired = days === 0; // Exatamente zero, não <=
     const isUsageExpired = usage === 0; // Exatamente zero, não <=
     const isTrialExpired = isTimeExpired || isUsageExpired;
 
-    console.log('🚦 Estado Trial:', { isTimeExpired, isUsageExpired, isTrialExpired });
+    console.log('Estado Trial:', { isTimeExpired, isUsageExpired, isTrialExpired });
 
     if (isTrialExpired) {
         // --- BLOQUEIO TOTAL ---
-        expired.style.display = 'block'; // ✅ Forçar exibição com style direto
+        expired.style.display = 'block'; // Forçar exibição com style direto
         expired.classList.remove('hidden');
 
         const textEl = expired.querySelector('.trial-text');
@@ -927,7 +954,7 @@ function updateTrialUI(remainingUsage, remainingDays) {
     const isUsageLow = usage > 0 && usage <= 3;
 
     if (isTimeLow || isUsageLow) {
-        warning.style.display = 'block'; // ✅ Forçar exibição com style direto
+        warning.style.display = 'block'; // Forçar exibição com style direto
         warning.classList.remove('hidden');
 
         const textEl = warning.querySelector('.trial-text');
