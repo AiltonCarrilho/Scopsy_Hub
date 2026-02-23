@@ -603,14 +603,14 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
     const feedback = {
       is_correct: is_correct,
       user_choice: user_choice,
-      expert_choice: case_data.expert_choice,
+      expert_choice: case_data.case_content?.expert_choice || case_data.expert_choice,
 
       immediate_feedback: is_correct
         ? `✅ Decisão de Expert! Você escolheu ${user_choice}.`
-        : `💡 Um expert escolheria ${case_data.expert_choice}. Você escolheu ${user_choice}.`,
+        : `💡 Um expert escolheria ${case_data.case_content?.expert_choice || case_data.expert_choice}. Você escolheu ${user_choice}.`,
 
-      expert_reasoning: case_data.expert_reasoning || {},
-      learning_point: case_data.learning_point || {},
+      expert_reasoning: case_data.case_content?.expert_reasoning || case_data.expert_reasoning || {},
+      learning_point: case_data.case_content?.learning_point || case_data.learning_point || {},
 
       user_reasoning_analysis: user_reasoning
         ? `Seu raciocínio: "${user_reasoning}"`
