@@ -79,54 +79,54 @@ router.post('/kiwify', express.json(), async (req, res) => {
     const eventType = event.event || event.webhook_event_type;
 
     switch (eventType) {
-      // Compra aprovada - Ativar premium
-      case 'order.approved':
-      case 'order_approved':
-      case 'purchase_approved': // Kiwify pode usar este nome
-        await handleOrderApproved(event);
-        break;
+    // Compra aprovada - Ativar premium
+    case 'order.approved':
+    case 'order_approved':
+    case 'purchase_approved': // Kiwify pode usar este nome
+      await handleOrderApproved(event);
+      break;
 
       // Assinatura cancelada - Downgrade para free
-      case 'subscription.canceled':
-      case 'subscription_canceled':
-      case 'subscription_cancelled': // Variação PT-BR
-        await handleSubscriptionCanceled(event);
-        break;
+    case 'subscription.canceled':
+    case 'subscription_canceled':
+    case 'subscription_cancelled': // Variação PT-BR
+      await handleSubscriptionCanceled(event);
+      break;
 
       // Assinatura renovada - Manter premium
-      case 'subscription.renewed':
-      case 'subscription_renewed':
-        await handleSubscriptionRenewed(event);
-        break;
+    case 'subscription.renewed':
+    case 'subscription_renewed':
+      await handleSubscriptionRenewed(event);
+      break;
 
       // Reembolso - Downgrade para free
-      case 'order.refunded':
-      case 'order_refunded':
-      case 'refund':
-        await handleOrderRefunded(event);
-        break;
+    case 'order.refunded':
+    case 'order_refunded':
+    case 'refund':
+      await handleOrderRefunded(event);
+      break;
 
       // Chargeback - Downgrade para free
-      case 'chargeback':
-        await handleOrderRefunded(event); // Mesmo tratamento que reembolso
-        logger.info('[WEBHOOK] Chargeback processado como reembolso');
-        break;
+    case 'chargeback':
+      await handleOrderRefunded(event); // Mesmo tratamento que reembolso
+      logger.info('[WEBHOOK] Chargeback processado como reembolso');
+      break;
 
       // Assinatura atrasada - downgrade para free
-      case 'subscription_overdue':
-        await handleSubscriptionOverdue(event);
-        break;
+    case 'subscription_overdue':
+      await handleSubscriptionOverdue(event);
+      break;
 
       // Eventos que apenas logamos (não precisam ação)
-      case 'billet_created': // Boleto gerado
-      case 'pix_generated': // Pix gerado
-      case 'cart_abandoned': // Carrinho abandonado
-      case 'purchase_refused': // Compra recusada
-        logger.info('[WEBHOOK] Evento informativo recebido', { event: eventType });
-        break;
+    case 'billet_created': // Boleto gerado
+    case 'pix_generated': // Pix gerado
+    case 'cart_abandoned': // Carrinho abandonado
+    case 'purchase_refused': // Compra recusada
+      logger.info('[WEBHOOK] Evento informativo recebido', { event: eventType });
+      break;
 
-      default:
-        logger.warn('[WEBHOOK] Evento desconhecido', { event: eventType });
+    default:
+      logger.warn('[WEBHOOK] Evento desconhecido', { event: eventType });
     }
 
     // 4. Sempre retornar 200 OK para Kiwify
@@ -243,7 +243,8 @@ async function handleOrderApproved(event) {
     plan: 'premium'
   });
 
-  // TODO: Enviar email de boas-vindas Premium
+  // Email notification would be sent here (future enhancement)
+  // Consider adding welcome email flow when email service is fully integrated
 }
 
 /**
@@ -425,7 +426,8 @@ async function handleOrderRefunded(event) {
     order_id: orderId
   });
 
-  // TODO: Enviar email de confirmacao de reembolso
+  // Email notification would be sent here (future enhancement)
+  // Consider adding refund confirmation email when email service is fully integrated
 }
 
 // ========================================
