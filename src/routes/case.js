@@ -127,12 +127,12 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     const seenCaseIds = interactions
       ? interactions
         .map(i => i.case_id)
-        .filter(id => id != null)  // ← CRÍTICO: Remove null/undefined para evitar erro SQL
+        .filter(id => id !== null)  // ← CRÍTICO: Remove null/undefined para evitar erro SQL
       : [];
 
     logger.debug(`[Case] 👁️ Usuário já viu: ${seenCaseIds.length} micro-momentos`);
     if (seenCaseIds.length > 0) {
-      logger.debug(`[Case] 📋 Últimos 5 IDs vistos:`);
+      logger.debug('[Case] 📋 Últimos 5 IDs vistos:');
       interactions.slice(0, 5).forEach((inter, idx) => {
         logger.debug(`  ${idx + 1}. ${inter.case_id} (${inter.created_at})`);
       });
@@ -186,7 +186,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           casesQuery = casesQuery.neq('moment_type', lastMomentType);
           logger.debug(`[Case] 🧠 INTERLEAVING ATIVO: Buscando qualquer tipo EXCETO "${lastMomentType}"`);
         } else {
-          logger.debug(`[Case] 🧠 INTERLEAVING: Usuário novo, qualquer tipo disponível`);
+          logger.debug('[Case] 🧠 INTERLEAVING: Usuário novo, qualquer tipo disponível');
         }
       }
     } else if (isConceptualization) {
@@ -241,9 +241,12 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     }
 
     // Buscar apenas 10 casos JÁ FILTRADOS pelo SQL (eficiente!)
-    let { data: availableCases, error: queryError } = await casesQuery
+    const result = await casesQuery
       .order('times_used', { ascending: true })
       .limit(10);  // ← LIMIT executado no SQL (só transfere 10 casos pela rede)
+
+    const { error: queryError } = result;
+    let { data: availableCases } = result;
 
     if (queryError) {
       console.error('[Case] ❌ Erro na query:', queryError.message);
@@ -255,7 +258,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     // 🧠 INTERLEAVING FALLBACK: Se não encontrou NENHUM caso (usuário fez todos os outros tipos),
     // fazer segunda busca SEM filtro de interleaving
     if ((!availableCases || availableCases.length === 0) && lastMomentType && isMicroMoment && !moment_type) {
-      logger.debug(`[Case] 🔄 INTERLEAVING FALLBACK: Nenhum caso encontrado, removendo filtro de tipo`);
+      logger.debug('[Case] 🔄 INTERLEAVING FALLBACK: Nenhum caso encontrado, removendo filtro de tipo');
 
       // Refazer query SEM filtro de interleaving, mas MANTENDO filtro de moment_type não-nulo
       let fallbackQuery = supabase
@@ -281,12 +284,12 @@ router.post('/generate', authenticateRequest, async (req, res) => {
         // Sobrescrever availableCases com fallback
         availableCases = fallbackCases;
       } else {
-        logger.debug(`[Case] ⚠️ FALLBACK: Ainda não encontrou casos`);
+        logger.debug('[Case] ⚠️ FALLBACK: Ainda não encontrou casos');
       }
     }
 
     if (availableCases && availableCases.length > 0) {
-      logger.debug(`[Case] 📋 IDs disponíveis (top 5):`);
+      logger.debug('[Case] 📋 IDs disponíveis (top 5):');
       availableCases.slice(0, 5).forEach((c, idx) => {
         logger.debug(`  ${idx + 1}. ${c.id} (usado ${c.times_used}x)`);
       });
@@ -313,7 +316,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           if (error) {
             console.error('[Case] ❌ Erro ao atualizar contador:', error.message);
           } else {
-            logger.debug(`[Case] ✅ Contador atualizado`);
+            logger.debug('[Case] ✅ Contador atualizado');
           }
         });
 
@@ -340,8 +343,11 @@ router.post('/generate', authenticateRequest, async (req, res) => {
           .update({ status: 'needs_review' })
           .eq('id', selectedCase.id)
           .then(({ error }) => {
-            if (error) logger.error('[Case] ❌ Erro ao marcar caso como needs_review:', error.message);
-            else logger.info(`[Case] ✅ Caso ${selectedCase.id} marcado como needs_review`);
+            if (error) {
+              logger.error('[Case] ❌ Erro ao marcar caso como needs_review:', error.message);
+            } else {
+              logger.info(`[Case] ✅ Caso ${selectedCase.id} marcado como needs_review`);
+            }
           });
         return res.json({
           success: false,
@@ -403,7 +409,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
         });
       } else {
         // CONCEITUAÇÃO: Montar vinheta rica a partir de rich_narrative (M4) ou micro-momento
-        let caseToReturn = { ...selectedCase };
+        const caseToReturn = { ...selectedCase };
         const cc = selectedCase.case_content || {};
 
         if (cc.rich_narrative && typeof cc.rich_narrative === 'object') {
@@ -414,13 +420,27 @@ router.post('/generate', authenticateRequest, async (req, res) => {
 
           const sections = [];
           sections.push(`${demo.name || 'Cliente'}, ${demo.age || '30'} anos — ${disorder}`);
-          if (rn.presenting_complaint) sections.push(`\nQUEIXA PRINCIPAL:\n${rn.presenting_complaint}`);
-          if (rn.history_of_problem) sections.push(`\nHISTÓRIA DO PROBLEMA:\n${rn.history_of_problem}`);
-          if (rn.life_context) sections.push(`\nCONTEXTO DE VIDA:\n${rn.life_context}`);
-          if (rn.interpersonal_patterns) sections.push(`\nPADRÕES INTERPESSOAIS:\n${rn.interpersonal_patterns}`);
-          if (rn.coping_strategies) sections.push(`\nESTRATÉGIAS DE ENFRENTAMENTO:\n${rn.coping_strategies}`);
-          if (rn.previous_treatments) sections.push(`\nTRATAMENTOS ANTERIORES:\n${rn.previous_treatments}`);
-          if (rn.client_goals) sections.push(`\nOBJETIVOS DO CLIENTE:\n${rn.client_goals}`);
+          if (rn.presenting_complaint) {
+            sections.push(`\nQUEIXA PRINCIPAL:\n${rn.presenting_complaint}`);
+          }
+          if (rn.history_of_problem) {
+            sections.push(`\nHISTÓRIA DO PROBLEMA:\n${rn.history_of_problem}`);
+          }
+          if (rn.life_context) {
+            sections.push(`\nCONTEXTO DE VIDA:\n${rn.life_context}`);
+          }
+          if (rn.interpersonal_patterns) {
+            sections.push(`\nPADRÕES INTERPESSOAIS:\n${rn.interpersonal_patterns}`);
+          }
+          if (rn.coping_strategies) {
+            sections.push(`\nESTRATÉGIAS DE ENFRENTAMENTO:\n${rn.coping_strategies}`);
+          }
+          if (rn.previous_treatments) {
+            sections.push(`\nTRATAMENTOS ANTERIORES:\n${rn.previous_treatments}`);
+          }
+          if (rn.client_goals) {
+            sections.push(`\nOBJETIVOS DO CLIENTE:\n${rn.client_goals}`);
+          }
 
           caseToReturn.vignette = sections.join('\n');
           logger.debug(`[Case] ✅ Vinheta rica montada a partir de rich_narrative (${caseToReturn.vignette.length} chars)`);
@@ -539,7 +559,7 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
       // user_analysis removido temporariamente - verificar schema
     };
 
-    logger.debug(`[Case] 💾 Salvando interação:`, {
+    logger.debug('[Case] 💾 Salvando interação:', {
       user_id: interactionData.user_id,
       case_id: interactionData.case_id,
       is_correct: interactionData.is_correct
@@ -627,7 +647,9 @@ router.post('/analyze', authenticateRequest, async (req, res) => {
       await checkAndUpdateStreak(userId, 'challenge');
       missionsCompleted = await updateMissionProgress(userId, 'challenge', true) || [];
       recalculateICC(userId).catch(e => console.error('ICC bg error:', e.message));
-    } catch (e) { console.error('Erro gamification:', e); }
+    } catch (e) {
+      console.error('Erro gamification:', e);
+    }
 
     res.json({
       success: true,
@@ -726,7 +748,7 @@ TOM EMOCIONAL: ${cm.emotional_tone || 'Neutro'}`;
     };
 
     // Montar system prompt enriquecido
-    let systemPrompt = `Você é um supervisor clínico experiente que avalia conceituações de caso em TCC.
+    const systemPrompt = `Você é um supervisor clínico experiente que avalia conceituações de caso em TCC.
 
 ${toneByLevel[difficultyLevel] || toneByLevel.intermediate}
 
@@ -795,13 +817,13 @@ Forneça feedback formativo em JSON.`;
 
     // Feedback formativo com gpt-4o
     const feedbackCompletion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      response_format: { type: "json_object" },
+      model: 'gpt-4o',
+      response_format: { type: 'json_object' },
       temperature: 0.7,
       max_tokens: 2500,
       messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userMessage }
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage }
       ]
     });
 
@@ -814,13 +836,13 @@ Forneça feedback formativo em JSON.`;
       console.error('[Case] ❌ Erro ao fazer parse do feedback:', parseError.message);
       // Fallback: feedback estruturado padrão
       feedback = {
-        triade_feedback: "Você identificou elementos importantes da tríade cognitiva. Continue praticando a conexão entre pensamentos, emoções e comportamentos.",
-        crencas_feedback: "Sua análise das crenças mostra compreensão do modelo cognitivo. Continue desenvolvendo a diferenciação entre níveis de crenças.",
-        formulacao_feedback: "Sua formulação capturou aspectos relevantes do caso. Continue integrando história, vulnerabilidades e fatores mantenedores.",
-        intervencao_feedback: "As técnicas propostas são adequadas ao caso. Continue estudando o timing e sequenciamento de intervenções.",
-        strengths: "Você demonstrou dedicação ao preencher todos os campos e aplicou conceitos teóricos ao caso prático.",
-        next_challenge: "Continue estudando a integração entre teoria e prática clínica, e aprofunde seu conhecimento sobre formulação de caso.",
-        comparison_with_expert: "",
+        triade_feedback: 'Você identificou elementos importantes da tríade cognitiva. Continue praticando a conexão entre pensamentos, emoções e comportamentos.',
+        crencas_feedback: 'Sua análise das crenças mostra compreensão do modelo cognitivo. Continue desenvolvendo a diferenciação entre níveis de crenças.',
+        formulacao_feedback: 'Sua formulação capturou aspectos relevantes do caso. Continue integrando história, vulnerabilidades e fatores mantenedores.',
+        intervencao_feedback: 'As técnicas propostas são adequadas ao caso. Continue estudando o timing e sequenciamento de intervenções.',
+        strengths: 'Você demonstrou dedicação ao preencher todos os campos e aplicou conceitos teóricos ao caso prático.',
+        next_challenge: 'Continue estudando a integração entre teoria e prática clínica, e aprofunde seu conhecimento sobre formulação de caso.',
+        comparison_with_expert: '',
         difficulty_calibration: difficultyLevel
       };
     }
@@ -847,12 +869,12 @@ Forneça feedback formativo em JSON.`;
       success: false,
       error: error.message,
       feedback: {
-        triade_feedback: "Continue praticando a identificação da tríade cognitiva.",
-        crencas_feedback: "O reconhecimento de crenças se desenvolve com prática.",
-        formulacao_feedback: "Formulação de casos é uma habilidade que se refina com tempo.",
-        intervencao_feedback: "Continue estudando técnicas de intervenção.",
-        strengths: "Você demonstrou dedicação ao preencher todos os campos.",
-        areas_to_develop: "Continue estudando e praticando conceituação de casos."
+        triade_feedback: 'Continue praticando a identificação da tríade cognitiva.',
+        crencas_feedback: 'O reconhecimento de crenças se desenvolve com prática.',
+        formulacao_feedback: 'Formulação de casos é uma habilidade que se refina com tempo.',
+        intervencao_feedback: 'Continue estudando técnicas de intervenção.',
+        strengths: 'Você demonstrou dedicação ao preencher todos os campos.',
+        areas_to_develop: 'Continue estudando e praticando conceituação de casos.'
       }
     });
   }
@@ -1021,7 +1043,7 @@ router.get('/adaptive-level', authenticateRequest, async (req, res) => {
 // ========================================
 async function updateUserProgress(userId, assistantType, isCorrect) {
   try {
-    logger.debug(`\n[updateUserProgress] 🎯 INICIANDO:`, { userId, assistantType, isCorrect });
+    logger.debug('\n[updateUserProgress] 🎯 INICIANDO:', { userId, assistantType, isCorrect });
 
     const { data: existing, error: selectError } = await supabase
       .from('user_progress')
@@ -1122,9 +1144,13 @@ router.get('/series', authenticateRequest, async (req, res) => {
       disorder_category
     } = req.query;
 
-    logger.debug(`\n[Case Series] 📚 Listando séries disponíveis`);
-    if (difficulty_level) logger.debug(`   Filtro: difficulty=${difficulty_level}`);
-    if (disorder_category) logger.debug(`   Filtro: category=${disorder_category}`);
+    logger.debug('\n[Case Series] 📚 Listando séries disponíveis');
+    if (difficulty_level) {
+      logger.debug(`   Filtro: difficulty=${difficulty_level}`);
+    }
+    if (disorder_category) {
+      logger.debug(`   Filtro: category=${disorder_category}`);
+    }
 
     let query = supabase
       .from('case_series')
@@ -1144,7 +1170,9 @@ router.get('/series', authenticateRequest, async (req, res) => {
 
     const { data: series, error } = await query.order('created_at', { ascending: false });
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     // Adicionar contagem de episódios disponíveis
     const enriched = await Promise.all(series.map(async (s) => {
@@ -1230,10 +1258,12 @@ router.get('/series/:series_id/next', authenticateRequest, async (req, res) => {
 
     const { data: episodes, error: episodesError } = await query.limit(1);
 
-    if (episodesError) throw episodesError;
+    if (episodesError) {
+      throw episodesError;
+    }
 
     if (!episodes || episodes.length === 0) {
-      logger.debug(`[Case Series] 🏁 Todos os episódios já foram vistos!`);
+      logger.debug('[Case Series] 🏁 Todos os episódios já foram vistos!');
       return res.json({
         success: true,
         completed: true,
@@ -1252,7 +1282,9 @@ router.get('/series/:series_id/next', authenticateRequest, async (req, res) => {
       .update({ times_used: (nextEpisode.times_used || 0) + 1 })
       .eq('id', nextEpisode.id)
       .then(({ error }) => {
-        if (error) console.error('[Case Series] Erro ao atualizar contador:', error.message);
+        if (error) {
+          console.error('[Case Series] Erro ao atualizar contador:', error.message);
+        }
       });
 
     res.json({

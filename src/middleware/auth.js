@@ -45,19 +45,19 @@ function generateRefreshToken(userId) {
 function authenticateRequest(req, res, next) {
   try {
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader) {
       return res.status(401).json({ error: 'Token não fornecido' });
     }
 
     const token = authHeader.replace('Bearer ', '');
     const decoded = verifyToken(token);
-    
+
     req.user = {
       userId: decoded.userId,
       plan: decoded.plan
     };
-    
+
     next();
   } catch (error) {
     logger.error('Auth error', { error: error.message });

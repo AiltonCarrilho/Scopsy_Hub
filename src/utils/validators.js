@@ -112,5 +112,5 @@ module.exports = {
   isValidPassword,
   sanitizeString,
   isPositiveNumber,
-  isValidAssistantType,
+  isValidAssistantType
 };

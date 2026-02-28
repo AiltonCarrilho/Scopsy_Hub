@@ -314,7 +314,7 @@ OPÇÕES DE DIAGNÓSTICO DIFERENCIAL:
 ${question.options?.map((opt, i) => `${i + 1}. ${opt}`).join('\n') || 'Opções não disponíveis'}
 
 DIAGNÓSTICO CORRETO (índice):
-${question.correct_option_index != null ? question.correct_option_index + 1 : 'Não especificado'}`;
+${question.correct_option_index !== null ? question.correct_option_index + 1 : 'Não especificado'}`;
   }
 
   return JSON.stringify(caseData, null, 2);
@@ -414,7 +414,7 @@ async function reviewCase(caseData, moduleType) {
  * @returns {Promise<Array<Object>>} Array de resultados
  */
 async function reviewBatch(cases, moduleType, batchSize = 10) {
-  logger.info(`Iniciando revisão em batch`, {
+  logger.info('Iniciando revisão em batch', {
     total_cases: cases.length,
     batch_size: batchSize,
     module_type: moduleType

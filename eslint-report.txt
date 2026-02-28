@@ -1,0 +1,1899 @@
+
+> scopsy-backend@1.0.0 lint
+> eslint src/**/*.js
+
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\config\logger.js
+  6:7  error  'path' is assigned a value but never used  no-unused-vars
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\middleware\auth.js
+  48:1  error  Trailing spaces not allowed  no-trailing-spaces
+  55:1  error  Trailing spaces not allowed  no-trailing-spaces
+  60:1  error  Trailing spaces not allowed  no-trailing-spaces
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\middleware\errorHandler.js
+  7:38  error  'next' is defined but never used. Allowed unused args must match /^_/u  no-unused-vars
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\account.js
+   15:1   error    Expected indentation of 2 spaces but found 4                        indent
+   16:1   error    Expected indentation of 2 spaces but found 4                        indent
+   23:40  warning  Async arrow function has a complexity of 16. Maximum allowed is 10  complexity
+   24:1   error    Expected indentation of 2 spaces but found 4                        indent
+   25:1   error    Expected indentation of 4 spaces but found 8                        indent
+   27:1   error    Expected indentation of 4 spaces but found 8                        indent
+   29:1   error    Expected indentation of 4 spaces but found 8                        indent
+   30:1   error    Expected indentation of 4 spaces but found 8                        indent
+   31:1   error    Expected indentation of 4 spaces but found 8                        indent
+   32:1   error    Expected indentation of 4 spaces but found 8                        indent
+   34:1   error    Expected indentation of 4 spaces but found 8                        indent
+   35:1   error    Expected indentation of 4 spaces but found 8                        indent
+   36:1   error    Expected indentation of 6 spaces but found 12                       indent
+   37:1   error    Expected indentation of 6 spaces but found 12                       indent
+   38:1   error    Expected indentation of 6 spaces but found 12                       indent
+   39:1   error    Expected indentation of 6 spaces but found 12                       indent
+   41:1   error    Expected indentation of 4 spaces but found 8                        indent
+   42:1   error    Expected indentation of 6 spaces but found 12                       indent
+   43:1   error    Expected indentation of 6 spaces but found 12                       indent
+   44:1   error    Expected indentation of 8 spaces but found 16                       indent
+   45:1   error    Expected indentation of 8 spaces but found 16                       indent
+   46:1   error    Expected indentation of 8 spaces but found 16                       indent
+   47:1   error    Expected indentation of 8 spaces but found 16                       indent
+   48:1   error    Expected indentation of 6 spaces but found 12                       indent
+   49:1   error    Expected indentation of 8 spaces but found 16                       indent
+   50:1   error    Expected indentation of 8 spaces but found 16                       indent
+   51:1   error    Expected indentation of 6 spaces but found 12                       indent
+   52:1   error    Expected indentation of 6 spaces but found 12                       indent
+   53:1   error    Expected indentation of 4 spaces but found 8                        indent
+   54:1   error    Expected indentation of 6 spaces but found 12                       indent
+   55:1   error    Expected indentation of 6 spaces but found 12                       indent
+   56:1   error    Expected indentation of 4 spaces but found 8                        indent
+   57:1   error    Expected indentation of 6 spaces but found 12                       indent
+   58:1   error    Expected indentation of 4 spaces but found 8                        indent
+   60:1   error    Expected indentation of 4 spaces but found 8                        indent
+   61:1   error    Expected indentation of 4 spaces but found 8                        indent
+   62:1   error    Expected indentation of 4 spaces but found 8                        indent
+   63:1   error    Expected indentation of 6 spaces but found 12                       indent
+   64:1   error    Expected indentation of 6 spaces but found 12                       indent
+   65:1   error    Expected indentation of 6 spaces but found 12                       indent
+   66:1   error    Expected indentation of 6 spaces but found 12                       indent
+   67:1   error    Expected indentation of 4 spaces but found 8                        indent
+   69:1   error    Expected indentation of 4 spaces but found 8                        indent
+   70:1   error    Expected indentation of 6 spaces but found 12                       indent
+   71:1   error    Expected indentation of 8 spaces but found 16                       indent
+   72:1   error    Expected indentation of 8 spaces but found 16                       indent
+   73:1   error    Expected indentation of 8 spaces but found 16                       indent
+   74:1   error    Expected indentation of 8 spaces but found 16                       indent
+   75:1   error    Expected indentation of 8 spaces but found 16                       indent
+   76:1   error    Expected indentation of 8 spaces but found 16                       indent
+   77:1   error    Expected indentation of 8 spaces but found 16                       indent
+   78:1   error    Expected indentation of 6 spaces but found 12                       indent
+   79:1   error    Expected indentation of 6 spaces but found 12                       indent
+   80:1   error    Expected indentation of 8 spaces but found 16                       indent
+   81:1   error    Expected indentation of 8 spaces but found 16                       indent
+   82:1   error    Expected indentation of 8 spaces but found 16                       indent
+   83:1   error    Expected indentation of 8 spaces but found 16                       indent
+   84:1   error    Expected indentation of 8 spaces but found 16                       indent
+   85:1   error    Expected indentation of 6 spaces but found 12                       indent
+   86:1   error    Expected indentation of 6 spaces but found 12                       indent
+   87:1   error    Expected indentation of 4 spaces but found 8                        indent
+   89:1   error    Expected indentation of 2 spaces but found 4                        indent
+   90:1   error    Expected indentation of 4 spaces but found 8                        indent
+   91:1   error    Expected indentation of 4 spaces but found 8                        indent
+   92:1   error    Expected indentation of 2 spaces but found 4                        indent
+   99:45  warning  Async arrow function has a complexity of 11. Maximum allowed is 10  complexity
+  100:1   error    Expected indentation of 2 spaces but found 4                        indent
+  101:1   error    Expected indentation of 4 spaces but found 8                        indent
+  102:1   error    Expected indentation of 4 spaces but found 8                        indent
+  104:1   error    Expected indentation of 4 spaces but found 8                        indent
+  105:1   error    Expected indentation of 4 spaces but found 8                        indent
+  106:1   error    Expected indentation of 6 spaces but found 12                       indent
+  107:1   error    Expected indentation of 4 spaces but found 8                        indent
+  109:1   error    Expected indentation of 4 spaces but found 8                        indent
+  110:1   error    Expected indentation of 6 spaces but found 12                       indent
+  111:1   error    Expected indentation of 4 spaces but found 8                        indent
+  113:1   error    Expected indentation of 4 spaces but found 8                        indent
+  114:1   error    Expected indentation of 4 spaces but found 8                        indent
+  115:1   error    Expected indentation of 6 spaces but found 12                       indent
+  116:1   error    Expected indentation of 6 spaces but found 12                       indent
+  117:1   error    Expected indentation of 8 spaces but found 16                       indent
+  118:1   error    Expected indentation of 6 spaces but found 12                       indent
+  119:1   error    Expected indentation of 4 spaces but found 8                        indent
+  121:1   error    Expected indentation of 4 spaces but found 8                        indent
+  123:1   error    Expected indentation of 4 spaces but found 8                        indent
+  124:1   error    Expected indentation of 6 spaces but found 12                       indent
+  125:1   error    Expected indentation of 6 spaces but found 12                       indent
+  126:1   error    Expected indentation of 6 spaces but found 12                       indent
+  127:1   error    Expected indentation of 4 spaces but found 8                        indent
+  129:1   error    Expected indentation of 4 spaces but found 8                        indent
+  130:1   error    Expected indentation of 6 spaces but found 12                       indent
+  131:1   error    Expected indentation of 6 spaces but found 12                       indent
+  132:1   error    Expected indentation of 6 spaces but found 12                       indent
+  133:1   error    Expected indentation of 6 spaces but found 12                       indent
+  134:1   error    Expected indentation of 6 spaces but found 12                       indent
+  136:1   error    Expected indentation of 4 spaces but found 8                        indent
+  137:1   error    Expected indentation of 6 spaces but found 12                       indent
+  138:1   error    Expected indentation of 6 spaces but found 12                       indent
+  139:1   error    Expected indentation of 4 spaces but found 8                        indent
+  141:1   error    Expected indentation of 4 spaces but found 8                        indent
+  142:1   error    Expected indentation of 4 spaces but found 8                        indent
+  144:1   error    Expected indentation of 4 spaces but found 8                        indent
+  145:1   error    Expected indentation of 6 spaces but found 12                       indent
+  146:1   error    Expected indentation of 6 spaces but found 12                       indent
+  147:1   error    Expected indentation of 6 spaces but found 12                       indent
+  148:1   error    Expected indentation of 8 spaces but found 16                       indent
+  149:1   error    Expected indentation of 8 spaces but found 16                       indent
+  150:1   error    Expected indentation of 8 spaces but found 16                       indent
+  151:1   error    Expected indentation of 8 spaces but found 16                       indent
+  152:1   error    Expected indentation of 8 spaces but found 16                       indent
+  153:1   error    Expected indentation of 8 spaces but found 16                       indent
+  154:1   error    Expected indentation of 6 spaces but found 12                       indent
+  155:1   error    Expected indentation of 4 spaces but found 8                        indent
+  157:1   error    Expected indentation of 2 spaces but found 4                        indent
+  158:1   error    Expected indentation of 4 spaces but found 8                        indent
+  159:1   error    Expected indentation of 4 spaces but found 8                        indent
+  160:1   error    Expected indentation of 2 spaces but found 4                        indent
+  167:46  warning  Async arrow function has a complexity of 11. Maximum allowed is 10  complexity
+  168:1   error    Expected indentation of 2 spaces but found 4                        indent
+  169:1   error    Expected indentation of 4 spaces but found 8                        indent
+  170:1   error    Expected indentation of 4 spaces but found 8                        indent
+  172:1   error    Expected indentation of 4 spaces but found 8                        indent
+  173:1   error    Expected indentation of 6 spaces but found 12                       indent
+  174:1   error    Expected indentation of 4 spaces but found 8                        indent
+  176:1   error    Expected indentation of 4 spaces but found 8                        indent
+  177:1   error    Expected indentation of 6 spaces but found 12                       indent
+  178:1   error    Expected indentation of 4 spaces but found 8                        indent
+  180:1   error    Expected indentation of 4 spaces but found 8                        indent
+  181:1   error    Expected indentation of 6 spaces but found 12                       indent
+  182:1   error    Expected indentation of 4 spaces but found 8                        indent
+  184:1   error    Expected indentation of 4 spaces but found 8                        indent
+  185:1   error    Expected indentation of 6 spaces but found 12                       indent
+  186:1   error    Expected indentation of 4 spaces but found 8                        indent
+  188:1   error    Expected indentation of 4 spaces but found 8                        indent
+  189:1   error    Expected indentation of 4 spaces but found 8                        indent
+  190:1   error    Expected indentation of 6 spaces but found 12                       indent
+  191:1   error    Expected indentation of 6 spaces but found 12                       indent
+  192:1   error    Expected indentation of 6 spaces but found 12                       indent
+  193:1   error    Expected indentation of 6 spaces but found 12                       indent
+  195:1   error    Expected indentation of 4 spaces but found 8                        indent
+  196:1   error    Expected indentation of 6 spaces but found 12                       indent
+  197:1   error    Expected indentation of 4 spaces but found 8                        indent
+  199:1   error    Expected indentation of 4 spaces but found 8                        indent
+  200:1   error    Expected indentation of 4 spaces but found 8                        indent
+  201:1   error    Expected indentation of 4 spaces but found 8                        indent
+  202:1   error    Expected indentation of 6 spaces but found 12                       indent
+  203:1   error    Expected indentation of 6 spaces but found 12                       indent
+  204:1   error    Expected indentation of 4 spaces but found 8                        indent
+  206:1   error    Expected indentation of 4 spaces but found 8                        indent
+  207:1   error    Expected indentation of 4 spaces but found 8                        indent
+  209:1   error    Expected indentation of 4 spaces but found 8                        indent
+  210:1   error    Expected indentation of 6 spaces but found 12                       indent
+  211:1   error    Expected indentation of 6 spaces but found 12                       indent
+  212:1   error    Expected indentation of 6 spaces but found 12                       indent
+  214:1   error    Expected indentation of 4 spaces but found 8                        indent
+  215:1   error    Expected indentation of 6 spaces but found 12                       indent
+  216:1   error    Expected indentation of 6 spaces but found 12                       indent
+  217:1   error    Expected indentation of 4 spaces but found 8                        indent
+  219:1   error    Expected indentation of 4 spaces but found 8                        indent
+  220:1   error    Expected indentation of 4 spaces but found 8                        indent
+  222:1   error    Expected indentation of 2 spaces but found 4                        indent
+  223:1   error    Expected indentation of 4 spaces but found 8                        indent
+  224:1   error    Expected indentation of 4 spaces but found 8                        indent
+  225:1   error    Expected indentation of 2 spaces but found 4                        indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\auth.js
+  21:24  warning  Async arrow function has a complexity of 11. Maximum allowed is 10  complexity
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\case.js
+    49:47  warning  Async arrow function has a complexity of 87. Maximum allowed is 10                                             complexity
+    85:1   warning  This line has a length of 128. Maximum allowed is 120                                                          max-len
+   130:26  error    Expected '!==' and instead saw '!='                                                                            eqeqeq
+   135:20  error    Strings must use singlequote                                                                                   quotes
+   189:24  error    Strings must use singlequote                                                                                   quotes
+   244:40  error    'queryError' is never reassigned. Use 'const' instead                                                          prefer-const
+   258:20  error    Strings must use singlequote                                                                                   quotes
+   284:22  error    Strings must use singlequote                                                                                   quotes
+   289:20  error    Strings must use singlequote                                                                                   quotes
+   316:26  error    Strings must use singlequote                                                                                   quotes
+   337:1   warning  This line has a length of 125. Maximum allowed is 120                                                          max-len
+   343:24  error    Expected { after 'if' condition                                                                                curly
+   344:18  error    Expected { after 'else'                                                                                        curly
+   406:13  error    'caseToReturn' is never reassigned. Use 'const' instead                                                        prefer-const
+   417:40  error    Expected { after 'if' condition                                                                                curly
+   418:38  error    Expected { after 'if' condition                                                                                curly
+   419:32  error    Expected { after 'if' condition                                                                                curly
+   420:42  error    Expected { after 'if' condition                                                                                curly
+   421:37  error    Expected { after 'if' condition                                                                                curly
+   422:39  error    Expected { after 'if' condition                                                                                curly
+   423:32  error    Expected { after 'if' condition                                                                                curly
+   426:1   warning  This line has a length of 123. Maximum allowed is 120                                                          max-len
+   474:1   warning  This line has a length of 152. Maximum allowed is 120                                                          max-len
+   487:1   warning  This line has a length of 180. Maximum allowed is 120                                                          max-len
+   515:46  warning  Async arrow function has a complexity of 22. Maximum allowed is 10                                             complexity
+   527:1   warning  This line has a length of 137. Maximum allowed is 120                                                          max-len
+   542:18  error    Strings must use singlequote                                                                                   quotes
+   610:1   warning  This line has a length of 134. Maximum allowed is 120                                                          max-len
+   630:17  error    Statement inside of curly braces should be on next line                                                        brace-style
+   630:59  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   653:52  warning  Async arrow function has a complexity of 41. Maximum allowed is 10                                             complexity
+   729:9   error    'systemPrompt' is never reassigned. Use 'const' instead                                                        prefer-const
+   734:1   warning  This line has a length of 134. Maximum allowed is 120                                                          max-len
+   741:1   warning  This line has a length of 128. Maximum allowed is 120                                                          max-len
+   742:1   warning  This line has a length of 135. Maximum allowed is 120                                                          max-len
+   745:1   warning  This line has a length of 128. Maximum allowed is 120                                                          max-len
+   746:1   warning  This line has a length of 141. Maximum allowed is 120                                                          max-len
+   798:14  error    Strings must use singlequote                                                                                   quotes
+   799:32  error    Strings must use singlequote                                                                                   quotes
+   803:17  error    Strings must use singlequote                                                                                   quotes
+   804:17  error    Strings must use singlequote                                                                                   quotes
+   817:26  error    Strings must use singlequote                                                                                   quotes
+   818:27  error    Strings must use singlequote                                                                                   quotes
+   819:30  error    Strings must use singlequote                                                                                   quotes
+   820:31  error    Strings must use singlequote                                                                                   quotes
+   821:20  error    Strings must use singlequote                                                                                   quotes
+   822:25  error    Strings must use singlequote                                                                                   quotes
+   823:33  error    Strings must use singlequote                                                                                   quotes
+   850:26  error    Strings must use singlequote                                                                                   quotes
+   851:27  error    Strings must use singlequote                                                                                   quotes
+   852:30  error    Strings must use singlequote                                                                                   quotes
+   853:31  error    Strings must use singlequote                                                                                   quotes
+   854:20  error    Strings must use singlequote                                                                                   quotes
+   855:27  error    Strings must use singlequote                                                                                   quotes
+   874:1   warning  Async function 'calculateAdaptiveLevel' has a complexity of 15. Maximum allowed is 10                          complexity
+   945:1   warning  This line has a length of 121. Maximum allowed is 120                                                          max-len
+  1022:1   warning  Async function 'updateUserProgress' has a complexity of 18. Maximum allowed is 10                              complexity
+  1024:18  error    Strings must use singlequote                                                                                   quotes
+  1125:18  error    Strings must use singlequote                                                                                   quotes
+  1126:27  error    Expected { after 'if' condition                                                                                curly
+  1127:28  error    Expected { after 'if' condition                                                                                curly
+  1147:16  error    Expected { after 'if' condition                                                                                curly
+  1233:24  error    Expected { after 'if' condition                                                                                curly
+  1236:20  error    Strings must use singlequote                                                                                   quotes
+  1255:20  error    Expected { after 'if' condition                                                                                curly
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\chat.js
+   14:1   error    Expected indentation of 2 spaces but found 4                        indent
+   21:1   error    Expected indentation of 2 spaces but found 4                        indent
+   22:1   error    Expected indentation of 2 spaces but found 4                        indent
+   30:1   error    Expected indentation of 2 spaces but found 4                        indent
+   31:1   error    Expected indentation of 2 spaces but found 4                        indent
+   32:1   error    Expected indentation of 2 spaces but found 4                        indent
+   33:1   error    Expected indentation of 2 spaces but found 4                        indent
+   34:1   error    Expected indentation of 2 spaces but found 4                        indent
+   42:46  warning  Async arrow function has a complexity of 22. Maximum allowed is 10  complexity
+   43:1   error    Expected indentation of 2 spaces but found 4                        indent
+   44:1   error    Expected indentation of 4 spaces but found 8                        indent
+   45:1   error    Expected indentation of 4 spaces but found 8                        indent
+   47:1   error    Expected indentation of 4 spaces but found 8                        indent
+   48:1   error    Expected indentation of 4 spaces but found 8                        indent
+   49:1   error    Expected indentation of 6 spaces but found 12                       indent
+   50:1   error    Expected indentation of 4 spaces but found 8                        indent
+   52:1   error    Expected indentation of 4 spaces but found 8                        indent
+   53:1   error    Expected indentation of 6 spaces but found 12                       indent
+   54:1   error    Expected indentation of 4 spaces but found 8                        indent
+   56:1   error    Expected indentation of 4 spaces but found 8                        indent
+   57:1   error    Expected indentation of 6 spaces but found 12                       indent
+   58:1   error    Expected indentation of 4 spaces but found 8                        indent
+   60:1   error    Expected indentation of 4 spaces but found 8                        indent
+   61:1   error    Expected indentation of 6 spaces but found 12                       indent
+   62:1   error    Expected indentation of 4 spaces but found 8                        indent
+   64:1   error    Expected indentation of 4 spaces but found 8                        indent
+   66:1   error    Expected indentation of 4 spaces but found 8                        indent
+   67:1   error    Expected indentation of 4 spaces but found 8                        indent
+   68:1   error    Trailing spaces not allowed                                         no-trailing-spaces
+   69:1   error    Expected indentation of 4 spaces but found 8                        indent
+   70:1   error    Expected indentation of 6 spaces but found 12                       indent
+   71:1   error    Expected indentation of 6 spaces but found 12                       indent
+   72:1   error    Expected indentation of 8 spaces but found 16                       indent
+   73:1   error    Expected indentation of 8 spaces but found 16                       indent
+   74:1   error    Expected indentation of 8 spaces but found 16                       indent
+   75:1   error    Expected indentation of 8 spaces but found 16                       indent
+   76:1   error    Expected indentation of 8 spaces but found 16                       indent
+   78:1   error    Expected indentation of 6 spaces but found 12                       indent
+   79:1   error    Expected indentation of 8 spaces but found 16                       indent
+   80:1   error    Expected indentation of 6 spaces but found 12                       indent
+   82:1   error    Expected indentation of 6 spaces but found 12                       indent
+   83:1   error    Expected indentation of 4 spaces but found 8                        indent
+   84:1   error    Expected indentation of 6 spaces but found 12                       indent
+   85:1   error    Expected indentation of 6 spaces but found 12                       indent
+   86:1   error    Expected indentation of 8 spaces but found 16                       indent
+   87:1   error    Expected indentation of 8 spaces but found 16                       indent
+   88:1   error    Expected indentation of 10 spaces but found 20                      indent
+   89:1   error    Expected indentation of 10 spaces but found 20                      indent
+   90:1   error    Expected indentation of 10 spaces but found 20                      indent
+   91:1   error    Expected indentation of 8 spaces but found 16                       indent
+   92:1   error    Expected indentation of 8 spaces but found 16                       indent
+   93:1   error    Expected indentation of 8 spaces but found 16                       indent
+   95:1   error    Expected indentation of 6 spaces but found 12                       indent
+   96:1   error    Expected indentation of 8 spaces but found 16                       indent
+   97:1   error    Expected indentation of 8 spaces but found 16                       indent
+   98:1   error    Expected indentation of 6 spaces but found 12                       indent
+  100:1   error    Expected indentation of 6 spaces but found 12                       indent
+  101:1   error    Expected indentation of 6 spaces but found 12                       indent
+  102:1   error    Expected indentation of 4 spaces but found 8                        indent
+  104:1   error    Expected indentation of 4 spaces but found 8                        indent
+  105:1   error    Expected indentation of 4 spaces but found 8                        indent
+  106:1   error    Expected indentation of 6 spaces but found 12                       indent
+  107:1   error    Expected indentation of 6 spaces but found 12                       indent
+  108:1   error    Expected indentation of 8 spaces but found 16                       indent
+  109:1   error    Expected indentation of 8 spaces but found 16                       indent
+  110:1   error    Expected indentation of 8 spaces but found 16                       indent
+  111:1   error    Expected indentation of 6 spaces but found 12                       indent
+  113:1   error    Expected indentation of 4 spaces but found 8                        indent
+  114:1   error    Expected indentation of 6 spaces but found 12                       indent
+  115:1   error    Expected indentation of 4 spaces but found 8                        indent
+  117:1   error    Expected indentation of 4 spaces but found 8                        indent
+  118:1   error    Expected indentation of 4 spaces but found 8                        indent
+  120:1   error    Expected indentation of 4 spaces but found 8                        indent
+  121:1   error    Expected indentation of 6 spaces but found 12                       indent
+  121:25  error    Strings must use singlequote                                        quotes
+  122:1   error    Expected indentation of 6 spaces but found 12                       indent
+  123:1   error    Expected indentation of 6 spaces but found 12                       indent
+  125:1   error    Expected indentation of 6 spaces but found 12                       indent
+  126:1   error    Expected indentation of 6 spaces but found 12                       indent
+  127:1   error    Expected indentation of 8 spaces but found 16                       indent
+  128:1   error    Expected indentation of 8 spaces but found 16                       indent
+  129:1   error    Expected indentation of 8 spaces but found 16                       indent
+  131:1   error    Expected indentation of 6 spaces but found 12                       indent
+  132:1   error    Expected indentation of 4 spaces but found 8                        indent
+  134:1   error    Expected indentation of 4 spaces but found 8                        indent
+  135:1   error    Expected indentation of 4 spaces but found 8                        indent
+  136:1   error    Expected indentation of 6 spaces but found 12                       indent
+  137:1   error    Expected indentation of 6 spaces but found 12                       indent
+  138:1   error    Expected indentation of 4 spaces but found 8                        indent
+  140:1   error    Expected indentation of 4 spaces but found 8                        indent
+  142:1   error    Expected indentation of 4 spaces but found 8                        indent
+  143:1   error    Expected indentation of 4 spaces but found 8                        indent
+  144:1   error    Expected indentation of 6 spaces but found 12                       indent
+  145:1   error    Expected indentation of 4 spaces but found 8                        indent
+  147:1   error    Expected indentation of 4 spaces but found 8                        indent
+  149:1   error    Expected indentation of 4 spaces but found 8                        indent
+  150:1   error    Expected indentation of 4 spaces but found 8                        indent
+  151:1   error    Expected indentation of 4 spaces but found 8                        indent
+  152:1   error    Expected indentation of 4 spaces but found 8                        indent
+  154:1   error    Expected indentation of 4 spaces but found 8                        indent
+  155:1   error    Expected indentation of 6 spaces but found 12                       indent
+  156:1   error    Expected indentation of 8 spaces but found 16                       indent
+  157:1   error    Expected indentation of 6 spaces but found 12                       indent
+  159:1   error    Expected indentation of 6 spaces but found 12                       indent
+  160:1   error    Expected indentation of 6 spaces but found 12                       indent
+  161:1   error    Expected indentation of 6 spaces but found 12                       indent
+  163:1   error    Expected indentation of 6 spaces but found 12                       indent
+  164:1   error    Expected indentation of 8 spaces but found 16                       indent
+  165:1   error    Expected indentation of 6 spaces but found 12                       indent
+  166:1   error    Expected indentation of 4 spaces but found 8                        indent
+  168:1   error    Expected indentation of 4 spaces but found 8                        indent
+  169:1   error    Expected indentation of 6 spaces but found 12                       indent
+  170:1   error    Expected indentation of 4 spaces but found 8                        indent
+  172:1   error    Expected indentation of 4 spaces but found 8                        indent
+  172:21  error    Strings must use singlequote                                        quotes
+  174:1   error    Expected indentation of 4 spaces but found 8                        indent
+  175:1   error    Expected indentation of 4 spaces but found 8                        indent
+  176:1   error    Expected indentation of 6 spaces but found 12                       indent
+  177:1   error    Expected indentation of 6 spaces but found 12                       indent
+  178:1   error    Expected indentation of 4 spaces but found 8                        indent
+  180:1   error    Expected indentation of 4 spaces but found 8                        indent
+  181:1   error    Expected indentation of 4 spaces but found 8                        indent
+  183:1   error    Expected indentation of 4 spaces but found 8                        indent
+  185:1   error    Expected indentation of 4 spaces but found 8                        indent
+  186:1   error    Expected indentation of 4 spaces but found 8                        indent
+  187:1   error    Expected indentation of 6 spaces but found 12                       indent
+  188:1   error    Expected indentation of 6 spaces but found 12                       indent
+  189:1   error    Expected indentation of 8 spaces but found 16                       indent
+  190:1   error    Expected indentation of 8 spaces but found 16                       indent
+  191:1   error    Expected indentation of 8 spaces but found 16                       indent
+  192:1   error    Expected indentation of 6 spaces but found 12                       indent
+  194:1   error    Expected indentation of 4 spaces but found 8                        indent
+  195:1   error    Expected indentation of 6 spaces but found 12                       indent
+  196:1   error    Expected indentation of 4 spaces but found 8                        indent
+  198:1   error    Expected indentation of 4 spaces but found 8                        indent
+  199:1   error    Expected indentation of 4 spaces but found 8                        indent
+  200:1   error    Expected indentation of 6 spaces but found 12                       indent
+  201:1   error    Expected indentation of 6 spaces but found 12                       indent
+  202:1   error    Expected indentation of 6 spaces but found 12                       indent
+  204:1   error    Expected indentation of 4 spaces but found 8                        indent
+  205:1   error    Expected indentation of 4 spaces but found 8                        indent
+  206:1   error    Expected indentation of 6 spaces but found 12                       indent
+  207:1   error    Expected indentation of 6 spaces but found 12                       indent
+  208:1   error    Expected indentation of 6 spaces but found 12                       indent
+  209:1   error    Expected indentation of 6 spaces but found 12                       indent
+  210:1   error    Expected indentation of 6 spaces but found 12                       indent
+  211:1   error    Expected indentation of 4 spaces but found 8                        indent
+  213:1   error    Expected indentation of 2 spaces but found 4                        indent
+  214:1   error    Expected indentation of 4 spaces but found 8                        indent
+  215:1   error    Expected indentation of 4 spaces but found 8                        indent
+  216:1   error    Expected indentation of 6 spaces but found 12                       indent
+  217:1   error    Expected indentation of 6 spaces but found 12                       indent
+  218:1   error    Expected indentation of 4 spaces but found 8                        indent
+  219:1   error    Expected indentation of 2 spaces but found 4                        indent
+  228:1   error    Expected indentation of 2 spaces but found 4                        indent
+  229:1   error    Expected indentation of 4 spaces but found 8                        indent
+  230:1   error    Expected indentation of 4 spaces but found 8                        indent
+  232:1   error    Expected indentation of 4 spaces but found 8                        indent
+  233:1   error    Expected indentation of 6 spaces but found 12                       indent
+  234:1   error    Expected indentation of 6 spaces but found 12                       indent
+  235:1   error    Expected indentation of 6 spaces but found 12                       indent
+  236:1   error    Expected indentation of 6 spaces but found 12                       indent
+  237:1   error    Expected indentation of 6 spaces but found 12                       indent
+  239:1   error    Expected indentation of 4 spaces but found 8                        indent
+  240:1   error    Expected indentation of 6 spaces but found 12                       indent
+  241:1   error    Expected indentation of 4 spaces but found 8                        indent
+  243:1   error    Expected indentation of 4 spaces but found 8                        indent
+  245:1   error    Expected indentation of 4 spaces but found 8                        indent
+  246:1   error    Expected indentation of 6 spaces but found 12                       indent
+  247:1   error    Expected indentation of 6 spaces but found 12                       indent
+  248:1   error    Expected indentation of 4 spaces but found 8                        indent
+  250:1   error    Expected indentation of 4 spaces but found 8                        indent
+  251:1   error    Expected indentation of 6 spaces but found 12                       indent
+  252:1   error    Expected indentation of 6 spaces but found 12                       indent
+  253:1   error    Expected indentation of 4 spaces but found 8                        indent
+  255:1   error    Expected indentation of 2 spaces but found 4                        indent
+  256:1   error    Expected indentation of 4 spaces but found 8                        indent
+  257:1   error    Expected indentation of 4 spaces but found 8                        indent
+  258:1   error    Expected indentation of 6 spaces but found 12                       indent
+  259:1   error    Expected indentation of 6 spaces but found 12                       indent
+  260:1   error    Expected indentation of 4 spaces but found 8                        indent
+  261:1   error    Expected indentation of 2 spaces but found 4                        indent
+  270:1   error    Expected indentation of 2 spaces but found 4                        indent
+  271:1   error    Expected indentation of 4 spaces but found 8                        indent
+  272:1   error    Expected indentation of 4 spaces but found 8                        indent
+  274:1   error    Expected indentation of 4 spaces but found 8                        indent
+  275:1   error    Expected indentation of 4 spaces but found 8                        indent
+  276:1   error    Expected indentation of 6 spaces but found 12                       indent
+  277:1   error    Expected indentation of 6 spaces but found 12                       indent
+  278:1   error    Expected indentation of 6 spaces but found 12                       indent
+  279:1   error    Expected indentation of 6 spaces but found 12                       indent
+  280:1   error    Expected indentation of 6 spaces but found 12                       indent
+  282:1   error    Expected indentation of 4 spaces but found 8                        indent
+  283:1   error    Expected indentation of 6 spaces but found 12                       indent
+  284:1   error    Expected indentation of 4 spaces but found 8                        indent
+  286:1   error    Expected indentation of 4 spaces but found 8                        indent
+  287:1   error    Expected indentation of 4 spaces but found 8                        indent
+  288:1   error    Expected indentation of 6 spaces but found 12                       indent
+  289:1   error    Expected indentation of 6 spaces but found 12                       indent
+  290:1   error    Expected indentation of 6 spaces but found 12                       indent
+  291:1   error    Expected indentation of 6 spaces but found 12                       indent
+  293:1   error    Expected indentation of 4 spaces but found 8                        indent
+  294:1   error    Expected indentation of 6 spaces but found 12                       indent
+  295:1   error    Expected indentation of 6 spaces but found 12                       indent
+  296:1   error    Expected indentation of 4 spaces but found 8                        indent
+  298:1   error    Expected indentation of 4 spaces but found 8                        indent
+  299:1   error    Expected indentation of 6 spaces but found 12                       indent
+  300:1   error    Expected indentation of 6 spaces but found 12                       indent
+  301:1   error    Expected indentation of 6 spaces but found 12                       indent
+  302:1   error    Expected indentation of 4 spaces but found 8                        indent
+  304:1   error    Expected indentation of 2 spaces but found 4                        indent
+  305:1   error    Expected indentation of 4 spaces but found 8                        indent
+  306:1   error    Expected indentation of 4 spaces but found 8                        indent
+  307:1   error    Expected indentation of 6 spaces but found 12                       indent
+  308:1   error    Expected indentation of 6 spaces but found 12                       indent
+  309:1   error    Expected indentation of 4 spaces but found 8                        indent
+  310:1   error    Expected indentation of 2 spaces but found 4                        indent
+  319:1   error    Expected indentation of 2 spaces but found 4                        indent
+  320:1   error    Expected indentation of 4 spaces but found 8                        indent
+  321:1   error    Expected indentation of 4 spaces but found 8                        indent
+  323:1   error    Expected indentation of 4 spaces but found 8                        indent
+  324:1   error    Expected indentation of 6 spaces but found 12                       indent
+  325:1   error    Expected indentation of 4 spaces but found 8                        indent
+  327:1   error    Expected indentation of 4 spaces but found 8                        indent
+  328:1   error    Expected indentation of 4 spaces but found 8                        indent
+  329:1   error    Expected indentation of 6 spaces but found 12                       indent
+  330:1   error    Expected indentation of 6 spaces but found 12                       indent
+  331:1   error    Expected indentation of 6 spaces but found 12                       indent
+  332:1   error    Expected indentation of 6 spaces but found 12                       indent
+  334:1   error    Expected indentation of 4 spaces but found 8                        indent
+  335:1   error    Expected indentation of 6 spaces but found 12                       indent
+  336:1   error    Expected indentation of 4 spaces but found 8                        indent
+  338:1   error    Expected indentation of 4 spaces but found 8                        indent
+  339:1   error    Expected indentation of 6 spaces but found 12                       indent
+  340:1   error    Expected indentation of 6 spaces but found 12                       indent
+  341:1   error    Expected indentation of 6 spaces but found 12                       indent
+  342:1   error    Expected indentation of 6 spaces but found 12                       indent
+  343:1   error    Expected indentation of 6 spaces but found 12                       indent
+  345:1   error    Expected indentation of 4 spaces but found 8                        indent
+  346:1   error    Expected indentation of 6 spaces but found 12                       indent
+  347:1   error    Expected indentation of 4 spaces but found 8                        indent
+  349:1   error    Expected indentation of 4 spaces but found 8                        indent
+  350:1   error    Expected indentation of 6 spaces but found 12                       indent
+  351:1   error    Expected indentation of 6 spaces but found 12                       indent
+  352:1   error    Expected indentation of 6 spaces but found 12                       indent
+  354:1   error    Expected indentation of 4 spaces but found 8                        indent
+  355:1   error    Expected indentation of 6 spaces but found 12                       indent
+  356:1   error    Expected indentation of 6 spaces but found 12                       indent
+  357:1   error    Expected indentation of 4 spaces but found 8                        indent
+  359:1   error    Expected indentation of 4 spaces but found 8                        indent
+  360:1   error    Expected indentation of 6 spaces but found 12                       indent
+  361:1   error    Expected indentation of 6 spaces but found 12                       indent
+  362:1   error    Expected indentation of 4 spaces but found 8                        indent
+  364:1   error    Expected indentation of 2 spaces but found 4                        indent
+  365:1   error    Expected indentation of 4 spaces but found 8                        indent
+  366:1   error    Expected indentation of 4 spaces but found 8                        indent
+  367:1   error    Expected indentation of 6 spaces but found 12                       indent
+  368:1   error    Expected indentation of 6 spaces but found 12                       indent
+  369:1   error    Expected indentation of 4 spaces but found 8                        indent
+  370:1   error    Expected indentation of 2 spaces but found 4                        indent
+  379:1   error    Expected indentation of 2 spaces but found 4                        indent
+  380:1   error    Expected indentation of 4 spaces but found 8                        indent
+  381:1   error    Expected indentation of 4 spaces but found 8                        indent
+  383:1   error    Expected indentation of 4 spaces but found 8                        indent
+  384:1   error    Expected indentation of 6 spaces but found 12                       indent
+  385:1   error    Expected indentation of 6 spaces but found 12                       indent
+  386:1   error    Expected indentation of 6 spaces but found 12                       indent
+  387:1   error    Expected indentation of 6 spaces but found 12                       indent
+  389:1   error    Expected indentation of 4 spaces but found 8                        indent
+  390:1   error    Expected indentation of 6 spaces but found 12                       indent
+  391:1   error    Expected indentation of 6 spaces but found 12                       indent
+  392:1   error    Expected indentation of 4 spaces but found 8                        indent
+  394:1   error    Expected indentation of 4 spaces but found 8                        indent
+  395:1   error    Expected indentation of 6 spaces but found 12                       indent
+  396:1   error    Expected indentation of 6 spaces but found 12                       indent
+  397:1   error    Expected indentation of 4 spaces but found 8                        indent
+  399:1   error    Expected indentation of 2 spaces but found 4                        indent
+  400:1   error    Expected indentation of 4 spaces but found 8                        indent
+  401:1   error    Expected indentation of 4 spaces but found 8                        indent
+  402:1   error    Expected indentation of 6 spaces but found 12                       indent
+  403:1   error    Expected indentation of 6 spaces but found 12                       indent
+  404:1   error    Expected indentation of 4 spaces but found 8                        indent
+  405:1   error    Expected indentation of 2 spaces but found 4                        indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\dashboard.js
+  21:43  warning  Async arrow function has a complexity of 14. Maximum allowed is 10  complexity
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\diagnostic.js
+   19:52  warning  Async arrow function has a complexity of 19. Maximum allowed is 10                                             complexity
+   62:1   error    Expected indentation of 8 spaces but found 10                                                                  indent
+   63:1   error    Expected indentation of 8 spaces but found 10                                                                  indent
+   63:28  error    Expected '!==' and instead saw '!='                                                                            eqeqeq
+   68:20  error    Strings must use singlequote                                                                                   quotes
+   99:20  error    Strings must use singlequote                                                                                   quotes
+  123:34  error    Strings must use singlequote                                                                                   quotes
+  172:14  error    Strings must use singlequote                                                                                   quotes
+  173:32  error    Strings must use singlequote                                                                                   quotes
+  178:17  error    Strings must use singlequote                                                                                   quotes
+  181:1   warning  This line has a length of 121. Maximum allowed is 120                                                          max-len
+  272:17  error    Strings must use singlequote                                                                                   quotes
+  349:22  error    'error' is defined but never used. Allowed unused args must match /^_/u                                        no-unused-vars
+  410:16  error    Strings must use singlequote                                                                                   quotes
+  411:34  error    Strings must use singlequote                                                                                   quotes
+  416:19  error    Strings must use singlequote                                                                                   quotes
+  435:19  error    Strings must use singlequote                                                                                   quotes
+  454:17  error    Strings must use singlequote                                                                                   quotes
+  458:32  error    Strings must use singlequote                                                                                   quotes
+  461:33  error    Strings must use singlequote                                                                                   quotes
+  477:17  error    Statement inside of curly braces should be on next line                                                        brace-style
+  477:59  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+  540:1   warning  Async function 'updateUserProgress' has a complexity of 13. Maximum allowed is 10                              complexity
+  542:18  error    Strings must use singlequote                                                                                   quotes
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\freshness.js
+  18:1  error  Expected indentation of 2 spaces but found 4   indent
+  19:1  error  Expected indentation of 4 spaces but found 8   indent
+  21:1  error  Expected indentation of 4 spaces but found 8   indent
+  22:1  error  Expected indentation of 4 spaces but found 8   indent
+  24:1  error  Expected indentation of 4 spaces but found 8   indent
+  25:1  error  Expected indentation of 4 spaces but found 8   indent
+  27:1  error  Expected indentation of 4 spaces but found 8   indent
+  28:1  error  Expected indentation of 4 spaces but found 8   indent
+  29:1  error  Expected indentation of 6 spaces but found 12  indent
+  30:1  error  Expected indentation of 6 spaces but found 12  indent
+  31:1  error  Expected indentation of 6 spaces but found 12  indent
+  32:1  error  Expected indentation of 6 spaces but found 12  indent
+  34:1  error  Expected indentation of 4 spaces but found 8   indent
+  35:1  error  Expected indentation of 4 spaces but found 8   indent
+  36:1  error  Expected indentation of 4 spaces but found 8   indent
+  37:1  error  Expected indentation of 6 spaces but found 12  indent
+  38:1  error  Expected indentation of 6 spaces but found 12  indent
+  39:1  error  Expected indentation of 6 spaces but found 12  indent
+  40:1  error  Expected indentation of 4 spaces but found 8   indent
+  42:1  error  Expected indentation of 4 spaces but found 8   indent
+  43:1  error  Expected indentation of 6 spaces but found 12  indent
+  44:1  error  Expected indentation of 6 spaces but found 12  indent
+  45:1  error  Expected indentation of 8 spaces but found 16  indent
+  46:1  error  Expected indentation of 8 spaces but found 16  indent
+  47:1  error  Expected indentation of 8 spaces but found 16  indent
+  48:1  error  Expected indentation of 8 spaces but found 16  indent
+  49:1  error  Expected indentation of 8 spaces but found 16  indent
+  50:1  error  Expected indentation of 8 spaces but found 16  indent
+  51:1  error  Expected indentation of 8 spaces but found 16  indent
+  52:1  error  Expected indentation of 8 spaces but found 16  indent
+  53:1  error  Expected indentation of 8 spaces but found 16  indent
+  54:1  error  Expected indentation of 6 spaces but found 12  indent
+  55:1  error  Expected indentation of 4 spaces but found 8   indent
+  57:1  error  Expected indentation of 2 spaces but found 4   indent
+  58:1  error  Expected indentation of 4 spaces but found 8   indent
+  59:1  error  Expected indentation of 4 spaces but found 8   indent
+  60:1  error  Expected indentation of 6 spaces but found 12  indent
+  61:1  error  Expected indentation of 6 spaces but found 12  indent
+  62:1  error  Expected indentation of 4 spaces but found 8   indent
+  63:1  error  Expected indentation of 2 spaces but found 4   indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\gamification.js
+   8:38  error    'checkAndAwardBadges' is assigned a value but never used            no-unused-vars
+  10:9   error    'getFromBoostspace' is assigned a value but never used              no-unused-vars
+  18:45  warning  Async arrow function has a complexity of 11. Maximum allowed is 10  complexity
+  19:1   error    Expected indentation of 2 spaces but found 4                        indent
+  20:1   error    Expected indentation of 4 spaces but found 8                        indent
+  22:1   error    Expected indentation of 4 spaces but found 8                        indent
+  23:1   error    Expected indentation of 4 spaces but found 8                        indent
+  25:1   error    Expected indentation of 4 spaces but found 8                        indent
+  26:1   error    Expected indentation of 4 spaces but found 8                        indent
+  28:1   error    Expected indentation of 4 spaces but found 8                        indent
+  29:1   error    Expected indentation of 4 spaces but found 8                        indent
+  31:1   error    Expected indentation of 4 spaces but found 8                        indent
+  32:1   error    Expected indentation of 4 spaces but found 8                        indent
+  34:1   error    Expected indentation of 4 spaces but found 8                        indent
+  35:1   error    Expected indentation of 6 spaces but found 12                       indent
+  36:1   error    Expected indentation of 6 spaces but found 12                       indent
+  37:1   error    Expected indentation of 8 spaces but found 16                       indent
+  38:1   error    Expected indentation of 8 spaces but found 16                       indent
+  39:1   error    Expected indentation of 8 spaces but found 16                       indent
+  40:1   error    Expected indentation of 8 spaces but found 16                       indent
+  41:1   error    Expected indentation of 6 spaces but found 12                       indent
+  42:1   error    Expected indentation of 6 spaces but found 12                       indent
+  43:1   error    Expected indentation of 8 spaces but found 16                       indent
+  44:1   error    Expected indentation of 8 spaces but found 16                       indent
+  45:1   error    Expected indentation of 8 spaces but found 16                       indent
+  46:1   error    Expected indentation of 8 spaces but found 16                       indent
+  47:1   error    Expected indentation of 8 spaces but found 16                       indent
+  48:1   error    Expected indentation of 8 spaces but found 16                       indent
+  49:1   error    Expected indentation of 6 spaces but found 12                       indent
+  50:1   error    Expected indentation of 6 spaces but found 12                       indent
+  51:1   error    Expected indentation of 6 spaces but found 12                       indent
+  52:1   error    Expected indentation of 4 spaces but found 8                        indent
+  54:1   error    Expected indentation of 2 spaces but found 4                        indent
+  55:1   error    Expected indentation of 4 spaces but found 8                        indent
+  56:1   error    Expected indentation of 4 spaces but found 8                        indent
+  57:1   error    Expected indentation of 2 spaces but found 4                        indent
+  65:1   error    Expected indentation of 2 spaces but found 4                        indent
+  66:1   error    Expected indentation of 4 spaces but found 8                        indent
+  67:1   error    Expected indentation of 4 spaces but found 8                        indent
+  68:1   error    Expected indentation of 4 spaces but found 8                        indent
+  69:1   error    Expected indentation of 4 spaces but found 8                        indent
+  71:1   error    Expected indentation of 4 spaces but found 8                        indent
+  72:1   error    Expected indentation of 4 spaces but found 8                        indent
+  73:1   error    Expected indentation of 6 spaces but found 12                       indent
+  74:1   error    Expected indentation of 6 spaces but found 12                       indent
+  75:1   error    Expected indentation of 6 spaces but found 12                       indent
+  76:1   error    Expected indentation of 4 spaces but found 8                        indent
+  78:1   error    Expected indentation of 4 spaces but found 8                        indent
+  79:1   error    Expected indentation of 6 spaces but found 12                       indent
+  80:1   error    Expected indentation of 6 spaces but found 12                       indent
+  81:1   error    Expected indentation of 4 spaces but found 8                        indent
+  82:1   error    Expected indentation of 2 spaces but found 4                        indent
+  83:1   error    Expected indentation of 4 spaces but found 8                        indent
+  84:1   error    Expected indentation of 2 spaces but found 4                        indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\health.js
+  11:1   error  Expected indentation of 2 spaces but found 4   indent
+  12:1   error  Expected indentation of 2 spaces but found 4   indent
+  13:1   error  Expected indentation of 2 spaces but found 4   indent
+  15:1   error  Expected indentation of 2 spaces but found 4   indent
+  16:1   error  Expected indentation of 4 spaces but found 8   indent
+  17:1   error  Expected indentation of 4 spaces but found 8   indent
+  18:1   error  Expected indentation of 4 spaces but found 8   indent
+  19:1   error  Expected indentation of 6 spaces but found 12  indent
+  20:1   error  Expected indentation of 6 spaces but found 12  indent
+  22:1   error  Expected indentation of 4 spaces but found 8   indent
+  22:20  error  Expected { after 'if' condition                curly
+  24:1   error  Expected indentation of 4 spaces but found 8   indent
+  25:1   error  Expected indentation of 4 spaces but found 8   indent
+  27:1   error  Expected indentation of 4 spaces but found 8   indent
+  28:1   error  Expected indentation of 4 spaces but found 8   indent
+  30:1   error  Expected indentation of 4 spaces but found 8   indent
+  31:1   error  Expected indentation of 6 spaces but found 12  indent
+  32:1   error  Expected indentation of 6 spaces but found 12  indent
+  33:1   error  Expected indentation of 6 spaces but found 12  indent
+  34:1   error  Expected indentation of 6 spaces but found 12  indent
+  35:1   error  Expected indentation of 8 spaces but found 16  indent
+  36:1   error  Expected indentation of 8 spaces but found 16  indent
+  37:1   error  Expected indentation of 8 spaces but found 16  indent
+  38:1   error  Expected indentation of 6 spaces but found 12  indent
+  39:1   error  Expected indentation of 6 spaces but found 12  indent
+  40:1   error  Expected indentation of 6 spaces but found 12  indent
+  41:1   error  Expected indentation of 4 spaces but found 8   indent
+  43:1   error  Expected indentation of 2 spaces but found 4   indent
+  44:1   error  Expected indentation of 4 spaces but found 8   indent
+  45:1   error  Trailing spaces not allowed                    no-trailing-spaces
+  46:1   error  Expected indentation of 4 spaces but found 8   indent
+  47:1   error  Expected indentation of 6 spaces but found 12  indent
+  48:1   error  Expected indentation of 6 spaces but found 12  indent
+  49:1   error  Expected indentation of 6 spaces but found 12  indent
+  50:1   error  Expected indentation of 6 spaces but found 12  indent
+  51:1   error  Expected indentation of 8 spaces but found 16  indent
+  52:1   error  Expected indentation of 8 spaces but found 16  indent
+  53:1   error  Expected indentation of 6 spaces but found 12  indent
+  54:1   error  Expected indentation of 4 spaces but found 8   indent
+  55:1   error  Expected indentation of 2 spaces but found 4   indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\journey.js
+   36:16  error    Expected { after 'if' condition                                     curly
+   71:23  error    Expected { after 'if' condition                                     curly
+   81:24  error    Expected { after 'if' condition                                     curly
+   87:20  error    Strings must use singlequote                                        quotes
+  147:16  error    Expected { after 'if' condition                                     curly
+  184:23  error    Expected { after 'if' condition                                     curly
+  194:24  error    Expected { after 'if' condition                                     curly
+  239:81  warning  Async arrow function has a complexity of 22. Maximum allowed is 10  complexity
+  256:23  error    Expected { after 'if' condition                                     curly
+  266:24  error    Expected { after 'if' condition                                     curly
+  279:18  error    Strings must use singlequote                                        quotes
+  295:1   error    Trailing spaces not allowed                                         no-trailing-spaces
+  310:24  error    Expected { after 'if' condition                                     curly
+  329:26  error    Expected { after 'if' condition                                     curly
+  348:32  error    Expected { after 'if' condition                                     curly
+  350:20  error    Strings must use singlequote                                        quotes
+  359:1   error    Trailing spaces not allowed                                         no-trailing-spaces
+  368:25  error    Expected { after 'if' condition                                     curly
+  376:59  error    Trailing spaces not allowed                                         no-trailing-spaces
+  381:29  error    Expected { after 'if' condition                                     curly
+  382:34  error    Expected { after 'if' condition                                     curly
+  383:34  error    Expected { after 'if' condition                                     curly
+  395:26  error    Expected { after 'if' condition                                     curly
+  397:20  error    Strings must use singlequote                                        quotes
+  442:16  error    Expected { after 'if' condition                                     curly
+  485:9   error    'query' is never reassigned. Use 'const' instead                    prefer-const
+  493:24  error    Expected { after 'if' condition                                     curly
+  572:24  error    Expected { after 'if' condition                                     curly
+  593:22  error    Expected { after 'if' condition                                     curly
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\missions.js
+  15:1  error  Expected indentation of 2 spaces but found 4   indent
+  16:1  error  Expected indentation of 4 spaces but found 8   indent
+  17:1  error  Expected indentation of 4 spaces but found 8   indent
+  19:1  error  Expected indentation of 4 spaces but found 8   indent
+  20:1  error  Expected indentation of 6 spaces but found 12  indent
+  21:1  error  Expected indentation of 6 spaces but found 12  indent
+  22:1  error  Expected indentation of 4 spaces but found 8   indent
+  23:1  error  Expected indentation of 2 spaces but found 4   indent
+  24:1  error  Expected indentation of 4 spaces but found 8   indent
+  25:1  error  Expected indentation of 4 spaces but found 8   indent
+  26:1  error  Expected indentation of 2 spaces but found 4   indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\progress.js
+   11:7   error    'XP_TITLES' is assigned a value but never used                                                                 no-unused-vars
+   12:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   13:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   14:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   16:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   17:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   18:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   19:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   21:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   22:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   23:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   24:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   26:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   27:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   28:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   29:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   33:1   warning  Function 'calculateLevelAndTitle' has a complexity of 12. Maximum allowed is 10                                complexity
+   34:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   35:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   36:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   38:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   39:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   41:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   42:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   43:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   43:32  error    Statement inside of curly braces should be on next line                                                        brace-style
+   43:75  error    Closing curly brace does not appear on the same line as the subsequent block                                   brace-style
+   43:75  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   44:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   44:38  error    Statement inside of curly braces should be on next line                                                        brace-style
+   44:81  error    Closing curly brace does not appear on the same line as the subsequent block                                   brace-style
+   44:81  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   45:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   45:14  error    Statement inside of curly braces should be on next line                                                        brace-style
+   45:60  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   46:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   47:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   48:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   48:33  error    Statement inside of curly braces should be on next line                                                        brace-style
+   48:83  error    Closing curly brace does not appear on the same line as the subsequent block                                   brace-style
+   48:83  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   49:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   49:38  error    Statement inside of curly braces should be on next line                                                        brace-style
+   49:87  error    Closing curly brace does not appear on the same line as the subsequent block                                   brace-style
+   49:87  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   50:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   50:14  error    Statement inside of curly braces should be on next line                                                        brace-style
+   50:67  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   51:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   52:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   53:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   53:33  error    Statement inside of curly braces should be on next line                                                        brace-style
+   53:70  error    Closing curly brace does not appear on the same line as the subsequent block                                   brace-style
+   53:70  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   54:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   54:38  error    Statement inside of curly braces should be on next line                                                        brace-style
+   54:87  error    Closing curly brace does not appear on the same line as the subsequent block                                   brace-style
+   54:87  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   55:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   55:14  error    Statement inside of curly braces should be on next line                                                        brace-style
+   55:62  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   56:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   57:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   58:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   58:34  error    Statement inside of curly braces should be on next line                                                        brace-style
+   58:79  error    Closing curly brace does not appear on the same line as the subsequent block                                   brace-style
+   58:79  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   59:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   59:39  error    Statement inside of curly braces should be on next line                                                        brace-style
+   59:86  error    Closing curly brace does not appear on the same line as the subsequent block                                   brace-style
+   59:86  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   60:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   60:14  error    Statement inside of curly braces should be on next line                                                        brace-style
+   60:67  error    Closing curly brace should be on the same line as opening curly brace or on the line after the previous block  brace-style
+   61:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   63:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   71:45  warning  Async arrow function has a complexity of 23. Maximum allowed is 10                                             complexity
+   72:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+   73:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   75:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   76:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   77:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   78:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+   79:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   80:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   81:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   82:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   84:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   86:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   87:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   89:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   90:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   91:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+   92:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+   93:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+   94:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+   95:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   97:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   98:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+   99:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  100:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  101:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  102:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  103:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  104:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  105:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  107:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  108:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  109:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  110:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  111:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  112:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  113:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  115:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  116:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  117:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  118:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  119:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  120:1   error    Expected indentation of 10 spaces but found 20                                                                 indent
+  121:1   error    Expected indentation of 10 spaces but found 20                                                                 indent
+  122:1   error    Expected indentation of 10 spaces but found 20                                                                 indent
+  123:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  124:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  126:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  128:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  129:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  130:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  131:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  133:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  134:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  135:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  136:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  137:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  139:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  140:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  141:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  142:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  144:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  145:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  146:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  147:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  149:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  150:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  151:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  152:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  153:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  155:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  156:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  157:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  158:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  160:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  162:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  163:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  164:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  164:33  error    Expected { after 'if' condition                                                                                curly
+  165:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  165:38  error    Expected { after 'if' condition                                                                                curly
+  166:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  166:39  error    Expected { after 'if' condition                                                                                curly
+  167:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  167:14  error    Expected { after 'else'                                                                                        curly
+  169:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  171:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  172:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  173:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  174:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  175:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  176:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  177:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  178:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  179:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  181:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  182:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  183:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  184:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  185:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  186:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  187:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  188:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  189:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  190:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  192:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  193:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  194:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  196:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  197:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  198:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  199:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  201:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  203:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  205:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  206:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  207:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  208:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  209:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  211:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  212:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  213:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  214:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  215:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  217:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+  218:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  219:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  220:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  221:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  223:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  224:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  225:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  226:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  227:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  228:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  229:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  230:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  231:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  232:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  233:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+  242:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+  243:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  245:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  247:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  248:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  250:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  251:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  252:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  253:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  254:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  255:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  256:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  258:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  259:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  260:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  261:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  262:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  264:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  266:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  267:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  268:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  269:1   error    Expected indentation of 10 spaces but found 20                                                                 indent
+  270:1   error    Expected indentation of 10 spaces but found 20                                                                 indent
+  271:1   error    Expected indentation of 10 spaces but found 20                                                                 indent
+  272:1   error    Expected indentation of 8 spaces but found 16                                                                  indent
+  273:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  274:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  276:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  278:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  279:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  280:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  281:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  282:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  284:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+  285:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  286:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  287:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  288:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  289:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  291:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  292:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  293:1   error    Expected indentation of 6 spaces but found 12                                                                  indent
+  294:1   error    Expected indentation of 4 spaces but found 8                                                                   indent
+  295:1   error    Expected indentation of 2 spaces but found 4                                                                   indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\skills.js
+   32:16  error    Expected { after 'if' condition                        curly
+   36:31  error    Expected { after 'if' condition                        curly
+   75:16  error    Expected { after 'if' condition                        curly
+  113:24  error    Expected { after 'if' condition                        curly
+  121:22  error    Expected { after 'if' condition                        curly
+  139:25  error    Expected { after 'if' condition                        curly
+  239:18  error    Expected { after 'if' condition                        curly
+  241:1   warning  This line has a length of 145. Maximum allowed is 120  max-len
+  268:18  error    Expected { after 'if' condition                        curly
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\streaks.js
+  15:1  error  Expected indentation of 2 spaces but found 4   indent
+  16:1  error  Expected indentation of 4 spaces but found 8   indent
+  18:1  error  Expected indentation of 4 spaces but found 8   indent
+  19:1  error  Expected indentation of 4 spaces but found 8   indent
+  21:1  error  Expected indentation of 4 spaces but found 8   indent
+  22:1  error  Expected indentation of 6 spaces but found 12  indent
+  23:1  error  Expected indentation of 6 spaces but found 12  indent
+  24:1  error  Expected indentation of 4 spaces but found 8   indent
+  26:1  error  Expected indentation of 2 spaces but found 4   indent
+  27:1  error  Expected indentation of 4 spaces but found 8   indent
+  28:1  error  Expected indentation of 4 spaces but found 8   indent
+  29:1  error  Expected indentation of 6 spaces but found 12  indent
+  30:1  error  Expected indentation of 6 spaces but found 12  indent
+  31:1  error  Expected indentation of 4 spaces but found 8   indent
+  32:1  error  Expected indentation of 2 spaces but found 4   indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\support.js
+  18:1  error  Expected indentation of 2 spaces but found 4   indent
+  19:1  error  Expected indentation of 4 spaces but found 8   indent
+  20:1  error  Expected indentation of 4 spaces but found 8   indent
+  22:1  error  Expected indentation of 4 spaces but found 8   indent
+  23:1  error  Expected indentation of 6 spaces but found 12  indent
+  24:1  error  Expected indentation of 4 spaces but found 8   indent
+  26:1  error  Expected indentation of 4 spaces but found 8   indent
+  27:1  error  Expected indentation of 4 spaces but found 8   indent
+  28:1  error  Expected indentation of 6 spaces but found 12  indent
+  29:1  error  Expected indentation of 6 spaces but found 12  indent
+  30:1  error  Expected indentation of 6 spaces but found 12  indent
+  31:1  error  Expected indentation of 6 spaces but found 12  indent
+  32:1  error  Expected indentation of 4 spaces but found 8   indent
+  34:1  error  Expected indentation of 4 spaces but found 8   indent
+  36:1  error  Expected indentation of 4 spaces but found 8   indent
+  37:1  error  Expected indentation of 6 spaces but found 12  indent
+  38:1  error  Expected indentation of 4 spaces but found 8   indent
+  39:1  error  Expected indentation of 6 spaces but found 12  indent
+  40:1  error  Expected indentation of 4 spaces but found 8   indent
+  42:1  error  Expected indentation of 2 spaces but found 4   indent
+  43:1  error  Expected indentation of 4 spaces but found 8   indent
+  44:1  error  Expected indentation of 4 spaces but found 8   indent
+  45:1  error  Expected indentation of 2 spaces but found 4   indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\routes\webhooks.js
+   55:40  warning  Async arrow function has a complexity of 24. Maximum allowed is 10                  complexity
+   82:1   error    Expected indentation of 4 spaces but found 6                                        indent
+   83:1   error    Expected indentation of 4 spaces but found 6                                        indent
+   84:1   error    Expected indentation of 4 spaces but found 6                                        indent
+   85:1   error    Expected indentation of 4 spaces but found 6                                        indent
+   86:1   error    Expected indentation of 6 spaces but found 8                                        indent
+   87:1   error    Expected indentation of 6 spaces but found 8                                        indent
+   90:1   error    Expected indentation of 4 spaces but found 6                                        indent
+   91:1   error    Expected indentation of 4 spaces but found 6                                        indent
+   92:1   error    Expected indentation of 4 spaces but found 6                                        indent
+   93:1   error    Expected indentation of 6 spaces but found 8                                        indent
+   94:1   error    Expected indentation of 6 spaces but found 8                                        indent
+   97:1   error    Expected indentation of 4 spaces but found 6                                        indent
+   98:1   error    Expected indentation of 4 spaces but found 6                                        indent
+   99:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  100:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  103:1   error    Expected indentation of 4 spaces but found 6                                        indent
+  104:1   error    Expected indentation of 4 spaces but found 6                                        indent
+  105:1   error    Expected indentation of 4 spaces but found 6                                        indent
+  106:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  107:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  110:1   error    Expected indentation of 4 spaces but found 6                                        indent
+  111:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  112:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  113:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  116:1   error    Expected indentation of 4 spaces but found 6                                        indent
+  117:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  118:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  121:1   error    Expected indentation of 4 spaces but found 6                                        indent
+  122:1   error    Expected indentation of 4 spaces but found 6                                        indent
+  123:1   error    Expected indentation of 4 spaces but found 6                                        indent
+  124:1   error    Expected indentation of 4 spaces but found 6                                        indent
+  125:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  126:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  128:1   error    Expected indentation of 4 spaces but found 6                                        indent
+  129:1   error    Expected indentation of 6 spaces but found 8                                        indent
+  153:1   warning  Async function 'handleOrderApproved' has a complexity of 11. Maximum allowed is 10  complexity
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\server.js
+   33:1   error    Expected indentation of 4 spaces but found 6                            indent
+   34:1   error    Expected indentation of 4 spaces but found 6                            indent
+   35:1   error    Expected indentation of 4 spaces but found 6                            indent
+   36:1   error    Expected indentation of 4 spaces but found 6                            indent
+   37:1   error    Expected indentation of 4 spaces but found 6                            indent
+   38:1   error    Expected indentation of 2 spaces but found 4                            indent
+   40:1   error    Expected indentation of 4 spaces but found 6                            indent
+   41:1   error    Expected indentation of 4 spaces but found 6                            indent
+   42:1   error    Expected indentation of 4 spaces but found 6                            indent
+   43:1   error    Expected indentation of 4 spaces but found 6                            indent
+   44:1   error    Expected indentation of 4 spaces but found 6                            indent
+   45:1   error    Expected indentation of 4 spaces but found 6                            indent
+   46:1   error    Expected indentation of 4 spaces but found 6                            indent
+   47:1   error    Expected indentation of 4 spaces but found 6                            indent
+   48:1   error    Expected indentation of 4 spaces but found 6                            indent
+   49:1   error    Expected indentation of 4 spaces but found 6                            indent
+   50:1   error    Expected indentation of 2 spaces but found 4                            indent
+   89:40  error    Expected { after 'if' condition                                         curly
+   90:38  error    Expected { after 'if' condition                                         curly
+  166:65  error    Trailing spaces not allowed                                             no-trailing-spaces
+  202:25  error    'next' is defined but never used. Allowed unused args must match /^_/u  no-unused-vars
+  216:15  error    Strings must use singlequote                                            quotes
+  227:5   warning  Don't use process.exit(); throw an error instead                        no-process-exit
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\services\badgeService.js
+    5:9   error    'getFromBoostspace' is assigned a value but never used                              no-unused-vars
+    5:28  error    'saveToBoostspace' is assigned a value but never used                               no-unused-vars
+   13:1   warning  Async function 'checkAndAwardBadges' has a complexity of 29. Maximum allowed is 10  complexity
+   14:1   error    Expected indentation of 2 spaces but found 4                                        indent
+   15:1   error    Expected indentation of 2 spaces but found 4                                        indent
+   17:1   error    Expected indentation of 2 spaces but found 4                                        indent
+   18:1   error    Expected indentation of 4 spaces but found 8                                        indent
+   19:1   error    Expected indentation of 4 spaces but found 8                                        indent
+   20:1   error    Expected indentation of 4 spaces but found 8                                        indent
+   20:20  error    Expected { after 'if' condition                                                     curly
+   22:1   error    Expected indentation of 4 spaces but found 8                                        indent
+   23:1   error    Expected indentation of 4 spaces but found 8                                        indent
+   24:1   error    Expected indentation of 4 spaces but found 8                                        indent
+   26:1   error    Expected indentation of 4 spaces but found 8                                        indent
+   27:1   error    Expected indentation of 4 spaces but found 8                                        indent
+   28:1   error    Expected indentation of 4 spaces but found 8                                        indent
+   28:27  error    Expected { after 'if' condition                                                     curly
+   30:1   error    Expected indentation of 4 spaces but found 8                                        indent
+   31:1   error    Expected indentation of 4 spaces but found 8                                        indent
+   32:1   error    Expected indentation of 6 spaces but found 12                                       indent
+   32:46  error    Expected { after 'if' condition                                                     curly
+   34:1   error    Expected indentation of 6 spaces but found 12                                       indent
+   36:1   error    Expected indentation of 6 spaces but found 12                                       indent
+   37:1   error    Expected indentation of 6 spaces but found 12                                       indent
+   38:1   error    Expected indentation of 6 spaces but found 12                                       indent
+   39:1   error    Expected indentation of 6 spaces but found 16                                       indent
+   40:1   error    Expected indentation of 6 spaces but found 16                                       indent
+   41:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   41:79  error    Expected { after 'if' condition                                                     curly
+   42:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   43:1   error    Expected indentation of 6 spaces but found 16                                       indent
+   44:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   44:79  error    Expected { after 'if' condition                                                     curly
+   45:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   46:1   error    Expected indentation of 6 spaces but found 16                                       indent
+   47:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   47:81  error    Expected { after 'if' condition                                                     curly
+   48:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   50:1   error    Expected indentation of 8 spaces but found 16                                       indent
+   51:1   error    Expected indentation of 6 spaces but found 16                                       indent
+   52:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   53:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   54:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   55:1   error    Expected indentation of 6 spaces but found 16                                       indent
+   56:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   57:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   58:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   58:21  error    Unexpected lexical declaration in case block                                        no-case-declarations
+   59:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   59:60  error    Expected { after 'if' condition                                                     curly
+   60:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   62:1   error    Expected indentation of 8 spaces but found 16                                       indent
+   63:1   error    Expected indentation of 8 spaces but found 16                                       indent
+   64:1   error    Expected indentation of 8 spaces but found 16                                       indent
+   65:1   error    Expected indentation of 6 spaces but found 16                                       indent
+   66:1   error    Expected indentation of 6 spaces but found 16                                       indent
+   67:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   67:21  error    Unexpected lexical declaration in case block                                        no-case-declarations
+   68:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   68:76  error    Expected { after 'if' condition                                                     curly
+   69:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   69:82  error    Expected { after 'if' condition                                                     curly
+   70:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   72:1   error    Expected indentation of 6 spaces but found 16                                       indent
+   73:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   73:21  error    Unexpected lexical declaration in case block                                        no-case-declarations
+   73:27  error    'diagCount' is assigned a value but never used                                      no-unused-vars
+   74:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   75:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   76:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   77:1   error    Expected indentation of 8 spaces but found 20                                       indent
+   78:1   error    Expected indentation of 6 spaces but found 12                                       indent
+   80:1   error    Expected indentation of 6 spaces but found 12                                       indent
+   81:1   error    Expected indentation of 8 spaces but found 16                                       indent
+   83:1   error    Expected indentation of 8 spaces but found 16                                       indent
+   84:1   error    Expected indentation of 10 spaces but found 20                                      indent
+   85:1   error    Expected indentation of 10 spaces but found 20                                      indent
+   86:1   error    Expected indentation of 10 spaces but found 20                                      indent
+   87:1   error    Expected indentation of 8 spaces but found 16                                       indent
+   89:1   error    Expected indentation of 8 spaces but found 16                                       indent
+   90:1   error    Expected indentation of 10 spaces but found 20                                      indent
+   91:1   error    Expected indentation of 10 spaces but found 20                                      indent
+   92:1   error    Expected indentation of 10 spaces but found 20                                      indent
+   93:1   error    Expected indentation of 12 spaces but found 24                                      indent
+   94:1   error    Expected indentation of 12 spaces but found 24                                      indent
+   95:1   error    Expected indentation of 10 spaces but found 20                                      indent
+   96:1   error    Expected indentation of 8 spaces but found 16                                       indent
+   97:1   error    Expected indentation of 10 spaces but found 20                                      indent
+   98:1   error    Expected indentation of 8 spaces but found 16                                       indent
+   99:1   error    Expected indentation of 6 spaces but found 12                                       indent
+  100:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  102:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  103:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  104:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  106:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  110:46  error    'mustBeSucces' is assigned a value but never used                                   no-unused-vars
+  111:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  112:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  112:20  error    'error' is assigned a value but never used                                          no-unused-vars
+  113:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  114:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  115:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  116:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  118:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  122:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  123:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  124:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  125:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  126:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  127:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  129:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  129:16  error    Expected { after 'if' condition                                                     curly
+  131:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  132:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  133:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  134:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  135:1   error    Expected indentation of 4 spaces but found 8                                        indent
+  136:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  140:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  141:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  145:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  146:1   error    Expected indentation of 2 spaces but found 4                                        indent
+  147:1   error    Expected indentation of 2 spaces but found 4                                        indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\services\case-review-service.js
+  231:1   warning  Function 'formatCaseForReview' has a complexity of 43. Maximum allowed is 10  complexity
+  317:33  error    Expected '!==' and instead saw '!='                                           eqeqeq
+  417:15  error    Strings must use singlequote                                                  quotes
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\services\database.js
+   32:1   error  Trailing spaces not allowed  no-trailing-spaces
+   33:51  error  Trailing spaces not allowed  no-trailing-spaces
+   35:17  error  Trailing spaces not allowed  no-trailing-spaces
+   76:1   error  Trailing spaces not allowed  no-trailing-spaces
+   77:51  error  Trailing spaces not allowed  no-trailing-spaces
+   79:17  error  Trailing spaces not allowed  no-trailing-spaces
+  107:54  error  Trailing spaces not allowed  no-trailing-spaces
+  110:9   error  Trailing spaces not allowed  no-trailing-spaces
+  136:52  error  Trailing spaces not allowed  no-trailing-spaces
+  139:9   error  Trailing spaces not allowed  no-trailing-spaces
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\services\emailService.js
+   15:1  error    Expected indentation of 2 spaces but found 4           indent
+   16:1  error    Expected indentation of 2 spaces but found 4           indent
+   18:1  error    Expected indentation of 2 spaces but found 4           indent
+   29:1  error    Expected indentation of 2 spaces but found 4           indent
+   30:1  error    Expected indentation of 4 spaces but found 8           indent
+   31:1  error    Expected indentation of 6 spaces but found 12          indent
+   32:1  error    Expected indentation of 6 spaces but found 12          indent
+   33:1  error    Expected indentation of 6 spaces but found 12          indent
+   34:1  error    Expected indentation of 6 spaces but found 12          indent
+   35:1  error    Expected indentation of 4 spaces but found 8           indent
+   37:1  error    Expected indentation of 4 spaces but found 8           indent
+   38:1  error    Expected indentation of 6 spaces but found 12          indent
+   39:1  error    Expected indentation of 8 spaces but found 16          indent
+   40:1  error    Expected indentation of 8 spaces but found 16          indent
+   41:1  error    Expected indentation of 6 spaces but found 12          indent
+   42:1  error    Expected indentation of 6 spaces but found 12          indent
+   43:1  error    Expected indentation of 4 spaces but found 8           indent
+   45:1  error    Expected indentation of 4 spaces but found 8           indent
+   46:1  error    Expected indentation of 6 spaces but found 12          indent
+   47:1  error    Expected indentation of 6 spaces but found 12          indent
+   48:1  error    Expected indentation of 4 spaces but found 8           indent
+   50:1  error    Expected indentation of 4 spaces but found 8           indent
+   51:1  error    Expected indentation of 2 spaces but found 4           indent
+   52:1  error    Expected indentation of 4 spaces but found 8           indent
+   53:1  error    Expected indentation of 6 spaces but found 12          indent
+   54:1  error    Expected indentation of 6 spaces but found 12          indent
+   55:1  error    Expected indentation of 4 spaces but found 8           indent
+   56:1  error    Expected indentation of 4 spaces but found 8           indent
+   57:1  error    Expected indentation of 2 spaces but found 4           indent
+   67:1  error    Expected indentation of 2 spaces but found 4           indent
+   68:1  error    Expected indentation of 4 spaces but found 8           indent
+   70:1  error    Expected indentation of 4 spaces but found 8           indent
+   71:1  error    Expected indentation of 4 spaces but found 8           indent
+   72:1  error    Expected indentation of 6 spaces but found 12          indent
+   73:1  error    Expected indentation of 8 spaces but found 16          indent
+   74:1  error    Expected indentation of 8 spaces but found 16          indent
+   75:1  error    Expected indentation of 8 spaces but found 16          indent
+   76:1  error    Expected indentation of 6 spaces but found 12          indent
+   77:1  error    Expected indentation of 6 spaces but found 12          indent
+   78:1  error    Expected indentation of 4 spaces but found 8           indent
+   80:1  error    Expected indentation of 4 spaces but found 8           indent
+   81:1  error    Expected indentation of 4 spaces but found 8           indent
+   83:1  error    Expected indentation of 4 spaces but found 8           indent
+   84:1  error    Expected indentation of 6 spaces but found 12          indent
+   85:1  error    Expected indentation of 6 spaces but found 12          indent
+   86:1  error    Expected indentation of 6 spaces but found 12          indent
+   87:1  error    Expected indentation of 6 spaces but found 12          indent
+   88:1  error    Expected indentation of 6 spaces but found 12          indent
+   97:1  error    Expected indentation of 4 spaces but found 8           indent
+   99:1  error    Expected indentation of 4 spaces but found 8           indent
+  100:1  error    Expected indentation of 6 spaces but found 12          indent
+  101:1  error    Expected indentation of 8 spaces but found 16          indent
+  102:1  error    Expected indentation of 8 spaces but found 16          indent
+  103:1  error    Expected indentation of 6 spaces but found 12          indent
+  104:1  error    Expected indentation of 6 spaces but found 12          indent
+  105:1  error    Expected indentation of 4 spaces but found 8           indent
+  107:1  error    Expected indentation of 4 spaces but found 8           indent
+  108:1  error    Expected indentation of 6 spaces but found 12          indent
+  109:1  error    Expected indentation of 6 spaces but found 12          indent
+  110:1  error    Expected indentation of 4 spaces but found 8           indent
+  112:1  error    Expected indentation of 4 spaces but found 8           indent
+  113:1  error    Expected indentation of 2 spaces but found 4           indent
+  114:1  error    Expected indentation of 4 spaces but found 8           indent
+  115:1  error    Expected indentation of 6 spaces but found 12          indent
+  116:1  error    Expected indentation of 6 spaces but found 12          indent
+  117:1  error    Expected indentation of 4 spaces but found 8           indent
+  118:1  error    Expected indentation of 4 spaces but found 8           indent
+  119:1  error    Expected indentation of 2 spaces but found 4           indent
+  126:1  error    Expected indentation of 2 spaces but found 4           indent
+  134:1  warning  This line has a length of 153. Maximum allowed is 120  max-len
+  138:1  warning  This line has a length of 182. Maximum allowed is 120  max-len
+  142:1  warning  This line has a length of 139. Maximum allowed is 120  max-len
+  160:1  warning  This line has a length of 169. Maximum allowed is 120  max-len
+  164:1  warning  This line has a length of 123. Maximum allowed is 120  max-len
+  168:1  warning  This line has a length of 155. Maximum allowed is 120  max-len
+  169:1  warning  This line has a length of 164. Maximum allowed is 120  max-len
+  176:1  warning  This line has a length of 210. Maximum allowed is 120  max-len
+  183:1  warning  This line has a length of 291. Maximum allowed is 120  max-len
+  189:1  warning  This line has a length of 155. Maximum allowed is 120  max-len
+  191:1  warning  This line has a length of 190. Maximum allowed is 120  max-len
+  199:1  warning  This line has a length of 131. Maximum allowed is 120  max-len
+  207:1  warning  This line has a length of 193. Maximum allowed is 120  max-len
+  214:1  warning  This line has a length of 129. Maximum allowed is 120  max-len
+  237:1  error    Expected indentation of 2 spaces but found 4           indent
+  238:1  error    Expected indentation of 4 spaces but found 8           indent
+  239:1  error    Expected indentation of 6 spaces but found 12          indent
+  240:1  error    Expected indentation of 6 spaces but found 12          indent
+  241:1  error    Expected indentation of 6 spaces but found 12          indent
+  242:1  error    Expected indentation of 6 spaces but found 12          indent
+  249:1  error    Expected indentation of 4 spaces but found 8           indent
+  251:1  error    Expected indentation of 4 spaces but found 8           indent
+  252:1  error    Expected indentation of 6 spaces but found 12          indent
+  253:1  error    Expected indentation of 8 spaces but found 16          indent
+  254:1  error    Expected indentation of 8 spaces but found 16          indent
+  255:1  error    Expected indentation of 6 spaces but found 12          indent
+  256:1  error    Expected indentation of 6 spaces but found 12          indent
+  257:1  error    Expected indentation of 4 spaces but found 8           indent
+  259:1  error    Expected indentation of 4 spaces but found 8           indent
+  260:1  error    Expected indentation of 6 spaces but found 12          indent
+  261:1  error    Expected indentation of 6 spaces but found 12          indent
+  262:1  error    Expected indentation of 4 spaces but found 8           indent
+  264:1  error    Expected indentation of 4 spaces but found 8           indent
+  265:1  error    Expected indentation of 2 spaces but found 4           indent
+  266:1  error    Expected indentation of 4 spaces but found 8           indent
+  267:1  error    Expected indentation of 6 spaces but found 12          indent
+  268:1  error    Expected indentation of 6 spaces but found 12          indent
+  269:1  error    Expected indentation of 4 spaces but found 8           indent
+  270:1  error    Expected indentation of 4 spaces but found 8           indent
+  271:1  error    Expected indentation of 2 spaces but found 4           indent
+  279:1  error    Expected indentation of 2 spaces but found 4           indent
+  280:1  error    Expected indentation of 2 spaces but found 4           indent
+  281:1  error    Expected indentation of 2 spaces but found 4           indent
+  282:1  error    Expected indentation of 4 spaces but found 8           indent
+  283:1  error    Expected indentation of 2 spaces but found 4           indent
+  284:1  error    Expected indentation of 2 spaces but found 4           indent
+  288:1  error    Expected indentation of 2 spaces but found 4           indent
+  289:1  error    Expected indentation of 2 spaces but found 4           indent
+  290:1  error    Expected indentation of 2 spaces but found 4           indent
+  291:1  error    Expected indentation of 2 spaces but found 4           indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\services\freshnessService.js
+   16:1   error    Expected indentation of 2 spaces but found 4              indent
+   17:1   error    Expected indentation of 4 spaces but found 8              indent
+   18:1   error    Expected indentation of 6 spaces but found 12             indent
+   19:1   error    Expected indentation of 6 spaces but found 12             indent
+   20:1   error    Expected indentation of 6 spaces but found 12             indent
+   21:1   error    Expected indentation of 6 spaces but found 12             indent
+   23:1   error    Expected indentation of 4 spaces but found 8              indent
+   23:20  error    Expected { after 'if' condition                           curly
+   25:1   error    Expected indentation of 4 spaces but found 8              indent
+   26:1   error    Expected indentation of 4 spaces but found 8              indent
+   27:1   error    Expected indentation of 6 spaces but found 12             indent
+   28:1   error    Expected indentation of 4 spaces but found 8              indent
+   30:1   error    Expected indentation of 4 spaces but found 8              indent
+   31:1   error    Expected indentation of 4 spaces but found 8              indent
+   32:1   error    Expected indentation of 4 spaces but found 8              indent
+   34:1   error    Expected indentation of 4 spaces but found 8              indent
+   36:1   error    Expected indentation of 4 spaces but found 8              indent
+   37:1   error    Expected indentation of 4 spaces but found 8              indent
+   38:1   error    Expected indentation of 6 spaces but found 12             indent
+   39:1   error    Expected indentation of 4 spaces but found 8              indent
+   40:1   error    Expected indentation of 6 spaces but found 12             indent
+   41:1   error    Expected indentation of 4 spaces but found 8              indent
+   42:1   error    Expected indentation of 6 spaces but found 12             indent
+   43:1   error    Expected indentation of 4 spaces but found 8              indent
+   44:1   error    Expected indentation of 6 spaces but found 12             indent
+   45:1   error    Expected indentation of 4 spaces but found 8              indent
+   47:1   error    Expected indentation of 4 spaces but found 8              indent
+   48:1   error    Expected indentation of 4 spaces but found 8              indent
+   49:1   error    Expected indentation of 6 spaces but found 12             indent
+   50:1   error    Expected indentation of 8 spaces but found 16             indent
+   51:1   error    Expected indentation of 8 spaces but found 16             indent
+   52:1   error    Expected indentation of 8 spaces but found 16             indent
+   54:1   error    Expected indentation of 6 spaces but found 12             indent
+   55:1   error    Expected indentation of 4 spaces but found 8              indent
+   57:1   error    Expected indentation of 4 spaces but found 8              indent
+   59:1   error    Expected indentation of 2 spaces but found 4              indent
+   60:1   error    Expected indentation of 4 spaces but found 8              indent
+   61:1   error    Expected indentation of 4 spaces but found 8              indent
+   62:1   error    Expected indentation of 2 spaces but found 4              indent
+   71:1   error    Expected indentation of 2 spaces but found 4              indent
+   72:1   error    Expected indentation of 4 spaces but found 8              indent
+   73:1   error    Expected indentation of 6 spaces but found 12             indent
+   74:1   error    Expected indentation of 6 spaces but found 12             indent
+   75:1   error    Expected indentation of 6 spaces but found 12             indent
+   76:1   error    Expected indentation of 6 spaces but found 12             indent
+   78:1   error    Expected indentation of 4 spaces but found 8              indent
+   78:20  error    Expected { after 'if' condition                           curly
+   80:1   error    Expected indentation of 4 spaces but found 8              indent
+   81:1   error    Expected indentation of 4 spaces but found 8              indent
+   83:1   error    Expected indentation of 4 spaces but found 8              indent
+   84:1   error    Expected indentation of 4 spaces but found 8              indent
+   85:1   error    Expected indentation of 6 spaces but found 12             indent
+   86:1   error    Expected indentation of 4 spaces but found 8              indent
+   88:1   error    Expected indentation of 4 spaces but found 8              indent
+   89:1   error    Expected indentation of 4 spaces but found 8              indent
+   89:13  error    'newMultiplier' is never reassigned. Use 'const' instead  prefer-const
+   91:1   error    Expected indentation of 4 spaces but found 8              indent
+   92:1   error    Expected indentation of 6 spaces but found 12             indent
+   93:1   error    Expected indentation of 6 spaces but found 12             indent
+   94:1   error    Expected indentation of 8 spaces but found 16             indent
+   95:1   error    Expected indentation of 8 spaces but found 16             indent
+   96:1   error    Expected indentation of 6 spaces but found 12             indent
+   97:1   error    Expected indentation of 6 spaces but found 12             indent
+   99:1   error    Expected indentation of 4 spaces but found 8              indent
+  101:1   error    Expected indentation of 4 spaces but found 8              indent
+  103:1   error    Expected indentation of 2 spaces but found 4              indent
+  104:1   error    Expected indentation of 4 spaces but found 8              indent
+  105:1   error    Expected indentation of 4 spaces but found 8              indent
+  106:1   error    Expected indentation of 2 spaces but found 4              indent
+  115:1   error    Expected indentation of 2 spaces but found 4              indent
+  116:1   error    Expected indentation of 4 spaces but found 8              indent
+  117:1   error    Expected indentation of 6 spaces but found 12             indent
+  118:1   error    Expected indentation of 6 spaces but found 12             indent
+  119:1   error    Expected indentation of 6 spaces but found 12             indent
+  120:1   error    Expected indentation of 6 spaces but found 12             indent
+  121:1   error    Expected indentation of 6 spaces but found 12             indent
+  122:1   error    Expected indentation of 4 spaces but found 8              indent
+  123:1   error    Expected indentation of 2 spaces but found 4              indent
+  124:1   error    Expected indentation of 4 spaces but found 8              indent
+  125:1   error    Expected indentation of 6 spaces but found 12             indent
+  126:1   error    Expected indentation of 6 spaces but found 12             indent
+  127:1   error    Expected indentation of 6 spaces but found 12             indent
+  128:1   error    Expected indentation of 6 spaces but found 12             indent
+  129:1   warning  This line has a length of 122. Maximum allowed is 120     max-len
+  129:1   error    Expected indentation of 6 spaces but found 12             indent
+  130:1   error    Expected indentation of 4 spaces but found 8              indent
+  131:1   error    Expected indentation of 2 spaces but found 4              indent
+  132:1   error    Expected indentation of 4 spaces but found 8              indent
+  133:1   error    Expected indentation of 6 spaces but found 12             indent
+  134:1   error    Expected indentation of 6 spaces but found 12             indent
+  135:1   error    Expected indentation of 6 spaces but found 12             indent
+  136:1   error    Expected indentation of 6 spaces but found 12             indent
+  137:1   error    Expected indentation of 6 spaces but found 12             indent
+  138:1   error    Expected indentation of 4 spaces but found 8              indent
+  139:1   error    Expected indentation of 2 spaces but found 4              indent
+  140:1   error    Expected indentation of 4 spaces but found 8              indent
+  141:1   error    Expected indentation of 6 spaces but found 12             indent
+  142:1   error    Expected indentation of 6 spaces but found 12             indent
+  143:1   error    Expected indentation of 6 spaces but found 12             indent
+  144:1   error    Expected indentation of 6 spaces but found 12             indent
+  145:1   error    Expected indentation of 6 spaces but found 12             indent
+  146:1   error    Expected indentation of 4 spaces but found 8              indent
+  147:1   error    Expected indentation of 2 spaces but found 4              indent
+  157:1   error    Expected indentation of 2 spaces but found 4              indent
+  158:1   error    Expected indentation of 4 spaces but found 8              indent
+  159:1   error    Expected indentation of 4 spaces but found 8              indent
+  161:1   error    Expected indentation of 4 spaces but found 8              indent
+  162:1   error    Expected indentation of 4 spaces but found 8              indent
+  164:1   error    Expected indentation of 4 spaces but found 8              indent
+  166:1   error    Expected indentation of 4 spaces but found 8              indent
+  168:1   error    Expected indentation of 2 spaces but found 4              indent
+  169:1   error    Expected indentation of 4 spaces but found 8              indent
+  170:1   error    Expected indentation of 4 spaces but found 8              indent
+  171:1   error    Expected indentation of 2 spaces but found 4              indent
+  175:1   error    Expected indentation of 2 spaces but found 4              indent
+  176:1   error    Expected indentation of 2 spaces but found 4              indent
+  177:1   error    Expected indentation of 2 spaces but found 4              indent
+  178:1   error    Expected indentation of 2 spaces but found 4              indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\services\iccService.js
+  14:1   error  Expected indentation of 2 spaces but found 4   indent
+  15:1   error  Expected indentation of 4 spaces but found 8   indent
+  15:17  error  'data' is assigned a value but never used      no-unused-vars
+  16:1   error  Expected indentation of 6 spaces but found 12  indent
+  17:1   error  Expected indentation of 4 spaces but found 8   indent
+  19:1   error  Expected indentation of 4 spaces but found 8   indent
+  20:1   error  Expected indentation of 6 spaces but found 12  indent
+  21:1   error  Expected indentation of 6 spaces but found 12  indent
+  22:1   error  Expected indentation of 4 spaces but found 8   indent
+  24:1   error  Expected indentation of 4 spaces but found 8   indent
+  25:1   error  Expected indentation of 6 spaces but found 12  indent
+  26:1   error  Expected indentation of 6 spaces but found 12  indent
+  27:1   error  Expected indentation of 6 spaces but found 12  indent
+  28:1   error  Expected indentation of 6 spaces but found 12  indent
+  30:1   error  Expected indentation of 4 spaces but found 8   indent
+  31:1   error  Expected indentation of 4 spaces but found 8   indent
+  32:1   error  Expected indentation of 2 spaces but found 4   indent
+  33:1   error  Expected indentation of 4 spaces but found 8   indent
+  34:1   error  Expected indentation of 4 spaces but found 8   indent
+  35:1   error  Expected indentation of 2 spaces but found 4   indent
+  42:1   error  Expected indentation of 2 spaces but found 4   indent
+  42:25  error  Expected { after 'if' condition                curly
+  43:1   error  Expected indentation of 2 spaces but found 4   indent
+  43:25  error  Expected { after 'if' condition                curly
+  44:1   error  Expected indentation of 2 spaces but found 4   indent
+  44:25  error  Expected { after 'if' condition                curly
+  45:1   error  Expected indentation of 2 spaces but found 4   indent
+  45:25  error  Expected { after 'if' condition                curly
+  46:1   error  Expected indentation of 2 spaces but found 4   indent
+  46:25  error  Expected { after 'if' condition                curly
+  47:1   error  Expected indentation of 2 spaces but found 4   indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\services\missionService.js
+   12:1   error    Expected indentation of 2 spaces but found 4           indent
+   17:1   error    Expected indentation of 2 spaces but found 4           indent
+   18:1   error    Expected indentation of 2 spaces but found 4           indent
+   19:1   error    Expected indentation of 2 spaces but found 4           indent
+   20:1   error    Expected indentation of 2 spaces but found 4           indent
+   21:1   error    Expected indentation of 2 spaces but found 4           indent
+   22:1   error    Expected indentation of 2 spaces but found 4           indent
+   23:1   error    Expected indentation of 2 spaces but found 4           indent
+   24:1   error    Expected indentation of 2 spaces but found 4           indent
+   26:1   error    Expected indentation of 2 spaces but found 4           indent
+   27:1   error    Expected indentation of 2 spaces but found 4           indent
+   28:1   error    Expected indentation of 2 spaces but found 4           indent
+   29:1   error    Expected indentation of 2 spaces but found 4           indent
+   30:1   error    Expected indentation of 2 spaces but found 4           indent
+   31:1   error    Expected indentation of 2 spaces but found 4           indent
+   32:1   error    Expected indentation of 2 spaces but found 4           indent
+   33:1   error    Expected indentation of 2 spaces but found 4           indent
+   35:1   error    Expected indentation of 2 spaces but found 4           indent
+   36:1   error    Expected indentation of 2 spaces but found 4           indent
+   37:1   error    Expected indentation of 2 spaces but found 4           indent
+   38:1   error    Expected indentation of 2 spaces but found 4           indent
+   39:1   error    Expected indentation of 2 spaces but found 4           indent
+   40:1   error    Expected indentation of 2 spaces but found 4           indent
+   41:1   error    Expected indentation of 2 spaces but found 4           indent
+   48:1   error    Expected indentation of 2 spaces but found 4           indent
+   50:1   error    Expected indentation of 2 spaces but found 4           indent
+   51:1   error    Expected indentation of 2 spaces but found 4           indent
+   52:1   error    Expected indentation of 4 spaces but found 8           indent
+   53:1   error    Expected indentation of 4 spaces but found 8           indent
+   54:1   error    Expected indentation of 4 spaces but found 8           indent
+   55:1   error    Expected indentation of 4 spaces but found 8           indent
+   57:1   error    Expected indentation of 2 spaces but found 4           indent
+   58:1   error    Expected indentation of 4 spaces but found 8           indent
+   59:1   error    Expected indentation of 2 spaces but found 4           indent
+   61:1   error    Expected indentation of 2 spaces but found 4           indent
+   62:1   error    Expected indentation of 4 spaces but found 8           indent
+   63:1   error    Expected indentation of 2 spaces but found 4           indent
+   65:1   error    Expected indentation of 2 spaces but found 4           indent
+   67:1   error    Expected indentation of 2 spaces but found 4           indent
+   68:1   error    Expected indentation of 2 spaces but found 4           indent
+   69:1   error    Expected indentation of 2 spaces but found 4           indent
+   71:1   error    Expected indentation of 2 spaces but found 4           indent
+   72:1   error    Expected indentation of 2 spaces but found 4           indent
+   73:1   error    Expected indentation of 2 spaces but found 4           indent
+   75:1   error    Expected indentation of 2 spaces but found 4           indent
+   76:1   error    Expected indentation of 2 spaces but found 4           indent
+   78:1   error    Expected indentation of 2 spaces but found 4           indent
+   79:1   error    Expected indentation of 2 spaces but found 4           indent
+   80:1   error    Expected indentation of 2 spaces but found 4           indent
+   81:1   error    Expected indentation of 2 spaces but found 4           indent
+   83:1   error    Expected indentation of 2 spaces but found 4           indent
+   84:1   error    Expected indentation of 2 spaces but found 4           indent
+   85:1   error    Expected indentation of 2 spaces but found 4           indent
+   85:39  error    Expected { after 'if' condition                        curly
+   86:1   error    Expected indentation of 2 spaces but found 4           indent
+   87:1   error    Expected indentation of 2 spaces but found 4           indent
+   88:1   error    Expected indentation of 2 spaces but found 4           indent
+   90:1   error    Expected indentation of 2 spaces but found 4           indent
+   91:1   error    Expected indentation of 2 spaces but found 4           indent
+   92:1   error    Expected indentation of 2 spaces but found 4           indent
+   92:37  error    Expected { after 'if' condition                        curly
+   93:1   error    Expected indentation of 2 spaces but found 4           indent
+   94:1   error    Expected indentation of 2 spaces but found 4           indent
+   96:1   error    Expected indentation of 2 spaces but found 4           indent
+   98:1   error    Expected indentation of 2 spaces but found 4           indent
+  100:1   error    Expected indentation of 2 spaces but found 4           indent
+  101:1   error    Expected indentation of 4 spaces but found 8           indent
+  102:1   error    Expected indentation of 6 spaces but found 12          indent
+  103:1   error    Expected indentation of 6 spaces but found 12          indent
+  104:1   error    Expected indentation of 6 spaces but found 12          indent
+  105:1   error    Expected indentation of 6 spaces but found 12          indent
+  106:1   error    Expected indentation of 6 spaces but found 12          indent
+  107:1   error    Expected indentation of 6 spaces but found 12          indent
+  108:1   error    Expected indentation of 6 spaces but found 12          indent
+  109:1   error    Expected indentation of 6 spaces but found 12          indent
+  110:1   error    Expected indentation of 4 spaces but found 8           indent
+  112:1   error    Expected indentation of 4 spaces but found 8           indent
+  113:1   error    Expected indentation of 6 spaces but found 12          indent
+  114:1   error    Expected indentation of 6 spaces but found 12          indent
+  115:1   error    Expected indentation of 4 spaces but found 8           indent
+  116:1   error    Expected indentation of 6 spaces but found 12          indent
+  117:1   error    Expected indentation of 4 spaces but found 8           indent
+  118:1   error    Expected indentation of 2 spaces but found 4           indent
+  120:1   error    Expected indentation of 2 spaces but found 4           indent
+  125:26  error    Trailing spaces not allowed                            no-trailing-spaces
+  130:1   error    Expected indentation of 2 spaces but found 4           indent
+  132:1   error    Expected indentation of 2 spaces but found 4           indent
+  133:1   error    Expected indentation of 2 spaces but found 4           indent
+  134:1   error    Expected indentation of 4 spaces but found 8           indent
+  135:1   error    Expected indentation of 4 spaces but found 8           indent
+  136:1   error    Expected indentation of 4 spaces but found 8           indent
+  137:1   error    Expected indentation of 4 spaces but found 8           indent
+  138:1   error    Expected indentation of 4 spaces but found 8           indent
+  139:1   error    Expected indentation of 4 spaces but found 8           indent
+  141:1   error    Expected indentation of 2 spaces but found 4           indent
+  141:54  error    Expected { after 'if' condition                        curly
+  143:1   error    Expected indentation of 2 spaces but found 4           indent
+  145:1   error    Expected indentation of 2 spaces but found 4           indent
+  146:1   error    Expected indentation of 4 spaces but found 8           indent
+  147:1   error    Expected indentation of 4 spaces but found 8           indent
+  148:1   error    Expected indentation of 4 spaces but found 8           indent
+  149:1   error    Expected indentation of 4 spaces but found 8           indent
+  150:1   error    Expected indentation of 4 spaces but found 8           indent
+  152:1   error    Expected indentation of 4 spaces but found 8           indent
+  152:50  error    Expected { after 'if' condition                        curly
+  154:1   error    Expected indentation of 4 spaces but found 8           indent
+  155:1   error    Expected indentation of 4 spaces but found 8           indent
+  157:1   error    Expected indentation of 4 spaces but found 8           indent
+  158:1   error    Expected indentation of 4 spaces but found 8           indent
+  159:1   error    Expected indentation of 6 spaces but found 12          indent
+  160:1   error    Expected indentation of 6 spaces but found 12          indent
+  161:1   error    Expected indentation of 6 spaces but found 12          indent
+  162:1   error    Expected indentation of 4 spaces but found 8           indent
+  164:1   error    Expected indentation of 4 spaces but found 8           indent
+  165:1   error    Expected indentation of 6 spaces but found 12          indent
+  166:1   error    Expected indentation of 6 spaces but found 12          indent
+  168:1   error    Expected indentation of 6 spaces but found 12          indent
+  169:1   error    Expected indentation of 8 spaces but found 16          indent
+  170:1   error    Expected indentation of 8 spaces but found 16          indent
+  171:1   error    Expected indentation of 6 spaces but found 12          indent
+  172:1   error    Expected indentation of 4 spaces but found 8           indent
+  173:1   error    Expected indentation of 2 spaces but found 4           indent
+  175:1   error    Expected indentation of 2 spaces but found 4           indent
+  179:1   error    Expected indentation of 2 spaces but found 4           indent
+  180:1   error    Expected indentation of 2 spaces but found 4           indent
+  181:1   error    Expected indentation of 2 spaces but found 4           indent
+  181:39  error    Expected { after 'if' condition                        curly
+  183:1   error    Expected indentation of 2 spaces but found 4           indent
+  184:1   error    Expected indentation of 2 spaces but found 4           indent
+  185:1   error    Expected indentation of 2 spaces but found 4           indent
+  186:1   error    Expected indentation of 2 spaces but found 4           indent
+  188:1   error    Expected indentation of 2 spaces but found 4           indent
+  188:7   error    Trailing spaces not allowed                            no-trailing-spaces
+  191:1   error    Trailing spaces not allowed                            no-trailing-spaces
+  194:1   error    Trailing spaces not allowed                            no-trailing-spaces
+  198:1   warning  This line has a length of 156. Maximum allowed is 120  max-len
+  198:1   error    Expected indentation of 2 spaces but found 4           indent
+  200:1   error    Expected indentation of 2 spaces but found 4           indent
+  201:1   error    Expected indentation of 2 spaces but found 4           indent
+  202:1   error    Expected indentation of 4 spaces but found 8           indent
+  203:1   error    Expected indentation of 4 spaces but found 8           indent
+  204:1   error    Expected indentation of 4 spaces but found 8           indent
+  205:1   error    Expected indentation of 4 spaces but found 8           indent
+  206:1   error    Expected indentation of 4 spaces but found 8           indent
+  207:1   error    Expected indentation of 4 spaces but found 8           indent
+  208:1   error    Expected indentation of 2 spaces but found 4           indent
+  210:1   error    Expected indentation of 2 spaces but found 4           indent
+  214:1   error    Expected indentation of 2 spaces but found 4           indent
+  215:1   error    Expected indentation of 2 spaces but found 4           indent
+  217:1   error    Expected indentation of 2 spaces but found 4           indent
+  218:1   error    Expected indentation of 2 spaces but found 4           indent
+  219:1   error    Expected indentation of 2 spaces but found 4           indent
+  220:1   error    Expected indentation of 4 spaces but found 8           indent
+  221:1   error    Expected indentation of 4 spaces but found 8           indent
+  222:1   error    Expected indentation of 4 spaces but found 8           indent
+  223:1   error    Expected indentation of 4 spaces but found 8           indent
+  224:1   error    Expected indentation of 4 spaces but found 8           indent
+  226:1   error    Expected indentation of 2 spaces but found 4           indent
+  230:1   error    Expected indentation of 2 spaces but found 4           indent
+  231:1   error    Expected indentation of 2 spaces but found 4           indent
+  232:1   error    Expected indentation of 2 spaces but found 4           indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\services\openai-service.js
+    3:3   error    Trailing spaces not allowed                                                   no-trailing-spaces
+    6:3   error    Trailing spaces not allowed                                                   no-trailing-spaces
+   43:3   error    Trailing spaces not allowed                                                   no-trailing-spaces
+   78:11  error    'savedConversation' is assigned a value but never used                        no-unused-vars
+   79:1   error    Trailing spaces not allowed                                                   no-trailing-spaces
+   90:3   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  102:39  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  103:16  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  104:21  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  106:13  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  132:11  error    'response' is assigned a value but never used                                 no-unused-vars
+  167:53  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  168:18  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  169:41  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  175:46  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  176:28  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  177:16  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  179:25  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  187:3   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  193:1   warning  Async function 'pollRunStatus' has a complexity of 13. Maximum allowed is 10  complexity
+  200:1   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  201:43  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  202:15  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  203:28  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  204:30  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  223:1   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  225:25  error    Expected { after 'if' condition                                               curly
+  226:31  error    Expected { after 'if' condition                                               curly
+  227:31  error    Expected { after 'if' condition                                               curly
+  228:12  error    Expected { after 'else'                                                       curly
+  236:1   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  237:40  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  238:30  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  239:30  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  241:1   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  253:3   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  297:3   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  312:50  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  313:16  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  315:24  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  321:1   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  323:1   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  329:1   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  336:46  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  337:29  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  338:32  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  356:69  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  357:26  error    Trailing spaces not allowed                                                   no-trailing-spaces
+  359:1   error    Trailing spaces not allowed                                                   no-trailing-spaces
+  399:40  error    'tokensUsed' is defined but never used. Allowed unused args must match /^_/u  no-unused-vars
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\services\streakService.js
+   15:1   error    Expected indentation of 2 spaces but found 4                                         indent
+   22:1   error    Expected indentation of 2 spaces but found 4                                         indent
+   23:1   error    Expected indentation of 2 spaces but found 4                                         indent
+   24:1   error    Expected indentation of 2 spaces but found 4                                         indent
+   25:1   error    Expected indentation of 2 spaces but found 4                                         indent
+   33:1   warning  Async function 'checkAndUpdateStreak' has a complexity of 16. Maximum allowed is 10  complexity
+   33:45  error    'activityType' is assigned a value but never used                                    no-unused-vars
+   34:1   error    Expected indentation of 2 spaces but found 4                                         indent
+   35:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   36:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   37:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   37:43  error    Expected { after 'if' condition                                                      curly
+   39:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   40:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   42:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   43:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   44:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   46:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   47:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   48:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   50:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   51:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   52:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   53:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   54:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   55:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   56:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   57:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   59:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   60:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   61:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   62:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   64:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   65:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   66:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   67:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   68:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   69:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   71:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   72:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   73:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   74:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   75:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   76:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   77:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   78:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   79:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   80:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   81:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   82:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   84:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   85:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   86:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   87:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   89:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   90:1   error    Expected indentation of 4 spaces but found 8                                         indent
+   91:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   92:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   93:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   94:1   error    Expected indentation of 8 spaces but found 16                                        indent
+   95:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   97:1   error    Expected indentation of 6 spaces but found 12                                        indent
+   99:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  100:1   error    Expected indentation of 8 spaces but found 16                                        indent
+  101:1   error    Expected indentation of 8 spaces but found 16                                        indent
+  102:1   error    Expected indentation of 8 spaces but found 16                                        indent
+  103:1   error    Expected indentation of 8 spaces but found 16                                        indent
+  104:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  106:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  107:1   error    Expected indentation of 8 spaces but found 16                                        indent
+  108:1   error    Expected indentation of 8 spaces but found 16                                        indent
+  109:1   error    Expected indentation of 8 spaces but found 16                                        indent
+  110:1   error    Expected indentation of 8 spaces but found 16                                        indent
+  111:1   error    Expected indentation of 8 spaces but found 16                                        indent
+  112:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  113:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  115:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  117:1   error    Expected indentation of 2 spaces but found 4                                         indent
+  118:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  119:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  120:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  121:1   error    Expected indentation of 2 spaces but found 4                                         indent
+  128:1   error    Expected indentation of 2 spaces but found 4                                         indent
+  129:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  130:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  130:43  error    Expected { after 'if' condition                                                      curly
+  132:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  133:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  134:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  136:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  137:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  138:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  140:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  141:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  142:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  143:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  143:13  error    'isFrozen' is assigned a value but never used                                        no-unused-vars
+  143:13  error    'isFrozen' is never reassigned. Use 'const' instead                                  prefer-const
+  145:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  146:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  147:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  148:1   error    Expected indentation of 8 spaces but found 16                                        indent
+  149:1   error    Expected indentation of 8 spaces but found 16                                        indent
+  150:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  151:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  152:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  153:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  155:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  156:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  157:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  158:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  159:1   error    Expected indentation of 6 spaces but found 12                                        indent
+  160:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  162:1   error    Expected indentation of 2 spaces but found 4                                         indent
+  163:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  164:1   error    Expected indentation of 4 spaces but found 8                                         indent
+  165:1   error    Expected indentation of 2 spaces but found 4                                         indent
+  169:1   error    Expected indentation of 2 spaces but found 4                                         indent
+  170:1   error    Expected indentation of 2 spaces but found 4                                         indent
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\socket\chatHandler.js
+   23:1   error  Trailing spaces not allowed  no-trailing-spaces
+   28:1   error  Trailing spaces not allowed  no-trailing-spaces
+   36:1   error  Trailing spaces not allowed  no-trailing-spaces
+   37:56  error  Trailing spaces not allowed  no-trailing-spaces
+   39:28  error  Trailing spaces not allowed  no-trailing-spaces
+   41:1   error  Trailing spaces not allowed  no-trailing-spaces
+   51:1   error  Trailing spaces not allowed  no-trailing-spaces
+   53:1   error  Trailing spaces not allowed  no-trailing-spaces
+   56:1   error  Trailing spaces not allowed  no-trailing-spaces
+  243:1   error  Trailing spaces not allowed  no-trailing-spaces
+
+D:\projetos.vscode\SCOPSY-CLAUDE-CODE\src\utils\validators.js
+  115:23  error  Unexpected trailing comma  comma-dangle
+
+✖ 1829 problems (1774 errors, 55 warnings)
+  1749 errors and 0 warnings potentially fixable with the `--fix` option.
+

@@ -29,10 +29,10 @@ async function saveToBoostspace(collection, data) {
     console.error('🔍 ERRO DETALHADO SUPABASE (SAVE):');
     console.error('Message:', error.message);
     console.error('Full error:', error);
-    
-    logger.error('❌ Erro ao salvar no Supabase', { 
+
+    logger.error('❌ Erro ao salvar no Supabase', {
       error: error.message,
-      collection 
+      collection
     });
     throw new Error(`Falha ao salvar: ${error.message}`);
   }
@@ -73,10 +73,10 @@ async function getFromBoostspace(collection, filters = {}) {
     console.error('🔍 ERRO DETALHADO SUPABASE (GET):');
     console.error('Message:', error.message);
     console.error('Full error:', error);
-    
-    logger.error('❌ Erro ao buscar no Supabase', { 
+
+    logger.error('❌ Erro ao buscar no Supabase', {
       error: error.message,
-      collection 
+      collection
     });
     throw new Error(`Falha ao buscar: ${error.message}`);
   }
@@ -104,10 +104,10 @@ async function updateInBoostspace(collection, id, data) {
     return result;
 
   } catch (error) {
-    logger.error('❌ Erro ao atualizar no Supabase', { 
+    logger.error('❌ Erro ao atualizar no Supabase', {
       error: error.message,
       collection,
-      id 
+      id
     });
     throw new Error(`Falha ao atualizar: ${error.message}`);
   }
@@ -133,10 +133,10 @@ async function deleteFromBoostspace(collection, id) {
     return { success: true };
 
   } catch (error) {
-    logger.error('❌ Erro ao deletar do Supabase', { 
+    logger.error('❌ Erro ao deletar do Supabase', {
       error: error.message,
       collection,
-      id 
+      id
     });
     throw new Error(`Falha ao deletar: ${error.message}`);
   }

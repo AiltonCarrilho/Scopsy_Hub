@@ -30,24 +30,24 @@ const server = http.createServer(app);
 // ========================================
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? [
-      'https://www.scopsy.com.br',
-      'https://scopsy.com.br',
-      'https://app.scopsy.com.br',
-      process.env.FRONTEND_URL,
-      /https:\/\/.*\.vercel\.app$/  // preview deployments
-    ].filter(Boolean)
+    'https://www.scopsy.com.br',
+    'https://scopsy.com.br',
+    'https://app.scopsy.com.br',
+    process.env.FRONTEND_URL,
+    /https:\/\/.*\.vercel\.app$/  // preview deployments
+  ].filter(Boolean)
   : [
-      'http://localhost:3000',
-      'http://localhost:5500',  // VSCode Live Server
-      'http://localhost:5502',  // VSCode Live Server (alternative port)
-      'http://localhost:5173',  // Vite
-      'http://localhost:8080',  // Webpack
-      'http://127.0.0.1:3000',
-      'http://127.0.0.1:5500',
-      'http://127.0.0.1:5502',
-      'http://127.0.0.1:5173',
-      process.env.FRONTEND_URL
-    ].filter(Boolean);
+    'http://localhost:3000',
+    'http://localhost:5500',  // VSCode Live Server
+    'http://localhost:5502',  // VSCode Live Server (alternative port)
+    'http://localhost:5173',  // Vite
+    'http://localhost:8080',  // Webpack
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:5500',
+    'http://127.0.0.1:5502',
+    'http://127.0.0.1:5173',
+    process.env.FRONTEND_URL
+  ].filter(Boolean);
 
 const io = socketIo(server, {
   cors: {
@@ -86,8 +86,12 @@ app.use(cors({
 
     // Verificar se origin está na lista (suporta strings e regex)
     const isAllowed = allowedOrigins.some(allowed => {
-      if (typeof allowed === 'string') return allowed === origin;
-      if (allowed instanceof RegExp) return allowed.test(origin);
+      if (typeof allowed === 'string') {
+        return allowed === origin;
+      }
+      if (allowed instanceof RegExp) {
+        return allowed.test(origin);
+      }
       return false;
     });
 
@@ -163,7 +167,7 @@ app.use('/api/webhooks', webhookLimiter, webhooksRoutes);
 // ========================================
 // 4. HEALTH CHECK (Keep-Alive Supabase)
 // ========================================
-// ⚠️ IMPORTANTE: Este endpoint faz ping no Supabase para evitar 
+// ⚠️ IMPORTANTE: Este endpoint faz ping no Supabase para evitar
 // que o projeto seja pausado após 7 dias de inatividade.
 // Configure UptimeRobot ou similar para chamar /api/health a cada 5 min
 app.use('/api/health', healthRoutes);
@@ -199,7 +203,7 @@ app.set('io', io);
 // ========================================
 // 6. TRATAMENTO DE ERROS
 // ========================================
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   logger.error('Erro não tratado', { message: err.message, stack: err.stack, path: req.path });
   res.status(500).json({
     error: 'Erro interno do servidor',
@@ -213,7 +217,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   logger.info(`🚀 Servidor rodando na porta ${PORT}`);
-  logger.info(`✅ Supabase client initialized`);
+  logger.info('✅ Supabase client initialized');
   logger.info(`📡 Health check: http://localhost:${PORT}/health`);
 });
 
@@ -224,6 +228,7 @@ process.on('SIGTERM', () => {
   logger.info('👋 SIGTERM recebido, fechando servidor...');
   server.close(() => {
     logger.info('✅ Servidor encerrado com segurança');
+    // eslint-disable-next-line no-process-exit
     process.exit(0);
   });
 });

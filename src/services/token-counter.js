@@ -26,7 +26,7 @@ function estimateTokens(text) {
  * @param {number} tokensUsed - Tokens gastos nesta interação
  * @returns {Promise<void>}
  */
-async function updateUserStats(userId, tokensUsed) {
+async function updateUserStats(userId, _tokensUsed) {
   try {
     const stats = await getFromBoostspace('user_stats', { user_id: userId });
 

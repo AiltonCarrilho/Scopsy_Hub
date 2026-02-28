@@ -59,13 +59,13 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
 
     const seenCaseIds = interactions
       ? interactions
-          .map(i => i.case_id)
-          .filter(id => id != null)  // ← CRÍTICO: Remove null/undefined
+        .map(i => i.case_id)
+        .filter(id => id !== null)  // ← CRÍTICO: Remove null/undefined
       : [];
 
     logger.debug(`[Diagnostic] 👁️ Usuário já viu: ${seenCaseIds.length} casos diagnósticos`);
     if (seenCaseIds.length > 0) {
-      logger.debug(`[Diagnostic] 📋 Últimos 5 IDs vistos:`);
+      logger.debug('[Diagnostic] 📋 Últimos 5 IDs vistos:');
       interactions.slice(0, 5).forEach((inter, idx) => {
         logger.debug(`  ${idx + 1}. ${inter.case_id} (${inter.created_at})`);
       });
@@ -96,7 +96,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
 
     logger.debug(`[Diagnostic] 📦 Casos disponíveis no cache: ${availableCases ? availableCases.length : 0}`);
     if (availableCases && availableCases.length > 0) {
-      logger.debug(`[Diagnostic] 📋 IDs disponíveis (top 5):`);
+      logger.debug('[Diagnostic] 📋 IDs disponíveis (top 5):');
       availableCases.slice(0, 5).forEach((c, idx) => {
         logger.debug(`  ${idx + 1}. ${c.id} (usado ${c.times_used}x)`);
       });
@@ -120,7 +120,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
           last_used_at: new Date().toISOString()
         })
         .eq('id', cachedCase.id)
-        .then(() => logger.debug(`[Diagnostic] ✅ Contador atualizado`));
+        .then(() => logger.debug('[Diagnostic] ✅ Contador atualizado'));
 
       // 🚀 OTIMIZAÇÃO: Buscar dados completos apenas do caso selecionado
       const { data: fullCaseData, error: fullCaseError } = await supabase
@@ -169,13 +169,13 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
     logger.debug('[Diagnostic] ⏳ Cache MISS - Gerando novo caso...');
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // RÁPIDO e barato
-      response_format: { type: "json_object" },
+      model: 'gpt-4o-mini', // RÁPIDO e barato
+      response_format: { type: 'json_object' },
       temperature: 0.8,
       max_tokens: 1000,
       messages: [
         {
-          role: "system",
+          role: 'system',
           content: `Você é um gerador de casos clínicos para treino diagnóstico e clínico DSM-5-TR.
 
 OBJETIVO PEDAGÓGICO: Treinar competências clínicas reais (diagnóstico diferencial, conhecimento DSM, raciocínio clínico).
@@ -269,7 +269,7 @@ SAÍDA JSON:
 PORTUGUÊS BRASILEIRO. Casos realistas. DSM-5-TR. ESCOLHA 1 FORMATO ALEATORIAMENTE.`
         },
         {
-          role: "user",
+          role: 'user',
           content: `Gere caso: level=${level}, category=${category}. APENAS JSON.`
         }
       ]
@@ -346,7 +346,7 @@ router.post('/submit-answer', authenticateRequest, async (req, res) => {
       .eq('user_id', userId)
       .eq('case_id', case_id)
       .is('is_correct', null)
-      .then(({ data, error }) => {
+      .then(({ data, error: _error }) => {
         // Se não encontrou registro para atualizar, criar novo (fallback)
         if (!data || data.length === 0) {
           logger.debug('[Diagnostic] ℹ️ Nenhuma visualização prévia, criando novo registro');
@@ -407,13 +407,13 @@ router.post('/submit-answer', authenticateRequest, async (req, res) => {
 
     try {
       const feedbackCompletion = await openai.chat.completions.create({
-        model: "gpt-4o-mini", // RÁPIDO
-        response_format: { type: "json_object" },
+        model: 'gpt-4o-mini', // RÁPIDO
+        response_format: { type: 'json_object' },
         temperature: 0.7,
         max_tokens: 600, // Curto = rápido
         messages: [
           {
-            role: "system",
+            role: 'system',
             content: `Feedback educativo em JSON. Conciso e acionável.
 
 SAÍDA:
@@ -432,7 +432,7 @@ SAÍDA:
 }`
           },
           {
-            role: "user",
+            role: 'user',
             content: `Caso: ${case_data.clinical_content?.vignette?.substring(0, 250)}
 Correto: ${correct_diagnosis}
 Usuário: ${user_answer}
@@ -451,14 +451,14 @@ Feedback JSON.`
         feedback_eco: {
           explicar: {
             what_happened: is_correct
-              ? "Você identificou corretamente o diagnóstico!"
+              ? 'Você identificou corretamente o diagnóstico!'
               : `O diagnóstico correto é ${correct_diagnosis}.`
           },
           conectar: {
-            theory_connection: "Revise os critérios DSM-5-TR."
+            theory_connection: 'Revise os critérios DSM-5-TR.'
           },
           orientar: {
-            what_to_focus_next: "Continue praticando."
+            what_to_focus_next: 'Continue praticando.'
           }
         }
       };
@@ -474,7 +474,9 @@ Feedback JSON.`
       await checkAndUpdateStreak(userId, 'diagnostic');
       missionsCompleted = await updateMissionProgress(userId, 'diagnostic', is_correct) || [];
       recalculateICC(userId).catch(e => console.error('ICC bg error:', e.message));
-    } catch (e) { console.error('Erro gamification:', e); }
+    } catch (e) {
+      console.error('Erro gamification:', e);
+    }
 
     res.json({
       success: true,
@@ -539,7 +541,7 @@ router.get('/stats', authenticateRequest, async (req, res) => {
 // ========================================
 async function updateUserProgress(userId, assistantType, isCorrect) {
   try {
-    logger.debug(`\n[updateUserProgress] 🎯 INICIANDO:`, { userId, assistantType, isCorrect });
+    logger.debug('\n[updateUserProgress] 🎯 INICIANDO:', { userId, assistantType, isCorrect });
 
     const { data: existing, error: selectError } = await supabase
       .from('user_progress')

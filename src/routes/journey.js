@@ -33,7 +33,9 @@ router.get('/list', authenticateRequest, async (req, res) => {
 
     const { data: journeys, error } = await query.order('created_at', { ascending: false });
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     logger.debug(`[Journey] ✅ ${journeys.length} jornadas encontradas`);
 
@@ -68,7 +70,9 @@ router.get('/:id', authenticateRequest, async (req, res) => {
       .eq('id', id)
       .single();
 
-    if (journeyError) throw journeyError;
+    if (journeyError) {
+      throw journeyError;
+    }
 
     // Buscar progresso do usuário
     const { data: progress, error: progressError } = await supabase
@@ -78,13 +82,15 @@ router.get('/:id', authenticateRequest, async (req, res) => {
       .eq('journey_id', id)
       .maybeSingle();
 
-    if (progressError) throw progressError;
+    if (progressError) {
+      throw progressError;
+    }
 
     logger.debug(`[Journey] ✅ Jornada encontrada: ${journey.title}`);
     if (progress) {
       logger.debug(`[Journey] 📊 Progresso: Sessão ${progress.current_session}/12`);
     } else {
-      logger.debug(`[Journey] 🆕 Usuário ainda não iniciou esta jornada`);
+      logger.debug('[Journey] 🆕 Usuário ainda não iniciou esta jornada');
     }
 
     res.json({
@@ -144,7 +150,9 @@ router.post('/start', authenticateRequest, async (req, res) => {
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     logger.debug('[Journey] ✅ Jornada iniciada - Sessão 1/12');
 
@@ -181,7 +189,9 @@ router.get('/:journey_id/session/:session_number', authenticateRequest, async (r
       .eq('session_number', parseInt(session_number))
       .single();
 
-    if (sessionError) throw sessionError;
+    if (sessionError) {
+      throw sessionError;
+    }
 
     // Buscar progresso do usuário
     const { data: progress, error: progressError } = await supabase
@@ -191,7 +201,9 @@ router.get('/:journey_id/session/:session_number', authenticateRequest, async (r
       .eq('journey_id', journey_id)
       .single();
 
-    if (progressError) throw progressError;
+    if (progressError) {
+      throw progressError;
+    }
 
     // Verificar se usuário está na sessão correta
     if (!req.query.free_mode && parseInt(session_number) > progress.current_session) {
@@ -253,7 +265,9 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
       .eq('session_number', parseInt(session_number))
       .single();
 
-    if (sessionError) throw sessionError;
+    if (sessionError) {
+      throw sessionError;
+    }
 
     // Buscar progresso
     const { data: progress, error: progressError } = await supabase
@@ -263,7 +277,9 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
       .eq('journey_id', journey_id)
       .single();
 
-    if (progressError) throw progressError;
+    if (progressError) {
+      throw progressError;
+    }
 
     // Encontrar feedback da opção escolhida
     const options = session.options;
@@ -276,7 +292,7 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
     const feedback = chosenOption.feedback;
     const impact = feedback.impact;
 
-    logger.debug(`[Journey] 📊 Impacto:`);
+    logger.debug('[Journey] 📊 Impacto:');
     logger.debug(`   Rapport: +${impact.rapport}`);
     logger.debug(`   Insight: +${impact.insight}`);
     logger.debug(`   Mudança Comportamental: +${impact.behavioral_change}`);
@@ -292,7 +308,7 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
 
     if (existingDecision) {
       logger.debug('[Journey] ⚠️  Decisão já registrada - atualizando...');
-      
+
       // Atualizar decisão existente
       const { error: updateError } = await supabase
         .from('user_session_decisions')
@@ -307,7 +323,9 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
         })
         .eq('id', existingDecision.id);
 
-      if (updateError) throw updateError;
+      if (updateError) {
+        throw updateError;
+      }
 
     } else {
       // Criar nova decisão
@@ -326,7 +344,9 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
           time_taken_seconds: time_taken_seconds
         });
 
-      if (decisionError) throw decisionError;
+      if (decisionError) {
+        throw decisionError;
+      }
 
       // Atualizar progresso acumulado
       const newRapport = progress.total_rapport + impact.rapport;
@@ -345,9 +365,11 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
         })
         .eq('id', progress.id);
 
-      if (progressUpdateError) throw progressUpdateError;
+      if (progressUpdateError) {
+        throw progressUpdateError;
+      }
 
-      logger.debug(`[Journey] 📈 Totais atualizados:`);
+      logger.debug('[Journey] 📈 Totais atualizados:');
       logger.debug(`   Rapport total: ${newRapport}`);
       logger.debug(`   Insight total: ${newInsight}`);
       logger.debug(`   Mudança total: ${newBehavioral}`);
@@ -356,7 +378,7 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
 
     // Se não for a última sessão, avançar para próxima
     const isLastSession = parseInt(session_number) === 12;
-    
+
     if (!isLastSession && progress.current_session === parseInt(session_number)) {
       const { error: advanceError } = await supabase
         .from('user_journey_progress')
@@ -365,7 +387,9 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
         })
         .eq('id', progress.id);
 
-      if (advanceError) throw advanceError;
+      if (advanceError) {
+        throw advanceError;
+      }
 
       logger.debug(`[Journey] ➡️  Avançando para sessão ${progress.current_session + 1}`);
     }
@@ -373,14 +397,18 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
     // Se for última sessão, marcar como completa
     if (isLastSession && !progress.is_completed) {
       const totalScore = Math.round(
-        (progress.total_rapport + progress.total_insight + 
+        (progress.total_rapport + progress.total_insight +
          progress.total_behavioral_change + progress.total_symptom_reduction) / 4.8
       );
 
       let effectiveness = 'poor';
-      if (totalScore >= 80) effectiveness = 'excellent';
-      else if (totalScore >= 60) effectiveness = 'good';
-      else if (totalScore >= 40) effectiveness = 'moderate';
+      if (totalScore >= 80) {
+        effectiveness = 'excellent';
+      } else if (totalScore >= 60) {
+        effectiveness = 'good';
+      } else if (totalScore >= 40) {
+        effectiveness = 'moderate';
+      }
 
       const { error: completeError } = await supabase
         .from('user_journey_progress')
@@ -392,9 +420,11 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
         })
         .eq('id', progress.id);
 
-      if (completeError) throw completeError;
+      if (completeError) {
+        throw completeError;
+      }
 
-      logger.debug(`[Journey] 🎉 Jornada completa!`);
+      logger.debug('[Journey] 🎉 Jornada completa!');
       logger.debug(`   Score final: ${totalScore}/100`);
       logger.debug(`   Efetividade: ${effectiveness}`);
     }
@@ -439,7 +469,9 @@ router.get('/:journey_id/progress', authenticateRequest, async (req, res) => {
       .eq('journey_id', journey_id)
       .maybeSingle();
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     if (!progress) {
       logger.debug('[Journey] 🆕 Usuário ainda não iniciou esta jornada');
@@ -482,7 +514,7 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
     }
 
     // Buscar sessões SEM join (evita erro de relacionamento)
-    let query = supabase
+    const query = supabase
       .from('journey_sessions')
       .select('*')
       .eq('journey_id', journey_id)
@@ -490,7 +522,9 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
 
     const { data: sessions, error: sessionsError } = await query;
 
-    if (sessionsError) throw sessionsError;
+    if (sessionsError) {
+      throw sessionsError;
+    }
 
     // Buscar skills manualmente
     const { data: skills } = await supabase
@@ -569,7 +603,9 @@ router.post('/:journey_id/restart', authenticateRequest, async (req, res) => {
         .delete()
         .eq('id', currentProgress.id);
 
-      if (deleteError) throw deleteError;
+      if (deleteError) {
+        throw deleteError;
+      }
 
       logger.debug('[Journey] 🗑️ Progresso antigo deletado');
     }
@@ -590,7 +626,9 @@ router.post('/:journey_id/restart', authenticateRequest, async (req, res) => {
       .select()
       .single();
 
-    if (createError) throw createError;
+    if (createError) {
+      throw createError;
+    }
 
     logger.debug('[Journey] ✅ Nova jornada iniciada');
 

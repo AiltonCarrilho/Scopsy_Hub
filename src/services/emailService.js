@@ -12,10 +12,10 @@ const { Resend } = require('resend');
 // Inicializar Resend apenas se API key estiver configurada
 let resend = null;
 if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 're_placeholder_for_dev') {
-    resend = new Resend(process.env.RESEND_API_KEY);
-    logger.info('✅ Resend email service initialized');
+  resend = new Resend(process.env.RESEND_API_KEY);
+  logger.info('✅ Resend email service initialized');
 } else {
-    logger.warn('⚠️ Resend API key not configured - emails will be logged only');
+  logger.warn('⚠️ Resend API key not configured - emails will be logged only');
 }
 
 /**
@@ -26,35 +26,35 @@ if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 're_placeholder
  * @param {string} temporaryPassword - Senha temporária gerada
  */
 async function sendWelcomeEmail(user, temporaryPassword) {
-    try {
-        const { data, error } = await resend.emails.send({
-            from: 'Scopsy Lab <noreply@scopsy.com.br>',
-            to: [user.email],
-            subject: '🎉 Bem-vindo ao Scopsy Lab!',
-            html: getWelcomeEmailHTML(user.name, user.email, temporaryPassword)
-        });
+  try {
+    const { data, error } = await resend.emails.send({
+      from: 'Scopsy Lab <noreply@scopsy.com.br>',
+      to: [user.email],
+      subject: '🎉 Bem-vindo ao Scopsy Lab!',
+      html: getWelcomeEmailHTML(user.name, user.email, temporaryPassword)
+    });
 
-        if (error) {
-            logger.error('[EMAIL] Erro ao enviar email de boas-vindas', {
-                error: error.message,
-                email: user.email
-            });
-            return false;
-        }
-
-        logger.info('[EMAIL] Email de boas-vindas enviado', {
-            emailId: data.id,
-            to: user.email
-        });
-
-        return true;
-    } catch (error) {
-        logger.error('[EMAIL] Exceção ao enviar email', {
-            error: error.message,
-            email: user.email
-        });
-        return false;
+    if (error) {
+      logger.error('[EMAIL] Erro ao enviar email de boas-vindas', {
+        error: error.message,
+        email: user.email
+      });
+      return false;
     }
+
+    logger.info('[EMAIL] Email de boas-vindas enviado', {
+      emailId: data.id,
+      to: user.email
+    });
+
+    return true;
+  } catch (error) {
+    logger.error('[EMAIL] Exceção ao enviar email', {
+      error: error.message,
+      email: user.email
+    });
+    return false;
+  }
 }
 
 /**
@@ -64,28 +64,28 @@ async function sendWelcomeEmail(user, temporaryPassword) {
  * @param {string} message - Corpo da mensagem
  */
 async function sendSupportEmail(user, subject, message) {
-    try {
-        const supportEmail = 'suporte@scopsy.com.br';
+  try {
+    const supportEmail = 'suporte@scopsy.com.br';
 
-        // Fallback para desenvolvimento (sem API Key)
-        if (!resend) {
-            logger.warn('[EMAIL] Resend não configurado - Simulação de envio de suporte', {
-                subject,
-                user: user.email,
-                message: message.substring(0, 50) + '...'
-            });
-            return true;
-        }
+    // Fallback para desenvolvimento (sem API Key)
+    if (!resend) {
+      logger.warn('[EMAIL] Resend não configurado - Simulação de envio de suporte', {
+        subject,
+        user: user.email,
+        message: message.substring(0, 50) + '...'
+      });
+      return true;
+    }
 
-        // Sanitizar inputs para prevenir XSS no template HTML
-        const esc = (str) => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    // Sanitizar inputs para prevenir XSS no template HTML
+    const esc = (str) => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-        const { data, error } = await resend.emails.send({
-            from: 'Scopsy App <noreply@scopsy.com.br>',
-            reply_to: user.email,
-            to: [supportEmail],
-            subject: `[Suporte] ${esc(subject)} - ${esc(user.name)}`,
-            html: `
+    const { data, error } = await resend.emails.send({
+      from: 'Scopsy App <noreply@scopsy.com.br>',
+      reply_to: user.email,
+      to: [supportEmail],
+      subject: `[Suporte] ${esc(subject)} - ${esc(user.name)}`,
+      html: `
                 <h2>Solicitação de Suporte</h2>
                 <p><strong>Usuário:</strong> ${esc(user.name)} (${esc(user.email)})</p>
                 <p><strong>ID:</strong> ${esc(user.id)}</p>
@@ -94,36 +94,36 @@ async function sendSupportEmail(user, subject, message) {
                 <h3>${esc(subject)}</h3>
                 <p style="white-space: pre-wrap;">${esc(message)}</p>
             `
-        });
+    });
 
-        if (error) {
-            logger.error('[EMAIL] Erro ao enviar email de suporte', {
-                error: error.message,
-                userId: user.id
-            });
-            return false;
-        }
-
-        logger.info('[EMAIL] Email de suporte enviado', {
-            emailId: data.id,
-            from: user.email
-        });
-
-        return true;
-    } catch (error) {
-        logger.error('[EMAIL] Exceção ao enviar email de suporte', {
-            error: error.message,
-            userId: user.id
-        });
-        return false;
+    if (error) {
+      logger.error('[EMAIL] Erro ao enviar email de suporte', {
+        error: error.message,
+        userId: user.id
+      });
+      return false;
     }
+
+    logger.info('[EMAIL] Email de suporte enviado', {
+      emailId: data.id,
+      from: user.email
+    });
+
+    return true;
+  } catch (error) {
+    logger.error('[EMAIL] Exceção ao enviar email de suporte', {
+      error: error.message,
+      userId: user.id
+    });
+    return false;
+  }
 }
 
 /**
  * Template HTML do email de boas-vindas
  */
 function getWelcomeEmailHTML(name, email, temporaryPassword) {
-    return `
+  return `
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -234,41 +234,41 @@ function getWelcomeEmailHTML(name, email, temporaryPassword) {
  * Envia email de cancelamento de assinatura
  */
 async function sendCancellationEmail(user) {
-    try {
-        const { data, error } = await resend.emails.send({
-            from: 'Scopsy Lab <noreply@scopsy.com.br>',
-            to: [user.email],
-            subject: 'Assinatura Cancelada - Scopsy Lab',
-            html: `
+  try {
+    const { data, error } = await resend.emails.send({
+      from: 'Scopsy Lab <noreply@scopsy.com.br>',
+      to: [user.email],
+      subject: 'Assinatura Cancelada - Scopsy Lab',
+      html: `
                 <h2>Olá, ${user.name}</h2>
                 <p>Sua assinatura do Scopsy Lab foi cancelada.</p>
                 <p>Você ainda pode acessar a plataforma em modo gratuito com funcionalidades limitadas.</p>
                 <p>Se mudou de ideia, pode reativar sua assinatura a qualquer momento!</p>
                 <p>Atenciosamente,<br>Equipe Scopsy Lab</p>
             `
-        });
+    });
 
-        if (error) {
-            logger.error('[EMAIL] Erro ao enviar email de cancelamento', {
-                error: error.message,
-                email: user.email
-            });
-            return false;
-        }
-
-        logger.info('[EMAIL] Email de cancelamento enviado', {
-            emailId: data.id,
-            to: user.email
-        });
-
-        return true;
-    } catch (error) {
-        logger.error('[EMAIL] Exceção ao enviar email de cancelamento', {
-            error: error.message,
-            email: user.email
-        });
-        return false;
+    if (error) {
+      logger.error('[EMAIL] Erro ao enviar email de cancelamento', {
+        error: error.message,
+        email: user.email
+      });
+      return false;
     }
+
+    logger.info('[EMAIL] Email de cancelamento enviado', {
+      emailId: data.id,
+      to: user.email
+    });
+
+    return true;
+  } catch (error) {
+    logger.error('[EMAIL] Exceção ao enviar email de cancelamento', {
+      error: error.message,
+      email: user.email
+    });
+    return false;
+  }
 }
 
 /**
@@ -276,17 +276,17 @@ async function sendCancellationEmail(user) {
  * @returns {string} Senha de 12 caracteres
  */
 function generateTemporaryPassword() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
-    let password = '';
-    for (let i = 0; i < 12; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return password;
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  let password = '';
+  for (let i = 0; i < 12; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
 }
 
 module.exports = {
-    sendWelcomeEmail,
-    sendSupportEmail,
-    sendCancellationEmail,
-    generateTemporaryPassword
+  sendWelcomeEmail,
+  sendSupportEmail,
+  sendCancellationEmail,
+  generateTemporaryPassword
 };

@@ -20,12 +20,12 @@ const activeConnections = new Map();
  * Inicializar handlers do Socket.io
  */
 function initializeSocketHandlers(io) {
-  
+
   // Middleware de autenticação
   io.use(async (socket, next) => {
     try {
       const token = socket.handshake.auth.token;
-      
+
       if (!token) {
         return next(new Error('Token não fornecido'));
       }
@@ -33,12 +33,12 @@ function initializeSocketHandlers(io) {
       const decoded = verifyToken(token);
       socket.userId = decoded.userId;
       socket.userPlan = decoded.plan;
-      
-      logger.info('Cliente autenticado no WebSocket', { 
+
+      logger.info('Cliente autenticado no WebSocket', {
         userId: socket.userId,
-        socketId: socket.id 
+        socketId: socket.id
       });
-      
+
       next();
     } catch (error) {
       logger.error('Erro auth WebSocket', { error: error.message });
@@ -48,12 +48,12 @@ function initializeSocketHandlers(io) {
 
   io.on('connection', (socket) => {
     const userId = socket.userId;
-    
+
     logger.info('Cliente conectado', { userId, socketId: socket.id });
-    
+
     // Adicionar ao store de conexões
     activeConnections.set(userId, socket.id);
-    
+
     // Join room privado do usuário
     socket.join(`user:${userId}`);
 
@@ -240,7 +240,7 @@ async function checkRateLimit(userId, plan) {
  */
 function sendNotificationToUser(userId, notification) {
   const socketId = activeConnections.get(userId);
-  
+
   if (socketId) {
     const io = require('../server').io;
     io.to(socketId).emit('notification', notification);

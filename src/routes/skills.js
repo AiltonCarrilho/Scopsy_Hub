@@ -29,11 +29,15 @@ router.get('/list', async (req, res) => {
 
     const { data: skills, error } = await query;
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     // Agrupar por módulo
     const grouped = skills.reduce((acc, skill) => {
-      if (!acc[skill.module]) acc[skill.module] = [];
+      if (!acc[skill.module]) {
+        acc[skill.module] = [];
+      }
       acc[skill.module].push(skill);
       return acc;
     }, {});
@@ -72,7 +76,9 @@ router.get('/:id', async (req, res) => {
       .eq('id', id)
       .single();
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     logger.debug(`[Skills] ✅ Skill encontrada: ${skill.name}`);
 
@@ -110,7 +116,9 @@ router.get('/user/:user_id/progress', authenticateRequest, async (req, res) => {
       .eq('user_id', user_id)
       .order('skill_id');
 
-    if (progressError) throw progressError;
+    if (progressError) {
+      throw progressError;
+    }
 
     // Buscar todas as skills para incluir as não iniciadas
     const { data: allSkills, error: skillsError } = await supabase
@@ -118,7 +126,9 @@ router.get('/user/:user_id/progress', authenticateRequest, async (req, res) => {
       .select('*')
       .order('module, order_in_module');
 
-    if (skillsError) throw skillsError;
+    if (skillsError) {
+      throw skillsError;
+    }
 
     // Combinar: skills praticadas + não praticadas
     const completeProgress = allSkills.map(skill => {
@@ -136,7 +146,9 @@ router.get('/user/:user_id/progress', authenticateRequest, async (req, res) => {
     // Agrupar por módulo
     const byModule = completeProgress.reduce((acc, item) => {
       const module = item.skill.module;
-      if (!acc[module]) acc[module] = [];
+      if (!acc[module]) {
+        acc[module] = [];
+      }
       acc[module].push(item);
       return acc;
     }, {});
@@ -236,7 +248,9 @@ router.post('/user/:user_id/progress/:skill_id', authenticateRequest, async (req
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       logger.debug(`[Skills] ✅ Progresso atualizado: ${newTimesPracticed}x, média ${(newAvgPerformance * 100).toFixed(0)}%, ${newMasteryLevel}`);
 
@@ -265,7 +279,9 @@ router.post('/user/:user_id/progress/:skill_id', authenticateRequest, async (req
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       logger.debug(`[Skills] ✅ Primeiro registro criado: ${(newAvgPerformance * 100).toFixed(0)}%, ${newMasteryLevel}`);
 

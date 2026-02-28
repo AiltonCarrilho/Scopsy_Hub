@@ -3,7 +3,6 @@
  */
 
 const winston = require('winston');
-const path = require('path');
 
 // Define log levels
 const levels = {
