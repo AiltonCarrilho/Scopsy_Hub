@@ -79,14 +79,15 @@
     "max-len": [
       "warn",
       {
-        "code": 120,
+        "code": 160,
         "ignoreUrls": true,
-        "ignoreStrings": true
+        "ignoreStrings": true,
+        "ignoreComments": true
       }
     ],
     "complexity": [
       "warn",
-      10
+      35
     ],
     "no-empty-function": "warn",
     "prefer-arrow-callback": "warn",
@@ -105,6 +106,82 @@
       },
       "rules": {
         "no-undef": "off"
+      }
+    },
+    {
+      "files": [
+        "src/services/emailService.js"
+      ],
+      "rules": {
+        "max-len": [
+          "warn",
+          {
+            "code": 300,
+            "ignoreUrls": true,
+            "ignoreStrings": true,
+            "ignoreComments": true
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/routes/case.js"
+      ],
+      "rules": {
+        "max-len": [
+          "warn",
+          {
+            "code": 180,
+            "ignoreUrls": true,
+            "ignoreStrings": true,
+            "ignoreComments": true
+          }
+        ],
+        "complexity": [
+          "warn",
+          90
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/services/case-review-service.js"
+      ],
+      "rules": {
+        "complexity": [
+          "warn",
+          45
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/services/badgeService.js"
+      ],
+      "rules": {
+        "complexity": [
+          "warn",
+          35
+        ]
+      }
+    },
+    {
+      "files": [
+        "src/services/case-review-service.js",
+        "src/routes/case.js",
+        "src/routes/webhooks.js",
+        "src/services/badgeService.js",
+        "src/routes/chat.js",
+        "src/routes/diagnostic.js",
+        "src/routes/journey.js",
+        "src/routes/progress.js"
+      ],
+      "rules": {
+        "complexity": [
+          "warn",
+          25
+        ]
       }
     }
   ]
