@@ -1,5 +1,18 @@
 /**
  * Database Service - Supabase
+ *
+ * Generic CRUD helpers used by various parts of the system.
+ *
+ * RLS Compatibility:
+ * - This service uses the ANON client (supabase), which is subject to RLS.
+ * - The setRLSContext middleware must have been called before any function
+ *   in this service is invoked from an HTTP route handler.
+ * - Functions that filter by user_id manually will still work — RLS adds
+ *   an additional filter layer that is harmless (AND user_id = current_user).
+ * - If cross-user admin access is needed, use supabaseAdmin from supabase.js.
+ *
+ * @see middleware/set-rls-context.js
+ * @see services/supabase.js (exports supabase + supabaseAdmin)
  */
 
 const { supabase } = require('./supabase');
@@ -7,10 +20,14 @@ const logger = require('../config/logger');
 
 /**
  * Salvar dados
+ * Uses anon client — subject to RLS.
+ * @param {string} collection - Table name
+ * @param {Object} data - Data to insert
+ * @returns {Promise<Object>} Inserted record
  */
 async function saveToBoostspace(collection, data) {
   try {
-    logger.info('💾 Salvando no Supabase', { collection });
+    logger.info('Salvando no Supabase', { collection });
 
     const { data: result, error } = await supabase
       .from(collection)
@@ -22,15 +39,11 @@ async function saveToBoostspace(collection, data) {
       throw error;
     }
 
-    logger.info('✅ Salvo no Supabase', { collection, id: result.id });
+    logger.info('Salvo no Supabase', { collection, id: result.id });
     return result;
 
   } catch (error) {
-    console.error('🔍 ERRO DETALHADO SUPABASE (SAVE):');
-    console.error('Message:', error.message);
-    console.error('Full error:', error);
-
-    logger.error('❌ Erro ao salvar no Supabase', {
+    logger.error('Erro ao salvar no Supabase', {
       error: error.message,
       collection
     });
@@ -40,10 +53,14 @@ async function saveToBoostspace(collection, data) {
 
 /**
  * Buscar dados
+ * Uses anon client — subject to RLS.
+ * @param {string} collection - Table name
+ * @param {Object} filters - Key-value filters to apply
+ * @returns {Promise<Array>} Matching records
  */
 async function getFromBoostspace(collection, filters = {}) {
   try {
-    logger.info('🔍 Buscando no Supabase', { collection, filters });
+    logger.info('Buscando no Supabase', { collection, filters });
 
     let query = supabase.from(collection).select('*');
 
@@ -66,15 +83,11 @@ async function getFromBoostspace(collection, filters = {}) {
       throw error;
     }
 
-    logger.info('✅ Encontrados no Supabase', { count: data?.length || 0 });
+    logger.info('Encontrados no Supabase', { count: data?.length || 0 });
     return data || [];
 
   } catch (error) {
-    console.error('🔍 ERRO DETALHADO SUPABASE (GET):');
-    console.error('Message:', error.message);
-    console.error('Full error:', error);
-
-    logger.error('❌ Erro ao buscar no Supabase', {
+    logger.error('Erro ao buscar no Supabase', {
       error: error.message,
       collection
     });
@@ -84,10 +97,15 @@ async function getFromBoostspace(collection, filters = {}) {
 
 /**
  * Atualizar dados
+ * Uses anon client — subject to RLS.
+ * @param {string} collection - Table name
+ * @param {string} id - Record ID
+ * @param {Object} data - Fields to update
+ * @returns {Promise<Object>} Updated record
  */
 async function updateInBoostspace(collection, id, data) {
   try {
-    logger.info('📝 Atualizando no Supabase', { collection, id });
+    logger.info('Atualizando no Supabase', { collection, id });
 
     const { data: result, error } = await supabase
       .from(collection)
@@ -100,11 +118,11 @@ async function updateInBoostspace(collection, id, data) {
       throw error;
     }
 
-    logger.info('✅ Atualizado no Supabase', { collection, id });
+    logger.info('Atualizado no Supabase', { collection, id });
     return result;
 
   } catch (error) {
-    logger.error('❌ Erro ao atualizar no Supabase', {
+    logger.error('Erro ao atualizar no Supabase', {
       error: error.message,
       collection,
       id
@@ -115,10 +133,14 @@ async function updateInBoostspace(collection, id, data) {
 
 /**
  * Deletar registro
+ * Uses anon client — subject to RLS.
+ * @param {string} collection - Table name
+ * @param {string} id - Record ID
+ * @returns {Promise<{success: boolean}>}
  */
 async function deleteFromBoostspace(collection, id) {
   try {
-    logger.info('🗑️ Deletando do Supabase', { collection, id });
+    logger.info('Deletando do Supabase', { collection, id });
 
     const { error } = await supabase
       .from(collection)
@@ -129,11 +151,11 @@ async function deleteFromBoostspace(collection, id) {
       throw error;
     }
 
-    logger.info('✅ Deletado do Supabase', { collection, id });
+    logger.info('Deletado do Supabase', { collection, id });
     return { success: true };
 
   } catch (error) {
-    logger.error('❌ Erro ao deletar do Supabase', {
+    logger.error('Erro ao deletar no Supabase', {
       error: error.message,
       collection,
       id

@@ -1,13 +1,9 @@
 const express = require('express');
 const logger = require('../config/logger');
 const router = express.Router();
-const { createClient } = require('@supabase/supabase-js');
 const { authenticateRequest } = require('../middleware/auth');
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+const { supabase } = require('../services/supabase'); // RLS-aware anon client
 
 // ============================================
 // 1️⃣ LISTAR JORNADAS DISPONÍVEIS

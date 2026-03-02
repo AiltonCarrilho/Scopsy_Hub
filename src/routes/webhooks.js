@@ -11,17 +11,12 @@ if (process.env.NODE_ENV !== 'production') {
 }
 const express = require('express');
 const router = express.Router();
-const { createClient } = require('@supabase/supabase-js');
 const logger = require('../config/logger');
 const { sendWelcomeEmail, sendCancellationEmail, generateTemporaryPassword } = require('../services/emailService');
 
 // ========================================
-// SUPABASE CLIENT
-// ========================================
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY // Usa service role para bypass RLS
-);
+// SUPABASE CLIENT (admin - bypasses RLS intentionally for payment webhooks)
+const { supabaseAdmin: supabase } = require('../services/supabase');
 
 // ========================================
 // VALIDACAO DE TOKEN KIWIFY

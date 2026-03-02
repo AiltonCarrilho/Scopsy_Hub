@@ -3,16 +3,12 @@
  */
 
 const express = require('express');
-const { createClient } = require('@supabase/supabase-js');
 const { authenticateRequest } = require('../middleware/auth');
 const logger = require('../config/logger');
 
 const router = express.Router();
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+const { supabase } = require('../services/supabase'); // RLS-aware anon client
 
 /**
  * GET /api/dashboard/stats

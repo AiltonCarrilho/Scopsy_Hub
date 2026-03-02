@@ -7,20 +7,15 @@ const router = express.Router();
 const { authenticateRequest } = require('../middleware/auth');
 const logger = require('../config/logger');
 const OpenAI = require('openai');
-const { createClient } = require('@supabase/supabase-js');
 
 // Inicializar OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-// Inicializar Supabase
-// IMPORTANTE: Usar ANON_KEY + RLS habilitado nas tabelas chat_conversations e chat_messages
-// NÃO usar SERVICE_ROLE_KEY aqui — bypass de RLS expõe dados de todos os usuários
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-);
+// Usar cliente centralizado (anon key + RLS) de services/supabase.js
+// NÃO usar SERVICE_ROLE_KEY aqui — bypass de RLS expoe dados de todos os usuarios
+const { supabase } = require('../services/supabase'); // RLS-aware anon client
 
 // Validação de UUID (módulo-level — não recriar por request)
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

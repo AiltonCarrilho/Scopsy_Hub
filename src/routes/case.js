@@ -2,15 +2,11 @@ const express = require('express');
 const logger = require('../config/logger');
 const router = express.Router();
 const OpenAI = require('openai');
-const { createClient } = require('@supabase/supabase-js');
 const { authenticateRequest } = require('../middleware/auth');
 const { applyFreshnessMultiplier } = require('../services/freshnessService');
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+const { supabase } = require('../services/supabase'); // RLS-aware anon client
 
 // ========================================
 // BIBLIOTECA DE MOMENTOS CRÍTICOS
