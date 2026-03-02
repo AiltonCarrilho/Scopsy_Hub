@@ -6,12 +6,10 @@
 const logger = require('../config/logger');
 const { sendMessage, getOrCreateThread, routeToAssistant } = require('../services/openai-service');
 const { verifyToken } = require('../middleware/auth');
-const { createClient } = require('@supabase/supabase-js');
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+// supabaseAdmin: used for rate limiting (user_rate_limits) — admin operation, RLS bypass intentional
+// supabase (anon): used to call set_auth_context() RPC before thread queries
+// Note: chat_conversations/messages are queried via database.js (anon client) in thread-manager.js
+const { supabase, supabaseAdmin } = require('../services/supabase');
 
 // Store de conexões ativas (userId -> socketId)
 const activeConnections = new Map();
@@ -94,6 +92,21 @@ function initializeSocketHandlers(io) {
         // Rotear para assistente apropriado se não especificado
         const targetAssistant = assistantType || routeToAssistant(message);
 
+        // Set RLS context before thread-manager queries Supabase (conversations table)
+        // This ensures thread data is isolated per user via Row Level Security
+        if (supabase) {
+          const { error: rlsError } = await supabase.rpc('set_auth_context', {
+            p_user_id: userId
+          });
+          if (rlsError) {
+            logger.warn('Socket: failed to set RLS context', { error: rlsError.message, userId });
+            // Non-fatal: thread-manager queries use database.js (anon client)
+            // RLS will enforce isolation even if context call fails (returns empty, not data leak)
+          } else {
+            logger.debug('Socket: RLS context set', { userId });
+          }
+        }
+
         // Get ou criar thread
         const threadId = await getOrCreateThread(userId, targetAssistant, conversationId);
 
@@ -175,7 +188,7 @@ async function checkRateLimit(userId, plan) {
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
     // Buscar contador de mensagens de hoje
-    const { data: rateData, error: fetchError } = await supabase
+    const { data: rateData, error: fetchError } = await supabaseAdmin
       .from('user_rate_limits')
       .select('*')
       .eq('user_id', userId)
@@ -189,7 +202,7 @@ async function checkRateLimit(userId, plan) {
 
     // Se não existe registro de hoje, criar
     if (!rateData) {
-      await supabase
+      await supabaseAdmin
         .from('user_rate_limits')
         .insert({
           user_id: userId,
@@ -214,7 +227,7 @@ async function checkRateLimit(userId, plan) {
     }
 
     // Incrementar contador
-    await supabase
+    await supabaseAdmin
       .from('user_rate_limits')
       .update({ message_count: rateData.message_count + 1 })
       .eq('user_id', userId)
