@@ -1,0 +1,22 @@
+#!/bin/sh
+
+echo "🔒 Pre-commit security checks..."
+
+# Skip if running in CI or if NO_VERIFY is set
+if [ -n "$CI" ] || [ -n "$NO_VERIFY" ]; then
+  exit 0
+fi
+
+# Run ESLint check
+npm run lint >/dev/null 2>&1 || {
+  echo "⚠️  ESLint found issues. Run 'npm run lint:fix' to fix."
+  exit 1
+}
+
+# Warn about vulnerabilities but don't block
+npm audit --audit-level=moderate >/dev/null 2>&1 || {
+  echo "ℹ️  npm audit: check with 'npm audit' and 'npm audit fix' if needed"
+}
+
+echo "✅ Pre-commit checks passed"
+exit 0

@@ -2,7 +2,7 @@
  * Database Service - Supabase
  */
 
-const { supabase } = require('./supabase');
+const { supabase, supabaseAdmin } = require('./supabase');
 const logger = require('../config/logger');
 
 /**
@@ -12,7 +12,7 @@ async function saveToBoostspace(collection, data) {
   try {
     logger.info('💾 Salvando no Supabase', { collection });
 
-    const { data: result, error } = await supabase
+    const { data: result, error } = await supabaseAdmin
       .from(collection)
       .insert(data)
       .select()
@@ -45,7 +45,7 @@ async function getFromBoostspace(collection, filters = {}) {
   try {
     logger.info('🔍 Buscando no Supabase', { collection, filters });
 
-    let query = supabase.from(collection).select('*');
+    let query = supabaseAdmin.from(collection).select('*');
 
     // Aplicar filtros
     if (filters.email) {
@@ -89,7 +89,7 @@ async function updateInBoostspace(collection, id, data) {
   try {
     logger.info('📝 Atualizando no Supabase', { collection, id });
 
-    const { data: result, error } = await supabase
+    const { data: result, error } = await supabaseAdmin
       .from(collection)
       .update(data)
       .eq('id', id)
@@ -120,7 +120,7 @@ async function deleteFromBoostspace(collection, id) {
   try {
     logger.info('🗑️ Deletando do Supabase', { collection, id });
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from(collection)
       .delete()
       .eq('id', id);
@@ -146,5 +146,7 @@ module.exports = {
   saveToBoostspace,
   getFromBoostspace,
   updateInBoostspace,
-  deleteFromBoostspace
+  deleteFromBoostspace,
+  supabase,
+  supabaseAdmin
 };

@@ -2,7 +2,7 @@
  * Badge Service
  * Gerencia a conquista e verificação de medalhas
  */
-const { getFromBoostspace, saveToBoostspace, supabase } = require('./database');
+const { getFromBoostspace, saveToBoostspace, supabaseAdmin: supabase } = require('./database');
 const logger = require('../config/logger');
 
 /**

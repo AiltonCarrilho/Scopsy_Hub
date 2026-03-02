@@ -1,0 +1,17 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🚀 Running final security checks before push..."
+
+# Run full test suite
+echo "🧪 Running test suite..."
+npm test --coverage || {
+  echo "❌ Tests failed. Fix issues before pushing."
+  exit 1
+}
+
+# Generate security report
+echo "📊 Generating security report..."
+npm run security:report 2>/dev/null || true
+
+echo "✅ Pre-push checks completed successfully!"

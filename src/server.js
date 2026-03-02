@@ -289,6 +289,7 @@ server.listen(PORT, () => {
 // ========================================
 // 8. FINALIZAÇÃO GRACIOSA
 // ========================================
+// eslint-disable-next-line no-process-exit
 process.on('SIGTERM', () => {
   logger.info('👋 SIGTERM recebido, fechando servidor...');
   server.close(() => {

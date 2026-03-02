@@ -1,0 +1,91 @@
+{
+  "project": "scopsy-backend",
+  "version": "1.0.0",
+  "description": "Security scanning configuration for Scopsy backend",
+
+  "rules": {
+    "secrets-detection": {
+      "enabled": true,
+      "severity": "critical",
+      "patterns": [
+        "sk-proj-",
+        "sk-",
+        "OPENAI_API_KEY",
+        "JWT_SECRET",
+        "SUPABASE_ANON_KEY",
+        "password",
+        "secret",
+        "token"
+      ]
+    },
+    "sql-injection": {
+      "enabled": true,
+      "severity": "high",
+      "patterns": [
+        "SELECT.*WHERE.*=.*\\$",
+        "INSERT.*VALUES",
+        "UPDATE.*SET"
+      ]
+    },
+    "auth-bypass": {
+      "enabled": true,
+      "severity": "high"
+    },
+    "env-vars": {
+      "enabled": true,
+      "severity": "medium",
+      "requireExistenceCheck": true
+    },
+    "hardcoded-values": {
+      "enabled": true,
+      "severity": "medium"
+    },
+    "dependency-vulnerabilities": {
+      "enabled": true,
+      "severity": "high"
+    }
+  },
+
+  "whitelist": [
+    {
+      "rule": "secrets-detection",
+      "pattern": "OPENAI_API_KEY",
+      "reason": "Template variable in documentation",
+      "locations": ["docs/**", "CLAUDE.md", ".env.example"]
+    },
+    {
+      "rule": "secrets-detection",
+      "pattern": "JWT_SECRET",
+      "reason": "Template variable in documentation",
+      "locations": ["docs/**", "CLAUDE.md", ".env.example"]
+    },
+    {
+      "rule": "hardcoded-values",
+      "pattern": "localhost|127.0.0.1",
+      "reason": "Development environment URLs",
+      "locations": ["test/**", "*.test.js"]
+    }
+  ],
+
+  "excludePaths": [
+    "node_modules/**",
+    ".git/**",
+    "coverage/**",
+    "dist/**",
+    "build/**",
+    "logs/**"
+  ],
+
+  "severity": {
+    "critical": "error",
+    "high": "error",
+    "medium": "warning",
+    "low": "info"
+  },
+
+  "ci": {
+    "failOnCritical": true,
+    "failOnHigh": true,
+    "failOnMedium": false
+  }
+}
