@@ -111,6 +111,7 @@ app.use(cors({
 // Rate Limiters
 const { apiLimiter, openaiLimiter, authLimiter, webhookLimiter, createPlanBasedLimiter } = require('./middleware/rateLimiter');
 const { authenticateRequest } = require('./middleware/auth');
+const { setRLSContext } = require('./middleware/set-rls-context');
 const planLimiter = createPlanBasedLimiter({ free: 3, basic: 10, premium: 30 });
 
 app.use(express.json());
@@ -141,25 +142,26 @@ const supportRoutes = require('./routes/support');
 // Auth routes - Rate limit mais restritivo (anti brute-force)
 app.use('/api/auth', authLimiter, authRoutes);
 
-// Rotas gerais - Rate limit padrão da API
-app.use('/api/dashboard', apiLimiter, dashboardRoutes);
-app.use('/api/account', apiLimiter, accountRoutes);
-app.use('/api/chat', apiLimiter, openaiLimiter, chatRoutes);
-app.use('/api/progress', apiLimiter, require('./routes/progress'));
-app.use('/api/streaks', apiLimiter, require('./routes/streaks'));
-app.use('/api/missions', apiLimiter, require('./routes/missions'));
-app.use('/api/gamification', apiLimiter, require('./routes/gamification'));
-app.use('/api/freshness', apiLimiter, require('./routes/freshness'));
-app.use('/api/skills', apiLimiter, skillsRoutes);
-app.use('/api/support', apiLimiter, supportRoutes);
+// Rotas autenticadas - authenticateRequest + setRLSContext em cada cadeia
+// Ordem: rateLimit -> authenticateRequest (define req.user) -> setRLSContext (define contexto RLS) -> routeHandler
+app.use('/api/dashboard', apiLimiter, authenticateRequest, setRLSContext, dashboardRoutes);
+app.use('/api/account', apiLimiter, authenticateRequest, setRLSContext, accountRoutes);
+app.use('/api/chat', apiLimiter, openaiLimiter, authenticateRequest, setRLSContext, chatRoutes);
+app.use('/api/progress', apiLimiter, authenticateRequest, setRLSContext, require('./routes/progress'));
+app.use('/api/streaks', apiLimiter, authenticateRequest, setRLSContext, require('./routes/streaks'));
+app.use('/api/missions', apiLimiter, authenticateRequest, setRLSContext, require('./routes/missions'));
+app.use('/api/gamification', apiLimiter, authenticateRequest, setRLSContext, require('./routes/gamification'));
+app.use('/api/freshness', apiLimiter, authenticateRequest, setRLSContext, require('./routes/freshness'));
+app.use('/api/skills', apiLimiter, authenticateRequest, setRLSContext, skillsRoutes);
+app.use('/api/support', apiLimiter, authenticateRequest, setRLSContext, supportRoutes);
 
 // ⚠️ ROTAS OPENAI - Auth + Rate limit por IP + por plano (custo!)
-app.use('/api/diagnostic', openaiLimiter, authenticateRequest, planLimiter, diagnosticRoutes);
+app.use('/api/diagnostic', openaiLimiter, authenticateRequest, setRLSContext, planLimiter, diagnosticRoutes);
 // /api/case não usa OpenAI desde 12/02 (geração on-demand removida) — apenas apiLimiter + planLimiter
-app.use('/api/case', apiLimiter, authenticateRequest, planLimiter, caseRoutes);
+app.use('/api/case', apiLimiter, authenticateRequest, setRLSContext, planLimiter, caseRoutes);
 
-// 📚 ROTAS JOURNEY - Rate limit padrão API (são apenas leituras de banco)
-app.use('/api/journey', apiLimiter, journeyRoutes);
+// 📚 ROTAS JOURNEY - Rate limit padrão API + autenticação + RLS context
+app.use('/api/journey', apiLimiter, authenticateRequest, setRLSContext, journeyRoutes);
 
 // 🔔 WEBHOOKS - Rate limit separado (Kiwify)
 app.use('/api/webhooks', webhookLimiter, webhooksRoutes);
