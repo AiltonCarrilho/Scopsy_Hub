@@ -114,6 +114,16 @@ const { authenticateRequest } = require('./middleware/auth');
 const { setRLSContext } = require('./middleware/set-rls-context');
 const planLimiter = createPlanBasedLimiter({ free: 3, basic: 10, premium: 30 });
 
+// ========================================
+// WEBHOOK RAW BODY CAPTURE (para HMAC validation)
+// ========================================
+// IMPORTANTE: Deve vir ANTES de express.json()
+// Captura o body raw APENAS para webhooks endpoint
+// Necessário para validação HMAC-SHA256 correta
+const { captureRawBody } = require('./middleware/kiwify-auth');
+app.use('/api/webhooks', express.raw({ type: 'application/json' }), captureRawBody);
+
+// Parse JSON para todas as outras rotas
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const path = require('path'); // Ensure path is imported if not already, or use it here
