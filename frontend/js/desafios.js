@@ -699,7 +699,7 @@ function showFeedback(f, userChoice) {
             <!-- ========================================
                  NÍVEL 3: EXPANSÍVEL (Aprendizado Profundo)
                  FIX: Condicional usa hasLearningPoint (boolean real)
-                 em vez de `lp && (...)` que falha com objeto vazio {}
+                 em vez de lp && (...) que falha com objeto vazio {}
                  ======================================== -->
             <details class="feedback-expandable">
                 <summary class="feedback-summary">
