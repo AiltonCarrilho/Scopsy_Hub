@@ -7,8 +7,9 @@ const { applyFreshnessMultiplier } = require('../services/freshnessService');
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const { supabase, supabaseAdmin } = require('../services/supabase');
-// supabaseAdmin: for shared content (cases table - not user-owned data)
-// supabase: for user-owned data (user_case_interactions - RLS applies)
+// supabase (RLS): for all queries
+// - cases table: read-only shared content (GRANT SELECT anon)
+// - user_case_interactions: user-owned data (RLS isolates per user)
 
 // ========================================
 // BIBLIOTECA DE MOMENTOS CRÍTICOS
@@ -146,7 +147,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       const lastInteraction = interactions[0]; // Já ordenado por created_at DESC
 
       if (lastInteraction && lastInteraction.case_id) {
-        const { data: lastCase, error: lastCaseError } = await supabaseAdmin
+        const { data: lastCase, error: lastCaseError } = await supabase
           .from('cases')
           .select('moment_type')
           .eq('id', lastInteraction.case_id)
@@ -160,7 +161,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     }
 
     // 2️⃣ BUSCAR CASOS DISPONÍVEIS (que usuário NÃO viu)
-    let casesQuery = supabaseAdmin
+    let casesQuery = supabase
       .from('cases')
       .select('id, times_used, moment_type, category, disorder, difficulty_level')
       .eq('status', 'active')
@@ -320,7 +321,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
 
       // 🚀 OTIMIZAÇÃO: Buscar dados completos apenas do caso selecionado
       // (query leve buscou 10 IDs com ~100 bytes cada, agora busca JSONB completo de 1 só)
-      const { data: fullCaseData, error: fullCaseError } = await supabaseAdmin
+      const { data: fullCaseData, error: fullCaseError } = await supabase
         .from('cases')
         .select('*')
         .eq('id', selectedCase.id)
@@ -350,7 +351,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       // 🛡️ VALIDAÇÃO: Garantir que caso tem estrutura válida para micro-momentos
       if (isMicroMoment && (!selectedCase.case_content || !selectedCase.case_content.context)) {
         logger.warn(`[Case] ⚠️ Caso ${selectedCase.id} com case_content inválido (sem context) — movendo para needs_review`);
-        supabaseAdmin
+        supabase
           .from('cases')
           .update({ status: 'needs_review' })
           .eq('id', selectedCase.id)

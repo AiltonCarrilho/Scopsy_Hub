@@ -7,8 +7,9 @@ const { applyFreshnessMultiplier } = require('../services/freshnessService');
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const { supabase, supabaseAdmin } = require('../services/supabase');
-// supabaseAdmin: for shared content (cases table - not user-owned data)
-// supabase: for user-owned data (user_case_interactions - RLS applies)
+// supabase (RLS): for all queries
+// - cases table: read-only shared content (GRANT SELECT anon)
+// - user_case_interactions: user-owned data (RLS isolates per user)
 
 // ========================================
 // POST /api/diagnostic/generate-case
@@ -70,7 +71,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
     }
 
     // 2️⃣ BUSCAR CASOS DISPONÍVEIS (que usuário NÃO viu)
-    let casesQuery = supabaseAdmin
+    let casesQuery = supabase
       .from('cases')
       .select('id, times_used, moment_type, category, disorder, difficulty_level')
       .eq('status', 'active')
@@ -121,7 +122,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
         .then(() => logger.debug('[Diagnostic] ✅ Contador atualizado'));
 
       // 🚀 OTIMIZAÇÃO: Buscar dados completos apenas do caso selecionado
-      const { data: fullCaseData, error: fullCaseError } = await supabaseAdmin
+      const { data: fullCaseData, error: fullCaseError } = await supabase
         .from('cases')
         .select('*')
         .eq('id', cachedCase.id)
@@ -276,7 +277,7 @@ PORTUGUÊS BRASILEIRO. Casos realistas. DSM-5-TR. ESCOLHA 1 FORMATO ALEATORIAMEN
     const caseData = JSON.parse(completion.choices[0].message.content);
 
     // Salvar para próximas vezes
-    const { data: newCase } = await supabaseAdmin
+    const { data: newCase } = await supabase
       .from('cases')
       .insert({
         disorder: caseData.metadata?.disorder || 'Unknown',
