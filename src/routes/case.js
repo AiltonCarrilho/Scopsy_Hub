@@ -6,7 +6,9 @@ const { authenticateRequest } = require('../middleware/auth');
 const { applyFreshnessMultiplier } = require('../services/freshnessService');
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const { supabase } = require('../services/supabase'); // RLS-aware anon client
+const { supabase, supabaseAdmin } = require('../services/supabase');
+// supabaseAdmin: for shared content (cases table - not user-owned data)
+// supabase: for user-owned data (user_case_interactions - RLS applies)
 
 // ========================================
 // BIBLIOTECA DE MOMENTOS CRÍTICOS
@@ -144,7 +146,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       const lastInteraction = interactions[0]; // Já ordenado por created_at DESC
 
       if (lastInteraction && lastInteraction.case_id) {
-        const { data: lastCase, error: lastCaseError } = await supabase
+        const { data: lastCase, error: lastCaseError } = await supabaseAdmin
           .from('cases')
           .select('moment_type')
           .eq('id', lastInteraction.case_id)
@@ -158,7 +160,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     }
 
     // 2️⃣ BUSCAR CASOS DISPONÍVEIS (que usuário NÃO viu)
-    let casesQuery = supabase
+    let casesQuery = supabaseAdmin
       .from('cases')
       .select('id, times_used, moment_type, category, disorder, difficulty_level')
       .eq('status', 'active')
@@ -318,7 +320,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
 
       // 🚀 OTIMIZAÇÃO: Buscar dados completos apenas do caso selecionado
       // (query leve buscou 10 IDs com ~100 bytes cada, agora busca JSONB completo de 1 só)
-      const { data: fullCaseData, error: fullCaseError } = await supabase
+      const { data: fullCaseData, error: fullCaseError } = await supabaseAdmin
         .from('cases')
         .select('*')
         .eq('id', selectedCase.id)
@@ -331,10 +333,24 @@ router.post('/generate', authenticateRequest, async (req, res) => {
 
       selectedCase = fullCaseData;
 
+      // 🛡️ FIX: case_content pode vir como string (double-encoded JSON) do Supabase
+      // Isso acontece quando o script de inserção fez JSON.stringify() antes de gravar
+      // em uma coluna JSONB que já serializa automaticamente.
+      // Sem esse parse, selectedCase.case_content.context === undefined (string nao tem .context)
+      if (selectedCase.case_content && typeof selectedCase.case_content === 'string') {
+        try {
+          selectedCase.case_content = JSON.parse(selectedCase.case_content);
+          logger.debug(`[Case] 🔧 case_content era string, convertido para objeto (caso ${selectedCase.id})`);
+        } catch (parseErr) {
+          logger.error(`[Case] ❌ case_content é string mas não é JSON válido (caso ${selectedCase.id}):`, parseErr.message);
+          // Deixar cair na validação abaixo que marca como needs_review
+        }
+      }
+
       // 🛡️ VALIDAÇÃO: Garantir que caso tem estrutura válida para micro-momentos
       if (isMicroMoment && (!selectedCase.case_content || !selectedCase.case_content.context)) {
         logger.warn(`[Case] ⚠️ Caso ${selectedCase.id} com case_content inválido (sem context) — movendo para needs_review`);
-        supabase
+        supabaseAdmin
           .from('cases')
           .update({ status: 'needs_review' })
           .eq('id', selectedCase.id)
