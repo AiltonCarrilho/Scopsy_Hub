@@ -1,0 +1,78 @@
+# Pre-commit hooks for Scopsy backend
+# Install: pip install pre-commit
+# Setup: pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # Secrets Detection
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        name: detect-secrets
+        description: Detects secrets using regex and entropy
+        language: python
+        types: [text]
+        args: ['--baseline', '.secrets.baseline']
+        stages: [commit]
+
+  # ESLint - Lint and basic security checks
+  - repo: local
+    hooks:
+      - id: eslint
+        name: ESLint
+        description: Lints JavaScript files and checks for basic security issues
+        entry: npm run lint --
+        language: system
+        types: [javascript]
+        stages: [commit]
+
+  # npm audit - Check dependencies
+  - repo: local
+    hooks:
+      - id: npm-audit
+        name: npm audit
+        description: Check npm dependencies for known vulnerabilities
+        entry: bash -c 'npm audit --audit-level=moderate'
+        language: system
+        types: [json]
+        files: package-lock.json
+        stages: [commit]
+        pass_filenames: false
+
+  # Trailing whitespace
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        name: Trim trailing whitespace
+        types: [text]
+
+  # End of file fixer
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer
+        name: Fix end of file
+        types: [text]
+
+  # Check JSON syntax
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-json
+        name: Check JSON syntax
+        types: [json]
+
+  # Check YAML syntax
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-yaml
+        name: Check YAML syntax
+        types: [yaml]
+
+# Configuration
+default_stages: [commit]
+fail_fast: false
+exclude: node_modules

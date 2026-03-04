@@ -8,8 +8,11 @@
     "dev": "nodemon src/server.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
+    "test:webhooks": "jest tests/webhooks.test.js --coverage",
     "lint": "eslint src/**/*.js",
-    "lint:fix": "eslint src/**/*.js --fix"
+    "lint:fix": "eslint src/**/*.js --fix",
+    "retry:webhooks": "node scripts/retry-webhooks.js",
+    "retry:webhooks:dry": "node scripts/retry-webhooks.js -- --dry-run --verbose"
   },
   "keywords": [
     "tcc",
@@ -39,7 +42,10 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
+    "agentshield": "^0.1.0",
+    "detect-secrets": "^1.0.6",
     "eslint": "^8.56.0",
+    "gitleaks": "^1.0.0",
     "jest": "^29.7.0",
     "nodemon": "^3.0.2",
     "supertest": "^6.3.3"
