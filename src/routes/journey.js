@@ -3,7 +3,7 @@ const logger = require('../config/logger');
 const router = express.Router();
 const { authenticateRequest } = require('../middleware/auth');
 
-const { supabase } = require('../services/supabase'); // RLS-aware anon client
+const { supabaseAdmin: supabase } = require('../services/supabase'); // Service role - backend handles auth via JWT
 
 // ============================================
 // 1️⃣ LISTAR JORNADAS DISPONÍVEIS
