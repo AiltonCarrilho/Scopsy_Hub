@@ -201,6 +201,15 @@ router.get('/:journey_id/session/:session_number', authenticateRequest, async (r
       throw progressError;
     }
 
+    // Verificar se usuário iniciou a jornada
+    if (!progress) {
+      return res.status(403).json({
+        success: false,
+        error: 'Você precisa iniciar a jornada primeiro',
+        code: 'JOURNEY_NOT_STARTED'
+      });
+    }
+
     // Verificar se usuário está na sessão correta
     if (!req.query.free_mode && parseInt(session_number) > progress.current_session) {
 
