@@ -1,19 +1,19 @@
 /**
- * Testes de Integração - Autenticação
+ * Testes de Integração - Autenticação (FIXED)
  *
  * Testa as rotas de autenticação:
  * - POST /api/auth/signup
  * - POST /api/auth/login
  * - GET /api/auth/me
  *
- * Valida correções implementadas: last_login update, validações
+ * 🔥 FIX: Usando manual injection ao invés de jest.mock()
  */
 
 const request = require('supertest');
 const express = require('express');
 const bcrypt = require('bcrypt');
 
-// Mock do logger
+// 🔥 PASSO 2: Mock do logger (global)
 jest.mock('../../src/config/logger', () => ({
   info: jest.fn(),
   error: jest.fn(),
@@ -21,10 +21,7 @@ jest.mock('../../src/config/logger', () => ({
   debug: jest.fn()
 }));
 
-// Mock do database
-jest.mock('../../src/services/database');
-
-// Mock do middleware auth (apenas para generateToken/generateRefreshToken)
+// 🔥 PASSO 3: Mock do auth middleware (global)
 jest.mock('../../src/middleware/auth', () => {
   const original = jest.requireActual('../../src/middleware/auth');
   return {
@@ -34,30 +31,26 @@ jest.mock('../../src/middleware/auth', () => {
   };
 });
 
+// 🔥 PASSO 4: Mock do database (global)
+jest.mock('../../src/services/database', () => jest.requireActual('../mocks/database.mock'));
+
+// 🔥 PASSO 1: Importar mocks APÓS jest.mock setup
+const databaseMock = require('../mocks/database.mock');
+const { resetMockDatabase } = databaseMock;
+
+// 🔥 PASSO 1B: Import database functions APÓS jest.mock
 const {
   saveToBoostspace,
   getFromBoostspace,
   updateInBoostspace
 } = require('../../src/services/database');
 
-const {
-  resetMockDatabase,
-  seedMockDatabase
-} = require('../mocks/database.mock');
-
-// Importar mocks do database
-const databaseMock = require('../mocks/database.mock');
-
-// Configurar mocks para usar as implementações mockadas
-saveToBoostspace.mockImplementation(databaseMock.saveToBoostspace);
-getFromBoostspace.mockImplementation(databaseMock.getFromBoostspace);
-updateInBoostspace.mockImplementation(databaseMock.updateInBoostspace);
-
-// Criar app Express para testes
+// 🔥 PASSO 5: Criar app Express para testes
 function createTestApp() {
   const app = express();
   app.use(express.json());
 
+  // Require authRouter APÓS mocks estarem setup
   const authRouter = require('../../src/routes/auth');
   app.use('/api/auth', authRouter);
 
@@ -86,6 +79,15 @@ describe('Auth Integration Tests', () => {
           name: 'Usuário Novo',
           crp: '06/12345'
         });
+
+      // 🔥 DEBUG
+      if (response.status !== 201) {
+        console.log('❌ SIGNUP FAILED:', {
+          status: response.status,
+          body: response.body,
+          headers: response.headers
+        });
+      }
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('message', 'Conta criada com sucesso');
@@ -257,6 +259,16 @@ describe('Auth Integration Tests', () => {
     });
 
     test('deve fazer login com credenciais válidas', async () => {
+      // 🔥 FIX: Criar usuário primeiro!
+      await request(app)
+        .post('/api/auth/signup')
+        .send({
+          email: 'login@teste.com',
+          password: 'senha12345',
+          name: 'Teste Login'
+        });
+
+      // Agora fazer login
       const response = await request(app)
         .post('/api/auth/login')
         .send({
