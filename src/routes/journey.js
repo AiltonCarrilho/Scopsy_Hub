@@ -110,7 +110,7 @@ router.get('/:id', authenticateRequest, async (req, res) => {
 router.post('/start', authenticateRequest, async (req, res) => {
   try {
     const { journey_id } = req.body;
-    const user_id = req.user.userId;
+    const user_id = parseInt(req.user.userId, 10);  // Convert string to int
 
     logger.debug(`\n[Journey] 🚀 Iniciando jornada: ${journey_id}, user: ${user_id}`);
 
@@ -173,7 +173,7 @@ router.post('/start', authenticateRequest, async (req, res) => {
 router.get('/:journey_id/session/:session_number', authenticateRequest, async (req, res) => {
   try {
     const { journey_id, session_number } = req.params;
-    const userId = req.user.userId;
+    const userId = parseInt(req.user.userId, 10);  // Convert string to int
 
     logger.debug(`\n[Journey] 📖 Sessão ${session_number}, jornada: ${journey_id}, user: ${userId}`);
 
@@ -248,7 +248,7 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
   try {
     const { journey_id, session_number } = req.params;
     const { option_chosen, time_taken_seconds } = req.body;
-    const user_id = req.user.userId;
+    const user_id = parseInt(req.user.userId, 10);  // Convert string to int
 
     logger.debug(`\n[Journey] ✍️  Decisão na sessão ${session_number}:`);
     logger.debug(`   Opção: ${option_chosen}, Tempo: ${time_taken_seconds}s`);
