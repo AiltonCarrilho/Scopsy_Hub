@@ -175,7 +175,7 @@ router.post('/login', async (req, res) => {
     }
 
     // ✅ Atualizar last_login (async, não bloqueia resposta)
-    updateInBoostspace('users', user.id, {
+    await updateInBoostspace('users', user.id, {
       last_login: new Date().toISOString()
     }).catch(err => {
       logger.error('Erro ao atualizar last_login', { error: err.message, userId: user.id });
