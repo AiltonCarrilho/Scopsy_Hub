@@ -168,10 +168,12 @@ app.use('/api/support', apiLimiter, authenticateRequest, setRLSContext, supportR
 // ⚠️ ROTAS OPENAI - Auth + Rate limit por IP + por plano (custo!)
 app.use('/api/diagnostic', openaiLimiter, authenticateRequest, setRLSContext, planLimiter, diagnosticRoutes);
 // /api/case não usa OpenAI desde 12/02 (geração on-demand removida) — apenas apiLimiter + planLimiter
-app.use('/api/case', apiLimiter, authenticateRequest, setRLSContext, planLimiter, caseRoutes);
+// NOTE: authenticateRequest é aplicado em cada rota individual para evitar double auth
+app.use('/api/case', apiLimiter, setRLSContext, planLimiter, caseRoutes);
 
-// 📚 ROTAS JOURNEY - Rate limit padrão API + autenticação + RLS context
-app.use('/api/journey', apiLimiter, authenticateRequest, setRLSContext, journeyRoutes);
+// 📚 ROTAS JOURNEY - Rate limit padrão API + RLS context
+// NOTE: authenticateRequest é aplicado em cada rota individual (router.post/get) não aqui
+app.use('/api/journey', apiLimiter, setRLSContext, journeyRoutes);
 
 // 🔔 WEBHOOKS - Rate limit separado (Kiwify)
 app.use('/api/webhooks', webhookLimiter, webhooksRoutes);
