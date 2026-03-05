@@ -195,7 +195,7 @@ router.get('/:journey_id/session/:session_number', authenticateRequest, async (r
       .select('*')
       .eq('user_id', userId)
       .eq('journey_id', journey_id)
-      .single();
+      .maybeSingle();
 
     if (progressError) {
       throw progressError;

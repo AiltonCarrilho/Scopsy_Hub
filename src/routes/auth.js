@@ -118,6 +118,14 @@ router.post('/signup', async (req, res) => {
 
   } catch (error) {
     logger.error('Erro no signup', { error: error.message });
+
+    // Detectar erro de email duplicado
+    if (error.message && error.message.includes('duplicate') || error.message.includes('UNIQUE')) {
+      return res.status(409).json({
+        error: 'Email já cadastrado'
+      });
+    }
+
     res.status(500).json({
       error: 'Erro ao criar conta',
       ...(process.env.NODE_ENV !== 'production' && { details: error.message })
