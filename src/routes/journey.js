@@ -540,45 +540,40 @@ router.get('/:journey_id/progress', authenticateRequest, async (req, res) => {
 router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
   try {
     const { journey_id } = req.params;
-    const { skill_module } = req.query;
     const userId = req.user.userId;
 
     logger.debug(`\n[Journey] 📚 Listando sessões: jornada ${journey_id}`);
-    if (skill_module) {
-      logger.debug(`   Filtro: module = ${skill_module}`);
+
+    // Carregar JSONs do Orquestrador
+    const fs = require('fs');
+    const path = require('path');
+
+    const orchestratorPath = path.resolve(__dirname, '../../../Orquestrar casos clinicos/outputs/modulo-3');
+    const sessions = [];
+    let journeyMetadata = null;
+
+    const ranges = [
+      `journey-${journey_id}-sessions-1-3-intermediate.json`,
+      `journey-${journey_id}-sessions-4-6-intermediate.json`,
+      `journey-${journey_id}-sessions-7-9-intermediate.json`,
+      `journey-${journey_id}-sessions-10-12-intermediate.json`
+    ];
+
+    for (const file of ranges) {
+      const filePath = path.join(orchestratorPath, file);
+      if (fs.existsSync(filePath)) {
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        if (!journeyMetadata && data.journey) {
+          journeyMetadata = data.journey;
+        }
+        if (data.sessions) {
+          sessions.push(...data.sessions);
+        }
+      }
     }
 
-    // Buscar sessões SEM join (evita erro de relacionamento)
-    const query = supabase
-      .from('journey_sessions')
-      .select('*')
-      .eq('journey_id', journey_id)
-      .order('session_number');
-
-    const { data: sessions, error: sessionsError } = await query;
-
-    if (sessionsError) {
-      throw sessionsError;
-    }
-
-    // Buscar skills manualmente
-    const { data: skills } = await supabase
-      .from('skills')
-      .select('*');
-
-    // Fazer join manual
-    const sessionsWithSkills = sessions.map(session => {
-      const skill = skills ? skills.find(s => s.id === session.skill_id) : null;
-      return {
-        ...session,
-        skill: skill
-      };
-    });
-
-    // Filtrar por módulo se especificado
-    let filteredSessions = sessionsWithSkills;
-    if (skill_module) {
-      filteredSessions = sessionsWithSkills.filter(s => s.skill && s.skill.module === skill_module);
+    if (sessions.length === 0) {
+      return res.status(404).json({ success: false, error: 'No sessions found' });
     }
 
     // Buscar progresso do usuário para marcar sessões completadas
@@ -589,19 +584,15 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
 
     const completedSessionIds = new Set(decisions?.map(d => d.session_id) || []);
 
-    // Adicionar flag de completado
-    const sessionsWithStatus = filteredSessions.map(session => ({
-      ...session,
-      is_completed: completedSessionIds.has(session.id)
-    }));
+    // Ordenar por session_number
+    const sorted = sessions.sort((a, b) => a.session_number - b.session_number);
 
-    logger.debug(`[Journey] ✅ ${sessionsWithStatus.length} sessões retornadas`);
+    logger.debug(`[Journey] ✅ ${sorted.length} sessões retornadas`);
 
     res.json({
       success: true,
-      sessions: sessionsWithStatus,
-      total: sessionsWithStatus.length,
-      filter_applied: skill_module || 'all'
+      sessions: sorted,
+      total: sorted.length
     });
 
   } catch (error) {
