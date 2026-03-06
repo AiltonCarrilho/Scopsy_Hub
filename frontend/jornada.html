@@ -7,13 +7,6 @@
     <title>Jornada Clínica - Scopsy Lab</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png" />
-    <link rel="shortcut icon" href="favicon.png" />
 
     <link rel="stylesheet" href="css/core.css">
     <link rel="stylesheet" href="css/jornada.css">
@@ -24,25 +17,14 @@
     <header class="header">
         <div class="container">
             <div class="logo">
-                <a href="dashboard.html" class="logo-link">
-                    <img src="assets/logo.png" alt="Scopsy Lab" class="logo-icon-img">
-                    <h1>Scopsy<span class="text-gradient">Lab</span></h1>
-                </a>
+                <h1>Scopsy Lab<span class="registered">®</span></h1>
+                <div style="color: #00ff00; font-size: 12px; margin-top: 4px;">VERSÃO CORRIGIDA v2.0</div>
             </div>
-            <a href="/dashboard.html" class="btn-back">
-                ← Voltar ao Dashboard
+            <a href="dashboard.html" class="btn-back">
+                ← Dashboard
             </a>
         </div>
     </header>
-
-    <!-- Banner Trial -->
-    <div id="trialBanner" class="trial-banner" style="display: none;">
-        <div class="trial-content">
-            <i data-lucide="clock"></i>
-            <span><strong id="trialDaysLeft">0</strong> dias restantes no seu período de teste.</span>
-        </div>
-        <a href="#" class="btn-upgrade">Assinar Premium</a>
-    </div>
 
     <div class="container">
         <!-- LAYOUT COM MENU LATERAL -->
@@ -50,7 +32,6 @@
             <!-- MENU LATERAL DE SESSÕES -->
             <div class="sessions-sidebar" id="sessionsSidebar">
                 <div class="sidebar-header">
-                    <div class="icon-trophy sprite-icon-small" style="margin-bottom: 8px;"></div>
                     <h3>Sessões</h3>
                     <div class="sessions-count" id="sessionsCount">12 disponíveis</div>
                 </div>
@@ -105,28 +86,11 @@
     <!-- Carregar configuração centralizada e utilitários de auth -->
     <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/sanitize.js"></script>
-    <script src="js/trial-banner.js"></script>
 
     <script>
         // API_URL definida globalmente em config.js
         // Criar constante local com sufixo /api para uso neste arquivo
         const JOURNEY_API_URL = window.API_URL + '/api';
-
-        // Helper para fetch autenticado
-        function authHeaders(extra = {}) {
-            const token = getToken();
-            return { 'Authorization': `Bearer ${token}`, ...extra };
-        }
-
-        // Toast de erro (substitui alert())
-        function showError(msg) {
-            const el = document.createElement('div');
-            el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#ef4444;color:#fff;padding:12px 24px;border-radius:8px;z-index:99998;font-size:0.95rem;box-shadow:0 4px 12px rgba(0,0,0,0.15);white-space:nowrap;';
-            el.textContent = msg;
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 4000);
-        }
 
         // Obter usuário logado dinamicamente
         const currentUser = getUser(); // Função do auth.js
@@ -148,10 +112,7 @@
         // ========================================
         async function loadJourneys() {
             try {
-                const response = await fetch(`${JOURNEY_API_URL}/journey/list`, {
-                    headers: authHeaders()
-                });
-                if (response.status === 401) { showSessionExpired(); return; }
+                const response = await fetch(`${JOURNEY_API_URL}/journey/list`);
                 const data = await response.json();
 
                 if (!data.success || data.journeys.length === 0) {
@@ -192,14 +153,11 @@
                     <div class="loading-small">Carregando sessões...</div>
                 `;
 
-                const url = `${JOURNEY_API_URL}/journey/${currentJourneyId}/sessions`;
+                const url = `${JOURNEY_API_URL}/journey/${currentJourneyId}/sessions?user_id=${USER_ID}`;
                 console.log('🔍 Carregando sessões da API:', url);
 
-                const response = await fetch(url, {
-                    headers: authHeaders()
-                });
+                const response = await fetch(url);
 
-                if (response.status === 401) { showSessionExpired(); return; }
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
@@ -380,9 +338,7 @@
         // ========================================
         async function checkProgress() {
             try {
-                const response = await fetch(`${JOURNEY_API_URL}/journey/${currentJourneyId}/progress`, {
-                    headers: authHeaders()
-                });
+                const response = await fetch(`${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`);
                 const data = await response.json();
 
                 if (data.progress) {
@@ -413,9 +369,10 @@
             try {
                 const response = await fetch(`${JOURNEY_API_URL}/journey/start`, {
                     method: 'POST',
-                    headers: authHeaders({ 'Content-Type': 'application/json' }),
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        journey_id: currentJourneyId
+                        journey_id: currentJourneyId,
+                        user_id: USER_ID
                     })
                 });
 
@@ -458,15 +415,12 @@
                 currentSessionNumber = sessionNumber;
                 sessionStartTime = Date.now();
 
-                let url = `${JOURNEY_API_URL}/journey/${currentJourneyId}/session/${sessionNumber}`;
+                let url = `${JOURNEY_API_URL}/journey/${currentJourneyId}/session/${sessionNumber}?user_id=${USER_ID}`;
                 if (freeMode) {
-                    url += '?free_mode=true';
+                    url += '&free_mode=true';
                 }
 
-                const response = await fetch(url, {
-                    headers: authHeaders()
-                });
-                if (response.status === 401) { showSessionExpired(); return; }
+                const response = await fetch(url);
                 const data = await response.json();
 
                 if (data.success) {
@@ -659,18 +613,18 @@
                 });
 
                 const response = await fetch(
-                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/session/${currentSessionNumber}/decide`,
+                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/session/${currentSessionNumber}/decide?user_id=${USER_ID}`,
                     {
                         method: 'POST',
-                        headers: authHeaders({ 'Content-Type': 'application/json' }),
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             option_chosen: selectedOption,
-                            time_taken_seconds: timeTaken
+                            time_taken_seconds: timeTaken,
+                            user_id: USER_ID
                         })
                     }
                 );
 
-                if (response.status === 401) { showSessionExpired(); return; }
                 const data = await response.json();
 
                 if (data.success) {
@@ -699,7 +653,7 @@
 
             } catch (error) {
                 console.error('❌ Erro ao submeter decisão:', error);
-                showError('Não foi possível registrar sua decisão. Tente novamente.');
+                alert('Erro ao registrar decisão. Tente novamente.');
 
                 // Re-habilitar botão em caso de erro
                 if (btn) {
@@ -850,8 +804,7 @@
         async function refreshProgress() {
             try {
                 const response = await fetch(
-                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress`,
-                    { headers: authHeaders() }
+                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
                 );
                 const data = await response.json();
 
@@ -877,10 +830,8 @@
 
                 // Buscar progresso atualizado
                 const response = await fetch(
-                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress`,
-                    { headers: authHeaders() }
+                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
                 );
-                if (response.status === 401) { showSessionExpired(); return; }
                 const data = await response.json();
 
                 if (data.progress.is_completed) {
@@ -904,7 +855,7 @@
                 }
             } catch (error) {
                 console.error('Erro ao avançar:', error);
-                showError('Erro ao carregar próxima sessão. Tente novamente.');
+                alert('Erro ao carregar próxima sessão.');
 
                 const btn = e?.target;
                 if (btn) {
@@ -996,8 +947,8 @@
             }
 
             if (restartBtn) restartBtn.addEventListener('click', restartJourney);
-            if (dashboardBtn) dashboardBtn.addEventListener('click', () => window.location.href = '/dashboard.html');
-            if (treinoLivreBtn) treinoLivreBtn.addEventListener('click', () => window.location.href = 'desafios.html');
+            if (dashboardBtn) dashboardBtn.addEventListener('click', () => window.location.href = 'dashboard.html');
+            if (treinoLivreBtn) treinoLivreBtn.addEventListener('click', () => window.location.href = 'treino-livre.html');
         }
 
         // ========================================
@@ -1046,7 +997,7 @@
 
             } catch (error) {
                 console.error('❌ Erro ao carregar novo caso:', error);
-                showError('Erro ao carregar novo caso. Tente novamente.');
+                alert(`Erro: ${error.message}`);
             }
         }
 
@@ -1072,12 +1023,12 @@
                     </div>
                 `;
 
-                const response = await fetch(`${JOURNEY_API_URL}/journey/${currentJourneyId}/restart`, {
+                const response = await fetch(`${API_URL}/journey/${currentJourneyId}/restart`, {
                     method: 'POST',
-                    headers: authHeaders({ 'Content-Type': 'application/json' }),
-                    body: JSON.stringify({})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: USER_ID })
                 });
-                if (response.status === 401) { showSessionExpired(); return; }
+
                 const data = await response.json();
 
                 if (!data.success) {
@@ -1089,7 +1040,7 @@
                 // Limpar cache de sessões para forçar reload
                 sessionsCache = {};
                 lastLoadedJourney = null;
-                // lastLoadedFilter removido (variavel nao utilizada)
+                lastLoadedFilter = null;
 
                 // Garantir que localStorage está atualizado
                 localStorage.setItem('scopsy_current_journey_id', currentJourneyId);
@@ -1099,7 +1050,7 @@
 
             } catch (error) {
                 console.error('❌ Erro ao recomeçar:', error);
-                showError('Erro ao recomeçar. Tente novamente.');
+                alert('Erro ao recomeçar: ' + error.message);
             }
         }
 
@@ -1125,47 +1076,9 @@
         }
 
         // ========================================
-        // MOBILE: COLLAPSIBLE SIDEBAR
-        // ========================================
-        function setupMobileSidebar() {
-            const sidebar = document.getElementById('sessionsSidebar');
-            const header = sidebar?.querySelector('.sidebar-header');
-            if (!sidebar || !header) return;
-
-            function isMobile() {
-                return window.matchMedia('(max-width: 768px)').matches;
-            }
-
-            header.addEventListener('click', function (e) {
-                if (!isMobile()) return;
-                e.stopPropagation();
-                sidebar.classList.toggle('expanded');
-            });
-
-            // Close sidebar when a session is selected on mobile
-            sidebar.addEventListener('click', function (e) {
-                if (!isMobile()) return;
-                if (e.target.closest('.session-menu-item')) {
-                    setTimeout(() => sidebar.classList.remove('expanded'), 200);
-                }
-            });
-
-            // Ensure sidebar is not collapsed on desktop
-            window.addEventListener('resize', function () {
-                if (!isMobile()) {
-                    sidebar.classList.remove('expanded');
-                }
-            });
-        }
-
-        // ========================================
         // INIT
         // ========================================
-        setupMobileSidebar();
         init();
-
-        // Initialize Lucide Icons
-        lucide.createIcons();
     </script>
 </body>
 
