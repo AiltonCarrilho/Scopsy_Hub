@@ -544,7 +544,18 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
 
     logger.debug(`\n[Journey] 📚 Listando sessões: jornada ${journey_id}`);
 
-    // Carregar JSONs do Orquestrador
+    // Buscar orchestrator_id do database
+    const { data: journey, error: journeyError } = await supabase
+      .from('clinical_journeys')
+      .select('orchestrator_id')
+      .eq('id', journey_id)
+      .single();
+
+    if (journeyError || !journey || !journey.orchestrator_id) {
+      return res.status(404).json({ success: false, error: 'Journey not found or orchestrator_id not mapped' });
+    }
+
+    // Carregar JSONs do Orquestrador usando numeric ID
     const fs = require('fs');
     const path = require('path');
 
@@ -552,11 +563,12 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
     const sessions = [];
     let journeyMetadata = null;
 
+    const orchestratorId = journey.orchestrator_id;
     const ranges = [
-      `journey-${journey_id}-sessions-1-3-intermediate.json`,
-      `journey-${journey_id}-sessions-4-6-intermediate.json`,
-      `journey-${journey_id}-sessions-7-9-intermediate.json`,
-      `journey-${journey_id}-sessions-10-12-intermediate.json`
+      `journey-${orchestratorId}-sessions-1-3-intermediate.json`,
+      `journey-${orchestratorId}-sessions-4-6-intermediate.json`,
+      `journey-${orchestratorId}-sessions-7-9-intermediate.json`,
+      `journey-${orchestratorId}-sessions-10-12-intermediate.json`
     ];
 
     for (const file of ranges) {
