@@ -82,6 +82,10 @@
             "destination": "https://scopsy-hub.onrender.com/api/:path*"
         },
         {
+            "source": "/frontend/:path*",
+            "destination": "/:path*"
+        },
+        {
             "source": "/",
             "destination": "/index.html"
         }
