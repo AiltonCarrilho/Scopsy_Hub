@@ -1,0 +1,242 @@
+[
+  {
+    "session_number": 1,
+    "session_title": "Acolhimento e Construção da Linha do Tempo do Trauma",
+    "session_phase": "initial",
+    "session_content": {
+      "narrative": "Você recebe Lucas, 32 anos, bombeiro civil, referenciado após testemunhar o colapso fatal de um colega durante um incêndio há oito meses. Lucas relata insônia, pesadelos recorrentes com imagens do acidente, irritabilidade e evitação de qualquer notícia ou local que lembre o trabalho. Ele se mostra vigilante, com postura rígida, e descreve um sentimento de 'embotamento' e distanciamento da família. Durante a sessão, você valida seu sofrimento, explica o modelo cognitivo do TEPT e propõe a construção conjunta de uma 'linha do tempo do trauma' para organizar os eventos e suas reações. Lucas concorda, mas ao começar a descrever o dia do acidente, sua voz falha e ele desvia o olhar, tensionando os músculos da mandíbula. Ele menciona, de passagem, um sentimento intenso de culpa por 'não ter feito o suficiente'.",
+      "session_goals": [
+        "Estabelecer rapport e psicoeducação sobre TEPT",
+        "Iniciar a organização narrativa do evento traumático (linha do tempo)"
+      ],
+      "key_observations": [
+        "Paciente apresenta hipervigilância e embotamento afetivo claros",
+        "Menção espontânea à culpa, um potencial cognição pós-traumática central",
+        "Resposta de congelamento/evitação ao abordar detalhes do trauma"
+      ],
+      "critical_decision_point": "O que você faz?"
+    },
+    "expert_commentary": "A opção A é ótima porque segue o princípio de 'nomear para dominar' e a técnica de validação emocional, crucial no TEPT. Como ressalta Foa et al. (2019) na Terapia de Exposição Prolongada, a validação reduz a vergonha e facilita a abordagem de memórias aversivas. A exploração cognitiva (B) é necessária, mas só após estabelecido um ambiente seguro e alguma habituação emocional. As opções C e D, embora comuns, sabotam os mecanismos de tratamento.",
+    "learning_focus": "Validação emocional e manejo da evitação no início da narrativa traumática",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Validar a dificuldade e focar na emoção presente",
+        "approach": "Abordagem centrada na emoção e validação",
+        "is_optimal": true,
+        "immediate_outcome": "Você diz: 'É muito difícil tocar nisso. Posso perceber o peso dessa culpa aqui agora.' Lucas suspira, faz contato visual e concorda, dizendo que carrega isso todos os dias. Isso normaliza sua reação e fortalece a aliança para trabalhar a culpa.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 7,
+          "behavioral_change": 6,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Pedir para ele detalhar o pensamento de culpa",
+        "approach": "Exploração cognitiva direta",
+        "is_optimal": false,
+        "immediate_outcome": "Você pergunta: 'O que exatamente você acha que poderia ter feito diferente?' Lucas se fecha, responde 'Não sei, tudo', e a evitação aumenta, interrompendo o fluxo da narrativa. A exploração prematura pode ser retraumatizante.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Mudar de tópico para aliviar o desconforto",
+        "approach": "Evitação do terapeuta",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz: 'Vamos voltar a isso depois. Conte-me mais sobre seu dia antes do acidente.' Lucas parece aliviado no momento, mas internaliza que o tópico é muito perigoso, reforçando seu padrão de evitação e prejudicando a exposição gradual.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 5,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Minimizar a culpa com racionalização",
+        "approach": "Reestruturação cognitiva prematura",
+        "is_optimal": false,
+        "immediate_outcome": "Você argumenta: 'Mas você fez o melhor que pôde na situação.' Lucas responde com irritação: 'O senhor não estava lá.', sentindo-se invalidado. A intervenção, embora bem-intencionada, ignora a necessidade de primeiro acessar e validar a experiência emocional.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 2,
+    "session_title": "Exposição à Memória e Identificação de Cognições",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Com base na aliança fortalecida na sessão anterior, você revisa a linha do tempo e propõe a primeira sessão de Exposição à Memória Traumática (EMT), focada no momento mais angustiante: ver o colega soterrado. Você conduz Lucas em uma respiração diafragmática e o guia na narrativa viva do evento, com os olhos fechados. Lucas relata, com voz trêmula, os detalhes sensoriais (o cheiro de queimado, o som do desabamento). Ao final, sua SUD (Unidades Subjetivas de Perturbação) cai de 90 para 70. No processamento, ele verbaliza a cognição: 'Sou um fracasso como bombeiro'. Você também nota que ele descreveu o evento de forma desconectada ('como se estivesse vendo um filme'), um sinal de dissociação peritraumática. Ele pergunta, ansioso: 'Contar isso de novo vai mesmo ajudar?'",
+      "session_goals": [
+        "Realizar a primeira EMT para promover habituação",
+        "Identificar cognições traumáticas centrais (ex: 'Sou um fracasso')"
+      ],
+      "key_observations": [
+        "Houve redução inicial da SUD, indicando início de habituação",
+        "Cognição negativa 'Sou um fracasso' identificada claramente",
+        "Relato de despersonalização ('ver um filme') durante o trauma"
+      ],
+      "critical_decision_point": "Como você processa esta primeira exposição e responde à sua dúvida?"
+    },
+    "expert_commentary": "A opção A é ótima porque integra validação, normalização e psicoeducação baseada nos dados da própria sessão (SUD). Shapiro (2018), no modelo do TEPT, enfatiza a importância de vincular a redução da angústia ao processamento adaptivo da memória. A reestruturação (B) é etapa seguinte. Adiar a EMT (C) é contraproducente, pois a evitação é o núcleo da patologia. Focar na dissociação (D) é importante, mas deve ser feito após validar a experiência global do paciente.",
+    "learning_focus": "Processamento pós-exposição e uso de dados da sessão para psicoeducação e engajamento",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Normalizar a exaustão, elogiar a coragem e conectar a redução da SUD ao processo de habituação",
+        "approach": "Psicoeducação baseada em dados e reforço",
+        "is_optimal": true,
+        "immediate_outcome": "Você diz: 'É normal se sentir esgotado. Foi um ato de coragem. E note que sua angústia caiu de 90 para 70 só em uma vez - isso mostra que seu cérebro está começando a processar, não só a reviver.' Lucas parece mais esperançoso e compreende a lógica do tratamento.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Focar apenas na cognição 'Sou um fracasso' e desafiar com evidências",
+        "approach": "Reestruturação cognitiva imediata",
+        "is_optimal": false,
+        "immediate_outcome": "Você questiona: 'Que evidências você tem de que é um fracasso?' Lucas, ainda emocionalmente vulnerável, rebate: 'A única evidência que importa está morta.' A intervenção falha por não consolidar a experiência da exposição antes de desafiar pensamentos.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 6,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Concordar que foi difícil e sugerir adiar a próxima EMT",
+        "approach": "Acomodação da evitação",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz: 'Foi intenso mesmo. Podemos trabalhar outras coisas na próxima sessão.' Lucas concorda com alívio, mas o adiamento reforça a crença de que a memória é intolerável, prejudicando a curva de habituação e o progresso.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Ignorar a dúvida e focar no relato dissociativo ('ver um filme')",
+        "approach": "Foco clínico rígido no sintoma",
+        "is_optimal": false,
+        "immediate_outcome": "Você pergunta: 'Fale mais sobre essa sensação de ver um filme.' Lucas se confunde, sentindo que sua preocupação prática foi ignorada. A aliança terapêutica é tensionada, e uma oportunidade de psicoeducação crucial é perdida.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 5,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 3,
+    "session_title": "Integrando a Dissociação e Trabalhando a Culpa",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Lucas chega relatando que teve menos pesadelos na semana, mas que evitou passar pelo quartel do corpo de bombeiros. Na segunda EMT, a SUD inicial foi menor (75), caindo para 55. A narrativa foi mais fluida e conectada. No processamento, você explora a cognição 'Sou um fracasso' e a liga ao relato dissociativo da sessão anterior. Lucas reflete: 'Talvez eu tenha me sentido um fracasso porque congelei... na hora, foi tudo como um sonho ruim.' Você propõe uma técnica de reestruturação cognitiva, usando a perspectiva do 'colega soterrado' para desafiar a culpa. Lucas se mostra receptivo, mas ao imaginar o que o colega diria, fica emocionado e cala. Ele então pergunta, com certa vergonha: 'Isso significa que eu sou fraco por ter 'desligado' na hora?'",
+      "session_goals": [
+        "Processar a dissociação peritraumática e conectá-la à cognição de culpa",
+        "Iniciar a reestruturação cognitiva da autocrítica severa"
+      ],
+      "key_observations": [
+        "Redução consistente da SUD entre sessões, indicando habituação",
+        "Paciente começa a fazer conexões entre sintoma (dissociação) e cognição (culpa)",
+        "Emoção de vergonha associada à resposta dissociativa surge como novo alvo"
+      ],
+      "critical_decision_point": "Como você responde a esta nova camada de culpa/vergonha?"
+    },
+    "expert_commentary": "A opção A é ótima porque ataca diretamente a cognição de vergonha com informação científica poderosa e desculpabilizante. Van der Kolk (2014) destaca que entender as respostas traumáticas como biológicas, e não morais, é libertador para o paciente. A exploração (B) é válida, mas secundária. A validação pura (C) é insuficiente. O exemplo (D) pode ser útil, mas deve ser complementado com a explicação neurobiológica para ser eficaz.",
+    "learning_focus": "Psicoeducação sobre respostas neurobiológicas ao trauma para reduzir culpa e vergonha secundárias",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Psicoeducar sobre a dissociação como uma reação neurobiológica automática de sobrevivência",
+        "approach": "Normalização baseada na neurociência do trauma",
+        "is_optimal": true,
+        "immediate_outcome": "Você explica: 'A dissociação não é fraqueza, é um 'circuito de emergência' do cérebro diante de um estresse extremo. Foi o que seu sistema fez para você sobreviver àqueles momentos. Muitos sobreviventes de trauma experienciam isso.' Lucas relaxa a postura, assimilando a informação com um 'nunca tinha pensado por esse lado'.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Explorar as crenças subjacentes sobre 'força' e 'fraqueza'",
+        "approach": "Exploração cognitiva de crenças nucleares",
+        "is_optimal": false,
+        "immediate_outcome": "Você pergunta: 'O que significa ser 'fraco' para você?' A discussão se aprofunda em valores rígidos, mas Lucas, ainda preso à vergonha, tem dificuldade de se engajar. A psicoeducação necessária para desbloquear a vergonha é postergada.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 7,
+          "behavioral_change": 5,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Validar apenas o sentimento sem corrigir a cognição",
+        "approach": "Validação sem psicoeducação corretiva",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz: 'É realmente difícil carregar essa vergonha.' Lucas concorda, mas a crença disfuncional de que é 'fraco' permanece intacta. Perde-se uma oportunidade crucial de intervenção que poderia aliviar significativamente seu sofrimento.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Contar sobre outro paciente com reação similar para normalizar",
+        "approach": "Normalização por exemplo (com cautela)",
+        "is_optimal": false,
+        "immediate_outcome": "Você comenta: 'Já atendi outros bombeiros que passaram por algo parecido.' Lucas parece um pouco menos sozinho, mas pergunta: 'E eles também se sentiram fracos?' A intervenção é incompleta e pode desviar o foco do processo individual para comparações.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  }
+]

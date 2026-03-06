@@ -1,0 +1,242 @@
+[
+  {
+    "session_number": 4,
+    "session_title": "Explorando a Inércia e a Ativação Comportamental",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Marcos, 42 anos, chega à sessão visivelmente mais arrumado, mas com um olhar cansado. Ele relata que a semana foi difícil, com 'dias cinzentos' e uma sensação constante de peso. Ele menciona ter tentado seguir a sugestão da sessão anterior de fazer uma caminhada curta, mas desistiu após dois dias, dizendo que 'não viu sentido' e que a fadiga era grande. Ele descreve um padrão de evitação: fica na cama até tarde, adia tarefas domésticas e evita ligações da família. O humor deprimido é persistente, com anedonia marcante ('nem a série que eu gostava me prende mais'). Ele fala com certa autocrítica sobre sua 'preguiça'. A sessão se concentra em validar o esforço da tentativa, normalizar a dificuldade como parte do transtorno, e mapear com mais detalhes o ciclo da depressão: humor baixo leva à inatividade, que reduz o contato com reforçadores, piorando o humor. É introduzido o conceito de 'Atividade de Mestre' versus 'Atividade de Controle' (Beck, 2011), explicando como a depressão 'sequestra' a motivação.",
+      "session_goals": [
+        "Psicoeducar sobre o ciclo depressivo da inatividade e anedonia",
+        "Introduzir os princípios da Ativação Comportamental de forma colaborativa"
+      ],
+      "key_observations": [
+        "Relato de tentativa fracassada de atividade, indicando baixa energia e desesperança",
+        "Presença de autocrítica ('preguiça') internalizando os sintomas como falha de caráter",
+        "Padrão claro de evitação e retraimento social, alinhado com critérios do DSM-5-TR para Episódio Depressivo Maior"
+      ],
+      "critical_decision_point": "Como você responde para engajá-lo no processo?"
+    },
+    "expert_commentary": "A resistência à Ativação Comportamental é comum e previsível. A opção ótima (A) segue o princípio de 'colaboração empírica' (Beck, 2011). Primeiro, valida-se a experiência emocional para manter a aliança. Depois, reformula-se a intervenção como um 'experimento' para testar a previsão da depressão ('nada ajuda'), não como uma solução mágica. Isso reduz a pressão e enquadra a ação como coleta de dados, alinhando-se com o modelo cognitivo. É crucial começar com atividades 'minúsculas' (Lewinsohn, 1974) para garantir sucesso e combater a desesperança.",
+    "learning_focus": "Manejo de resistência e engajamento em intervenções comportamentais na depressão",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Validar a emoção e reformular o objetivo",
+        "approach": "Abordagem colaborativa baseada em TCC, alinhada com a psicoeducação",
+        "is_optimal": true,
+        "immediate_outcome": "Você concorda que a tristeza é real e não se trata de fingir. Explica que a depressão 'diz' que nada vai ajudar, mas a Ativação Comportamental é um teste comportamental para verificar essa previsão. Propõe começar com atividades muito pequenas e neutras, não para gerar prazer imediato, mas para quebrar o ciclo da inércia. Marcos parece menos resistente e aceita planejar uma 'atividade-experimento' minúscula para os próximos dias.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 9,
+          "behavioral_change": 7,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Enfatizar a importância da disciplina e da força de vontade",
+        "approach": "Abordagem diretiva e motivacional",
+        "is_optimal": false,
+        "immediate_outcome": "Você tenta motivar Marcos, dizendo que ele precisa se esforçar mais e que a mudança exige disciplina. Marcos se sente incompreendido e pressionado, reforçando sua crença de que está falhando por falta de força de vontade. Ele concorda com o plano apenas para encerrar o assunto, mas o engajamento terapêutico diminui.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 2,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Mudar de tópico e explorar as origens da sua tristeza na infância",
+        "approach": "Abordagem psicodinâmica prematura",
+        "is_optimal": false,
+        "immediate_outcome": "Você pergunta se essa sensação de desesperança lembra algo da sua infância. Marcos fica confuso, pois esperava estratégias para o presente. A sessão perde o foco no modelo cognitivo-comportamental atual, gerando dispersão e frustração no paciente, que não vê conexão prática com seu sofrimento imediato.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 5,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Concordar que pode não funcionar e sugerir focar apenas no apoio emocional",
+        "approach": "Abordagem excessivamente passiva e não-diretiva",
+        "is_optimal": false,
+        "immediate_outcome": "Você valida sua descrença e sugere que talvez seja cedo para intervenções ativas, propondo apenas conversar sobre seus sentimentos nas próximas sessões. Isso reforça a impotência de Marcos e a crença de que não há saída. A terapia estagna, sem direção ou esperança de mudança.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 3,
+          "behavioral_change": 1,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 5,
+    "session_title": "Testando Experimentos Comportamentais e Identificando Pensamentos Automáticos",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Marcos inicia a sessão relatando que realizou o 'experimento' combinado: levantar da cama e preparar um café, sem a expectativa de se animar, apenas para observar. Ele conta que, no primeiro dia, foi mecânico, mas nos dias seguintes, notou que o simples ato de tomar café na varanda trouxe um breve momento de 'paz'. No entanto, rapidamente minimiza: 'Mas foi só um instante, o dia depois piorou'. Você explora esse 'instante de paz' como um dado importante, destacando que a previsão da depressão ('nada ajuda') pode não ser 100% verdadeira. A partir dessa situação concreta, você guia Marcos a identificar o pensamento automático que surgiu após o momento positivo: 'Isso não vai durar, amanhã será igual'. A sessão avança para a psicoeducação sobre a tríade cognitiva negativa (visão de si, do mundo e do futuro) e a introdução do registro de pensamentos. Marcos demonstra certa curiosidade intelectual sobre o modelo, mas ainda cético quanto à aplicação em sua vida.",
+      "session_goals": [
+        "Analisar os resultados do experimento comportamental para desafiar a desesperança",
+        "Introduzir a identificação de pensamentos automáticos e a conexão pensamento-emoção"
+      ],
+      "key_observations": [
+        "Paciente conseguiu realizar atividade de baixa demanda, mas desvaloriza o resultado positivo (viés cognitivo de desqualificação do positivo)",
+        "Surgimento espontâneo de um pensamento automático sobre o futuro, exemplificando a visão negativa do futuro (desesperança) típica da depressão",
+        "Engajamento intelectual é um ponto de entrada para o trabalho cognitivo, mas o afeto permanece embotado"
+      ],
+      "critical_decision_point": "Como você procede para manter a adesão à técnica cognitiva?"
+    },
+    "expert_commentary": "A objeção de Marcos é valiosa e comum. A TCC pode ser percebida como mecânica. A resposta ótima (A) transforma a objeção em parte do processo colaborativo. Primeiro, valida-se a preocupação (não é 'pensamento positivo'). Depois, redefine-se a ferramenta como um 'mapa' para entender padrões, não como uma solução. Por fim, convida-se para um 'experimento', mantendo a postura empírica. Isso preserva a aliança, educa sobre o verdadeiro propósito da reestruturação cognitiva (identificar distorções, não trocar pensamentos) e mantém o paciente no papel de cientista de sua própria experiência (Padesky, 1995).",
+    "learning_focus": "Psicoeducação sobre o modelo cognitivo e manejo de objeções às técnicas de reestruturação cognitiva",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Clarificar o objetivo da técnica e convidar para uma crítica colaborativa",
+        "approach": "Abordagem psicoeducacional e colaborativa, normalizando a resistência",
+        "is_optimal": true,
+        "immediate_outcome": "Você agradece pelo feedback honesto e concorda que não se trata de 'pensar positivo'. Explica que o objetivo é entender o padrão da sua mente depressiva, que distorce situações (como desqualificar o momento de paz), e não substituir pensamentos ruins por bons. Pergunta: 'Podemos testar se essa ferramenta, mesmo que robotizada, pode nos ajudar a mapear esse território?'. Marcos, sentindo-se ouvido, aceita tentar como um novo 'experimento', não como uma verdade imposta.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 9,
+          "insight": 8,
+          "behavioral_change": 7,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Insistir na importância da técnica e pedir que ele confie no processo",
+        "approach": "Abordagem autoritária e não colaborativa",
+        "is_optimal": false,
+        "immediate_outcome": "Você defende a técnica, citando sua eficácia comprovada, e pede que Marcos a pratique em casa como tarefa. Ele se sente invalidado e pressionado. A aliança terapêutica é prejudicada, e é provável que ele não realize os registros, voltando na próxima sessão com mais frustração.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 2,
+          "insight": 3,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Abandonar a técnica cognitiva e retornar exclusivamente à ativação comportamental",
+        "approach": "Abordagem de evitação do conflito terapêutico",
+        "is_optimal": false,
+        "immediate_outcome": "Você cede à resistência e propõe focar apenas em planejar mais atividades. Isso confirma a crença de Marcos de que seus padrões de pensamento são intocáveis ou 'reais demais' para serem examinados. Perde-se uma oportunidade crucial de intervenção no nível cognitivo, limitando o potencial da TCC.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 2,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Interpretar a irritação como resistência à mudança e confrontá-lo",
+        "approach": "Abordagem psicodinâmica inadequada ao contexto de TCC",
+        "is_optimal": false,
+        "immediate_outcome": "Você sugere que a irritação dele pode ser um medo de descobrir coisas sobre si mesmo ou de melhorar. Marcos se sente atacado e misinterpretado. A conversa vira uma discussão defensiva sobre motivações, arruinando o clima colaborativo e o foco no aqui-e-agora.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 1,
+          "insight": 4,
+          "behavioral_change": 1,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 6,
+    "session_title": "Trabalhando Crenças Centrais e o Medo da Recuperação",
+    "session_phase": "advanced",
+    "session_content": {
+      "narrative": "Marcos traz dois registros de pensamentos incompletos. Um deles captura uma situação em que um colega de trabalho não respondeu a uma mensagem. O pensamento automático foi 'Ele me acha incompetente e chato', seguido de tristeza e isolamento. Ao explorar, identifica-se a distorção de 'leitura mental' e 'personalização'. Juntos, geram uma resposta alternativa mais equilibrada. Marcos demonstra habilidade crescente nesse processo. No entanto, ao final da análise, ele fica quieto e então comenta: 'Se eu melhorar e parar de ser tão... assim... as pessoas vão esperar que eu seja sempre normal. E se eu não conseguir? É menos pior elas já me verem como o deprimido'. Este é um momento crucial, indicando o surgimento de uma 'crença central' (ex.: 'Sou defeituoso') e uma 'crença positiva sobre a doença' (a depressão como escudo). A sessão explora esse medo da recuperação e a função que o estado depressivo pode ter, sem julgamentos.",
+      "session_goals": [
+        "Consolidar a habilidade de identificar e questionar pensamentos automáticos em situações sociais",
+        "Explorar e validar o medo da recuperação e as crenças subjacentes que sustentam a depressão"
+      ],
+      "key_observations": [
+        "Paciente mostra capacidade inicial de usar ferramentas cognitivas (identificar distorções), indicando progresso",
+        "Surgimento de fala sobre o 'medo de melhorar', sinalizando trabalho em nível de crenças centrais (ex.: incompetência, defeito) e possíveis ganhos secundários (a depressão como identidade estável)",
+        "O afeto durante este relato é de ansiedade e vulnerabilidade, um sinal de que temas nucleares estão sendo tocados"
+      ],
+      "critical_decision_point": "Como você trabalha essa ambivalência entre a mudança e a segurança da depressão?"
+    },
+    "expert_commentary": "O 'medo da recuperação' é um marco no tratamento da depressão crônica. A opção ótima (A) segue a estratégia de trabalhar com 'crenças positivas sobre o problema' (Beck, 2011). Primeiro, valida-se e explora-se a função (proteção, previsibilidade). Isso reduz a defesa e aumenta a insight. Só então se introduz uma redefinição da recuperação como 'expansão de escolhas' e 'flexibilidade', não como um estado de perfeição inatingível. Essa abordagem respeita a ambivalência do paciente (conceito da Entrevista Motivacional integrado à TCC) e trabalha no nível das crenças centrais ('preciso ser perfeito para ser aceito') de forma indireta e menos ameaçadora.",
+    "learning_focus": "Trabalho com crenças centrais e ambivalência em fases avançadas da terapia para depressão",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Validar o medo e explorar a função protetora da depressão, antes de desafiar a crença",
+        "approach": "Abordagem baseada em TCC para crenças, integrando conceitos motivacionais",
+        "is_optimal": true,
+        "immediate_outcome": "Você responde: 'É compreensível sentir isso. A depressão, por mais que doe, se tornou um território conhecido. Vamos entender o que ela parece proteger você?' Isso normaliza sua ambivalência. Explorando, Marcos articula que a depressão 'justifica' suas falhas e afasta a pressão. Você então pergunta: 'E se a recuperação não fosse sobre ser 'sempre normal', mas sobre ter mais escolhas, inclusive a de dizer não ou de ter dias ruins, mas sem o sofrimento constante?'. Isso abre espaço para redefinir a recuperação de forma menos ameaçadora.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 9,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Confrontar diretamente a crença, afirmando que é irracional e um obstáculo",
+        "approach": "Abordagem confrontativa e não empática",
+        "is_optimal": false,
+        "immediate_outcome": "Você argumenta que isso é uma 'crença disfuncional' que está impedindo seu progresso e que ele não pode querer ficar doente. Marcos se sente criticado e incompreendido. Ele se retrai emocionalmente, concordando superficialmente para encerrar o assunto, mas internalizando mais culpa. A exploração do tema é abortada.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 2,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Garantir que, uma vez curado, as expectativas serão manejáveis e ele será 'normal'",
+        "approach": "Abordagem de tranquilização ingênua e promessa irrealista",
+        "is_optimal": false,
+        "immediate_outcome": "Você tenta acalmá-lo, dizendo que quando ele melhorar, tudo será mais fácil e as pessoas serão compreensivas. Isso soa como um clichê para Marcos, que não acredita. A intervenção é superficial e não aborda o medo real de falhar sob novas expectativas. A credibilidade terapêutica diminui.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 2,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Mudar de assunto para evitar o desconforto do paciente",
+        "approach": "Abordagem evitativa do terapeuta",
+        "is_optimal": false,
+        "immediate_outcome": "Percebendo a ansiedade de Marcos, você rapidamente retorna ao registro de pensamentos anterior, dizendo que podem trabalhar nisso mais tarde. Isso ensina ao paciente que temas difíceis devem ser evitados, reforçando a evitação como estratégia. Perde-se um momento terapêutico rico e profundo.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 1,
+          "behavioral_change": 1,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  }
+]

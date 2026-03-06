@@ -1,0 +1,244 @@
+[
+  {
+    "session_number": 4,
+    "session_title": "Mapeando o Medo e a Rede de Rituais",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "A sessão começa com Lucas relatando um aumento significativo da ansiedade após a tarefa de casa da sessão anterior, que envolvia registrar seus pensamentos obsessivos. Ele chega visivelmente agitado, com as mãos trêmulas. Lucas detalha sua obsessão central: o medo catastrófico de contaminar sua família com produtos de limpeza, levando-os a uma morte lenta e dolorosa. Ele descreve uma complexa rede de rituais compulsivos que consomem mais de 4 horas diárias, incluindo lavagens específicas de mãos (sempre em múltiplos de 3), verificação meticulosa de torneiras e maçanetas, e a evitação completa do armário de limpeza. Ele menciona que sua esposa, Carla, começou a se afastar emocionalmente, frustrada com as restrições que o TOC impôs à rotina familiar. Lucas demonstra insight parcial, reconhecendo que seus medos são 'exagerados', mas a ansiedade e a necessidade de neutralização são avassaladoras. Ele traz seu diário, cheio de anotações angustiadas, mas também com alguns momentos de dúvida sobre a lógica de seus rituais.",
+      "session_goals": [
+        "Estruturar uma hierarquia de exposição inicial baseada nos relatos do paciente.",
+        "Validar o sofrimento do paciente enquanto o orienta para o modelo cognitivo do TOC."
+      ],
+      "key_observations": [
+        "Paciente apresenta alto sofrimento e prejuízo funcional significativo (DSM-5-TR F42.2).",
+        "Insight é bom (reconhece que as obsessões são produto da própria mente), mas a crença na necessidade do ritual permanece forte.",
+        "O relato da reação da esposa sugere impacto social e familiar, um fator de manutenção potencial."
+      ],
+      "critical_decision_point": "Como você responde e conduz este momento crucial?"
+    },
+    "expert_commentary": "A opção A é ótima porque segue o princípio de 'validar o sofrimento, desafiar a solução disfuncional'. Como destacam Abramowitz et al. (2019), a psicoeducação sobre a natureza do 'viés de responsabilidade' e da 'intolerância à incerteza' no TOC é fundamental antes da ERP. A metáfora do 'bully' é uma ferramenta cognitiva poderosa, criando um distanciamento entre o paciente e a doença, facilitando a adesão ao tratamento comportamental. Evitar a garantia (B) é crucial, pois ela é um ritual cognitivo que mantém o ciclo obsessivo-compulsivo.",
+    "learning_focus": "Psicoeducação avançada e formulação de caso colaborativa no TOC.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Normalizar a dúvida e usar a metáfora do 'bully' do TOC",
+        "approach": "Psicoeducação e reestruturação cognitiva metafórica",
+        "is_optimal": true,
+        "immediate_outcome": "Você explica que a dúvida ('e se?') é o combustível do TOC, comparando-o a um valentão que sempre pede mais provas. Você valida o medo, mas redireciona o foco para a necessidade de desafiar essa tirania, não de obter certeza. Lucas se acalma um pouco, sentindo-se compreendido, e aceita colaborar na construção de uma hierarquia.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 9,
+          "insight": 8,
+          "behavioral_change": 7,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Fornecer garantia lógica e racional sobre a improbabilidade do medo",
+        "approach": "Argumentação lógica e tranquilização",
+        "is_optimal": false,
+        "immediate_outcome": "Você tenta tranquilizá-lo com dados sobre a toxicidade dos produtos e a robustez do sistema imunológico. Lucas concorda intelectualmente, mas sua ansiedade não diminui. Ele diz: 'Eu sei de tudo isso, mas o medo não some'. A sessão avança, mas o padrão de busca por garantia é reforçado.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Focar imediatamente na técnica de Exposição e Prevenção de Resposta (ERP)",
+        "approach": "Técnica comportamental direta",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz: 'A única forma é enfrentar. Na próxima sessão, vamos tocar na maçaneta do armário e não lavar as mãos'. Lucas fica aterrorizado, sente-se pressionado e desrespeitado em seu ritmo. A aliança terapêutica é abalada, e ele demonstra resistência para o resto da sessão.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 5,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Explorar as origens infantis do seu medo de contaminação",
+        "approach": "Abordagem psicodinâmica prematura",
+        "is_optimal": false,
+        "immediate_outcome": "Você pergunta se alguém na infância adoeceu gravemente. Lucas fica confuso, diz que não vê relação, e a ansiedade presente não é manejada. A sessão se perde em conjecturas históricas sem abordar os mecanismos de manutenção do TOC, e o progresso comportamental fica estagnado.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 5,
+    "session_title": "Primeiros Passos na Hierarquia: Enfrentando a Intolerância à Incerteza",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Com base na decisão anterior de usar a metáfora do 'bully', Lucas chega mais engajado. Ele relata que, durante a semana, conseguiu identificar momentos em que o 'bully do TOC' falava mais alto. Juntos, vocês constroem uma hierarquia de exposição com 10 itens, partindo de situações de ansiedade 3/10 (ex.: tocar no controle remoto após a esposa usá-lo) até 10/10 (ex.: limpar o banheiro com produto e depois preparar o jantar sem lavar as mãos). Lucas concorda em começar pelo item 4: 'Segurar a maçaneta externa da porta do armário de limpeza por 30 segundos e depois sentar no sofá sem lavar as mãos' (ansiedade estimada em 5/10). Durante a sessão, ele realiza a primeira exposição in vivo. A ansiedade sobe para 7/10. Ele fica inquieto, suando, e repetidamente olha para as próprias mãos. A compulsão de lavar é intensa, mas ele consegue, com seu apoio e instruções de respiração, permanecer sentado e tolerar a ansiedade, que após 15 minutos diminui para 4/10. Ele se surpreende: 'Eu não morri, ninguém adoeceu... mas ainda está muito desconfortável'.",
+      "session_goals": [
+        "Realizar a primeira exposição in vivo com prevenção de resposta.",
+        "Monitorar e normalizar a curva de ansiedade durante a ERP."
+      ],
+      "key_observations": [
+        "Paciente demonstra coragem e adesão ao plano, um prognóstico positivo.",
+        "A curva de ansiedade (pico e habituação) ocorreu conforme o esperado, um aprendizado comportamental crucial.",
+        "A fala 'mas ainda está muito desconfortável' indica que a tolerância à incerteza está sendo construída, mas não resolvida."
+      ],
+      "critical_decision_point": "Como você responde à tentativa de neutralização de Lucas?"
+    },
+    "expert_commentary": "A opção A é essencial. A Prevenção de Resposta (RP) é o componente mais crítico da ERP. Permitir qualquer neutralização (B), por mais sutil, reforça a crença de que a ansiedade é intolerável e perigosa. Como Foa et al. (2012) demonstram, a eficácia da ERP depende da violação das expectativas catastróficas. A resposta ótima educa o paciente sobre os padrões sutis do TOC (a 'trapaça'), fortalecendo seu papel de observador e combatente, não de vítima passiva.",
+    "learning_focus": "Implementação rigorosa e sábia da Prevenção de Resposta (RP) na ERP.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Reforçar a prevenção de resposta e explorar a 'trapaça do TOC'",
+        "approach": "Consolidação dos princípios da ERP com reestruturação cognitiva",
+        "is_optimal": true,
+        "immediate_outcome": "Você responde: 'Lucas, essa é uma jogada clássica do bully. Ele aceita a exposição, mas pede uma 'garantia de limpeza normal'. Se você fizer isso, estará dando o troféu de volta para ele. Podemos tolerar essa dúvida juntos agora?' Lucas suspira, reconhece o padrão, e concorda em não limpar. A aprendizagem sobre a prevenção de resposta é profundamente internalizada.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Flexibilizar e permitir a 'limpeza rápida' como um passo intermediário",
+        "approach": "Acomodação para manter a adesão",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz: 'Se for muito rápido e não seguir seu ritual, pode ser um meio-termo'. Lucas faz a limpeza e se acalma imediatamente. No entanto, na semana seguinte, ele relata que a ansiedade retornou mais forte, e ele começou a incorporar 'limpezas rápidas' em seus rituais, invalidando o progresso da ERP.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 4,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Confrontá-lo de forma rígida: 'Isso é um ritual, você está sabotando o tratamento'",
+        "approach": "Confrontação punitiva",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas se sente envergonhado e criticado. Ele se retrai, diz 'tudo bem, eu não faço nada', mas a aliança terapêutica é danificada. Ele pode até não limpar na hora, mas a probabilidade de realizar rituais encobertos ou abandonar o tratamento aumenta.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Desviar o foco e marcar a próxima exposição",
+        "approach": "Evitação do processo cognitivo",
+        "is_optimal": false,
+        "immediate_outcome": "Você ignora o comentário e diz: 'Ótimo progresso! Na próxima semana, vamos para o item 5'. Lucas sai confuso, sem saber como lidar com pensamentos de contaminação residual. A dúvida persiste e mina a confiança no processo, tornando as próximas exposições mais difíceis.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 3,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 6,
+    "session_title": "Generalização e Lida com Recaídas Cognitivas",
+    "session_phase": "advanced",
+    "session_content": {
+      "narrative": "Lucas chega relatando uma semana de altos e baixos. Ele conseguiu realizar várias exposições da hierarquia sozinho, incluindo tocar em sapatos que estavam na rua (item 6). No entanto, um evento desencadeou uma forte recaída: sua filha pequena teve um resfriado com febre. A obsessão de tê-la contaminado com 'produtos químicos que baixaram a imunidade' tomou conta dele, levando a uma compulsão de verificação extrema (medir a febre dela a cada hora) e lavagens prolongadas. Ele está exausto e desmoralizado: 'Eu estava me sentindo tão bem, e agora parece que voltei à estaca zero. Será que esse tratamento realmente funciona para algo tão real?'. Ele demonstra que aprendeu as técnicas, mas a crença disfuncional subjacente (superestimação de ameaça e responsabilidade) foi reativada por um estressor real.",
+      "session_goals": [
+        "Normalizar a recaída como parte do processo e não como fracasso.",
+        "Aplicar reestruturação cognitiva a um evento desencadeante realista.",
+        "Planejar a generalização dos ganhos para situações imprevistas."
+      ],
+      "key_observations": [
+        "Paciente aplicou habilidades de ERP de forma independente, indicando aprendizagem.",
+        "A recaída foi desencadeada por um evento de saúde real na família, um teste comum ao tratamento.",
+        "O discurso 'será que funciona para algo tão real?' mostra uma fusão pensamento-evento típica do TOC, onde a coincidência é interpretada como causalidade.",
+        "A desmoralização é um risco para a desistência do tratamento."
+      ],
+      "critical_decision_point": "Como você estrutura sua resposta para transformar esta recaída em um aprendizado terapêutico?"
+    },
+    "expert_commentary": "A opção A é a mais eficaz. Ela adere ao princípio de 'normalizar e capitalizar' as recaídas. No TOC, situações de estresse real são testes de generalização inevitáveis. A resposta transforma a crise em um caso de ensino, aplicando o modelo cognitivo-comportamental ao evento específico. Isso fortalece a autoconfiança do paciente como seu próprio terapeuta, um objetivo central do tratamento. Evitar minimizar (B) ou punir (C) é crucial para manter a aliança e o progresso a longo prazo. A recaída é uma oportunidade de aprendizagem, não um sinal de falha do tratamento ou do paciente.",
+    "learning_focus": "Manejo de recaídas e promoção de generalização e autonomia no tratamento do TOC.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Reenquadrar a recaída como um 'treino de alto nível' e analisar o evento com ferramentas cognitivas",
+        "approach": "Reestruturação cognitiva e normalização baseada em modelo",
+        "is_optimal": true,
+        "immediate_outcome": "Você responde: 'Lucas, isso não é voltar à estaca zero. É o treino mais importante: aplicar as regras do jogo em uma partida real. Vamos analisar: a febre da sua filha (evento real) ativou o 'bully' (pensamento de contaminação), e você negociou com ele (rituais). Na próxima vez, podemos usar a mesma exposição? Tolerar a dúvida de que você NÃO causou o resfriado?' Lucas se engaja na análise, percebe o padrão, e o desespero dá lugar a um plano de ação.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Minimizar o evento e focar apenas nos sucessos da semana",
+        "approach": "Reforço positivo seletivo",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz: 'Não foque nisso, veja quantas exposições você fez! Isso que importa'. Lucas concorda na sessão, mas sai sentindo que você não entendeu a gravidade de sua recaída. A crença disfuncional não é trabalhada, e ele fica sozinho com o medo, aumentando o risco de uma recaída mais grave.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 3,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Aumentar a dose de exposições para 'compensar' a recaída",
+        "approach": "Abordagem comportamental rígida e punitiva",
+        "is_optimal": false,
+        "immediate_outcome": "Você propõe: 'Precisamos ser mais agressivos. Sua tarefa será limpar o banheiro e depois abraçar sua filha sem lavar'. Lucas fica aterrorizado e se recusa, sentindo que o tratamento é desumano e não leva em conta seu contexto emocional. A adesão cai drasticamente.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 2,
+          "insight": 4,
+          "behavioral_change": 1,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Explorar se há um ganho secundário ou resistência por trás da recaída",
+        "approach": "Interpretação psicodinâmica inapropriada",
+        "is_optimal": false,
+        "immediate_outcome": "Você pergunta: 'O que esta recaída pode estar protegendo você de sentir?'. Lucas fica confuso e defensivo, respondendo: 'Protegendo? Eu quero é me livrar disso!'. A conversa se torna meta-cognitiva e desconectada do sofrimento presente, aumentando a frustração de Lucas.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 2,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  }
+]

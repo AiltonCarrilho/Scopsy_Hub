@@ -1,0 +1,242 @@
+[
+  {
+    "session_number": 10,
+    "session_title": "Revisitando a Memória Traumática",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "A sessão começa com Lucas, 34 anos, relatando um sonho perturbador relacionado ao assalto a mão armada que sofreu há dois anos. Ele demonstra um humor mais estável, fruto do trabalho de psicoeducação e regulação emocional das sessões anteriores. O foco hoje é iniciar a exposição prolongada à memória traumática, conforme planejado. Lucas concorda em descrever o evento, mas sua fisiologia muda rapidamente: respiração ofegante, mãos trêmulas e voz embargada. Ele consegue narrar os primeiros momentos (entrar no banco) antes de se calar, olhando fixamente para um ponto da sala. O silêncio é carregado de ansiedade. Você observa que ele está utilizando algumas técnicas de aterramento espontaneamente, pressionando os pés no chão. O desafio é equilibrar a exposição necessária com a manutenção da janela de tolerância de Lucas, evitando a re-traumatização.",
+      "session_goals": [
+        "Iniciar a exposição prolongada à memória traumática em um ambiente seguro",
+        "Monitorar e auxiliar na regulação do afeto durante a evocação"
+      ],
+      "key_observations": [
+        "Paciente apresenta reatividade fisiológica intensa (hiperarousal) ao narrar o trauma",
+        "Demonstra internalização de técnicas de aterramento, usando-as de forma autônoma",
+        "A narrativa é fragmentada e interrompida por 'brancos' na memória, um sintoma comum do TEPT"
+      ],
+      "critical_decision_point": "O que você faz?"
+    },
+    "expert_commentary": "A exposição prolongada (PE) requer um equilíbrio delicado entre encorajar a confrontação com a memória e garantir que o paciente não seja inundado. Como ressalta Foa et al. (2019), a 'habituação dentro da sessão' é um mecanismo crucial. A opção ótima (A) segue esse princípio: primeiro regula a resposta de medo excessiva (SUDS alta), criando uma experiência corretiva de que a angústia é manejável. Só então retoma a exposição. Isso fortalece a autoeficácia e a aliança, elementos preditores de sucesso na PE. Forçar a exposição sem regulação (B) ou evitá-la (C) são erros comuns que podem estagnar o tratamento.",
+    "learning_focus": "Gerenciamento da janela de tolerância durante técnicas de exposição a traumas.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Validar a angústia e guiá-lo em um exercício de respiração diafragmática para baixar a ativação, antes de perguntar se ele consegue continuar descrevendo o que viu.",
+        "approach": "Integração de regulação emocional com exposição, priorizando a estabilização dentro da janela de tolerância.",
+        "is_optimal": true,
+        "immediate_outcome": "Lucas recupera o controle fisiológico, sente-se contido pela aliança terapêutica e consegue retomar a narrativa por mais alguns detalhes, consolidando um senso de domínio sobre a memória.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 9,
+          "insight": 7,
+          "behavioral_change": 7,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Incentivá-lo firmemente a 'passar por isso' e continuar falando, lembrando-o de que a evitação mantém o medo.",
+        "approach": "Exposição pura, focada apenas na habituação, sem validação emocional no momento crítico.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas se força a continuar, mas dissocia rapidamente. A sessão termina com ele se sentindo inundado e desregulado, podendo aumentar a resistência para as próximas exposições.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 4,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Mudar completamente de assunto para um tópico neutro, afastando-se da memória traumática para aliviar seu desconforto imediato.",
+        "approach": "Evitação terapêutica, reforçando o comportamento de fuga.",
+        "is_optimal": false,
+        "immediate_outcome": "O alívio imediato é percebido, mas a mensagem implícita é que o trauma é intocável. Isso prejudica o progresso e solidifica a crença de que a memória é perigosa demais para ser abordada.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 2,
+          "behavioral_change": 1,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Interpretar o silêncio, sugerindo que ele pode estar sentindo raiva do agressor ou culpa por ter sobrevivido.",
+        "approach": "Psicodinâmica prematura, introduzindo conteúdo interpretativo durante alta ativação emocional.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas fica confuso e sobrecarregado pela sugestão, desconectando-se ainda mais do processo de exposição. A intervenção não ajuda na regulação nem na elaboração da memória.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 3,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 11,
+    "session_title": "Elaborando os Detalhes e Emoções Congeladas",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Com base na sessão anterior onde a regulação foi priorizada, Lucas chega relatando que pensou sobre o trauma durante a semana, mas com menos medo. Ele se mostra mais confiante para revisitar a memória. O trabalho hoje é aprofundar a narrativa, focando nos detalhes sensoriais (o som da arma engatilhada, o cheiro do local) e nas emoções 'congeladas' do momento. Lucas descreve com mais fluência, mas ao chegar no ápice – o momento em que achou que seria morto –, sua voz falha novamente. Desta vez, em vez de pânico, ele expressa uma profunda tristeza e desamparo, chorando. É a primeira vez que acessa essa emoção primária relacionada ao trauma, que antes era mascarada pela hipervigilância e irritabilidade. Surge uma crença: 'Eu estava completamente sozinho, ninguém podia me ajudar'.",
+      "session_goals": [
+        "Facilitar a elaboração emocional e cognitiva da memória traumática",
+        "Identificar e começar a desafiar crenças negativas intrínsecas ao evento"
+      ],
+      "key_observations": [
+        "Mudança na resposta emocional: do medo/pânico para a tristeza/desamparo, indicando processamento emocional",
+        "Emergência de uma crença negativa sobre si mesmo ('estava sozinho') típica do TEPT (DSM-5-TR, critério D2)",
+        "Maior tolerância afetiva, permitindo que a emoção seja expressa e contida na sessão"
+      ],
+      "critical_decision_point": "O que você faz?"
+    },
+    "expert_commentary": "O acesso à emoção primária (tristeza/desamparo) e à crença negativa associada é um marco no tratamento do TEPT. Segundo Resick et al. (2017), na Terapia Cognitiva para TEPT, o terapeuta deve 'explorar o significado' do evento para o paciente. A opção ótima (A) faz exatamente isso: primeiro valida (sintoniza com a emoção), depois investiga colaborativamente a crença. Isso honra a experiência subjetiva enquanto planta a semente da reavaliação. O reasseguramento (B) ou o questionamento frio (D) falham em fazer essa ponte. O momento é de 'elaboração', não apenas de 'exposição' (C). A meta é integrar a memória traumática à narrativa autobiográfica, alterando seu significado.",
+    "learning_focus": "Integração de técnicas de exposição com reestruturação cognitiva de crenças traumáticas.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Refletir e validar a emoção ('Foi um momento de profundo desamparo'), e então, com curiosidade, explorar se há evidências no próprio evento que contradizem ou matizam essa crença de total solidão.",
+        "approach": "Terapia Cognitiva para TEPT, acolhendo a emoção e iniciando a reestruturação cognitiva de forma colaborativa.",
+        "is_optimal": true,
+        "immediate_outcome": "Lucas se sente compreendido. Ao explorar, ele lembra que o caixa do banco tentou acalmá-lo com o olhar e que, minutos depois, pessoas vieram ajudá-lo. Isso cria uma fissura na crença rígida, introduzindo nuance e preparando o terreno para uma reavaliação cognitiva.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Confortá-lo rapidamente, dizendo 'Mas você não estava sozinho, eu estou aqui agora, e muitas pessoas se importam com você'.",
+        "approach": "Reasseguramento direto e consolo, focando no presente.",
+        "is_optimal": false,
+        "immediate_outcome": "O consolo é bem-intencionado, mas pode invalidar a experiência passada e impedir o processamento da crença traumática. Lucas pode concordar superficialmente, mas a crença original ('naquela hora, estava sozinho') permanece intacta.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 3,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Pedir para ele descrever com ainda mais detalhes técnicos o que aconteceu exatamente após esse pensamento, mantendo o foco na cadeia de eventos.",
+        "approach": "Exposição narrativa pura, ignorando a janela de oportunidade para trabalho cognitivo.",
+        "is_optimal": false,
+        "immediate_outcome": "A intervenção é mecânica e perde o momento rico de elaboração emocional e cognitiva. Lucas pode retomar a narrativa de forma dissociada, sem conectar os detalhes ao significado emocional que acabou de emergir.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 5,
+          "behavioral_change": 5,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Questionar a racionalidade da crença de imediato: 'Mas isso é realmente verdade? Você literalmente não estava sozinho, havia outras pessoas no banco'.",
+        "approach": "Questionamento cognitivo direto e desafiador, sem validação prévia.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas se sente invalidado e criticado. Ele pode reagir defensivamente, argumentando que a sensação era de solidão absoluta, ou pode se calar, encerrando o processamento. A aliança terapêutica é abalada.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 6,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 12,
+    "session_title": "Consolidando Novos Significados e Planejando a Vida Pós-Trauma",
+    "session_phase": "advanced",
+    "session_content": {
+      "narrative": "Lucas inicia a sessão comentando que a reflexão sobre 'não estar totalmente sozinho' o fez revisitar mentalmente o evento de uma forma nova, com menos carga de desamparo. Ele relata que os pesadelos diminuíram de frequência. O trabalho das últimas sessões permitiu uma dessensibilização significativa e o início de uma reavaliação cognitiva. Agora, o foco se desloca para consolidação e futuro. Vocês revisam juntos a narrativa completa do trauma, agora mais coesa e menos fragmentada, e Lucas é capaz de discorrer sobre ela com uma distância emocional maior. Ele menciona espontaneamente um desejo de 'virar a página' e retomar atividades que abandonou, como encontrar amigos em bares, mas ainda sente um 'friho na barriga' ao pensar nisso. A sessão caminha para a discussão sobre como integrar as conquistas da terapia à vida cotidiana e enfrentar os últimos resquícios de evitação.",
+      "session_goals": [
+        "Consolidar as novas perspectivas e significados atribuídos ao evento traumático",
+        "Planejar e ensaiar behavioralmente a confrontação com situações evitadas remanescentes"
+      ],
+      "key_observations": [
+        "Paciente demonstra capacidade de meta-cognição, refletindo sobre suas próprias mudanças de pensamento",
+        "Sintomas de revivência (pesadelos) mostram redução clara, indicando eficácia do processamento",
+        "A evitação (critério C do DSM-5-TR) persiste como o principal sintoma a ser trabalhado, agora em um grau mais comportamental e situacional"
+      ],
+      "critical_decision_point": "O que você faz?"
+    },
+    "expert_commentary": "Na fase avançada do TEPT, o foco muda da processamento do passado para a (re)construção do futuro. A pergunta de Lucas ('Como saber se estou pronto?') é central. A opção ótima (A) adere ao princípio de 'domínio graduado' e 'experimentos comportamentais' da TCC. Como descreve Beck (2021), esses métodos testam crenças antigas e constroem novas aprendizagens na vida real. Criar um plano gradual transforma uma meta ameaçadora em passos manejáveis, aumentando a probabilidade de sucesso e de autoeficácia. Ignorar a graduação (B) ou adiar a ação (C) são erros. Introduzir uma nova abordagem (D) neste momento quebra a coerência do tratamento e desempodera o paciente.",
+    "learning_focus": "Transição do processamento do trauma para a retomada de valores e vida ativa através de planejamento comportamental graduado.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Normalizar a ansiedade residual e propor um experimento comportamental conjunto: criar um plano gradual (ex: ir a um bar tranquilo em horário de pouco movimento, por 30 minutos) e ensaiar mentalmente a situação, focando em estratégias de coping.",
+        "approach": "Terapia Cognitivo-Comportamental integrada, usando planejamento gradual, ensaio e previsão de obstáculos para construir autoeficácia.",
+        "is_optimal": true,
+        "immediate_outcome": "Lucas se sente empoderado por ter um plano concreto e realista. A ansiedade é reenquadrada como um desafio a ser gerenciado, não um sinal de perigo. Ele concorda em tentar o primeiro passo antes da próxima sessão, fortalecendo seu senso de agência.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 8,
+          "behavioral_change": 9,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Encorajá-lo a 'ir com tudo' e enfrentar o bar no sábado à noite, argumentando que só assim ele vai superar o medo de vez.",
+        "approach": "Enfrentamento massivo e não-graduado, subestimando a ansiedade residual.",
+        "is_optimal": false,
+        "immediate_outcome": "A pressão pode levar Lucas a tentar e, se a ansiedade for alta demais, ter uma experiência negativa que reforça a evitação ('não estou pronto mesmo'). Ou ele pode simplesmente não ir, sentindo-se fracassado.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Sugerir que ele ainda não está pronto e que é melhor adiar essa meta, focando primeiro em continuar processando as memórias em sessão.",
+        "approach": "Superproteção terapêutica, reforçando indiretamente a evitação.",
+        "is_optimal": false,
+        "immediate_outcome": "A mensagem é de que o mundo ainda é perigoso e ele é frágil. Lucas pode se sentir desmoralizado e a generalização das conquistas da terapia para a vida real é adiada.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Analisar o significado simbólico do 'bar' para ele, questionando se remete a perda de liberdade ou masculinidade após o trauma.",
+        "approach": "Mudança para uma abordagem psicodinâmica interpretativa no estágio avançado de um tratamento TCC.",
+        "is_optimal": false,
+        "immediate_outcome": "A intervenção é desconexa do trabalho feito até agora e desvia o foco do planejamento comportamental prático. Lucas pode ficar confuso e a aliança de trabalho, construída na colaboração concreta, pode se enfraquecer.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 6,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  }
+]

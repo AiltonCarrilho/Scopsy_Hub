@@ -1,0 +1,242 @@
+[
+  {
+    "session_number": 7,
+    "session_title": "Revisitando o Trauma: Introdução à Exposição Narrativa",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "A sessão começa com João, um motorista de ônibus que sofreu um grave acidente há um ano, relatando um aumento nos pesadelos após a última sessão, onde começou a falar sobre o evento. Ele parece ansioso, mas também demonstra um compromisso genuíno com o tratamento. Você valida sua coragem e revisa o modelo cognitivo do TEPT, conectando a evitação (tanto comportamental quanto cognitiva) com a manutenção dos sintomas. Juntos, vocês revisam a psicoeducação sobre a exposição prolongada, explicando sua base na habituação e na processamento emocional do trauma. Você propõe a criação de uma hierarquia de estímulos temidos, começando por itens menos angustiantes, como ouvir o som de freios. João reluta um pouco, mas concorda em tentar. O clima é de colaboração cautelosa, com João expressando medo de 'não aguentar' reviver as memórias.",
+      "session_goals": [
+        "Introduzir e normalizar o protocolo de Exposição Prolongada (PE)",
+        "Construir uma hierarquia de estímulos temidos inicial e colaborativa"
+      ],
+      "key_observations": [
+        "Paciente apresenta aumento sintomático inicial ao abordar o trauma, o que é esperado",
+        "Demonstra ambivalência: compromisso com a terapia mas medo do processo",
+        "A aliança terapêutica parece suficientemente sólida para avançar"
+      ],
+      "critical_decision_point": "O que você faz?"
+    },
+    "expert_commentary": "A opção A é a mais aderente ao protocolo de Exposição Prolongada de Foa et al. (2007). O princípio é 'corrigir sem fugir': validar a emoção, conter a ativação dentro de limites manejáveis e manter o curso da tarefa terapêutica. Isso demonstra ao paciente que memórias e afetos intensos podem ser tolerados e processados dentro do contexto seguro da terapia. Interromper completamente (B) ou forçar uma exposição prematura (C) são erros comuns. A citação de Foa é pertinente: 'A evitação mantém o medo; a confrontação o diminui'.",
+    "learning_focus": "Habilidade em implementar a fase inicial de exposição de forma estruturada e responsiva, balanceando validação emocional com progressão terapêutica.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Validar a angústia, anotar o item como ponto alto da hierarquia, e retornar ao exercício de construção de forma estruturada.",
+        "approach": "Exposição Prolongada (Foa et al.) - Manejo da ativação dentro da estrutura do protocolo.",
+        "is_optimal": true,
+        "immediate_outcome": "João se acalma ao sentir que o terapeuta mantém o controle da situação. A hierarquia fica mais precisa e pessoal, e ele aprende que pode tocar em memórias difíceis sem desintegrar-se.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 7,
+          "behavioral_change": 6,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Interromper imediatamente a hierarquia e conduzir um exercício de grounding para acalmá-lo.",
+        "approach": "Estabilização e regulação emocional prioritária.",
+        "is_optimal": false,
+        "immediate_outcome": "João se acalma, mas a mensagem implícita é que o material é demasiadamente perigoso para ser abordado. Isso pode reforçar a evitação e dificultar o progresso na exposição.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Aproveitar o momento para incentivá-lo a descrever a cena em detalhes, aqui e agora.",
+        "approach": "Exposição implosiva e não estruturada.",
+        "is_optimal": false,
+        "immediate_outcome": "João fica sobrecarregado, possivelmente dissociando ou tendo um pico de ansiedade extrema. A aliança é prejudicada por uma percepção de que o terapeuta foi insensível e apressado.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 5,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Minimizar o detalhe, dizendo 'não precisamos falar disso agora' e rapidamente passar para outro item da lista.",
+        "approach": "Evitação por parte do terapeuta.",
+        "is_optimal": false,
+        "immediate_outcome": "João percebe o desconforto do terapeuta e internaliza que aquele é um segredo inominável. A evitação é modelada e reforçada, estagnando o processamento.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 8,
+    "session_title": "A Primeira Narrativa: Contando a História no Presente",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Com base na decisão da sessão anterior, João chegou preparado, mas extremamente tenso. A hierarquia está definida e hoje é a primeira sessão de exposição imaginária (recontagem da memória traumática). Você conduz um breve exercício de respiração antes de começar. Você o instrui a narrar o evento do acidente na primeira pessoa e no tempo presente, com o máximo de detalhes sensoriais possível, incluindo os pensamentos e emoções de então. João começa, sua voz trêmula. Ele descreve o dia, o trânsito, e chega ao momento do passageiro cortando a frente do ônibus. Sua narrativa é entrecortada por longas pausas e ele frequentemente olha para você, buscando confirmação. A SUA (Subjective Units of Distress) dele sobe rapidamente. Aproximando-se do clímax (o impacto e os gritos), ele para de falar, com os punhos cerrados.",
+      "session_goals": [
+        "Realizar a primeira recontagem narrativa da memória traumática",
+        "Monitorar e ajudar o paciente a tolerar a angústia (SUDS) durante a exposição"
+      ],
+      "key_observations": [
+        "Paciente demonstra alta angústia mas segue as instruções, indicando aliança forte",
+        "A narrativa é fragmentada, com omissões esperadas na primeira tentativa",
+        "O paciente busca validação não-verbal do terapeuta constantemente"
+      ],
+      "critical_decision_point": "O que você faz?"
+    },
+    "expert_commentary": "A opção A é tecnicamente sólida. O manual de PE (Foa, Hembree, & Rothbaum, 2007) enfatiza a importância do terapeuta ser um 'treinador compassivo', incentivando a permanência na memória até que a angústia comece a diminuir. Parar (B ou D) durante o pico de SUDS reforça a fobia à memória em si. Fazer muitas perguntas (C) tira a agência do paciente. Como ressalta Shapiro (2018) no EMDR, o processamento adaptativo requer que o paciente tenha 'um pé no trauma e um pé no presente seguro', papel que o terapeuta mantém com sua postura estável.",
+    "learning_focus": "Habilidade em guiar a exposição imaginária, gerenciando a alta angústia do paciente sem resgatá-lo prematuramente, promovendo a habituação.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Manter uma postura calma e encorajadora, lembrando-o dos objetivos e instruindo-o gentilmente a continuar, focando nos detalhes sensoriais do que aconteceu logo após o impacto.",
+        "approach": "Exposição Prolongada - Facilitação da habituação dentro da janela tolerável.",
+        "is_optimal": true,
+        "immediate_outcome": "João, sentindo-se apoiado e contido, consegue retomar a narrativa. A SUDS começa a diminuir ligeiramente no final da sessão, proporcionando uma experiência corretiva de domínio e habituação.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 8,
+          "behavioral_change": 7,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Permitir que ele pare a narrativa e mudar para uma discussão sobre os pensamentos automáticos de descontrole que surgiram no momento.",
+        "approach": "Terapia Cognitiva focada no 'aqui e agora'.",
+        "is_optimal": false,
+        "immediate_outcome": "João se alivia no curto prazo, mas a evitação da memória é reforçada. A sessão de exposição é interrompida, prejudicando o processo de habituação e enviando a mensagem de que a memória é, de fato, intolerável.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 6,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Fazer perguntas dirigidas e muito específicas para 'puxar' a narrativa dele: 'E então, o que você viu? Qual foi o primeiro som?'",
+        "approach": "Interrogatório direto.",
+        "is_optimal": false,
+        "immediate_outcome": "João pode responder, mas de forma mecânica e desconectada. A sensação de controle sobre a narrativa é retirada dele, podendo levar a uma dissociação ou a um sentimento de revitimização.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 5,
+          "behavioral_change": 5,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Encerrar a exposição prematuramente e dedicar o resto da sessão a técnicas de relaxamento profundo.",
+        "approach": "Priorização excessiva do conforto imediato.",
+        "is_optimal": false,
+        "immediate_outcome": "O medo do medo é intensificado. João aprende que sua angústia é tão perigosa que nem mesmo o terapeuta pode manejá-la, fortalecendo a crença de incapacidade e aumentando a evitação futura.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 9,
+    "session_title": "Processando e Integrando: Da Narrativa ao Significado",
+    "session_phase": "advanced",
+    "session_content": {
+      "narrative": "João inicia a sessão relatando que, apesar do cansaço após a última sessão, teve menos pesadelos naquela noite. Ele reflete sobre a recontagem, dizendo: 'Foi horrível, mas eu sobrevivi de novo aqui com você.' Vocês realizam uma nova recontagem da memória, que agora flui com menos bloqueios e uma SUDS que sobe, mas estabiliza em um platô e começa a declinar no final. Após a exposição, você inicia a fase de processamento cognitivo. João fala sobre a culpa que sente: 'Eu deveria ter freado mais rápido, poderia ter desviado.' Ele também expressa raiva do passageiro que causou o acidente. Suas crenças sobre o mundo como um lugar seguro e sobre si mesmo como competente foram abaladas.",
+      "session_goals": [
+        "Realizar uma segunda recontagem para consolidar a habituação",
+        "Iniciar a reestruturação cognitiva de crenças relacionadas ao trauma (culpa, segurança)"
+      ],
+      "key_observations": [
+        "Primeiros sinais de habituação (SUDS decrescente) e processamento (menos pesadelos)",
+        "Crenças negativas centrais (culpa, desconfiança) tornam-se explícitas e acessíveis",
+        "O paciente começa a fazer conexões espontâneas entre a exposição e a melhora dos sintomas"
+      ],
+      "critical_decision_point": "Como você procede com a reestruturação cognitiva deste ponto?"
+    },
+    "expert_commentary": "A opção A é a mais eficaz. A reestruturação cognitiva no TEPT, conforme descrita por Resick et al. (2016) na Terapia de Processamento Cognitivo (CPT), visa modificar crenças 'assimiladas' (o mundo é perigoso) e 'sobre-acomodadas' (nunca posso confiar em ninguém). A culpa de João é uma crença assimilada ('o evento prova que sou incompetente'). A questionamento socrático guia o paciente a descobrir suas próprias inconsistências cognitivas, levando a uma reavaliação mais duradoura. Reafirmar (B) ou debater (D) são menos eficazes, pois não promovem a autorreflexão. Ignorar (C) deixa o núcleo do trauma intacto.",
+    "learning_focus": "Habilidade em conduzir reestruturação cognitiva de crenças traumáticas profundas, utilizando questionamento socrático para promover insight e mudança duradoura.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Validar a dor da culpa e, usando a técnica da socrática, explorar as evidências a favor e contra a crença 'sou incompetente', contextualizando-a no evento traumático.",
+        "approach": "Terapia Cognitiva para TEPT (Resick et al.) - Reestruturação de crenças assimiladas/sobre-acomodadas.",
+        "is_optimal": true,
+        "immediate_outcome": "João engaja-se na análise, percebendo que está aplicando um padrão de perfeição impossível a uma situação de emergência. Começa a distinguir entre 'responsabilidade' (como motorista) e 'culpa' (como único culpado), aliviando o afeto negativo.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Oferecer reafirmação direta e tranquilizadora: 'João, você não é um lixo. Foi um acidente, você fez o melhor que pôde.'",
+        "approach": "Apoio e reassurance.",
+        "is_optimal": false,
+        "immediate_outcome": "João pode se sentir momentaneamente confortado, mas a crença disfuncional não é desafiada internamente. Ele pode concordar verbalmente, mas a mudança cognitiva não é internalizada, mantendo a vulnerabilidade à culpa.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 4,
+          "behavioral_change": 5,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Desviar do tema da culpa, focando apenas nas emoções de raiva do passageiro, que parecem mais confortáveis para ele explorar.",
+        "approach": "Evitação do núcleo disfuncional.",
+        "is_optimal": false,
+        "immediate_outcome": "A raiva é processada, mas a crença central de auto-culpa permanece intocada e continuará a alimentar sintomas como a intrusão e o humor negativo.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 3,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Confrontar a crença de forma vigorosa, apresentando uma lista lógica de razões pelas quais ele não é culpado.",
+        "approach": "Persuasão racional e debate.",
+        "is_optimal": false,
+        "immediate_outcome": "João pode se sentir invalidado e debatido, possivelmente resistindo e apresentando contra-argumentos ('mas se eu...'). A aliança é tensionada e ele pode não internalizar as razões apresentadas pelo terapeuta.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  }
+]

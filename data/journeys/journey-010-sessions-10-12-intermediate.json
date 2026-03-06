@@ -1,0 +1,239 @@
+[
+  {
+    "session_number": 10,
+    "session_title": "Confrontando a Evitação: A Hierarquia em Ação",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Na décima sessão, você encontra Lucas, um homem de 28 anos com TOC de contaminação (F42.2). Nas sessões anteriores, vocês mapearam suas obsessões (medo de contrair doenças graves ao tocar em maçanetas, dinheiro e corrimãos) e compulsões (lavagens rituais e evitação massiva). Juntos, construíram uma hierarquia de exposição e prevenção de resposta (EPR), graduada de 0 a 100. Hoje, o plano é iniciar os exercícios a partir de um item de dificuldade média (tocar na capa de um livro da sala de espera, SUA 45). Lucas chega visivelmente ansioso, mas motivado. Ele relata que, durante a semana, conseguiu observar seus pensamentos intrusivos sem se engajar em rituais mentais de 'neutralização', uma técnica de reestruturação cognitiva trabalhada antes. No entanto, sua evitação comportamental permanece alta. Ele evita pegar o celular se achar que caiu no chão. O foco desta sessão é realizar a primeira exposição 'ao vivo' (in vivo) dentro do setting terapêutico, um passo crucial para a generalização do aprendizado.",
+      "session_goals": [
+        "Realizar a primeira exposição in vivo a um item da hierarquia (SUA 45).",
+        "Reforçar o uso da prevenção de resposta (não lavar as mãos) por um período predeterminado."
+      ],
+      "key_observations": [
+        "Lucas demonstra motivação, mas sua ansiedade antecipatória é fisiológica (mãos trêmulas, respiração acelerada).",
+        "Ele já internalizou o modelo cognitivo, identificando a superestimação de ameaça e o pensamento mágico por trás de seus rituais."
+      ],
+      "critical_decision_point": "O que você faz?"
+    },
+    "expert_commentary": "A opção A é ótima porque equilibra validação empática com a fidelidade ao protocolo de EPR, que é o tratamento de primeira linha para TOC (Abramowitz, 2018). Validar ('É normal ficar nervoso, é sinal de que estamos no lugar certo') reduz a resistência. Guiar passo a passo ('Vamos primeiro colocar a mão a 10 cm...') quebra a tarefa em elementos manejáveis. O objetivo não é eliminar a ansiedade, mas ensinar ao paciente que ele pode tolerá-la e que ela diminui naturalmente (processo de habituação), desafiando a crença disfuncional de que a ansiedade é intolerável ou perigosa.",
+    "learning_focus": "Implementação colaborativa e guiada da Exposição e Prevenção de Resposta (EPR), manejando a resistência antecipatória com validação e psicoeducação.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Validar a ansiedade, mas manter a proposta do item planejado, guiando-o com instruções passo a passo e ancorando-o na técnica de aceitação da ansiedade.",
+        "approach": "EPR com validação e suporte à tolerância ao desconforto.",
+        "is_optimal": true,
+        "immediate_outcome": "Lucas, com suporte, toca o livro. A ansiedade sobe para 70 e depois diminui para 40 em 15 minutos, sem lavar as mãos. Ele experimenta a habituação e um grande senso de autoeficácia.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 7,
+          "behavioral_change": 9,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Ceder ao pedido dele e adiar a exposição, usando a sessão para revisar apenas os aspectos cognitivos do medo.",
+        "approach": "Evitação terapêutica, focando apenas em reestruturação cognitiva.",
+        "is_optimal": false,
+        "immediate_outcome": "A aliança permanece intacta, mas o ciclo de evitação é reforçado. Lucas não tem a experiência corretiva de enfrentamento, e a credibilidade da hierarquia pode ser prejudicada.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 5,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Insistir rigidamente no plano original, minimizando seu desconforto: 'Lucas, nós combinamos isso. Tem que enfrentar para melhorar. Vamos lá.'",
+        "approach": "EPR autoritária e não colaborativa.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas pode se sentir pressionado e executar a ação com ressentimento ou, pior, recusar-se, danificando a aliança terapêutica. A experiência fica associada a coerção.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 4,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Mudar imediatamente para um item mais fácil não planejado (olhar para uma foto), sem uma discussão clínica sobre a esquiva.",
+        "approach": "Reformulação impulsiva da hierarquia.",
+        "is_optimal": false,
+        "immediate_outcome": "A exposição ocorre, mas em um nível muito baixo, gerando pouca aprendizagem de habituação. Pode passar a mensagem de que a evitação é uma estratégia aceitável para lidar com a ansiedade antecipatória.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 3,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 11,
+    "session_title": "Lidando com a Resposta à Exposição e Rituais Encobertos",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Na sessão 11, Lucas chega relatando um misto de conquista e angústia. Ele conseguiu tocar no livro e não lavou as mãos por uma hora, conforme combinado. No entanto, após a sessão, ele se pegou realizando um 'ritual encoberto': repetiu mentalmente a frase 'isso é só um livro, não tem vírus' diversas vezes para aliviar a ansiedade. Além disso, tentou fazer uma exposição caseira (tocar no corrimão do prédio, SUA 60), mas a ansiedade foi tão intensa que ele acabou lavando as mãos compulsivamente após 2 minutos, sentindo-se um fracasso. A narrativa de Lucas ilustra dois desafios comuns na fase média da EPR: 1) a emergência de compulsões mentais (rituais encobertos) que sabotam a prevenção de resposta, e 2) a dificuldade em generalizar e tolerar a ansiedade em exposições autoguiadas. Seu humor está mais disfórico, com pensamentos do tipo 'nunca vou conseguir vencer isso'.",
+      "session_goals": [
+        "Psicoeducar sobre rituais encobertos e sua interferência no processo de habituação.",
+        "Reestruturar cognições disfuncionais sobre 'fracasso' e replanejar exposições autoguiadas de forma mais graduada."
+      ],
+      "key_observations": [
+        "Lucas está aplicando as técnicas, mas encontra barreiras complexas (rituais cognitivos) que exigem refinamento da intervenção.",
+        "Sua autoavaliação é dicotômica ('sucesso total' vs. 'fracasso total'), um padrão cognitivo típico no TOC."
+      ],
+      "critical_decision_point": "Como você responde e direciona a sessão?"
+    },
+    "expert_commentary": "A opção A é ótima porque aborda diretamente os dois núcleos do problema relatado. Rituais encobertos são compulsões e devem ser alvo da prevenção de resposta tanto quanto os comportamentais (Foa et al., 2012). A psicoeducação sobre eles é crucial. Além disso, a reestruturação da cognição dicotômica ('tudo ou nada') é um componente central da terapia cognitiva para TOC (Clark & Beck, 2011). Normalizar os contratempos e usá-los para recalibrar a hierarquia transforma uma experiência de 'fracasso' em uma oportunidade de aprendizado colaborativo, mantendo a motivação e a adesão.",
+    "learning_focus": "Identificação e manejo de rituais encobertos (compulsões mentais) e integração de reestruturação cognitiva para lidar com cognições disfuncionais sobre o progresso na terapia.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Explicar que rituais encobertos são uma forma sutil de compulsão que mantém o TOC, e propor um exercício de 'exposição ao pensamento' sem neutralização. Reestruturar a cognição dicotômica, normalizando o 'deslize' como parte do aprendizado.",
+        "approach": "Integração de EPR para rituais cognitivos e reestruturação cognitiva.",
+        "is_optimal": true,
+        "immediate_outcome": "Lucas entende que a prevenção de resposta também se aplica a rituais mentais. Ele reformula o 'fracasso' como um dado para ajustar a hierarquia (talvez o corrimão seja um SUA 75, não 60). A motivação é restaurada.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 9,
+          "behavioral_change": 7,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Focar apenas no 'sucesso' (tocar no livro) e encorajá-lo a repetir a mesma exposição na semana, ignorando a discussão sobre os rituais encobertos e a frustração.",
+        "approach": "Reforço positivo sem abordar as dificuldades emergentes.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas se sente invalidado em sua experiência negativa. Os rituais encobertos continuam não identificados e ativos, minando o progresso a longo prazo.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 3,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Criticar a lavagem das mãos após o corrimão como uma quebra grave do acordo, pressionando-o a se comprometer com mais 'força de vontade' na próxima vez.",
+        "approach": "Confrontação punitiva e subestimação da ansiedade.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas se sente envergonhado e menos propenso a relatar futuros 'deslizes'. A aliança terapêutica é danificada, e a terapia pode se tornar um fonte de estresse adicional.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 2,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Sugerir abandonar as exposições autoguiadas por enquanto e voltar a fazer todas as exposições apenas no consultório, onde você pode supervisionar.",
+        "approach": "Superproteção e retirada da autonomia do paciente.",
+        "is_optimal": false,
+        "immediate_outcome": "A generalização do tratamento é prejudicada. Lucas não desenvolve autoeficácia para lidar com os gatilhos no mundo real, mantendo uma dependência do terapeuta.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 4,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 12,
+    "session_title": "Consolidação e Prevenção de Recaída",
+    "session_phase": "advanced",
+    "session_content": {
+      "narrative": "Na décima segunda sessão, Lucas apresenta um progresso notável. Ele tem realizado exposições a itens da parte média-alta de sua hierarquia (como usar um banheiro público, SUA 70) com prevenção de resposta bem-sucedida, e os rituais encobertos diminuíram significativamente. Sua ansiedade geral está menor e ele reporta ter recuperado horas do seu dia que antes eram consumidas por rituais. No entanto, um evento estressante recente (uma discussão familiar) desencadeou um ligeiro aumento na frequência de pensamentos intrusivos sobre contaminação, embora ele tenha conseguido não ceder a compulsões maiores. Lucas expressa medo: 'Fiquei assustado, pensei que estava voltando à estaca zero.' Esta sessão ocorre em um momento de transição: a fase mais intensa de EPR está concluída, e o foco agora se desloca para a consolidação dos ganhos, o preparo para o encerramento e a prevenção de recaída. É hora de revisar o que funcionou, antecipar desafios futuros e fortalecer sua identidade como alguém que 'gerencia' o TOC, e não mais é 'controlado' por ele.",
+      "session_goals": [
+        "Consolidar os aprendizados e o progresso feito até o momento.",
+        "Elaborar um Plano de Prevenção de Recaída, antecipando gatilhos futuros e estratégias de coping."
+      ],
+      "key_observations": [
+        "Lucas demonstra habilidades de coping adquiridas, conseguindo navegar por um aumento sintomático sem recair totalmente.",
+        "O medo de 'voltar à estaca zero' é uma preocupação comum e um alvo importante para a psicoeducação sobre a natureza flutuante do TOC."
+      ],
+      "critical_decision_point": "Como você estrutura esta discussão e a construção do plano?"
+    },
+    "expert_commentary": "A opção A é ótima porque segue os princípios estabelecidos de prevenção de recaída em terapias comportamentais e cognitivas. O objetivo realista para o TOC não é a erradicação dos pensamentos intrusivos (que são universais), mas a mudança na relação com eles e a eliminação dos rituais que os mantêm (DSM-5-TR). Um plano escrito, co-criado, transforma o paciente no especialista de sua própria recuperação, promovendo autonomia. Como Hiss, Foa e Kozak (1994) destacaram, um programa de prevenção de recaída que inclui psicoeducação, antecipação de situações de risco e revisão de técnicas é fundamental para manter os ganhos terapêuticos a longo prazo no TOC.",
+    "learning_focus": "Consolidação de ganhos, psicoeducação para prevenção de recaída e transição da terapia para a autogestão do paciente, promovendo autonomia e resiliência.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Psicoeducar sobre a diferença entre 'cura' e 'controle' no TOC, normalizando a flutuação dos sintomas sob estresse. Guiá-lo a listar seus gatilhos de risco, sinais de alerta precoce e o 'kit de ferramentas' de estratégias (EPR, reestruturação cognitiva, aceitação) que ele já domina.",
+        "approach": "Psicoeducação para prevenção de recaída e empoderamento baseado em habilidades adquiridas.",
+        "is_optimal": true,
+        "immediate_outcome": "Lucas sai com um plano concreto e escrito, sentindo-se preparado e menos temeroso. Ele internaliza que recaídas parciais são oportunidades de aplicar suas habilidades, não sinais de fracasso.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 9,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Minimizar suas preocupações, assegurando-o de que, como ele progrediu tanto, é muito improvável que os sintomas voltem.",
+        "approach": "Garantias irreais e subestimação do risco de recaída.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas fica temporariamente aliviado, mas se um futuro surto sintomático ocorrer, ele pode se sentir traído pela terapia e despreparado para lidar com isso, aumentando o risco de uma recaída grave.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Focar a sessão inteiramente em revisitar técnicas de exposição complexas, criando novos itens de hierarquia extremamente difíceis para 'imunizá-lo' completamente.",
+        "approach": "Superenfase em EPR sem trabalhar os aspectos psicológicos do encerramento e da autonomia.",
+        "is_optimal": false,
+        "immediate_outcome": "O plano de prevenção de recaída não é feito. Lucas pode associar o fim da terapia a uma pressão por desempenho máximo, aumentando a ansiedade e não desenvolvendo uma mentalidade de autogestão a longo prazo.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 5,
+          "behavioral_change": 5,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Adiar a discussão sobre o plano e focar em explorar as raízes profundas do TOC na infância de Lucas, sugerindo que entender isso é a chave para evitar recaídas.",
+        "approach": "Mudança para uma abordagem psicodinâmica no momento inadequado.",
+        "is_optimal": false,
+        "immediate_outcome": "Desvia o foco do trabalho comportamental-cognitivo consolidado. Pode confundir o paciente e deixá-lo sem um plano prático para os desafios iminentes após o encerramento.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 6,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  }
+]

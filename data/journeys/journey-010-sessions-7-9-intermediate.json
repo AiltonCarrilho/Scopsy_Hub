@@ -1,0 +1,245 @@
+[
+  {
+    "session_number": 7,
+    "session_title": "Confrontando a Fusão Pensamento-Ação",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "O paciente, Rafael, chega à sétima sessão visivelmente ansioso. Ele relata que a exposição à contaminação (tocar na maçaneta do consultório sem lavar as mãos na sessão anterior) foi extremamente difícil, mas que conseguiu resistir ao ritual de limpeza por quase uma hora em casa. No entanto, um novo tema obsessivo emergiu com força: a ideia de que, ao pensar em algo ruim acontecendo com sua mãe, ele estaria aumentando a probabilidade real do evento ocorrer (fusão pensamento-ação). Ele passou a evitar certos pensamentos e a realizar rituais mentais de 'cancelamento', repetindo frases positivas. Rafael expressa culpa e medo, dizendo: 'Se eu pensar, é como se eu estivesse desejando'. A sessão se concentra em psicoeducação sobre a natureza intrusiva e egodistônica dos pensamentos no TOC, diferenciando pensamento de ação ou desejo. Trabalhamos na ideia de que a tentativa de suprimir o pensamento (evitação experiencial) só aumenta sua frequência e o sofrimento, conforme descrito por Clark & Beck (2010).",
+      "session_goals": [
+        "Psicoeducar sobre a fusão pensamento-ação (FTA)",
+        "Normalizar a ocorrência de pensamentos intrusivos sem julgamento moral",
+        "Iniciar a desmontagem da crença de que pensar é equivalente a causar"
+      ],
+      "key_observations": [
+        "O paciente demonstra insight sobre a irracionalidade, mas a crença é emocionalmente arraigada.",
+        "A ansiedade migrou de um tema (contaminação) para outro (pensamentos agressivos), padrão comum no TOC.",
+        "Há um componente moral e de responsabilidade excessiva na sua interpretação dos pensamentos."
+      ],
+      "critical_decision_point": "Como você responde e conduz o próximo passo terapêutico?"
+    },
+    "expert_commentary": "A fusão pensamento-ação é um processo cognitivo central em subtipos de TOC (Shafran, Thordarson & Rachman, 1996). A abordagem ótima integra reestruturação cognitiva (explicar a FTA) com ERP comportamental/cognitivo. O experimento de escrever o pensamento é uma ERP clássica que promove a discriminação crucial entre ter um pensamento e realizar uma ação, desafiando a crença de onipotência do pensamento. Evitar o tema ou apenas racionalizar mantém o ciclo obsessivo.",
+    "learning_focus": "Aplicação de Exposição e Prevenção de Resposta (ERP) a obsessões puramente cognitivas (rituais mentais).",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Propor um experimento comportamental de 'exposição ao pensamento'.",
+        "approach": "TCC - Exposição e Prevenção de Resposta (ERP) para pensamentos.",
+        "is_optimal": true,
+        "immediate_outcome": "Você orienta Rafael a escrever repetidamente o pensamento temido ('Minha mãe vai adoecer') em uma folha, sem realizar rituais de cancelamento, e a observar a ansiedade diminuir naturalmente (habituação). Isso ataca diretamente a FTA, demonstrando que o pensamento não tem poder causal.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Reforçar a lógica e debater a crença com mais vigor.",
+        "approach": "Reestruturação Cognitiva pura.",
+        "is_optimal": false,
+        "immediate_outcome": "Você apresenta mais argumentos racionais contra a FTA. Rafael concorda intelectualmente, mas sua ansiedade não diminui. A sessão fica em um impasse discursivo, e ele sai sentindo-se incompreendido, pois 'a sensação não some'.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 6,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Validar o medo e sugerir distrações quando o pensamento surgir.",
+        "approach": "Suporte e manejo de ansiedade.",
+        "is_optimal": false,
+        "immediate_outcome": "Rafael se sente acolhido, mas a sugestão de distração é interpretada como um novo ritual de esquiva. Ele passa a se distrair compulsivamente, o que reduz a ansiedade a curto prazo mas fortalece a crença de que o pensamento é perigoso e deve ser evitado.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Mudar de foco e retornar às exposições de contaminação, onde havia mais progresso.",
+        "approach": "Evitação do tema difícil.",
+        "is_optimal": false,
+        "immediate_outcome": "Você redireciona a sessão para a hierarquia de contaminação. Rafael coopera, mas o núcleo da nova obsessão (FTA) não é abordado, permitindo que ela se fortaleça fora da terapia. O progresso fica fragmentado.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 8,
+    "session_title": "A Resistência e o Custo dos Rituais",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Rafael inicia a sessão relatando um misto de sucessos e fracassos. Ele realizou o experimento de escrever o pensamento sobre a mãe em casa, descrevendo a ansiedade como 'uma onda que subiu muito, ficou no pico e depois foi baixando'. No entanto, em um dia de estresse no trabalho, ele cedeu a um ritual mental prolongado. A narrativa se aprofunda na função dos rituais: Rafael descreve o alívio imediato e intenso que eles proporcionam, seguido por uma profunda vergonha e exaustão. Ele começa a verbalizar o custo do TOC em sua vida: 'Perco horas, não consigo me concentrar no que importa, estou sempre cansado'. Utilizando a metáfora do 'bully' interno (Abramowitz, 2018), você o ajuda a externalizar o transtorno. Juntos, revisam o modelo cognitivo-comportamental do TOC, destacando como a interpretação catastrófica do pensamento intrusivo (avaliação) leva à ansiedade e aos rituais (compulsões), que por sua vez reforçam a crença original.",
+      "session_goals": [
+        "Explorar a função e o custo dos rituais (alívio vs. manutenção do ciclo)",
+        "Reforçar a adesão à ERP através do registro de tentativas",
+        "Ampliar a motivação para a mudança focando nos valores prejudicados pelo TOC"
+      ],
+      "key_observations": [
+        "O paciente está desenvolvendo uma linguagem para descrever sua experiência ('onda de ansiedade'), indicando maior awareness emocional.",
+        "A recaída em um ritual ocorreu em contexto de estresse generalizado, um gatilho comum.",
+        "Há um embrião de 'fadiga do TOC', que pode ser um motivador terapêutico potente se canalizado."
+      ],
+      "critical_decision_point": "Como você trabalha para fortalecer a resistência aos rituais e a tolerância à ansiedade?"
+    },
+    "expert_commentary": "A recaída é uma oportunidade de aprendizado, não um fracasso. A abordagem ótima (A) integra princípios da ACT à TCC tradicional para o TOC, focando na flexibilidade psicológica (Twohig et al., 2015). Ajudar o paciente a conectar a tolerância à ansiedade com seus valores pessoais cria uma motivação intrínseca mais poderosa do que apenas 'seguir ordens do terapeuta'. As outras opções ou são iatrogênicas (B), superficiais (C) ou arriscam criar novas compulsões (D).",
+    "learning_focus": "Manejo de recaídas e integração de estratégias de aceitação e valores para aumentar a adesão à ERP.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Trabalhar a aceitação da ansiedade e o foco nos valores.",
+        "approach": "Integração de ACT (Terapia de Aceitação e Compromisso) à TCC.",
+        "is_optimal": true,
+        "immediate_outcome": "Você introduz a ideia de 'escolher sentir a ansiedade em nome do que é importante'. Questiona: 'O que o TOC te impede de fazer ou ser?'. Rafael identifica 'ser presente para a família' como um valor. Você o encoraja a ver a ansiedade como um preço temporário a pagar para recuperar sua vida, não como um sinal de perigo. Isso aumenta sua resiliência.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 8,
+          "behavioral_change": 7,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Aumentar drasticamente a dificuldade das exposições para 'quebrar' a resistência.",
+        "approach": "ERP de alta intensidade.",
+        "is_optimal": false,
+        "immediate_outcome": "Você propõe uma exposição massiva (ex: pensar repetidamente na morte da mãe enquanto olha para uma foto dela). Rafael se sente sobrecarregado e desrespeitado. Ele pode não comparecer à próxima sessão, rompendo a aliança terapêutica e a adesão ao tratamento.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 2,
+          "insight": 4,
+          "behavioral_change": 1,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Minimizar a recaída e elogiar apenas os sucessos.",
+        "approach": "Reforço positivo seletivo.",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz 'Não se preocupe, o importante é que você tentou'. Rafael se sente momentaneamente melhor, mas a mensagem implícita é que recaídas são fracassos a serem ignorados. Isso impede uma análise funcional útil e pode fazer com que ele esconda futuras dificuldades.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 3,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Focar em técnicas de relaxamento para reduzir a ansiedade antes de enfrentar os rituais.",
+        "approach": "Controle da ansiedade como pré-requisito.",
+        "is_optimal": false,
+        "immediate_outcome": "Você ensina respiração diafragmática. Rafael usa a técnica, mas acaba incorporando-a como um novo ritual de 'preparação' ou mesmo de 'cancelamento' sutil. A ansiedade pode diminuir temporariamente, mas a crença na necessidade de controlá-la se fortalece.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 9,
+    "session_title": "Generalização e Prevenção de Recaída",
+    "session_phase": "advanced",
+    "session_content": {
+      "narrative": "Na nona sessão, Rafael chega com um relatório escrito de suas atividades da semana. Ele descreve várias situações onde pensamentos intrusivos surgiram (no trânsito, antes de dormir) e ele praticou 'observar e deixar passar', sem se engajar em rituais. Ele também realizou uma exposição planejada: usou o banheiro de um shopping sem realizar os rituais de limpeza prolongados. Seu humor está mais estável e ele relata 'mais espaço na cabeça' para outras coisas. Vocês revisam o progresso desde a sessão 7, destacando a quebra do elo entre pensamento e ação (FTA) e o aumento da tolerância à incerteza. A sessão se volta para a generalização dos ganhos e a preparação para o futuro. Você apresenta o modelo de vulnerabilidade ao estresse, explicando que períodos de cansaço, doença ou mudanças podem temporariamente aumentar a intrusividade dos pensamentos. Juntos, elaboram um 'Plano de Ação para Momentos Difíceis', um documento concreto que Rafael levará consigo.",
+      "session_goals": [
+        "Consolidar os ganhos terapêuticos e generalizar as habilidades aprendidas",
+        "Elaborar um plano de prevenção de recaída personalizado",
+        "Preparar o paciente para a eventual conclusão da terapia (futuro próximo)"
+      ],
+      "key_observations": [
+        "O paciente está assumindo um papel ativo e de 'pesquisador' de sua própria experiência, sinal de internalização do modelo terapêutico.",
+        "A autoeficácia de Rafael aumentou visivelmente.",
+        "É crucial antecipar e normalizar futuras flutuações nos sintomas para evitar desmoralização."
+      ],
+      "critical_decision_point": "Como você responde a esta questão crucial sobre a natureza crônica e o manejo do TOC?"
+    },
+    "expert_commentary": "A pergunta do paciente é um marco terapêutico. A resposta ótima (A) alinha-se com as evidências: o TOC tem um curso crônico e flutuante. A meta realista é a remissão sustentada e a autogestão eficaz, não a eliminação absoluta dos pensamentos intrusivos (que são normais). A metáfora da condição crônica (Abramowitz, 2018) é honesta e empoderadora. Prometer cura (B) é antiético e iatrogênico. Evitar o tema (C) ou fomentar dependência (D) prejudica a autonomia e a prevenção de recaída.",
+    "learning_focus": "Psicoeducação para prevenção de recaída e estabelecimento de expectativas realistas para o manejo de longo prazo do TOC.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Validar o realismo e reformular o objetivo: de 'cura' para 'autogestão eficaz'.",
+        "approach": "Psicoeducação avançada e reestruturação de expectativas.",
+        "is_optimal": true,
+        "immediate_outcome": "Você responde: 'Você está certo. O TOC é uma condição crônica, como a diabetes. O objetivo da terapia não é fazer os pensamentos sumirem para sempre – eles podem voltar – mas sim você se tornar o expert no seu próprio TOC, saber como não alimentá-lo e retomar sua vida rapidamente quando ele bater à porta. Você já tem as ferramentas para isso.' Rafael assente, com uma expressão de determinação realista.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 9,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Assegurar que com prática contínua, os sintomas desaparecerão completamente.",
+        "approach": "Promessa de cura total.",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz 'Se você continuar firme, uma hora seu cérebro se reprograma e isso some'. Rafael fica momentaneamente esperançoso, mas essa expectativa irreal o deixará devastado e sentindo-se fracassado quando, inevitavelmente, um pensamento intrusivo ressurgir no futuro, podendo levar a uma recaída grave.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Desviar da pergunta e focar no sucesso atual.",
+        "approach": "Evitação da conversa difícil.",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz 'Vamos focar no quanto você evoluiu!'. Rafael percebe a evasão e internaliza que a perspectiva é tão ruim que nem o terapeuta quer falar sobre ela. Sua ansiedade sobre o futuro aumenta, e a confiança no plano de prevenção de recaída diminui.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 5,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Sugerir que talvez seja necessário manter terapia de suporte indefinidamente.",
+        "approach": "Dependência terapêutica.",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz 'Por isso a terapia de manutenção é importante, podemos continuar nos vendo mensalmente'. Embora o acompanhamento possa ser benéfico, a forma como é colocado sugere que Rafael não poderá seguir sozinho. Isso pode minar sua autonomia recém-adquirida e criar uma dependência desnecessária.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  }
+]

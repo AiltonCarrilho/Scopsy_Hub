@@ -559,7 +559,7 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
     const fs = require('fs');
     const path = require('path');
 
-    const orchestratorPath = path.resolve(__dirname, '../../../Orquestrar casos clinicos/outputs/modulo-3');
+    const orchestratorPath = path.resolve(__dirname, '../data/journeys');
     const sessions = [];
     let journeyMetadata = null;
 

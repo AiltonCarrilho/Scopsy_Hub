@@ -1,0 +1,244 @@
+[
+  {
+    "session_number": 4,
+    "session_title": "Revisitando o Trauma: Introdução à Exposição Narrativa",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "João, um motorista de ônibus de 42 anos, chega à sessão visivelmente tenso. Ele relata que, na semana anterior, após a psicoeducação sobre reações de estresse, conseguiu identificar um padrão: sempre que vê um acidente de trânsito leve, mesmo na TV, seu coração dispara e ele tem a sensação de 'estar lá de novo'. Ele descreve brevemente o trauma principal: há dois anos, atropelou um pedestre que atravessou a rua correndo em um dia de chuva, não conseguindo frear a tempo. O paciente demonstra vergonha e culpa intensa, repetindo 'eu poderia ter feito algo diferente'. O foco da sessão é construir uma linha do tempo de vida (timeline) para contextualizar o evento traumático dentro de sua história, uma técnica da Terapia de Exposição Narrativa. João reluta inicialmente, mas consegue listar memórias positivas de infância e momentos difíceis anteriores, como a perda do pai. Quando chega próximo ao evento do atropelamento, ele fica em silêncio, evita o contato visual e sua respiração fica ofegante.",
+      "session_goals": [
+        "Construir uma linha do tempo de vida para contextualizar o trauma",
+        "Iniciar a exposição à memória traumática de forma estruturada e segura"
+      ],
+      "key_observations": [
+        "Paciente demonstra hipervigilância e reatividade fisiológica ao discorrer sobre o trauma",
+        "Culpa e vergonha são emoções centrais na narrativa do evento",
+        "Capacidade de engajamento na técnica, apesar da evidente angústia"
+      ],
+      "critical_decision_point": "O que você faz?"
+    },
+    "expert_commentary": "A opção A é ótima porque segue o princípio da 'exposição graduada' e do 'controle do estímulo' (Foa et al., 2007). Em TEPT, a exposição deve ser feita de forma que o paciente não seja retraumatizado. Interromper para uma técnica de aterramento (grounding) ensina ao paciente que ele pode modular sua angústia e que a memória não é incontrolável. Isso fortalece a autoeficácia, um componente crucial para o processamento emocional do trauma. A opção B ignora a janela de tolerância, arriscando uma dissociação. A C reforça a evitação, mantendo o sintoma. A D é uma interpretação inadequada no momento de alta ativação emocional.",
+    "learning_focus": "Psicoeducação e Regulação Emocional",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Validar a dificuldade e guiá-lo em um exercício de ancoragem no presente.",
+        "approach": "Abordagem de regulação emocional e estabilização antes de prosseguir.",
+        "is_optimal": true,
+        "immediate_outcome": "Você diz: 'Isso é muito difícil, e é normal a memória vir com tanta força. Vamos respirar juntos aqui, no meu consultório. Sinta os pés no chão.' João consegue se acalmar parcialmente, sente-se contido pela sua postura e concorda em fazer uma pausa na narrativa detalhada, focando apenas em fatos gerais por hoje. A aliança terapêutica se fortalece.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 7,
+          "behavioral_change": 6,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Incentivá-lo gentilmente a 'passar por isso' e descrever o que vê, garantindo que está seguro agora.",
+        "approach": "Exposição prolongada padrão, insistindo na descrição da memória.",
+        "is_optimal": false,
+        "immediate_outcome": "João tenta, mas a angústia se torna incontrolável. Ele descreve fragmentos caóticos ('chuva, o barulho, o rosto') e entra em um estado de dissociação moderada, ficando com o olhar vidrado. A sessão termina com ele exausto e com medo de retornar, sentindo-se sobrecarregado.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Mudar completamente de assunto para aliviar a pressão, perguntando sobre sua semana.",
+        "approach": "Evitação do conteúdo traumático para reduzir o desconforto imediato.",
+        "is_optimal": false,
+        "immediate_outcome": "João fica confuso com a mudança abrupta. Embora aliviado no momento, ele internaliza que o tema é intocável e que você não pode ajudá-lo a enfrentá-lo. A evitação é reforçada, e o progresso na exposição é interrompido.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 5,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Interpretar a culpa dele, dizendo: 'Parece que você se sente responsável por algo que estava fora do seu controle.'",
+        "approach": "Interpretação psicodinâmica prematura.",
+        "is_optimal": false,
+        "immediate_outcome": "João reage com irritação: 'Claro que eu era responsável, eu estava dirigindo! O senhor não estava lá.' Ele se fecha, sentindo que sua experiência e sua culpa estão sendo invalidadas. O rapport é abalado.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 5,
+    "session_title": "Processando a Memória: Detalhamento e Distinção Passado-Presente",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "João inicia a sessão relatando que, após a última sessão, praticou a técnica de ancoragem em casa quando se sentiu ansioso. Ele demonstra um pouco mais de confiança. Retomando o trabalho da linha do tempo, vocês se concentram na narração detalhada do evento traumático, mas desta vez com um roteiro mais estruturado. Você o guia a descrever o que aconteceu antes, durante e depois do atropelamento, focando em fatos, pensamentos, emoções e sensações físicas (protocolo de Exposição Narrativa/Prolongada). João consegue narrar com mais fluência, mas sua voz falha ao descrever o momento do impacto. Ele menciona pensamentos intrusivos recorrentes: 'Eu sou um assassino' e flashbacks do rosto da vítima. Um avanço importante ocorre quando ele identifica que o som da chuva forte ainda o dispara. Você utiliza a psicoeducação para explicar a natureza das memórias traumáticas não processadas.",
+      "session_goals": [
+        "Realizar a exposição prolongada à memória traumática de forma controlada",
+        "Trabalhar a distinção cognitiva entre 'então' (perigo passado) e 'agora' (segurança presente)",
+        "Identificar e desafiar cognições iniciais relacionadas à culpa"
+      ],
+      "key_observations": [
+        "Paciente mostra maior capacidade de tolerância afetiva do que na sessão anterior",
+        "Cognição central de culpa ('Eu sou um assassino') é claramente identificada",
+        "Reatividade a estímulos condicionados (chuva) é reconhecida pelo paciente"
+      ],
+      "critical_decision_point": "Como você responde para trabalhar essa cognição traumática?"
+    },
+    "expert_commentary": "A opção A é ideal porque integra a exposição com a reestruturação cognitiva, abordando diretamente a cognição traumática (um dos pilares do TEPT no DSM-5-TR: 'Cognições ou humor negativos persistentes e distorcidos'). A pergunta socrática convida o paciente a ser um investigador de seu próprio pensamento, promovendo insight e flexibilidade cognitiva. A opção B (reassurance) é bem-intencionada, mas ineficaz para modificar crenças profundas. A C subutiliza o momento clínico rico. A D é iatrogênica, pois o perdão é um processo que vem após a reavaliação da culpa, não um comando.",
+    "learning_focus": "Reestruturação Cognitiva de Cognições Traumáticas",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Explorar a evidência: 'Vamos examinar esse pensamento. O que um 'assassino' faz? E o que você, João, fez naquele dia?'",
+        "approach": "Reestruturação Cognitiva Socrática integrada à narrativa do trauma.",
+        "is_optimal": true,
+        "immediate_outcome": "Você guia João a diferenciar um ato intencional de homicídio de um acidente em condições adversas. Ele começa a separar a intenção do resultado, reconhecendo que sua culpa é pelo desfecho trágico, não por uma ação maligna. Isso gera um alívio significativo e um primeiro passo para reprocessar o significado do evento.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Oferecer apoio incondicional: 'João, você não é um assassino. Foi um acidente terrível, e você é uma boa pessoa.'",
+        "approach": "Suporte e reassurance direto.",
+        "is_optimal": false,
+        "immediate_outcome": "João ouve, mas responde: 'O senhor diz isso porque é seu trabalho.' A reassurance externa não é internalizada porque não modifica a crença central. Ele se sente acolhido, mas a cognição distorcida permanece intacta, limitando o progresso.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Pedir para ele repetir a narração do evento, focando apenas nas sensações físicas, sem abordar o pensamento.",
+        "approach": "Exposição pura, evitando o componente cognitivo.",
+        "is_optimal": false,
+        "immediate_outcome": "João obedece, mas a angústia retorna sem a elaboração do significado. A sessão se torna uma repetição exaustiva sem ganho cognitivo. Ele pode sair sentindo que a terapia apenas o faz reviver a dor sem entender ou superá-la.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Sugerir que ele deve perdoar a si mesmo para seguir em frente.",
+        "approach": "Foco prematuro no perdão.",
+        "is_optimal": false,
+        "immediate_outcome": "João reage com frustração: 'Como posso me perdoar? Uma pessoa morreu.' A sugestão é experimentada como pressão e uma minimização de sua culpa real. Isso pode criar uma nova barreira, fazendo-o acreditar que seu sofrimento é 'errado' ou que ele é incapaz de se recuperar.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 6,
+    "session_title": "Integração e Enfrentamento de Estímulos Condicionados",
+    "session_phase": "advanced",
+    "session_content": {
+      "narrative": "João chega relatando um pequeno, mas significativo, progresso: conseguiu dirigir em uma garagem fechada durante uma chuva fraca sem ter um ataque de pânico completo, usando as técnicas de respiração. Ele traz à tona que o pensamento 'eu sou um assassino' ainda aparece, mas agora ele consegue 'responder' mentalmente com 'foi um acidente'. A sessão é dedicada a consolidar os ganhos e planejar a exposição in vivo aos estímulos condicionados. Juntos, vocês elaboram uma hierarquia de situações temidas relacionadas ao trauma, desde ouvir o som de chuva em um app (menos ansiogênico) até passar pelo local do acidente (mais ansiogênico). João também revela que evita noticiários e que se isolou de amigos que são motoristas. Ele demonstra motivação para retomar atividades, mas teme uma recaída. A narrativa do trauma é revisitada brevemente, e nota-se uma redução na reatividade emocional e na dissociação.",
+      "session_goals": [
+        "Construir uma hierarquia de exposição in vivo para estímulos condicionados",
+        "Consolidar a narrativa integrada do trauma e os insights cognitivos",
+        "Planejar atividades de retomada de vida (reengajamento)"
+      ],
+      "key_observations": [
+        "Há evidências de habituação dentro das sessões e generalização para fora (dirigir na chuva fraca)",
+        "Paciente começa a desenvolver 'respostas' adaptativas às cognições intrusivas",
+        "A evitação social e de atividades persiste como um dos principais prejuízos funcionais"
+      ],
+      "critical_decision_point": "Como você maneja essa antecipação ansiosa e o medo do fracasso?"
+    },
+    "expert_commentary": "A opção A é a mais eficaz na fase de exposição in vivo. Ela combina validação (normalizar o medo) com ação concreta (plano de coping), o que é essencial para superar a 'evitação fóbica' característica do TEPT. Como descrito por Cahill & Foa (2007), a psicoeducação sobre a curva da ansiedade reduz o 'medo do medo'. Co-criar o plano empodera o paciente e aumenta a autoeficácia. A opção B é uma reassurance vazia. A C, embora pareça segura, pode ser uma armadilha de subdosagem terapêutica. A D é uma intervenção descontextualizada do marco terapêutico atual (TCC focada no trauma).",
+    "learning_focus": "Planejamento de Exposição In Vivo e Prevenção de Respostas de Evitação",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Normalizar o medo, revisar a psicoeducação sobre a ansiedade em forma de onda, e co-criar um plano de coping detalhado para cada passo.",
+        "approach": "Preparação comportamental e validação, enfatizando o controle e a previsibilidade.",
+        "is_optimal": true,
+        "immediate_outcome": "Você responde: 'Esse medo é esperado. A ansiedade sobe, mas também desce. Vamos planejar: você ouve o som por apenas 2 minutos, com a técnica de respiração à mão, e depois me liga para me contar como foi.' João se sente equipado e apoiado, não apenas desafiado. A adesão ao plano aumenta.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 9,
+          "insight": 8,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Encorajá-lo a ser corajoso e enfrentar, minimizando o risco: 'Confie no processo, você já mostrou que consegue. Não vai piorar.'",
+        "approach": "Reassurance otimista sem planejamento concreto.",
+        "is_optimal": false,
+        "immediate_outcome": "João tenta, mas a insegurança permanece. Se ele tiver uma reação forte, pode interpretar como uma falha pessoal ('eu não fui corajoso o suficiente') e uma quebra da sua promessa ('disse que não pioraria'), prejudicando a confiança e possivelmente desistindo do plano.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Rever a hierarquia e propor um item ainda mais fácil, como apenas olhar para uma foto de chuva.",
+        "approach": "Excessiva cautela que pode reforçar a evitação.",
+        "is_optimal": false,
+        "immediate_outcome": "João fica aliviado no curto prazo, mas internaliza que sua capacidade de enfrentamento é menor do que realmente é. O progresso fica estagnado em um nível muito básico, prolongando desnecessariamente o tratamento.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 5,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Explorar psicodinamicamente o medo de piorar: 'O que 'piorar' significaria para você? Parece haver um medo mais profundo.'",
+        "approach": "Exploração analítica do medo, desviando do planejamento comportamental.",
+        "is_optimal": false,
+        "immediate_outcome": "A conversa se afasta do plano prático e entra em um terreno abstrato que confunde João no momento. Ele sai da sessão sem um plano claro para a semana, sentindo-se menos preparado e mais ansioso sobre o que fazer.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 6,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno de Estresse Pos-Traumatico",
+    "difficulty_level": "intermediate"
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "session_number": 1,
+    "session_title": "Mapeando o Labirinto: Primeiro Contato com as Obsessões",
+    "session_phase": "initial",
+    "session_content": {
+      "narrative": "Você recebe Lucas, 28 anos, estudante de engenharia. Ele parece tenso e evita contato visual. Relata que sua vida está sendo \"sequestrada\" por pensamentos intrusivos e rituais. Com hesitação, descreve obsessões de contaminação por germes e substâncias químicas, levando a compulsões de lavagem das mãos e de objetos pessoais que consomem mais de 4 horas diárias. Ele também menciona pensamentos agressivos intrusivos sobre machucar acidentalmente familiares, que o aterrorizam e o levam a rituais mentais de repetição de frases 'protetoras'. Lucas relata que seus estudos estão prejudicados e que ele evita encontros sociais por medo de contaminação. Ele demonstra alto insight, reconhecendo que seus pensamentos e comportamentos são excessivos, mas sente uma ansiedade avassaladora se não os executar. A sessão é focada em estabelecer rapport, realizar uma avaliação inicial detalhada e começar a psicoeducação sobre o TOC.",
+      "session_goals": [
+        "Estabelecer aliança terapêutica e validar o sofrimento do paciente.",
+        "Realizar avaliação inicial dos sintomas, incluindo conteúdo das obsessões, compulsões, tempo de consumo e prejuízos funcionais."
+      ],
+      "key_observations": [
+        "Paciente apresenta alto insight (DSM-5-TR: 'com insight bom ou razoável'), o que é prognóstico positivo.",
+        "Sintomas claramente enquadrados nos critérios do DSM-5-TR para TOC (F42): presença de obsessões e/ou compulsões, reconhecidas como excessivas, consumindo tempo (>1h/dia) e causando sofrimento significativo.",
+        "Ansiedade é o afeto central que sustenta o ciclo obsessivo-compulsivo."
+      ],
+      "critical_decision_point": "O que você faz?"
+    },
+    "expert_commentary": "A opção A é ótima porque aborda diretamente a 'fusão pensamento-ação' (crença de que ter um pensamento é moralmente equivalente a realizar o ato) e a 'importância excessiva dada aos pensamentos', centrais no modelo cognitivo do TOC (Clark & Beck, 2011). Psicoeducar sobre a ego-distonia alivia a culpa e o autor julgamento, fortalecendo a aliança. Evitar o tema (C) ou fornecer reasseguramento (D) são armadilhas comuns que mantêm o transtorno. O questionamento precoce (B) pode ser útil mais tarde, mas primeiro é necessário normalizar e desmontar as crenças disfuncionais sobre os pensamentos.",
+    "learning_focus": "Psicoeducação inicial e manejo da fusão pensamento-ação para estabelecer base segura para a terapia.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Normalizar e psicoeducar sobre a natureza ego-distônica das obsessões no TOC.",
+        "approach": "Psicoeducação e Validação",
+        "is_optimal": true,
+        "immediate_outcome": "Você explica, citando conceitos de autores como David A. Clark no livro 'Cognitive Therapy for OCD', que pensamentos intrusivos são comuns, mas no TOC ganham significado catastrófico. Enfatiza que o conteúdo é ego-distônico (contrário aos seus valores), e que a angústia que ele sente é justamente a prova de que não deseja aquilo. Lucas se acalma visivelmente, sentindo-se compreendido e menos 'monstruoso'.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 9,
+          "insight": 8,
+          "behavioral_change": 7,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Questionar racionalmente a probabilidade de ele agir conforme os pensamentos.",
+        "approach": "Questionamento Socrático Precoce",
+        "is_optimal": false,
+        "immediate_outcome": "Você pergunta: 'Qual a evidência real de que você faria isso?'. Lucas tenta argumentar logicamente, mas a dúvida obsessiva ('e se?') persiste. Ele concorda intelectualmente, mas a ansiedade não diminui significativamente, pois a intervenção não atacou a fusão pensamento-ação, núcleo da sua angústia.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Minimizar o conteúdo, focando apenas nas compulsões de lavagem.",
+        "approach": "Evitação do Tema Difícil",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz: 'Vamos focar no que está atrapalhando mais sua rotina, que é a lavagem'. Lucas concorda, mas fica com a impressão de que seu maior medo foi ignorado ou considerado muito vergonhoso para discussão. O rapport é prejudicado e um núcleo central do TOC fica fora da terapia.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Garantir de forma tranquilizadora que ele nunca faria isso.",
+        "approach": "Reasseguramento Compulsivo",
+        "is_optimal": false,
+        "immediate_outcome": "Você afirma com convicção: 'Claro que não, você é uma boa pessoa'. Lucas sente alívio imediato, mas breve. Em casa, a dúvida retorna ('Será que o terapeuta realmente me conhece?'), e ele sente necessidade de buscar mais reasseguramento, reforçando um ciclo compulsivo. A intervenção, embora bem-intencionada, é contraproducente para o TOC.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 2,
+          "behavioral_change": 1,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 2,
+    "session_phase": "middle",
+    "session_title": "Desenhando o Mapa da Ansiedade: Hierarquia de Exposição",
+    "session_content": {
+      "narrative": "Com base no rapport estabelecido e na psicoeducação da sessão anterior, Lucas parece mais confiante. Você revisa o modelo cognitivo do TOC, explicando o ciclo obsessão-ansiedade-compulsão-alívio temporário. Lucas consegue identificar seus próprios gatilhos e rituais com mais clareza. O foco desta sessão é construir, em colaboração, uma Hierarquia de Exposição e Prevenção de Resposta (EPR). Juntos, listam situações, objetos e pensamentos que disparam ansiedade, desde os moderados (ex: tocar na maçaneta do banheiro de casa) até os mais temidos (ex: usar um banheiro público sem lavar as mãos depois, ou ter o pensamento intrusivo sobre a família sem neutralizá-lo). Lucas classifica cada item com uma Subjective Units of Distress Scale (SUDS) de 0 a 100. Ele demonstra alguma hesitação, mas também um frágil otimismo. A sessão é estruturada e colaborativa.",
+      "session_goals": [
+        "Construir, em colaboração com o paciente, uma hierarquia de exposição detalhada e personalizada.",
+        "Reforçar o entendimento do modelo de TOC e o racional da terapia de EPR."
+      ],
+      "key_observations": [
+        "Paciente engajado no processo de construção da hierarquia, sinal de adesão ao tratamento.",
+        "É possível observar a 'tendência à fuga' quando itens muito altos na hierarquia são mencionados, mas ele consegue se manter na tarefa com apoio.",
+        "A hierarquia cobre tanto exposições situacionais (contaminação) quanto imaginais (pensamentos intrusivos)."
+      ],
+      "critical_decision_point": "Como você responde?"
+    },
+    "expert_commentary": "A opção A é a abordagem padrão-ouro da EPR. Como destacado por Jonathan Abramowitz em 'Exposure Therapy for Anxiety', a colaboração e o início por itens sub-máximos são cruciais para o sucesso e a adesão. Validar o medo mantém o rapport. A inundação prematura (B) é eticamente questionável e arriscada. Acomodar (C) ou evitar (D) o item mais difícil reforça a patologia. É essencial manter o item no mapa da hierarquia, mas deixar claro que o caminho até ele será gradual, construindo autoeficácia.",
+    "learning_focus": "Construção colaborativa e manejo de ansiedades durante o planejamento da Hierarquia de Exposição e Prevenção de Resposta (EPR).",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Validar o medo, reafirmar o princípio da EPR e propor começar por um item de dificuldade baixa/média.",
+        "approach": "Validação + Princípio do Passo a Passo",
+        "is_optimal": true,
+        "immediate_outcome": "Você diz: 'É completamente normal sentir esse medo. O objetivo da hierarquia é justamente mapear isso. Nunca começaríamos por aqui. Vamos escolher um item na faixa de SUDS 40-50 para nossa primeira prática na próxima sessão, para você construir confiança.' Lucas se acalma, sente que sua ansiedade foi respeitada e que a terapia é desafiadora, mas manejável. A adesão é mantida.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 7,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Insistir que enfrentar o maior medo logo no início pode ser mais eficaz.",
+        "approach": "Inundação (Flooding) Prematura",
+        "is_optimal": false,
+        "immediate_outcome": "Você argumenta, citando estudos de eficácia, que a inundação pode ser rápida. Lucas fica extremamente ansioso, questiona se você entende a gravidade do que está propondo. Ele pode concordar por submissão, mas o risco de abandonar a terapia ou de ter uma experiência traumática que sabote o tratamento é alto.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 2,
+          "insight": 3,
+          "behavioral_change": 1,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Retirar o item do topo da hierarquia para aliviar a ansiedade imediata.",
+        "approach": "Acomodação da Evitação",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz: 'Tudo bem, vamos tirar esse por enquanto.' Lucas sente alívio imediato, mas internaliza a mensagem de que alguns medos são intocáveis. Isso reforça a crença de que a ansiedade é intolerável e que a evitação é a única solução, enfraquecendo o modelo terapêutico.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 4,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Mudar de tópico e focar apenas nas exposições situacionais de contaminação.",
+        "approach": "Evitação do Núcleo Cognitivo",
+        "is_optimal": false,
+        "immediate_outcome": "Você propõe trabalhar só com a lavagem por enquanto. Lucas aceita, mas o núcleo mais angustiante do seu TOC (os pensamentos agressivos intrusivos) permanece fora do escopo da terapia. O progresso fica limitado e o risco de recaída é maior, pois as crenças disfuncionais centrais não são desafiadas.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 3,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 3,
+    "session_phase": "middle",
+    "session_title": "Primeiros Passos na Exposição: Enfrentando o Gatilho",
+    "session_content": {
+      "narrative": "Na sessão anterior, vocês decidiram começar por um item de dificuldade média (SUDS ~50): tocar no lixo da cozinha de casa e depois resistir à compulsão de lavar as mãos por, inicialmente, 5 minutos. Lucas chegou à sessão visivelmente ansioso, mas trouxe o 'diário de exposição' preenchido com a prática realizada em casa. Ele relata que conseguiu realizar a tarefa, mas que a ansiedade subiu para 80 no pico e que os 5 minutos foram 'uma eternidade'. Ele descreve uma forte vontade de lavar as mãos, pensamentos catastróficos sobre doenças e um grande alívio quando o tempo acabou. No entanto, ele também nota que, após a primeira prática, a ansiedade de pensar em repetir a tarefa no dia seguinte foi um pouco menor. A sessão é dedicada a revisar essa primeira experiência de EPR, normalizar as dificuldades, analisar as crenças que surgiram durante a exposição e planejar o próximo passo.",
+      "session_goals": [
+        "Revisar e processar a primeira experiência de Exposição e Prevenção de Resposta (EPR).",
+        "Reforçar a aprendizagem de que a ansiedade diminui com a habituação e planejar a próxima exposição."
+      ],
+      "key_observations": [
+        "Paciente demonstrou adesão e coragem ao realizar a tarefa de exposição prescrita.",
+        "Relato clássico de pico de ansiedade seguido de habituação incompleta (devido ao tempo limitado) e alívio pós-prevenção de resposta.",
+        "A auto-observação de que a ansiedade antecipatória diminuiu é um dado comportamental positivo crucial para motivar continuidade."
+      ],
+      "critical_decision_point": "Como você conduz o processamento desta experiência?"
+    },
+    "expert_commentary": "A opção A é ideal porque transforma uma experiência percebida como 'fracasso' (a ansiedade não sumiu) em um poderoso dado de psicoeducação. Explicar a curva da habituação e o papel da prevenção de resposta prolongada é central para a EPR (Foa & Kozak, 1986). A opção B é um reforço vazio sem aprendizagem. A opção C retrocede desnecessariamente, perdendo uma oportunidade de consolidar ganhos. A opção D, mesmo que válida para checar adesão (rituais sutis são comuns), foi feita de forma não-colaborativa, prejudicando a aliança. É melhor checar isso de forma curiosidade: 'Algum pensamento ou ação mental veio para tentar neutralizar a ansiedade?'.",
+    "learning_focus": "Processamento de experiências de exposição e psicoeducação sobre habituação para consolidar aprendizagem e manter a adesão.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Psicoeducar sobre a curva da habituação e propor aumentar o tempo de prevenção de resposta gradualmente.",
+        "approach": "Psicoeducação Baseada em Dados + Planejamento Gradual",
+        "is_optimal": true,
+        "immediate_outcome": "Você desenha a curva da ansiedade, explicando que a habituação (diminuição da resposta de medo) leva tempo e que interromper com a lavagem logo após 5 minutos impede que ele vivencie a queda natural. Propõe repetir o mesmo item, mas estendendo o tempo de prevenção de resposta para 10, depois 15 minutos. Lucas entende o racional e, embora receoso, concorda em tentar, baseado no pequeno sucesso da ansiedade antecipatória reduzida.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Focar exclusivamente no sucesso de ter completado a tarefa, elogiando muito.",
+        "approach": "Reforço Positivo sem Processamento Cognitivo",
+        "is_optimal": false,
+        "immediate_outcome": "Você diz: 'Parabéns, você foi muito corajoso!'. Lucas se sente bem no momento, mas a dúvida central sobre a eficácia do método permanece. Sem entender o processo de habituação, sua motivação para repetir tarefas igualmente angustiantes pode diminuir, pois ele não vê a 'lógica' por trás do sofrimento.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 4,
+          "behavioral_change": 5,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Concordar que talvez o item tenha sido muito difícil e propor voltar para um mais fácil.",
+        "approach": "Retrocesso Excessivo por Desconforto",
+        "is_optimal": false,
+        "immediate_outcome": "Você sugere: 'Vamos tentar algo mais leve, como tocar no interruptor'. Lucas sente alívio, mas internaliza que 'fracassou'. A hierarquia perde sua função de guia progressivo, e a terapia pode estagnar em itens que não geram mais aprendizagem significativa, por medo de eliciar ansiedade intensa.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Questionar se ele realmente segurou a ansiedade ou se fez rituais mentais durante os 5 minutos.",
+        "approach": "Confrontação Desconfiada",
+        "is_optimal": false,
+        "immediate_outcome": "Você pergunta de forma cética: 'Tem certeza de que não fez nenhum ritual mental?'. Lucas se sente interrogado e desacreditado. Ele pode mentir para evitar julgamento ou ficar defensivo. O rapport é prejudicado, e a atmosfera colaborativa da terapia é quebrada.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 5,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Transtorno Obsessivo-Compulsivo",
+    "difficulty_level": "intermediate"
+  }
+]

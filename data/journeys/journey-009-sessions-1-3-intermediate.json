@@ -1,0 +1,242 @@
+[
+  {
+    "session_number": 1,
+    "session_title": "Avaliação Inicial e Construção do Vínculo",
+    "session_phase": "initial",
+    "session_content": {
+      "narrative": "Você recebe Ana Clara, 32 anos, arquiteta. Ela chega à sessão com postura curvada, fala pausada e evita contato visual. Relata que há cerca de quatro meses vem sentindo um 'vazio profundo', perda de interesse pelo trabalho que antes amava, e fadiga constante que a impede de concluir projetos. Descreve dificuldades para dormir (acorda às 3h da manhã e não consegue voltar a dormir) e perda de apetite. Ana menciona sentimentos de inutilidade e culpa por 'decepcionar' sua equipe no escritório. Ela nega ideação suicida atual, mas admite que já pensou que 'seria mais fácil se tudo acabasse'. Durante a narrativa, chora silenciosamente. O foco desta sessão é realizar uma avaliação diagnóstica inicial dentro dos critérios do DSM-5-TR para Depressão Maior, estabelecer rapport e começar a psicoeducação.",
+      "session_goals": [
+        "Realizar avaliação diagnóstica dos sintomas de acordo com o DSM-5-TR.",
+        "Estabelecer aliança terapêutica e validar o sofrimento da paciente."
+      ],
+      "key_observations": [
+        "Humor deprimido e anedonia claramente presentes.",
+        "Sintomas neurovegetativos (insônia terminal, hiporexia) são proeminentes.",
+        "Presença de sentimentos de culpa/inutilidade, mas negação de ideação suicida ativa."
+      ],
+      "critical_decision_point": "Como você responde à pergunta sobre o prognóstico?"
+    },
+    "expert_commentary": "A pergunta sobre prognóstico é um momento crucial para construir esperança realista. A opção A é ideal pois combina validação emocional (essencial para o rapport) com psicoeducação, um pilar da TCC para depressão. Como destacado por Beck (2011), a colaboração ativa é central, e informar o paciente sobre a natureza do transtorno reduz a desmoralização. Evitar reasseguramento vazio (B) ou fuga técnica (C, D) é fundamental, pois invalidaria a experiência da paciente.",
+    "learning_focus": "Construção de Aliança Terapêutica e Psicoeducação Inicial",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Validar o medo, fornecer psicoeducação sobre a depressão como um transtorno tratável e enfatizar a colaboração no processo.",
+        "approach": "Psicoeducação e Validação",
+        "is_optimal": true,
+        "immediate_outcome": "Ana se acalma um pouco, sente-se ouvida e demonstra um leve alívio ao saber que existe um caminho. Ela concorda em colaborar no tratamento.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 9,
+          "insight": 7,
+          "behavioral_change": 7,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Garantir de forma genérica e otimista que 'tudo vai ficar bem', minimizando a gravidade dos sintomas.",
+        "approach": "Reasseguramento Genérico",
+        "is_optimal": false,
+        "immediate_outcome": "Ana sente que você não está levando sua dor a sério. Ela concorda com a cabeça, mas o vínculo fica fragilizado e ela se retrai.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 4,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Desviar da pergunta, focando imediatamente na coleta de mais dados sobre o histórico familiar.",
+        "approach": "Fuga para a Avaliação",
+        "is_optimal": false,
+        "immediate_outcome": "Ana se sente ignorada em sua angústia central. Ela responde às perguntas de forma mecânica, mas o engajamento terapêutico diminui.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 5,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Adotar uma postura excessivamente técnica, listando estatísticas de remissão e diferentes modalidades de tratamento.",
+        "approach": "Resposta Excessivamente Técnica",
+        "is_optimal": false,
+        "immediate_outcome": "A paciente fica sobrecarregada com informações. Ela não absorve o conteúdo e sua expressão de desespero aumenta.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 6,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 2,
+    "session_title": "Identificando Pensamentos Automáticos e Atividade Agradável",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Ana Clara chega um pouco menos arrastada, relatando que pensou sobre a psicoeducação da sessão anterior e isso a 'acalmou um pouco'. No entanto, relata que a semana foi difícil: evitou uma reunião importante e passou o fim de semana inteiro na cama. Você introduz o modelo cognitivo, explicando a conexão entre situação, pensamento, emoção e comportamento. Juntos, identificam uma situação recente: 'Olhar o e-mail do trabalho na manhã de segunda-feira'. Ana identifica o pensamento automático: 'Eu não consigo fazer nada direito. Vou falhar de novo'. A emoção associada foi desespero (90%) e a conduta foi fechar o notebook e voltar para a cama. O humor durante a sessão flutua entre um engajamento inicial e momentos de desânimo quando fala sobre suas falhas percebidas.",
+      "session_goals": [
+        "Introduzir e praticar o modelo cognitivo com um exemplo concreto.",
+        "Planejar uma atividade agradável de baixa demanda para quebrar o ciclo de inatividade."
+      ],
+      "key_observations": [
+        "Consegue identificar pensamentos automáticos com relativa facilidade quando guiada.",
+        "A inatividade e a evitação são comportamentos de segurança que mantêm a depressão.",
+        "Há um leve aumento na esperança, mas ainda muito frágil."
+      ],
+      "critical_decision_point": "Como você trabalha esse pensamento automático que ameaça sabotar a tarefa comportamental?"
+    },
+    "expert_commentary": "A opção A demonstra a essência da TCC colaborativa e graduada. O pensamento de Ana é uma distorção cognitiva clássica (abstração seletiva e desqualificação do positivo). Usar questionamento socrático para examinar evidências, como proposto por Judith Beck (2011), é mais eficaz do que confronto (D) ou insistência (B). Ajustar a tarefa ('graduação de tarefas') é vital na depressão, onde a anedonia e a baixa energia são barreiras. Ignorar a barreira (C) compromete a ativação comportamental, um componente essencial do tratamento.",
+    "learning_focus": "Aplicação do Modelo Cognitivo e Graduação de Tarefas Comportamentais",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Convidar Ana a examinar a evidência para esse pensamento e, em colaboração, ajustar a atividade para algo menor e mais factível.",
+        "approach": "Questionamento Socrático e Ajuste Colaborativo",
+        "is_optimal": true,
+        "immediate_outcome": "Ana percebe que está prevendo o fracasso sem evidência. Juntos, definem 'preparar uma xícara de chá e sentar na varanda por 5 minutos' como meta. Ela se compromete.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Insistir na atividade original do café, incentivando-a a 'enfrentar o medo' e 'quebrar o padrão'.",
+        "approach": "Encorajamento Direto sem Flexibilidade",
+        "is_optimal": false,
+        "immediate_outcome": "Ana sente-se pressionada e incapaz. Ela pode até tentar, mas com alta probabilidade de autossabotagem, reforçando sua crença de incompetência.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Abandonar completamente o planejamento de atividade e voltar apenas para a análise dos pensamentos da semana.",
+        "approach": "Evitação da Intervenção Comportamental",
+        "is_optimal": false,
+        "immediate_outcome": "Perde-se uma oportunidade crucial de ativar a paciente. A sessão fica apenas no nível cognitivo, sem gerar experiência corretiva comportamental.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 7,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Interpretar o pensamento como resistência ao tratamento e confrontá-la sobre seu 'medo de melhorar'.",
+        "approach": "Confrontação Psicodinâmica Inadequada",
+        "is_optimal": false,
+        "immediate_outcome": "A paciente se sente atacada e incompreendida. O vínculo terapêutico é severamente danificado, podendo levar ao abandono do tratamento.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 2,
+          "insight": 3,
+          "behavioral_change": 1,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 3,
+    "session_title": "Trabalhando Crenças Intermediárias e Prevenção de Recaída",
+    "session_phase": "advanced",
+    "session_content": {
+      "narrative": "Ana Clara relata que conseguiu realizar a atividade ajustada (tomar chá na varanda) em dois dias. Ela descreve um momento breve de 'paz'. No diário de pensamentos, identificou outros pensamentos como 'Se não for perfeito, é um fracasso'. Você propõe explorar a crença por trás disso. Após trabalho, ela articula uma regra condicional: 'Se eu não fizer tudo perfeitamente, então sou uma incompetente'. Esta crença está ligada a um alto padrão de desempenho profissional. O humor está um pouco mais reativo, e ela demonstra frustração ao perceber como essa regra a desgasta. Nesta fase, é importante consolidar os ganhos e começar a discutir a autonomia e prevenção de recaída, uma vez que os sintomas neurovegetativos começam a mostrar leve melhora.",
+      "session_goals": [
+        "Identificar e começar a questionar crenças intermediárias (regras/atitudes disfuncionais).",
+        "Introduzir o conceito de prevenção de recaída e planejar para situações de risco."
+      ],
+      "key_observations": [
+        "A paciente começa a conectar padrões de pensamento a regras rígidas de vida.",
+        "Há um engajamento mais ativo no processo de reestruturação cognitiva.",
+        "A melhora comportamental é frágil e ainda muito vinculada à estrutura das sessões."
+      ],
+      "critical_decision_point": "Como você trabalha esse medo de recaída e promove autonomia?"
+    },
+    "expert_commentary": "A opção A é ótima porque aborda a prevenção de recaída, um componente final crucial na TCC para depressão (Segal, Williams, & Teasdale, 2018). Ela transforma a ansiedade da paciente em uma oportunidade de planejamento proativo, promovendo autoeficácia. A simples reasseguração (B) ou a extensão desnecessária (D) são iatrogênicas a longo prazo. Um plano de ação concreto, criado em colaboração, internaliza o papel do terapeuta e prepara o paciente para o encerramento futuro.",
+    "learning_focus": "Promoção de Autonomia e Prevenção de Recaída",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Normalizar o medo, revisar as ferramentas aprendidas (diário, questionamento de pensamentos, atividades) e co-criar um 'plano de ação' para situações de risco.",
+        "approach": "Prevenção de Recaída Colaborativa",
+        "is_optimal": true,
+        "immediate_outcome": "Ana sente-se capacitada, não apenas tranquilizada. Ela sai com um plano concreto (e.g., 'Se pensar X, eu faço Y'), aumentando sua autoeficácia e preparação para o futuro.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 8,
+          "behavioral_change": 9,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Reassegurá-la de que você ainda estará lá por muitas sessões e que ela não precisa se preocupar com isso agora.",
+        "approach": "Reasseguramento Dependente",
+        "is_optimal": false,
+        "immediate_outcome": "Reduz a ansiedade momentânea, mas reforça a dependência do terapeuta. Não promove as habilidades de autogerenciamento necessárias para a manutenção dos ganhos.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Desafiar o medo como um pensamento catastrófico, sem dedicar tempo para construir um plano prático.",
+        "approach": "Puramente Cognitivo, sem Plano de Ação",
+        "is_optimal": false,
+        "immediate_outcome": "Ana intelectualmente concorda, mas fica com a sensação de estar despreparada. A ansiedade sobre o futuro persiste.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 7,
+          "behavioral_change": 5,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Concordar que o risco é alto e sugerir estender a terapia indefinidamente para 'monitoramento'.",
+        "approach": "Medicalização da Prevenção",
+        "is_optimal": false,
+        "immediate_outcome": "A mensagem é de que a paciente é frágil e incapaz de se autogerir. Prejudica a autonomia e pode criar dependência terapêutica.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  }
+]

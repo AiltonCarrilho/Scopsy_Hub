@@ -1,0 +1,239 @@
+[
+  {
+    "session_number": 10,
+    "session_title": "Revisando o Plano de Ativação e Enfrentando a Evitação",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "A sessão começa com Lucas, 32 anos, relatando que conseguiu realizar duas das três atividades agendadas da semana (ir à academia e preparar uma refeição), mas evitou o encontro com amigos. Ele descreve um aumento da ansiedade antecipatória no dia do encontro, seguida de alívio ao cancelar, mas depois de uma intensificação da ruminação e da autocrítica ('sou um fracasso social'). Seu humor permanece deprimido, com anedonia persistente em contextos sociais. Ele menciona que a ideia de 'ter que ser divertido' o paralisa. Você observa que, apesar do progresso nas atividades instrumentais, a evitação social permanece um núcleo importante da depressão, funcionando como um mecanismo de manutenção do transtorno. A sessão é dedicada a revisar o registro de atividades e pensamentos automáticos associados à situação evitada, explorando a conexão entre evitação, humor e autoconceito.",
+      "session_goals": [
+        "Revisar a tarefa de ativação comportamental da semana, validando sucessos e analisando obstáculos.",
+        "Identificar e desmontar o ciclo de evitação-ansiedade-alívio-depressão em situações sociais."
+      ],
+      "key_observations": [
+        "O paciente demonstra capacidade de seguir com atividades instrumentais, mas a evitação social persiste como um padrão central.",
+        "O alívio de curto prazo ao evitar reforça negativamente o comportamento, mas gera consequências depressogênicas de longo prazo (ruminação, autocrítica)."
+      ],
+      "critical_decision_point": "Como você procede para trabalhar essa crença central de desvalorização social?"
+    },
+    "expert_commentary": "A opção A é ótima porque integra insight cognitivo com ação, princípio central da TCC. Como Beck et al. (1979) destacam, 'as crenças disfuncionais são mais facilmente modificadas quando o paciente é encorajado a agir de modo contrário a elas'. Um experimento comportamental oferece dados empíricos que desafiam a crença de forma mais potente que o debate verbal. A estruturação (encontro breve) reduz a barreira da ansiedade, aumentando a probabilidade de adesão. É crucial manter o foco no 'teste' e na coleta de evidências, não no 'desempenho'.",
+    "learning_focus": "Desenho e implementação de experimentos comportamentais para testar crenças centrais e reduzir evitação.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Propor um experimento comportamental para a próxima semana: combinar um encontro breve e estruturado (ex.: tomar um café por 30 minutos) para testar a previsão catastrófica.",
+        "approach": "Abordagem baseada em TCC clássica, focada em coleta de evidências comportamentais.",
+        "is_optimal": true,
+        "immediate_outcome": "Lucas, embora ansioso, aceita o desafio como um 'teste de realidade'. Isso gera um objetivo concreto e move o foco da ruminação para a ação e observação, promovendo aprendizagem corretiva.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Questionar socraticamente a evidência que sustenta essa crença, pedindo exemplos passados onde ele 'estragou o clima'.",
+        "approach": "Abordagem cognitiva pura, focada na reestruturação verbal.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas tem dificuldade em acessar memórias específicas e fica mais defensivo, afirmando 'é só uma sensação que eu tenho'. O trabalho fica muito abstrato e não gera avanço prático.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 6,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Validar o sentimento como compreensível dada a depressão, e sugerir adiar o enfrentamento social até que ele se sinta mais confiante.",
+        "approach": "Abordagem excessivamente centrada na validação e no alívio imediato.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas sente-se aliviado no momento, mas a evitação é reforçada. A mensagem implícita é de que a crença é válida e ele não é capaz, reduzindo a autoeficácia e estagnando o progresso.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Interpretar a crença como um reflexo de um esquema de incompetência social formado na infância, explorando suas origens.",
+        "approach": "Abordagem psicodinâmica, fora do escopo da TCC focada no presente.",
+        "is_optimal": false,
+        "immediate_outcome": "A discussão torna-se histórica e pouco focada na solução do problema atual. Lucas pode se sentir mais compreendido em um nível profundo, mas não sai com ferramentas para mudar seu padrão atual, prejudicando o momentum terapêutico.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 7,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 11,
+    "session_title": "Resultado do Experimento e Lida com a Autocrítica Pós-Social",
+    "session_phase": "advanced",
+    "session_content": {
+      "narrative": "Lucas comparece à sessão relatando que realizou o experimento: encontrou-se com um amigo para um café de 40 minutos. Ele descreve ter ficado muito ansioso antes, mas durante o encontro a ansiedade diminuiu. No entanto, após o evento, ele mergulhou em uma análise minuciosa e crítica de 'tudo que disse de errado', focando em um momento de silêncio que interpretou como 'estranho'. Seu humor piorou nas horas seguintes. Ele traz o registro do experimento, que mostra que a previsão catastrófica ('vou estragar tudo') não se confirmou, mas uma nova camada de processamento pós-evento surgiu. Você valida a coragem de Lucas e o fato objetivo de que ele não 'estragou o clima' (o amigo até combinou outro encontro). A sessão se concentra em analisar esse padrão de autocrítica pós-social e seu papel em anular ganhos comportamentais, mantendo os sintomas depressivos de acordo com o modelo cognitivo.",
+      "session_goals": [
+        "Analisar os dados do experimento comportamental, destacando a discrepância entre previsão e realidade.",
+        "Identificar e intervir no padrão de processamento pós-eventos sociais (ruminação e autocrítica)."
+      ],
+      "key_observations": [
+        "O paciente foi capaz de realizar a ação enfrentada (exposição), mas o benefício foi neutralizado por um processo cognitivo posterior de hipervigilância e autojulgamento.",
+        "A crença central de desvalorização adaptou-se, mudando de 'vou estragar o evento' para 'eu fui inadequado durante o evento', mantendo o núcleo depressivo."
+      ],
+      "critical_decision_point": "Como você responde a essa justificativa aparentemente racional para a autocrítica?"
+    },
+    "expert_commentary": "A opção A é ótima porque oferece tanto compreensão (psicoeducação) quanto uma ferramenta comportamental concreta (Tempo de Preocupação). Nolen-Hoeksema (1991) demonstrou que a ruminação é um fator de manutenção crucial na depressão. Delimitar temporalmente esse processo é uma intervenção de primeira linha na TCC. A distinção entre avaliação útil e ruminação ajuda a desafiar a crença do paciente sobre a 'utilidade' de seu comportamento, preparando o terreno para intervenções cognitivas mais profundas posteriormente. É um passo necessário antes de introduzir conceitos como autocompaixão.",
+    "learning_focus": "Psicoeducação sobre ruminação e implementação de técnicas de manejo de pensamentos repetitivos (estratégias de controle de estímulo).",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Psicoeducar sobre a diferença entre avaliação útil (focada em comportamento futuro) e ruminação autocrítica (focada no self e no passado), e introduzir a técnica de 'Tempo de Preocupação' para delimitar esse processo.",
+        "approach": "Abordagem psicoeducativa e de manejo de sintomas da TCC.",
+        "is_optimal": true,
+        "immediate_outcome": "Lucas entende a função disfuncional da ruminação. Ao agendar um 'tempo para refletir', ele ganha um senso de controle sobre o processo. Isso reduz a intrusividade dos pensamentos e abre espaço para uma avaliação mais balanceada posteriormente.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 9,
+          "behavioral_change": 7,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Desafiar diretamente a crença de que a autocrítica é necessária para melhorar, perguntando: 'Em que medida se criticar tanto após um evento tem realmente te ajudado a melhorar socialmente?'.",
+        "approach": "Questionamento socrático direto sobre a utilidade da crença.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas fica reflexivo e pode verbalmente concordar que não ajuda, mas a intervenção é muito cognitiva e não oferece uma ferramenta concreta para lidar com a automaticidade do processo no momento em que ele ocorre.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 7,
+          "behavioral_change": 5,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Sugerir que ele pratique a autocompaixão, repetindo frases como 'Foi bom ter saído, está tudo bem' sempre que a autocrítica surgir.",
+        "approach": "Abordagem baseada em Terapia Focada em Compaixão, útil mas potencialmente prematura.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas tenta, mas relata que as frases soam 'falsas' e que a voz crítica é mais forte. Sem desmontar primeiro a crença na utilidade da crítica, a autocompaixão pode ser rejeitada como um 'jeito fraco' de ser.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Explorar o significado emocional mais profundo por trás da necessidade de se criticar (ex.: medo de ser rejeitado se não for perfeito).",
+        "approach": "Abordagem exploratória de significados, desviando do foco no manejo do sintoma atual.",
+        "is_optimal": false,
+        "immediate_outcome": "A discussão torna-se interessante, mas longa e pouco estruturada. Lucas pode ganhar insight sobre origens, mas não sai com uma estratégia prática para interromper o ciclo que está minando seus ganhos terapêuticos aqui e agora.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 8,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 12,
+    "session_title": "Consolidando Novos Padrões e Planejando para Prevenção de Recaída",
+    "session_phase": "closing",
+    "session_content": {
+      "narrative": "Lucas relata uma semana com menos oscilações de humor. Ele usou a técnica do 'Tempo de Preocupação' duas vezes, conseguindo adiar a ruminação sobre uma interação no trabalho. Realizou outra atividade social (jantar em família) e, embora tenha notado pensamentos autocríticos depois, conseguiu aplicá-los à técnica. Ele traz espontaneamente uma reflexão: 'Parece que meu cérebro tem um piloto automático para o pior, mas agora estou aprendendo a colocar no manual'. Os sintomas depressivos (humor deprimido, anedonia, fadiga) apresentam redução moderada, mas persistente. A sessão é dedicada a consolidar os aprendizados, revisando o modelo cognitivo da sua depressão, os ciclos de evitação e ruminação que a mantinham, e as ferramentas que ele usou para quebrá-los. Inicia-se a discussão sobre a fase de encerramento da terapia, focando na autonomia e prevenção de recaída.",
+      "session_goals": [
+        "Revisar e consolidar o modelo de funcionamento da depressão e as habilidades de TCC aprendidas.",
+        "Iniciar o planejamento para prevenção de recaída, identificando sinais de alerta e planos de ação."
+      ],
+      "key_observations": [
+        "O paciente demonstra internalização do modelo cognitivo, usando metáforas próprias para descrever seus processos. Isso indica boa generalização do aprendizado.",
+        "A redução sintomática é consistente, mas frágil. O foco agora deve ser em consolidar ganhos e preparar para lidar com futuros estressores sem recair no padrão depressivo."
+      ],
+      "critical_decision_point": "Como você estrutura um plano de prevenção de recaída que seja robusto o suficiente para esse cenário de desesperança?"
+    },
+    "expert_commentary": "A opção A é ótima e segue diretrizes consagradas da TCC para prevenção de recaída (Beck, 2011). A chave é a externalização do plano: criar um recurso concreto e acessível fora do estado mental depressivo. Incluir um passo comportamental simples (caminhada) como primeira ação é crucial, pois atividades que aumentam a ativação podem facilitar o acesso subsequente a técnicas cognitivas. Este plano transforma uma preocupação abstrata ('e se eu esquecer') em uma solução prática, empoderando o paciente e solidificando os ganhos terapêuticos.",
+    "learning_focus": "Elaboração colaborativa de um plano estruturado de prevenção de recaída, promovendo autonomia e generalização do tratamento.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Criar, em colaboração, um 'Plano de Ação para Momentos Difíceis' por escrito. Inclui: 1) Sinais de alerta; 2) Passos concretos e simples (ex.: 'Fazer uma caminhada de 10 min' antes de tentar reestruturar pensamentos); 3) Contatos de apoio; 4) Releitura de cartões com suas principais habilidades aprendidas.",
+        "approach": "Abordagem estruturada e proativa da TCC para prevenção de recaída, focada em planejamento comportamental.",
+        "is_optimal": true,
+        "immediate_outcome": "O plano escrito serve como um 'manual de instruções' externo ao estado depressivo, contornando a dificuldade de acesso a memórias e recursos quando o humor piora. Aumenta a autoeficácia de Lucas e fornece um roteiro claro, reduzindo a sensação de desamparo.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 8,
+          "behavioral_change": 9,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Assegurá-lo de que, como ele internalizou as técnicas, elas virão naturalmente quando necessário, e que ele pode sempre retornar para algumas sessões de 'reforço' se precisar.",
+        "approach": "Abordagem de tranquilização e oferta de suporte futuro, mas pouco estruturada.",
+        "is_optimal": false,
+        "immediate_outcome": "Lucas se sente temporariamente aliviado, mas a resposta não aborda sua preocupação real sobre a amnésia induzida pelo estado depressivo. O plano fica vago e dependente da iniciativa dele em um momento de baixa energia e desesperança, o que é justamente o problema.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Explorar o medo por trás da pergunta ('e se eu esquecer tudo'), ligando-o a uma crença mais profunda de fragilidade ou incompetência.",
+        "approach": "Abordagem focada em crenças profundas, desviando do objetivo prático de criar um plano de ação.",
+        "is_optimal": false,
+        "immediate_outcome": "Embora possa gerar insight, isso consome o tempo da sessão sem produzir o produto concreto (o plano) que é fundamental para a prevenção de recaída. Lucas pode sair sem uma ferramenta tangível para lidar com uma crise futura.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 7,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Sugerir que ele marque sessões de acompanhamento mensais indefinidamente, para monitorar qualquer sinal de recaída.",
+        "approach": "Abordagem de dependência terapêutica, não promotora de autonomia.",
+        "is_optimal": false,
+        "immediate_outcome": "Isso pode minar a autoeficácia de Lucas e criar uma dependência do terapeuta como principal recurso de coping, indo contra o objetivo final da TCC, que é tornar o paciente seu próprio terapeuta. Além disso, pode não ser viável logisticamente.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 4,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "session_number": 7,
+    "session_title": "Desafiando a Triade Cognitiva",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Marcela, 34 anos, chega à sessão relatando um leve aumento na energia, mas sua visão negativa sobre si mesma, o mundo e o futuro persiste. Ela menciona ter conseguido fazer uma caminhada curta, mas imediatamente desqualifica o feito: 'Fiz, mas não adianta, continuo sendo uma fracassada'. Você nota que o humor deprimido e a anedonia (critérios A1 e A2 do DSM-5-TR para Depressão Maior) ainda são centrais, mas há uma abertura para o trabalho cognitivo. Durante a sessão, você utiliza o registro de pensamentos automáticos que foi combinado na sessão anterior. Marcela traz um exemplo recente: ao receber um feedback neutro no trabalho, seu pensamento foi 'Meu chefe acha que sou incompetente, vou ser demitida'. A emoção associada foi desespero e a consequência comportamental foi o isolamento. O foco da sessão é começar a questionar a validade desses pensamentos, introduzindo o conceito de distorções cognitivas, como a leitura mental e a catastrofização.",
+      "session_goals": [
+        "Identificar e registrar pensamentos automáticos negativos em situações específicas.",
+        "Introduzir e psicoeducar sobre distorções cognitivas comuns na depressão."
+      ],
+      "key_observations": [
+        "Paciente demonstra capacidade de monitorar pensamentos, mas com autocrítica severa.",
+        "Houveram ganhos comportamentais mínimos (caminhada), mas a cognição permanece rígida e negativa.",
+        "A aliança terapêutica está consolidada, permitindo um trabalho mais direto sobre cognições."
+      ],
+      "critical_decision_point": "Como você procede para desafiar este pensamento de forma colaborativa?"
+    },
+    "expert_commentary": "A opção ótima (A) segue o princípio de Beck de 'cientista colaborativo'. Em vez de confrontar, convida a paciente a testar sua crença, o que é menos ameaçador e mais empoderador. Conforme Beck (2011) enfatiza, 'as experiências comportamentais fornecem os dados mais convincentes para modificar crenças disfuncionais'. A opção B, embora tecnicamente correta sobre a distorção, é prematura e autoritária, podendo gerar resistência. As opções C e D são suportivas, mas não promovem mudança cognitiva, essencial nesta fase do tratamento.",
+    "learning_focus": "Habilidade de conduzir o questionamento socrático e desenhar experimentos comportamentais para testar pensamentos automáticos.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Propor um experimento comportamental simples: 'E se você pedisse um esclarecimento breve sobre o feedback na próxima oportunidade?'",
+        "approach": "Abordagem Cognitivo-Comportamental focada em testar crenças através da ação.",
+        "is_optimal": true,
+        "immediate_outcome": "Marcela reluta, mas aceita considerar a ideia. Isso coloca a crença como uma hipótese a ser testada, não um fato, reduzindo a angústia imediata e criando uma ponte para a reestruturação cognitiva.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 9,
+          "behavioral_change": 7,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Confrontar diretamente a distorção: 'Isso é uma leitura mental. Você não pode saber o que ele pensa.'",
+        "approach": "Confrontação psicopedagógica.",
+        "is_optimal": false,
+        "immediate_outcome": "Marcela se sente invalidada e corrigida, respondendo com 'Você não entende...'. A aliança é abalada e ela se fecha, interrompendo o processo de questionamento.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 2,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Mudar de tópico para uma área onde ela se sente mais confortável, evitando o desconforto.",
+        "approach": "Evitação para preservar o rapport.",
+        "is_optimal": false,
+        "immediate_outcome": "O alívio é momentâneo, mas reforça a esquiva como estratégia de coping. A crença central de incompetência não é abordada, e o progresso terapêutico estagna.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Validar apenas o sofrimento: 'Deve ser muito difícil se sentir assim constantemente.'",
+        "approach": "Apoio empático sem intervenção ativa.",
+        "is_optimal": false,
+        "immediate_outcome": "Marcela se sente acolhida, mas a intervenção não avança na mudança cognitiva. A sessão termina com validação, mas sem novos insights ou ferramentas para a paciente.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 8,
+          "insight": 4,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 8,
+    "session_title": "Analisando Evidências e Desenvolvendo Pensamentos Alternativos",
+    "session_phase": "middle",
+    "session_content": {
+      "narrative": "Marcela inicia a sessão relatando que não realizou o experimento comportamental (pedir esclarecimento ao chefe). Ela diz que a ansiedade foi grande demais. No entanto, trouxe novos registros de pensamentos. Você valida o esforço de registro e, sem criticar a evitação, explora o que a impediu. Juntos, identificam que o pensamento 'Vou gaguejar e parecer ainda mais incompetente' foi um obstáculo. Você decide, então, trabalhar na técnica de análise de evidências para o pensamento original ('Meu chefe acha que sou incompetente'). Em uma folha, dividem colunas para 'Evidências a Favor' e 'Evidências Contra'. Inicialmente, Marcela preenche rapidamente a coluna a favor com generalizações ('Ele não me elogiou', 'Eu sempre erro'). Com perguntas guiadas, você a ajuda a identificar evidências contra: 'Você foi promovida há dois anos', 'Ele continua te delegando tarefas importantes'. Aos poucos, um pensamento alternativo mais balanceado começa a surgir: 'O feedback foi neutro, não negativo. Posso não estar no meu melhor, mas isso não me define como incompetente'.",
+      "session_goals": [
+        "Aplicar a técnica de análise de evidências para um pensamento automático central.",
+        "Gerar um pensamento alternativo mais realista e menos disfuncional."
+      ],
+      "key_observations": [
+        "Paciente demonstra resistência comportamental, mas engajamento cognitivo no registro.",
+        "A habilidade de identificar evidências contra é inicialmente deficitária, indicando rigidez cognitiva.",
+        "O pensamento alternativo gerado é ainda frágil, mas representa um primeiro passo crucial na reestruturação."
+      ],
+      "critical_decision_point": "Como você responde a essa desconexão entre cognição racional e crença emocional?"
+    },
+    "expert_commentary": "A opção A é clinicamente sofisticada. Reconhece a distinção entre crenças automáticas, intermediárias e centrais, conceito fundamental no modelo de Beck. Judith Beck (2011) destaca que 'as crenças centrais são mantidas mesmo na presença de evidências contrárias'. Validar a emoção enquanto direciona para a estrutura subjacente é essencial para progressos duradouros. A opção B é mecanicista e ignora o afeto. A opção C abandona a estrutura da TCC, retrocedendo. A opção D é iatrogênica, replicando uma invalidação que pode ser parte da história do paciente.",
+    "learning_focus": "Habilidade de identificar e começar a abordar crenças centrais, diferenciando-as de pensamentos automáticos, e manejar a resistência cognitivo-afetiva.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Normalizar a desconexão e introduzir o conceito de 'crença central': 'É comum acreditar racionalmente, mas não sentir. Isso pode apontar para uma crença mais profunda, como 'Sou defeituosa'. Podemos explorar isso?'",
+        "approach": "Psicoeducação e sondagem para crenças intermediárias/centrais.",
+        "is_optimal": true,
+        "immediate_outcome": "Marcela se sente compreendida e aliviada. Ela identifica a crença 'Sou inadequada' como um tema de vida. Isso direciona o tratamento para um nível mais profundo, validando sua experiência emocional enquanto avança no modelo cognitivo.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 9,
+          "insight": 9,
+          "behavioral_change": 8,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Insistir no pensamento alternativo: 'Vamos repeti-lo mais algumas vezes para você se acostumar. A sensação virá com o tempo.'",
+        "approach": "Repetição e reforço.",
+        "is_optimal": false,
+        "immediate_outcome": "Marcela executa a tarefa de forma mecânica, mas o ceticismo aumenta. Ela pode sentir que sua experiência emocional está sendo ignorada, levando a um compliance superficial sem mudança genuína.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 5,
+          "insight": 4,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Descartar o pensamento alternativo e voltar a explorar apenas a dor emocional: 'Me conte mais sobre esse sentimento de ser um peso.'",
+        "approach": "Exploração emocional sem estrutura cognitiva.",
+        "is_optimal": false,
+        "immediate_outcome": "A sessão se torna catártica, mas desestruturada. Marcela sai mais angustiada e sem novas ferramentas para manejar o sofrimento, possivelmente reforçando o foco no conteúdo negativo.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 5,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Minimizar a importância da sensação: 'Não se preocupe com o sentimento agora, o importante é a lógica.'",
+        "approach": "Racionalização extrema.",
+        "is_optimal": false,
+        "immediate_outcome": "Marcela sente que sua experiência interna é invalidada. A aliança terapêutica é prejudicada, e ela pode parar de compartilhar seus verdadeiros sentimentos nas próximas sessões.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 3,
+          "insight": 3,
+          "behavioral_change": 2,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  },
+  {
+    "session_number": 9,
+    "session_title": "Lidando com a Crença Central e Planejando Ações de Autocuidado",
+    "session_phase": "advanced",
+    "session_content": {
+      "narrative": "Com base na sessão anterior, você e Marcela mapearam a crença central 'Sou inadequada'. Ela conecta essa crença a experiências de infância (exigência extrema dos pais) e padrões atuais (perfeccionismo no trabalho, evitação social). O humor de Marcela oscila entre tristeza e uma certa clareza. Ela relata: 'É doloroso ver esse padrão, mas de alguma forma faz sentido'. Você psicoeduca sobre como a depressão ativa e fortalece essas crenças adormecidas. O foco da sessão é duplo: 1) Começar a desafiar a crença central não como 'verdade absoluta', mas como 'uma hipótese aprendida'; 2) Planejar ações de autocuidado e domínio que sejam inconsistentes com a crença 'sou inadequada'. Marcela sugere retomar um hobby antigo (pintura), mas imediatamente se sabota: 'Vou fazer tudo errado'. Você a ajuda a quebrar a atividade em passos mínimos e não-ameaçadores ('comprar um pincel e uma tela pequena', 'pintar por 5 minutos sem julgamento').",
+      "session_goals": [
+        "Iniciar o trabalho de reestruturação da crença central 'Sou inadequada' de forma compassiva.",
+        "Planejar e comprometer-se com atividades de domínio e prazer graduais, antagônicas à depressão."
+      ],
+      "key_observations": [
+        "Paciente demonstra insight psicológico significativo ao conectar padrões passados e presentes.",
+        "A crença central ainda é poderosa, mas agora está 'sobre a mesa' como um alvo terapêutico explícito.",
+        "O perfeccionismo surge como um mecanismo de coping disfuncional que mantém a depressão."
+      ],
+      "critical_decision_point": "Como você intervém para quebrar esse ciclo de previsão negativa e evitação?"
+    },
+    "expert_commentary": "A opção A é a intervenção de TCC mais pura e eficaz. Ela desloca o sucesso do produto (a pintura) para o processo (testar uma hipótese e praticar autocuidado), alinhando-se com a ideia de 'experiência comportamental' como ferramenta primária de mudança. Conforme Leahy (2017), 'a evitação mantém a depressão; a ativação comportamental a desafia'. A opção B é um erro comum de bem-intencionados, mas coloca o terapeuta como 'torcedor', aumentando a pressão. A opção C é muito cautelosa e pode ser pouco eficaz. A opção D, embora relevante, é mal-timed; a análise histórica é importante, mas não deve substituir a ação no presente que gera nova aprendizagem.",
+    "learning_focus": "Habilidade de usar reestruturação cognitiva e planejamento de atividades para desafiar crenças centrais diretamente, promovendo ativação comportamental compassiva.",
+    "decision_options": [
+      {
+        "option_letter": "A",
+        "intervention": "Reenquadrar a tarefa e a crença: 'O objetivo não é pintar uma obra-prima. O objetivo é testar a hipótese de que você é 100% inadequada. Apenas comprar o material já é um ato de cuidado que contradiz essa crença. Podemos focar só nesse primeiro passo?'",
+        "approach": "Reestruturação cognitiva focada no processo (não no resultado) e no valor comportamental como evidência contrária.",
+        "is_optimal": true,
+        "immediate_outcome": "Marcela respira aliviada. A pressão por performance é reduzida e a tarefa se torna um experimento válido, independente do resultado final. Isso fortalece a agência e enfraquece a crença de maneira prática.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 9,
+          "insight": 8,
+          "behavioral_change": 9,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "B",
+        "intervention": "Aumentar a motivação com incentivo: 'Claro que você vai pintar! Você é capaz, tenho certeza. Vai ser lindo!'",
+        "approach": "Apoio motivacional otimista.",
+        "is_optimal": false,
+        "immediate_outcome": "Isso coloca mais pressão em Marcela. Se ela falhar, a decepção será maior (consigo mesma e com o terapeuta). Reforça a ideia de que seu valor depende do sucesso da tarefa, não do processo de tentativa.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 6,
+          "insight": 3,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "C",
+        "intervention": "Reduzir a tarefa para algo ainda menor: 'Então não compre. Apenas pesquise preços de tinta online.'",
+        "approach": "Gradação excessiva para evitar ansiedade.",
+        "is_optimal": false,
+        "immediate_outcome": "Embora bem-intencionada, essa opção pode reforçar a crença de que ela é tão frágil que não consegue nem sair de casa. Pode não gerar evidência suficientemente forte para desafiar a inadequação.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 5,
+          "behavioral_change": 4,
+          "symptom_reduction": 0
+        }
+      },
+      {
+        "option_letter": "D",
+        "intervention": "Explorar apenas a origem da previsão negativa: 'De onde vem essa certeza de que vai falhar? Vamos pensar na sua infância...'",
+        "approach": "Análise histórica no momento da ação.",
+        "is_optimal": false,
+        "immediate_outcome": "Muda o foco da ação presente para a análise do passado no momento crítico. Pode ser uma forma de evitação intelectual, adiando a experiência comportamental corretiva que é necessária.",
+        "long_term_effect": "",
+        "impact": {
+          "rapport": 7,
+          "insight": 7,
+          "behavioral_change": 3,
+          "symptom_reduction": 0
+        }
+      }
+    ],
+    "disorder": "Depressao Maior",
+    "difficulty_level": "intermediate"
+  }
+]
