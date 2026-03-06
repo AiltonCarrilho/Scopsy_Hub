@@ -183,10 +183,18 @@ router.get('/:journey_id/session/:session_number', authenticateRequest, async (r
       .select('*')
       .eq('journey_id', journey_id)
       .eq('session_number', parseInt(session_number))
-      .single();
+      .maybeSingle();
 
     if (sessionError) {
       throw sessionError;
+    }
+
+    if (!session) {
+      return res.status(404).json({
+        success: false,
+        error: `Sessão ${session_number} não encontrada para esta jornada`,
+        code: 'SESSION_NOT_FOUND'
+      });
     }
 
     // Buscar progresso do usuário
@@ -268,10 +276,18 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
       .select('*')
       .eq('journey_id', journey_id)
       .eq('session_number', parseInt(session_number))
-      .single();
+      .maybeSingle();
 
     if (sessionError) {
       throw sessionError;
+    }
+
+    if (!session) {
+      return res.status(404).json({
+        success: false,
+        error: `Sessão ${session_number} não encontrada para esta jornada`,
+        code: 'SESSION_NOT_FOUND'
+      });
     }
 
     // Buscar progresso
@@ -280,10 +296,18 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
       .select('*')
       .eq('user_id', user_id)
       .eq('journey_id', journey_id)
-      .single();
+      .maybeSingle();
 
     if (progressError) {
       throw progressError;
+    }
+
+    if (!progress) {
+      return res.status(403).json({
+        success: false,
+        error: 'Você precisa iniciar a jornada antes de tomar decisões',
+        code: 'JOURNEY_NOT_STARTED'
+      });
     }
 
     // Encontrar feedback da opção escolhida
