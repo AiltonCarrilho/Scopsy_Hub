@@ -55,7 +55,7 @@ router.get('/list', authenticateRequest, async (req, res) => {
 router.get('/:id', authenticateRequest, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId;
+    const userId = parseInt(req.user.userId, 10);
 
     logger.debug(`\n[Journey] 🔍 Buscando jornada: ${id}, user: ${userId}`);
 
@@ -493,7 +493,7 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
 router.get('/:journey_id/progress', authenticateRequest, async (req, res) => {
   try {
     const { journey_id } = req.params;
-    const userId = req.user.userId;
+    const userId = parseInt(req.user.userId, 10);
 
     logger.debug(`\n[Journey] 📊 Progresso: jornada ${journey_id}, user ${userId}`);
 
@@ -622,7 +622,7 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
 router.post('/:journey_id/restart', authenticateRequest, async (req, res) => {
   try {
     const { journey_id } = req.params;
-    const user_id = req.user.userId;
+    const user_id = parseInt(req.user.userId, 10);
 
     logger.debug(`\n[Journey] 🔄 Recomeçando jornada: ${journey_id}, user: ${user_id}`);
 
