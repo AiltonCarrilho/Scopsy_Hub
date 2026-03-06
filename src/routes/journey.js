@@ -311,14 +311,20 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
     }
 
     // Encontrar feedback da opção escolhida
-    const options = session.options;
-    const chosenOption = options.find(opt => opt.label === option_chosen);
+    const options = session.decision_options;
+    const chosenOption = options.find(opt => opt.option_letter === option_chosen);
 
     if (!chosenOption) {
       throw new Error('Opção inválida');
     }
 
-    const feedback = chosenOption.feedback;
+    // Construir feedback a partir dos campos da opção
+    const feedback = {
+      immediate: chosenOption.immediate_outcome,
+      explanation: `${chosenOption.approach}: ${chosenOption.intervention}`,
+      impact: chosenOption.impact,
+      is_optimal: chosenOption.is_optimal
+    };
     const impact = feedback.impact;
 
     logger.debug('[Journey] 📊 Impacto:');
@@ -343,7 +349,7 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
         .from('user_session_decisions')
         .update({
           option_chosen: option_chosen,
-          is_optimal: chosenOption.is_best || false,
+          is_optimal: chosenOption.is_optimal || false,
           rapport_gained: impact.rapport,
           insight_gained: impact.insight,
           behavioral_change_gained: impact.behavioral_change,

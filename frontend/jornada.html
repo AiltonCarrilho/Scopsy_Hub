@@ -526,12 +526,15 @@
                         </div>
 
                         <div class="options" id="optionsContainer">
-                            ${session.options.map(opt => `
-                                <div class="option ${previousDecision && previousDecision.option_chosen === opt.label ? 'selected' : ''}"
-                                     data-option="${opt.label}">
-                                    <div class="option-label">${opt.label}</div>
+                            ${session.decision_options.map(opt => `
+                                <div class="option ${previousDecision && previousDecision.option_chosen === opt.option_letter ? 'selected' : ''}"
+                                     data-option="${opt.option_letter}">
+                                    <div class="option-label">${opt.option_letter}</div>
                                     <div class="option-content">
-                                        <div class="option-text">${opt.text}</div>
+                                        <div class="option-text">
+                                            <strong>${opt.approach}</strong><br>
+                                            ${opt.intervention}
+                                        </div>
                                     </div>
                                 </div>
                             `).join('')}
