@@ -79,7 +79,7 @@
     "rewrites": [
         {
             "source": "/api/:path*",
-            "destination": "https://scopsy-backend.onrender.com/api/:path*"
+            "destination": "https://scopsy-hub.onrender.com/api/:path*"
         },
         {
             "source": "/",
