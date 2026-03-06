@@ -112,7 +112,12 @@
         // ========================================
         async function loadJourneys() {
             try {
-                const response = await fetch(`${JOURNEY_API_URL}/journey/list`);
+                const token = getToken();
+                const response = await fetch(`${JOURNEY_API_URL}/journey/list`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 const data = await response.json();
 
                 if (!data.success || data.journeys.length === 0) {
@@ -156,7 +161,12 @@
                 const url = `${JOURNEY_API_URL}/journey/${currentJourneyId}/sessions?user_id=${USER_ID}`;
                 console.log('🔍 Carregando sessões da API:', url);
 
-                const response = await fetch(url);
+                const token = getToken();
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
 
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -338,7 +348,12 @@
         // ========================================
         async function checkProgress() {
             try {
-                const response = await fetch(`${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`);
+                const token = getToken();
+                const response = await fetch(`${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 const data = await response.json();
 
                 if (data.progress) {
@@ -367,9 +382,13 @@
         // ========================================
         async function startJourney() {
             try {
+                const token = getToken();
                 const response = await fetch(`${JOURNEY_API_URL}/journey/start`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({
                         journey_id: currentJourneyId,
                         user_id: USER_ID
@@ -420,7 +439,12 @@
                     url += '&free_mode=true';
                 }
 
-                const response = await fetch(url);
+                const token = getToken();
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 const data = await response.json();
 
                 if (data.success) {
@@ -612,11 +636,15 @@
                     opt.style.pointerEvents = 'none';
                 });
 
+                const token = getToken();
                 const response = await fetch(
                     `${JOURNEY_API_URL}/journey/${currentJourneyId}/session/${currentSessionNumber}/decide?user_id=${USER_ID}`,
                     {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
                         body: JSON.stringify({
                             option_chosen: selectedOption,
                             time_taken_seconds: timeTaken,
@@ -803,8 +831,14 @@
         // ========================================
         async function refreshProgress() {
             try {
+                const token = getToken();
                 const response = await fetch(
-                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
+                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
                 );
                 const data = await response.json();
 
@@ -1023,9 +1057,13 @@
                     </div>
                 `;
 
+                const token = getToken();
                 const response = await fetch(`${API_URL}/journey/${currentJourneyId}/restart`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({ user_id: USER_ID })
                 });
 
