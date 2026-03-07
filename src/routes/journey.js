@@ -8,7 +8,7 @@ const { authenticateRequest } = require('../middleware/auth');
 const { supabaseAdmin: supabase } = require('../services/supabase'); // Service role - backend handles auth via JWT
 
 // ============================================
-// HELPER: Load session from Orchestrator JSON files
+// HELPER: In-memory cache for JSON sessions (loaded once at boot)
 // ============================================
 const ORCHESTRATOR_PATH = path.resolve(__dirname, '../../data/journeys');
 const SESSION_RANGES = [
@@ -18,37 +18,70 @@ const SESSION_RANGES = [
   { min: 10, max: 12, suffix: '10-12' },
 ];
 
+// Boot-time cache: { orchestratorId -> { sessionNumber -> transformedSession } }
+const sessionsCache = {};
+// Cache for orchestrator_id lookups: { journeyUUID -> orchestratorId }
+const orchestratorCache = {};
+// Cache for session DB row IDs: { "journeyId_sessionNumber" -> dbId }
+const sessionRowCache = {};
+
+function loadAllSessionsToCache() {
+  const files = fs.readdirSync(ORCHESTRATOR_PATH).filter(f => f.endsWith('.json'));
+  let total = 0;
+
+  for (const file of files) {
+    const match = file.match(/^journey-(\d+)-sessions-/);
+    if (!match) continue;
+
+    const orchestratorId = match[1];
+    if (!sessionsCache[orchestratorId]) sessionsCache[orchestratorId] = {};
+
+    const filePath = path.join(ORCHESTRATOR_PATH, file);
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    const sessionsArray = Array.isArray(data) ? data : data.sessions;
+
+    if (sessionsArray) {
+      for (const session of sessionsArray) {
+        sessionsCache[orchestratorId][session.session_number] = {
+          session_number: session.session_number,
+          session_title: session.session_title,
+          session_phase: session.session_phase,
+          context: session.session_content?.narrative || '',
+          decision_prompt: session.session_content?.critical_decision_point || '',
+          homework_review: session.session_content?.homework_review || null,
+          decision_options: session.decision_options,
+          expert_commentary: session.expert_commentary,
+          learning_focus: session.learning_focus,
+        };
+        total++;
+      }
+    }
+  }
+
+  logger.info(`[Journey] Cached ${total} sessions from ${files.length} JSON files`);
+}
+
+// Load cache at module init
+loadAllSessionsToCache();
+
 function getSessionFromJSON(orchestratorId, sessionNumber) {
   const num = parseInt(sessionNumber);
-  const range = SESSION_RANGES.find(r => num >= r.min && num <= r.max);
-  if (!range) return null;
+  return sessionsCache[orchestratorId]?.[num] || null;
+}
 
-  const filePath = path.join(ORCHESTRATOR_PATH, `journey-${orchestratorId}-sessions-${range.suffix}-intermediate.json`);
-  if (!fs.existsSync(filePath)) return null;
-
-  const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  // JSON files can be either a flat array or { sessions: [...] }
-  const sessionsArray = Array.isArray(data) ? data : data.sessions;
-  const session = sessionsArray?.find(s => s.session_number === num);
-  if (!session) return null;
-
-  // Transform to frontend-expected format
-  return {
-    session_number: session.session_number,
-    session_title: session.session_title,
-    session_phase: session.session_phase,
-    context: session.session_content?.narrative || '',
-    decision_prompt: session.session_content?.critical_decision_point || '',
-    homework_review: session.session_content?.homework_review || null,
-    decision_options: session.decision_options,
-    expert_commentary: session.expert_commentary,
-    learning_focus: session.learning_focus,
-  };
+function getAllSessionsFromCache(orchestratorId) {
+  const sessions = sessionsCache[orchestratorId];
+  if (!sessions) return [];
+  return Object.values(sessions).sort((a, b) => a.session_number - b.session_number);
 }
 
 // Helper: Ensure a journey_sessions row exists (needed for FK in user_session_decisions)
 async function ensureSessionRow(journeyId, sessionNumber, sessionData) {
   const num = parseInt(sessionNumber);
+  const cacheKey = journeyId + '_' + num;
+
+  // Check memory cache first
+  if (sessionRowCache[cacheKey]) return sessionRowCache[cacheKey];
 
   const { data: existing } = await supabase
     .from('journey_sessions')
@@ -57,7 +90,10 @@ async function ensureSessionRow(journeyId, sessionNumber, sessionData) {
     .eq('session_number', num)
     .maybeSingle();
 
-  if (existing) return existing.id;
+  if (existing) {
+    sessionRowCache[cacheKey] = existing.id;
+    return existing.id;
+  }
 
   // Create the row so decisions can reference it
   const { data: created, error } = await supabase
@@ -77,11 +113,14 @@ async function ensureSessionRow(journeyId, sessionNumber, sessionData) {
     throw error;
   }
 
+  sessionRowCache[cacheKey] = created.id;
   return created.id;
 }
 
-// Helper: Get orchestrator_id for a journey
+// Helper: Get orchestrator_id for a journey (cached)
 async function getOrchestratorId(journeyId) {
+  if (orchestratorCache[journeyId]) return orchestratorCache[journeyId];
+
   const { data: journey, error } = await supabase
     .from('clinical_journeys')
     .select('orchestrator_id')
@@ -89,6 +128,7 @@ async function getOrchestratorId(journeyId) {
     .single();
 
   if (error || !journey?.orchestrator_id) return null;
+  orchestratorCache[journeyId] = journey.orchestrator_id;
   return journey.orchestrator_id;
 }
 
@@ -640,30 +680,27 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
 
     logger.debug(`\n[Journey] 📚 Listando sessões: jornada ${journey_id}`);
 
-    // Buscar orchestrator_id do database
-    const { data: journey, error: journeyError } = await supabase
-      .from('clinical_journeys')
-      .select('orchestrator_id')
-      .eq('id', journey_id)
-      .single();
-
-    if (journeyError || !journey || !journey.orchestrator_id) {
+    // Get orchestrator_id (cached after first call)
+    const orchestratorId = await getOrchestratorId(journey_id);
+    if (!orchestratorId) {
       return res.status(404).json({ success: false, error: 'Journey not found or orchestrator_id not mapped' });
     }
 
-    // RLS ownership check: verify user has access to this journey
-    const { data: progress, error: progressError } = await supabase
-      .from('user_journey_progress')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('journey_id', journey_id)
-      .maybeSingle();
+    // RLS ownership check + get sessions from cache in parallel
+    const [progressResult] = await Promise.all([
+      supabase
+        .from('user_journey_progress')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('journey_id', journey_id)
+        .maybeSingle()
+    ]);
 
-    if (progressError) {
-      throw progressError;
+    if (progressResult.error) {
+      throw progressResult.error;
     }
 
-    if (!progress) {
+    if (!progressResult.data) {
       return res.status(403).json({
         success: false,
         error: 'Você não tem acesso a esta jornada',
@@ -671,84 +708,19 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
       });
     }
 
-    // Carregar JSONs do Orquestrador usando numeric ID
-    const orchestratorPath = ORCHESTRATOR_PATH;
-    const sessions = [];
-    let journeyMetadata = null;
-
-    const orchestratorId = journey.orchestrator_id;
-    const ranges = [
-      `journey-${orchestratorId}-sessions-1-3-intermediate.json`,
-      `journey-${orchestratorId}-sessions-4-6-intermediate.json`,
-      `journey-${orchestratorId}-sessions-7-9-intermediate.json`,
-      `journey-${orchestratorId}-sessions-10-12-intermediate.json`
-    ];
-
-    logger.debug(`[Journey] 🔍 DEBUG: Looking for sessions in: ${orchestratorPath}`);
-    logger.debug(`[Journey] 🔍 DEBUG: __dirname=${__dirname}, process.cwd()=${process.cwd()}`);
-    logger.debug(`[Journey] 🔍 DEBUG: orchestrator_id=${orchestratorId}`);
-
-    // Check if directory exists
-    if (!fs.existsSync(orchestratorPath)) {
-      logger.warn(`[Journey] ⚠️ Directory does not exist: ${orchestratorPath}`);
-      logger.debug(`[Journey] 🔍 Contents of src dir:`, fs.readdirSync(path.resolve(__dirname)));
-    }
-
-    for (const file of ranges) {
-      const filePath = path.join(orchestratorPath, file);
-      const exists = fs.existsSync(filePath);
-      logger.debug(`[Journey] 🔍 Checking file: ${filePath} - exists: ${exists}`);
-
-      if (exists) {
-        const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-        if (!journeyMetadata && data.journey) {
-          journeyMetadata = data.journey;
-        }
-        // JSON files can be either a flat array or { sessions: [...] }
-        const sessionsArray = Array.isArray(data) ? data : data.sessions;
-        if (sessionsArray) {
-          sessions.push(...sessionsArray);
-        }
-      }
-    }
+    // Load from in-memory cache (no disk I/O)
+    const sessions = getAllSessionsFromCache(orchestratorId);
 
     if (sessions.length === 0) {
-      logger.error(`[Journey] ❌ No sessions found for journey ${journey_id} (orchestrator_id: ${orchestratorId})`);
-      logger.error(`[Journey] ❌ Expected to find files in: ${orchestratorPath}`);
-      const response = {
-        success: false,
-        error: 'No sessions found'
-      };
-
-      if (process.env.NODE_ENV === 'development') {
-        response.debug = {
-          orchestratorPath,
-          orchestratorId,
-          nodeEnv: process.env.NODE_ENV,
-          cwd: process.cwd()
-        };
-      }
-
-      return res.status(404).json(response);
+      return res.status(404).json({ success: false, error: 'No sessions found' });
     }
 
-    // Buscar progresso do usuário para marcar sessões completadas
-    const { data: decisions } = await supabase
-      .from('user_session_decisions')
-      .select('session_id')
-      .eq('user_id', userId);
-
-    const completedSessionIds = new Set(decisions?.map(d => d.session_id) || []);
-
-    // Ordenar por session_number
-    const sorted = sessions.sort((a, b) => a.session_number - b.session_number);
-
-    logger.debug(`[Journey] ✅ ${sorted.length} sessões retornadas`);
+    logger.debug(`[Journey] ${sessions.length} sessions served from cache`);
 
     res.json({
       success: true,
-      sessions: sorted,
-      total: sorted.length
+      sessions: sessions,
+      total: sessions.length
     });
 
   } catch (error) {
