@@ -555,6 +555,26 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
       return res.status(404).json({ success: false, error: 'Journey not found or orchestrator_id not mapped' });
     }
 
+    // RLS ownership check: verify user has access to this journey
+    const { data: progress, error: progressError } = await supabase
+      .from('user_journey_progress')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('journey_id', journey_id)
+      .maybeSingle();
+
+    if (progressError) {
+      throw progressError;
+    }
+
+    if (!progress) {
+      return res.status(403).json({
+        success: false,
+        error: 'Você não tem acesso a esta jornada',
+        code: 'JOURNEY_ACCESS_DENIED'
+      });
+    }
+
     // Carregar JSONs do Orquestrador usando numeric ID
     const fs = require('fs');
     const path = require('path');
@@ -600,16 +620,21 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
     if (sessions.length === 0) {
       logger.error(`[Journey] ❌ No sessions found for journey ${journey_id} (orchestrator_id: ${orchestratorId})`);
       logger.error(`[Journey] ❌ Expected to find files in: ${orchestratorPath}`);
-      return res.status(404).json({
+      const response = {
         success: false,
-        error: 'No sessions found',
-        debug: {
+        error: 'No sessions found'
+      };
+
+      if (process.env.NODE_ENV === 'development') {
+        response.debug = {
           orchestratorPath,
           orchestratorId,
           nodeEnv: process.env.NODE_ENV,
           cwd: process.cwd()
-        }
-      });
+        };
+      }
+
+      return res.status(404).json(response);
     }
 
     // Buscar progresso do usuário para marcar sessões completadas
