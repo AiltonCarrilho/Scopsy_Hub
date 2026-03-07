@@ -871,10 +871,20 @@
                 }
 
                 // Buscar progresso atualizado
+                const token = getToken();
                 const response = await fetch(
-                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`
+                    `${JOURNEY_API_URL}/journey/${currentJourneyId}/progress?user_id=${USER_ID}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    }
                 );
                 const data = await response.json();
+
+                if (!data.success || !data.progress) {
+                    throw new Error(data.error || 'Erro ao buscar progresso');
+                }
 
                 if (data.progress.is_completed) {
                     // Jornada completa
