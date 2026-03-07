@@ -1,9 +1,96 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const logger = require('../config/logger');
 const router = express.Router();
 const { authenticateRequest } = require('../middleware/auth');
 
 const { supabaseAdmin: supabase } = require('../services/supabase'); // Service role - backend handles auth via JWT
+
+// ============================================
+// HELPER: Load session from Orchestrator JSON files
+// ============================================
+const ORCHESTRATOR_PATH = path.resolve(__dirname, '../../data/journeys');
+const SESSION_RANGES = [
+  { min: 1, max: 3, suffix: '1-3' },
+  { min: 4, max: 6, suffix: '4-6' },
+  { min: 7, max: 9, suffix: '7-9' },
+  { min: 10, max: 12, suffix: '10-12' },
+];
+
+function getSessionFromJSON(orchestratorId, sessionNumber) {
+  const num = parseInt(sessionNumber);
+  const range = SESSION_RANGES.find(r => num >= r.min && num <= r.max);
+  if (!range) return null;
+
+  const filePath = path.join(ORCHESTRATOR_PATH, `journey-${orchestratorId}-sessions-${range.suffix}-intermediate.json`);
+  if (!fs.existsSync(filePath)) return null;
+
+  const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  // JSON files can be either a flat array or { sessions: [...] }
+  const sessionsArray = Array.isArray(data) ? data : data.sessions;
+  const session = sessionsArray?.find(s => s.session_number === num);
+  if (!session) return null;
+
+  // Transform to frontend-expected format
+  return {
+    session_number: session.session_number,
+    session_title: session.session_title,
+    session_phase: session.session_phase,
+    context: session.session_content?.narrative || '',
+    decision_prompt: session.session_content?.critical_decision_point || '',
+    homework_review: session.session_content?.homework_review || null,
+    decision_options: session.decision_options,
+    expert_commentary: session.expert_commentary,
+    learning_focus: session.learning_focus,
+  };
+}
+
+// Helper: Ensure a journey_sessions row exists (needed for FK in user_session_decisions)
+async function ensureSessionRow(journeyId, sessionNumber, sessionData) {
+  const num = parseInt(sessionNumber);
+
+  const { data: existing } = await supabase
+    .from('journey_sessions')
+    .select('id')
+    .eq('journey_id', journeyId)
+    .eq('session_number', num)
+    .maybeSingle();
+
+  if (existing) return existing.id;
+
+  // Create the row so decisions can reference it
+  const { data: created, error } = await supabase
+    .from('journey_sessions')
+    .insert({
+      journey_id: journeyId,
+      session_number: num,
+      session_title: sessionData.session_title,
+      session_phase: sessionData.session_phase,
+      context: sessionData.context,
+    })
+    .select('id')
+    .single();
+
+  if (error) {
+    logger.error('[Journey] Failed to ensure session row:', error);
+    throw error;
+  }
+
+  return created.id;
+}
+
+// Helper: Get orchestrator_id for a journey
+async function getOrchestratorId(journeyId) {
+  const { data: journey, error } = await supabase
+    .from('clinical_journeys')
+    .select('orchestrator_id')
+    .eq('id', journeyId)
+    .single();
+
+  if (error || !journey?.orchestrator_id) return null;
+  return journey.orchestrator_id;
+}
 
 // ============================================
 // 1️⃣ LISTAR JORNADAS DISPONÍVEIS
@@ -177,18 +264,18 @@ router.get('/:journey_id/session/:session_number', authenticateRequest, async (r
 
     logger.debug(`\n[Journey] 📖 Sessão ${session_number}, jornada: ${journey_id}, user: ${userId}`);
 
-    // Buscar sessão
-    const { data: session, error: sessionError } = await supabase
-      .from('journey_sessions')
-      .select('*')
-      .eq('journey_id', journey_id)
-      .eq('session_number', parseInt(session_number))
-      .maybeSingle();
-
-    if (sessionError) {
-      throw sessionError;
+    // Get orchestrator_id to load from JSON files
+    const orchestratorId = await getOrchestratorId(journey_id);
+    if (!orchestratorId) {
+      return res.status(404).json({
+        success: false,
+        error: 'Jornada não encontrada',
+        code: 'JOURNEY_NOT_FOUND'
+      });
     }
 
+    // Load session from JSON files (source of truth)
+    const session = getSessionFromJSON(orchestratorId, session_number);
     if (!session) {
       return res.status(404).json({
         success: false,
@@ -196,6 +283,11 @@ router.get('/:journey_id/session/:session_number', authenticateRequest, async (r
         code: 'SESSION_NOT_FOUND'
       });
     }
+
+    // Ensure DB row exists for FK references
+    const sessionDbId = await ensureSessionRow(journey_id, session_number, session);
+    session.id = sessionDbId;
+    session.journey_id = journey_id;
 
     // Buscar progresso do usuário
     const { data: progress, error: progressError } = await supabase
@@ -270,18 +362,18 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
     logger.debug(`\n[Journey] ✍️  Decisão na sessão ${session_number}:`);
     logger.debug(`   Opção: ${option_chosen}, Tempo: ${time_taken_seconds}s`);
 
-    // Buscar sessão
-    const { data: session, error: sessionError } = await supabase
-      .from('journey_sessions')
-      .select('*')
-      .eq('journey_id', journey_id)
-      .eq('session_number', parseInt(session_number))
-      .maybeSingle();
-
-    if (sessionError) {
-      throw sessionError;
+    // Get orchestrator_id to load from JSON files
+    const orchestratorId = await getOrchestratorId(journey_id);
+    if (!orchestratorId) {
+      return res.status(404).json({
+        success: false,
+        error: 'Jornada não encontrada',
+        code: 'JOURNEY_NOT_FOUND'
+      });
     }
 
+    // Load session from JSON files (source of truth)
+    const session = getSessionFromJSON(orchestratorId, session_number);
     if (!session) {
       return res.status(404).json({
         success: false,
@@ -289,6 +381,10 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
         code: 'SESSION_NOT_FOUND'
       });
     }
+
+    // Ensure DB row exists for FK references
+    const sessionDbId = await ensureSessionRow(journey_id, session_number, session);
+    session.id = sessionDbId;
 
     // Buscar progresso
     const { data: progress, error: progressError } = await supabase
@@ -371,7 +467,7 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
           journey_id: journey_id,
           session_id: session.id,
           option_chosen: option_chosen,
-          is_optimal: chosenOption.is_best || false,
+          is_optimal: chosenOption.is_optimal || false,
           rapport_gained: impact.rapport,
           insight_gained: impact.insight,
           behavioral_change_gained: impact.behavioral_change,
@@ -472,7 +568,7 @@ router.post('/:journey_id/session/:session_number/decide', authenticateRequest, 
         immediate: feedback.immediate,
         explanation: feedback.explanation,
         impact: impact,
-        is_optimal: chosenOption.is_best || false
+        is_optimal: chosenOption.is_optimal || false
       },
       next_session: isLastSession ? null : progress.current_session + 1,
       is_completed: isLastSession
@@ -540,7 +636,7 @@ router.get('/:journey_id/progress', authenticateRequest, async (req, res) => {
 router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
   try {
     const { journey_id } = req.params;
-    const userId = req.user.userId;
+    const userId = parseInt(req.user.userId, 10);
 
     logger.debug(`\n[Journey] 📚 Listando sessões: jornada ${journey_id}`);
 
@@ -576,10 +672,7 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
     }
 
     // Carregar JSONs do Orquestrador usando numeric ID
-    const fs = require('fs');
-    const path = require('path');
-
-    const orchestratorPath = path.resolve(__dirname, '../../data/journeys');
+    const orchestratorPath = ORCHESTRATOR_PATH;
     const sessions = [];
     let journeyMetadata = null;
 
@@ -611,8 +704,10 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
         if (!journeyMetadata && data.journey) {
           journeyMetadata = data.journey;
         }
-        if (data.sessions) {
-          sessions.push(...data.sessions);
+        // JSON files can be either a flat array or { sessions: [...] }
+        const sessionsArray = Array.isArray(data) ? data : data.sessions;
+        if (sessionsArray) {
+          sessions.push(...sessionsArray);
         }
       }
     }
