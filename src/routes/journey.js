@@ -571,9 +571,22 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
       `journey-${orchestratorId}-sessions-10-12-intermediate.json`
     ];
 
+    logger.debug(`[Journey] 🔍 DEBUG: Looking for sessions in: ${orchestratorPath}`);
+    logger.debug(`[Journey] 🔍 DEBUG: __dirname=${__dirname}, process.cwd()=${process.cwd()}`);
+    logger.debug(`[Journey] 🔍 DEBUG: orchestrator_id=${orchestratorId}`);
+
+    // Check if directory exists
+    if (!fs.existsSync(orchestratorPath)) {
+      logger.warn(`[Journey] ⚠️ Directory does not exist: ${orchestratorPath}`);
+      logger.debug(`[Journey] 🔍 Contents of src dir:`, fs.readdirSync(path.resolve(__dirname)));
+    }
+
     for (const file of ranges) {
       const filePath = path.join(orchestratorPath, file);
-      if (fs.existsSync(filePath)) {
+      const exists = fs.existsSync(filePath);
+      logger.debug(`[Journey] 🔍 Checking file: ${filePath} - exists: ${exists}`);
+
+      if (exists) {
         const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
         if (!journeyMetadata && data.journey) {
           journeyMetadata = data.journey;
@@ -585,7 +598,18 @@ router.get('/:journey_id/sessions', authenticateRequest, async (req, res) => {
     }
 
     if (sessions.length === 0) {
-      return res.status(404).json({ success: false, error: 'No sessions found' });
+      logger.error(`[Journey] ❌ No sessions found for journey ${journey_id} (orchestrator_id: ${orchestratorId})`);
+      logger.error(`[Journey] ❌ Expected to find files in: ${orchestratorPath}`);
+      return res.status(404).json({
+        success: false,
+        error: 'No sessions found',
+        debug: {
+          orchestratorPath,
+          orchestratorId,
+          nodeEnv: process.env.NODE_ENV,
+          cwd: process.cwd()
+        }
+      });
     }
 
     // Buscar progresso do usuário para marcar sessões completadas
