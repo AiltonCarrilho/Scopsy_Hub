@@ -84,9 +84,10 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     logger.debug(`[Case] 🎯 Nível adaptativo calculado: "${adaptiveLevel}" → usando: "${finalLevel}" (adaptive=${useAdaptive})`);
 
     // 1️⃣ BUSCAR MICRO-MOMENTOS QUE O USUÁRIO JÁ VIU
+    // Inclui disorder_category para interleaving (evita query extra ao banco)
     const { data: interactions, error: interError } = await supabase
       .from('user_case_interactions')
-      .select('case_id, created_at')
+      .select('case_id, created_at, disorder_category')
       .eq('user_id', userId)
       .not('case_id', 'is', null)
       .order('created_at', { ascending: false });
@@ -140,23 +141,14 @@ router.post('/generate', authenticateRequest, async (req, res) => {
     // 🧠 INTERLEAVING: Identificar tipo do último caso (Neurociência da Aprendizagem)
     // Objetivo: +43% retenção ao forçar alternância entre tipos de momento
     // Fundamento: Discriminação de padrões (Rohrer & Taylor, 2007)
+    // 🚀 OTIMIZADO: Usa disorder_category da query de interações (elimina query extra)
     let lastMomentType = null;
 
     if (isMicroMoment && interactions && interactions.length > 0) {
-      // Buscar o último caso feito pelo usuário
       const lastInteraction = interactions[0]; // Já ordenado por created_at DESC
-
-      if (lastInteraction && lastInteraction.case_id) {
-        const { data: lastCase, error: lastCaseError } = await supabase
-          .from('cases')
-          .select('moment_type')
-          .eq('id', lastInteraction.case_id)
-          .single();
-
-        if (!lastCaseError && lastCase && lastCase.moment_type) {
-          lastMomentType = lastCase.moment_type;
-          logger.debug(`[Case] 🧠 INTERLEAVING: Último tipo foi "${lastMomentType}" → excluindo da seleção`);
-        }
+      if (lastInteraction && lastInteraction.disorder_category) {
+        lastMomentType = lastInteraction.disorder_category;
+        logger.debug(`[Case] 🧠 INTERLEAVING: Último tipo foi "${lastMomentType}" → excluindo da seleção`);
       }
     }
 
@@ -323,7 +315,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       // (query leve buscou 10 IDs com ~100 bytes cada, agora busca JSONB completo de 1 só)
       const { data: fullCaseData, error: fullCaseError } = await supabase
         .from('cases')
-        .select('*')
+        .select('id, case_content, case_title, vignette, difficulty_level, disorder, moment_type, category, status, expert_choice')
         .eq('id', selectedCase.id)
         .single();
 
@@ -1060,7 +1052,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
 
     const { data: existing, error: selectError } = await supabase
       .from('user_progress')
-      .select('*')
+      .select('id, total_cases, total_diagnoses, correct_diagnoses, xp_points')
       .eq('user_id', userId)
       .eq('assistant_type', assistantType)
       .single();
@@ -1096,8 +1088,9 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
 
       const newData = {
         total_cases: (existing.total_cases || 0) + 1,
+        total_diagnoses: (existing.total_diagnoses || 0) + 1,
         correct_diagnoses: (existing.correct_diagnoses || 0) + (isCorrect ? 1 : 0),
-        xp_points: (existing.xp_points || 0) + finalCognits, // ✅ Cognits com multiplicador de frescor aplicado
+        xp_points: (existing.xp_points || 0) + finalCognits,
         last_activity_date: new Date().toISOString().split('T')[0]
       };
 
@@ -1121,8 +1114,9 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
         user_id: userId,
         assistant_type: assistantType,
         total_cases: 1,
+        total_diagnoses: 1,
         correct_diagnoses: isCorrect ? 1 : 0,
-        xp_points: finalCognits, // ✅ Cognits com multiplicador de frescor aplicado
+        xp_points: finalCognits,
         last_activity_date: new Date().toISOString().split('T')[0]
       };
 
@@ -1138,6 +1132,39 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
       }
 
       logger.debug('[updateUserProgress] ✅ CRIADO COM SUCESSO!');
+    }
+
+    // ✅ Sincronizar users.cognits e users.level (agregado de todos os módulos)
+    try {
+      const { data: allProgress } = await supabase
+        .from('user_progress')
+        .select('xp_points')
+        .eq('user_id', userId);
+
+      const totalCognits = (allProgress || []).reduce((sum, p) => sum + (p.xp_points || 0), 0);
+
+      // Calcular nível baseado nos cognits totais
+      let level = 1;
+      if (totalCognits >= 3000) level = 12;
+      else if (totalCognits >= 2000) level = 11;
+      else if (totalCognits >= 1201) level = 10;
+      else if (totalCognits >= 966) level = 9;
+      else if (totalCognits >= 733) level = 8;
+      else if (totalCognits >= 501) level = 7;
+      else if (totalCognits >= 383) level = 6;
+      else if (totalCognits >= 266) level = 5;
+      else if (totalCognits >= 151) level = 4;
+      else if (totalCognits >= 100) level = 3;
+      else if (totalCognits >= 50) level = 2;
+
+      await supabase
+        .from('users')
+        .update({ cognits: totalCognits, level })
+        .eq('id', userId);
+
+      logger.debug(`[updateUserProgress] 🔄 users.cognits=${totalCognits}, level=${level}`);
+    } catch (syncError) {
+      console.error('[updateUserProgress] ⚠️ Erro ao sincronizar users.cognits:', syncError.message);
     }
   } catch (error) {
     console.error('[updateUserProgress] ❌ ERRO:', error.message);

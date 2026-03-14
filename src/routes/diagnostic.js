@@ -124,7 +124,7 @@ router.post('/generate-case', authenticateRequest, async (req, res) => {
       // 🚀 OTIMIZAÇÃO: Buscar dados completos apenas do caso selecionado
       const { data: fullCaseData, error: fullCaseError } = await supabase
         .from('cases')
-        .select('*')
+        .select('id, case_content, case_title, vignette, difficulty_level, disorder, moment_type, category, status')
         .eq('id', cachedCase.id)
         .single();
 
@@ -368,22 +368,22 @@ router.post('/submit-answer', authenticateRequest, async (req, res) => {
       })
       .then(() => logger.debug('[Diagnostic] ✅ Interação registrada'));
 
-    // Atualizar métricas (assíncrono)
+    // Atualizar métricas do caso (fire-and-forget, single query via RPC)
     if (case_id) {
-      supabase
-        .from('cases')
-        .select('times_correct, times_incorrect')
-        .eq('id', case_id)
-        .single()
-        .then(({ data: caseRecord }) => {
-          if (caseRecord) {
-            return supabase
-              .from('cases')
-              .update({
-                times_correct: caseRecord.times_correct + (is_correct ? 1 : 0),
-                times_incorrect: caseRecord.times_incorrect + (is_correct ? 0 : 1)
-              })
-              .eq('id', case_id);
+      const incrementCol = is_correct ? 'times_correct' : 'times_incorrect';
+      supabase.rpc('increment_case_metric', { p_case_id: case_id, p_column: incrementCol })
+        .then(({ error }) => {
+          if (error) {
+            // Fallback: SELECT + UPDATE se RPC não existir
+            supabase.from('cases').select('times_correct, times_incorrect').eq('id', case_id).single()
+              .then(({ data: caseRecord }) => {
+                if (caseRecord) {
+                  supabase.from('cases').update({
+                    times_correct: caseRecord.times_correct + (is_correct ? 1 : 0),
+                    times_incorrect: caseRecord.times_incorrect + (is_correct ? 0 : 1)
+                  }).eq('id', case_id);
+                }
+              });
           }
         });
     }
@@ -544,7 +544,7 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
 
     const { data: existing, error: selectError } = await supabase
       .from('user_progress')
-      .select('*')
+      .select('id, total_cases, total_diagnoses, correct_diagnoses, xp_points')
       .eq('user_id', userId)
       .eq('assistant_type', assistantType)
       .single();
@@ -568,8 +568,9 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
         .from('user_progress')
         .update({
           total_cases: (existing.total_cases || 0) + 1,
+          total_diagnoses: (existing.total_diagnoses || 0) + 1,
           correct_diagnoses: (existing.correct_diagnoses || 0) + (isCorrect ? 1 : 0),
-          xp_points: (existing.xp_points || 0) + finalCognits, // ✅ Cognits com multiplicador de frescor aplicado
+          xp_points: (existing.xp_points || 0) + finalCognits,
           last_activity_date: new Date().toISOString().split('T')[0]
         })
         .eq('id', existing.id);
@@ -589,8 +590,9 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
           user_id: userId,
           assistant_type: assistantType,
           total_cases: 1,
+          total_diagnoses: 1,
           correct_diagnoses: isCorrect ? 1 : 0,
-          xp_points: finalCognits, // ✅ Cognits com multiplicador de frescor aplicado
+          xp_points: finalCognits,
           last_activity_date: new Date().toISOString().split('T')[0]
         });
 
@@ -600,6 +602,39 @@ async function updateUserProgress(userId, assistantType, isCorrect) {
       }
 
       logger.debug('[updateUserProgress] ✅ CRIADO COM SUCESSO!');
+    }
+
+    // ✅ Sincronizar users.cognits e users.level (agregado de todos os módulos)
+    try {
+      const { data: allProgress } = await supabase
+        .from('user_progress')
+        .select('xp_points')
+        .eq('user_id', userId);
+
+      const totalCognits = (allProgress || []).reduce((sum, p) => sum + (p.xp_points || 0), 0);
+
+      // Calcular nível baseado nos cognits totais
+      let level = 1;
+      if (totalCognits >= 3000) level = 12;
+      else if (totalCognits >= 2000) level = 11;
+      else if (totalCognits >= 1201) level = 10;
+      else if (totalCognits >= 966) level = 9;
+      else if (totalCognits >= 733) level = 8;
+      else if (totalCognits >= 501) level = 7;
+      else if (totalCognits >= 383) level = 6;
+      else if (totalCognits >= 266) level = 5;
+      else if (totalCognits >= 151) level = 4;
+      else if (totalCognits >= 100) level = 3;
+      else if (totalCognits >= 50) level = 2;
+
+      await supabase
+        .from('users')
+        .update({ cognits: totalCognits, level })
+        .eq('id', userId);
+
+      logger.debug(`[updateUserProgress] 🔄 users.cognits=${totalCognits}, level=${level}`);
+    } catch (syncError) {
+      console.error('[updateUserProgress] ⚠️ Erro ao sincronizar users.cognits:', syncError.message);
     }
   } catch (error) {
     console.error('[updateUserProgress] ❌ ERRO:', error.message);

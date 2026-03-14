@@ -7,7 +7,7 @@ const router = express.Router();
 const { authenticateRequest } = require('../middleware/auth');
 const { getUserBadges, getAllBadges } = require('../services/badgeService');
 const { getDailyMissions } = require('../services/missionService');
-const { supabase } = require('../services/database');
+const { supabase } = require('../services/supabase');
 const { getICCTier } = require('../services/iccService');
 const logger = require('../config/logger');
 
