@@ -7,6 +7,7 @@ const router = express.Router();
 const { authenticateRequest } = require('../middleware/auth');
 const logger = require('../config/logger');
 const OpenAI = require('openai');
+const { ASSISTANTS } = require('../services/constants');
 
 // Inicializar OpenAI
 const openai = new OpenAI({
@@ -20,14 +21,8 @@ const { supabase } = require('../services/supabase'); // RLS-aware anon client
 // Validação de UUID (módulo-level — não recriar por request)
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-// IDs dos assistentes
-const ASSISTANT_IDS = {
-  orchestrator: process.env.ORCHESTRATOR_ID || 'asst_orchestrator',
-  case: process.env.CASE_ID || 'asst_case',
-  diagnostic: process.env.DIAGNOSTIC_ID || 'asst_diagnostic',
-  journey: process.env.JOURNEY_ID || 'asst_journey',
-  generator: process.env.GENERATOR_ID || 'asst_generator'
-};
+// IDs dos assistentes — fonte única de verdade em constants.js
+const ASSISTANT_IDS = ASSISTANTS;
 
 // ========================================
 // POST /api/chat/message
@@ -168,12 +163,18 @@ router.post('/message', authenticateRequest, async (req, res) => {
 
     // 7. OBTER RESPOSTA DO ASSISTENTE
     const messages = await openai.beta.threads.messages.list(threadId, {
-      limit: 1,
+      limit: 5,
       order: 'desc'
     });
 
-    const assistantMessage = messages.data[0];
-    const responseText = assistantMessage.content[0].text.value;
+    const assistantMessage = messages.data.find(m => m.role === 'assistant');
+    if (!assistantMessage) {
+      throw new Error('Nenhuma resposta do assistente encontrada no thread');
+    }
+    const responseText = assistantMessage.content
+      .filter(c => c.type === 'text')
+      .map(c => c.text.value)
+      .join('\n');
 
     logger.info(`📤 Resposta do assistente: ${responseText.substring(0, 100)}...`);
 

@@ -271,7 +271,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
-    margin-bottom: 32px;
+    margin-bottom: 56px; /* Aumentado por recomendação da ux-design-expert (espaço em branco terapêutico) */
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
@@ -512,7 +512,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--space-xl);
+    margin-bottom: 40px; /* Aumentado por recomendação da arq. cognitiva para reduzir poluição visual */
     border: 1px solid rgba(255, 215, 0, 0.3);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     animation: slideDown 0.5s ease;
@@ -659,7 +659,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 16px 24px;
-    margin-bottom: var(--space-lg);
+    margin-bottom: 40px; /* Espaçamento estendido contra overload cognitivo */
     border-radius: var(--radius-md);
     border: 2px solid;
     animation: slideDown 0.4s ease-out;
