@@ -315,7 +315,7 @@ router.post('/generate', authenticateRequest, async (req, res) => {
       // (query leve buscou 10 IDs com ~100 bytes cada, agora busca JSONB completo de 1 só)
       const { data: fullCaseData, error: fullCaseError } = await supabase
         .from('cases')
-        .select('id, case_content, case_title, vignette, difficulty_level, disorder, moment_type, category, status, expert_choice')
+        .select('id, case_content, case_title, vignette, difficulty_level, disorder, moment_type, category, status')
         .eq('id', selectedCase.id)
         .single();
 
