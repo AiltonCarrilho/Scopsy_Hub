@@ -26,7 +26,7 @@ function estimateTokens(text) {
  * @param {number} tokensUsed - Tokens gastos nesta interação
  * @returns {Promise<void>}
  */
-async function updateUserStats(userId, _tokensUsed) {
+async function updateUserStats(userId, tokensUsed) {
   try {
     const stats = await getFromBoostspace('user_stats', { user_id: userId });
 
@@ -40,13 +40,16 @@ async function updateUserStats(userId, _tokensUsed) {
         streak_days: 0,
         last_activity: new Date().toISOString(),
         badges: [],
-        xp_points: 0,
+        xp_points: Math.floor(tokensUsed / 10), // Convertendo tokens em XP pra gameficação
+        total_tokens_spent: tokensUsed,
         updated_at: new Date().toISOString()
       });
     } else {
       // Atualizar stats existentes
       const { updateInBoostspace } = require('./database');
       await updateInBoostspace('user_stats', stats[0].id, {
+        xp_points: (stats[0].xp_points || 0) + Math.floor(tokensUsed / 10),
+        total_tokens_spent: (stats[0].total_tokens_spent || 0) + tokensUsed,
         last_activity: new Date().toISOString(),
         updated_at: new Date().toISOString()
       });

@@ -68,6 +68,16 @@ async function validateToken(token) {
 
         // Atualizar dados do usuário
         localStorage.setItem('user', JSON.stringify(data.user));
+        
+        // PostHog Identity
+        if (window.posthog) {
+            posthog.identify(data.user.id, {
+                email: data.user.email,
+                name: data.user.name,
+                plan: data.user.plan
+            });
+        }
+
         displayUserInfo(data.user);
 
     } catch (error) {
@@ -297,6 +307,27 @@ function updateStatsDisplay(data) {
         // 4. Cognits (Unidades de Sabedoria Cognitiva)
         const elCognits = document.getElementById('badgesEarned');
         if (elCognits) elCognits.textContent = formatNumber(data.cognits || 0);
+
+        // 5. Cost Tracking Dashboard (< $0.03c Goal)
+        const elCost = document.getElementById('averageCostLabel');
+        if (elCost) {
+            const totalConversationsAllModules = 
+                (data.breakdown?.raciocinio || 0) + 
+                (data.breakdown?.conceituacao || 0) + 
+                (data.breakdown?.radar || 0) + 
+                (data.breakdown?.jornada || 0);
+            
+            const totalTokens = data.stats?.total_tokens_spent || 0;
+            // Cálculo aproximado GPT-4o-mini blended rate ($0.005 / 1000 iterativo) + turbo fallback
+            // Estimativa de custo base Scopsy: $0.015 / 1000 tokens
+            const grossCost = totalTokens * 0.015 / 1000;
+            
+            const averageCost = totalConversationsAllModules > 0 ? (grossCost / totalConversationsAllModules) : 0;
+            elCost.textContent = `$${averageCost.toFixed(3)}`;
+            
+            // Re-renderizar o ícone recém inserido
+            if (window.lucide) window.lucide.createIcons();
+        }
 
         // EXTRA: Título Clínico (se houver onde mostrar, senão console)
         console.log(`[Gamification] Title: ${data.clinical_title} (Level ${data.level})`);

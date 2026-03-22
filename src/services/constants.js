@@ -13,11 +13,11 @@ const ASSISTANTS = {
 
 // Limites de tokens por assistente (otimização de custo)
 const TOKEN_LIMITS = {
-  orchestrator: 1200,
+  orchestrator: 400,
   case: 1000,
   diagnostic: 600,
-  journey: 1200,
-  generator: 1500
+  journey: 1000,
+  generator: 1200
 };
 
 module.exports = {

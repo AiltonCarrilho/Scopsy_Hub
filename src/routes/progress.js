@@ -205,7 +205,8 @@ router.get('/summary', authenticateRequest, async (req, res) => {
       stats: {
         total_cases: totalCases,
         correct_cases: totalCorrect,
-        accuracy_rate: accuracy
+        accuracy_rate: accuracy,
+        total_tokens_spent: user.total_tokens_spent || 0
       },
 
       next_level: {

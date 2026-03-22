@@ -173,7 +173,8 @@ describe('Token Counter Module', () => {
           accuracy: 0,
           streak_days: 0,
           badges: [],
-          xp_points: 0
+          xp_points: Math.floor(100 / 10),
+          total_tokens_spent: 100
         })
       );
     });

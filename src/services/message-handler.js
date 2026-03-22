@@ -40,8 +40,31 @@ async function sendMessage(threadId, assistantType, message, userId) {
       userId
     });
 
-    // Check cache para respostas comuns
-    const cacheKey = `${assistantType}:${message.toLowerCase().trim()}`;
+    // Otimização: Interceptação Léxica Rápida antes da API (Fast Omit Cache)
+    const exactMatches = {
+      'oi': 'Olá! Sou seu assistente Scopsy. Como posso guiar sua jornada clínica hoje?',
+      'olá': 'Olá! Sou seu assistente Scopsy. Como posso guiar sua jornada clínica hoje?',
+      'ola': 'Olá! Sou seu assistente Scopsy. Como posso guiar sua jornada clínica hoje?',
+      'bom dia': 'Bom dia! Como posso guiar sua jornada clínica hoje?',
+      'boa tarde': 'Boa tarde! Como posso guiar sua jornada clínica hoje?',
+      'boa noite': 'Boa noite! Como posso guiar sua jornada clínica hoje?'
+    };
+    
+    const messageLower = message.toLowerCase().trim();
+    if (assistantType === 'orchestrator' && exactMatches[messageLower]) {
+        logger.info('Resposta gerada via Fast Omit Cache (Local)', { messageLower });
+        return {
+          response: exactMatches[messageLower],
+          threadId,
+          runId: 'local-fast-cache',
+          tokensUsed: 0,
+          assistantType,
+          timestamp: new Date().toISOString()
+        };
+    }
+
+    // Check cache in-memory nativo
+    const cacheKey = `${assistantType}:${messageLower}`;
     const cached = getCached(cacheKey);
     if (cached) {
       logger.info('Resposta em cache encontrada', { cacheKey });
@@ -54,11 +77,17 @@ async function sendMessage(threadId, assistantType, message, userId) {
       content: message
     });
 
-    // 2. Criar run com o assistente
+    // 2. Criar run com o assistente (Aplicando Truncamento Dinâmico)
     const run = await openai.beta.threads.runs.create(threadId, {
       assistant_id: assistantId,
       max_prompt_tokens: tokenLimit,
-      max_completion_tokens: tokenLimit
+      // Estrangular resposta do orquestrador para conversas diretivas
+      max_completion_tokens: assistantType === 'orchestrator' ? 300 : tokenLimit,
+      // Forçar OpenAI a truncar histórico sem usar CompressThread (obsoleto e caro)
+      truncation_strategy: {
+        type: 'last_messages',
+        last_messages: 10
+      }
     });
 
     logger.info('Run criado', { runId: run.id, status: run.status });
@@ -90,8 +119,9 @@ async function sendMessage(threadId, assistantType, message, userId) {
       timestamp: new Date().toISOString()
     };
 
-    // Cache respostas de comandos comuns
-    if (['start', 'menu', 'help'].includes(message.toLowerCase().trim())) {
+    // Cache respostas de comandos comuns e "lixo transacional"
+    const fastOmitCacheTags = ['start', 'menu', 'help', 'ok', 'obrigado', 'obrigada'];
+    if (fastOmitCacheTags.includes(messageLower)) {
       setCached(cacheKey, result);
     }
 

@@ -76,8 +76,8 @@ describe('Constants Module', () => {
       expect(TOKEN_LIMITS).toHaveProperty('generator');
     });
 
-    test('orchestrator limit should be 1200', () => {
-      expect(TOKEN_LIMITS.orchestrator).toBe(1200);
+    test('orchestrator limit should be 400', () => {
+      expect(TOKEN_LIMITS.orchestrator).toBe(400);
     });
 
     test('case limit should be 1000', () => {
@@ -88,12 +88,12 @@ describe('Constants Module', () => {
       expect(TOKEN_LIMITS.diagnostic).toBe(600);
     });
 
-    test('journey limit should be 1200', () => {
-      expect(TOKEN_LIMITS.journey).toBe(1200);
+    test('journey limit should be 1000', () => {
+      expect(TOKEN_LIMITS.journey).toBe(1000);
     });
 
-    test('generator limit should be 1500', () => {
-      expect(TOKEN_LIMITS.generator).toBe(1500);
+    test('generator limit should be 1200', () => {
+      expect(TOKEN_LIMITS.generator).toBe(1200);
     });
 
     test('all token limits should be positive numbers', () => {
