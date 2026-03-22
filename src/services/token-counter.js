@@ -94,8 +94,8 @@ function clearCache() {
   logger.info('Cache de respostas limpo');
 }
 
-// Limpar cache a cada 1 hora
-setInterval(clearCache, 60 * 60 * 1000);
+// Limpar cache a cada 1 hora e usar unref para não segurar o event loop longo
+setInterval(clearCache, 60 * 60 * 1000).unref();
 
 module.exports = {
   estimateTokens,

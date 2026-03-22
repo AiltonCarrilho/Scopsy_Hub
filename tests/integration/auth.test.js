@@ -24,15 +24,7 @@ jest.mock('../../src/config/logger', () => ({
 // Mock do database
 jest.mock('../../src/services/database');
 
-// Mock do middleware auth (apenas para generateToken/generateRefreshToken)
-jest.mock('../../src/middleware/auth', () => {
-  const original = jest.requireActual('../../src/middleware/auth');
-  return {
-    ...original,
-    generateToken: jest.fn((userId, plan) => `mock-token-${userId}`),
-    generateRefreshToken: jest.fn((userId) => `mock-refresh-${userId}`)
-  };
-});
+// (Removido mock do middleware auth para gerar JWTs REAIS durante o teste para que a rota /me valide com sucesso)
 
 const {
   saveToBoostspace,
@@ -48,10 +40,8 @@ const {
 // Importar mocks do database
 const databaseMock = require('../mocks/database.mock');
 
-// Configurar mocks para usar as implementações mockadas
-saveToBoostspace.mockImplementation(databaseMock.saveToBoostspace);
-getFromBoostspace.mockImplementation(databaseMock.getFromBoostspace);
-updateInBoostspace.mockImplementation(databaseMock.updateInBoostspace);
+// Configurar mocks (movido para dentro do beforeEach devido ao resetMocks: true no jest.config.js!)
+// saveToBoostspace.mockImplementation(...) 
 
 // Criar app Express para testes
 function createTestApp() {
@@ -69,6 +59,12 @@ describe('Auth Integration Tests', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    
+    // Re-aplicar os mocks aqui para sobreviver ao resetMocks do Jest!
+    saveToBoostspace.mockImplementation(databaseMock.saveToBoostspace);
+    getFromBoostspace.mockImplementation(databaseMock.getFromBoostspace);
+    updateInBoostspace.mockImplementation(databaseMock.updateInBoostspace);
+    
     resetMockDatabase();
     app = createTestApp();
   });
@@ -87,6 +83,7 @@ describe('Auth Integration Tests', () => {
           crp: '06/12345'
         });
 
+      if (response.status === 500) console.log("SIGNUP 500 ERROR:", response.body);
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('message', 'Conta criada com sucesso');
       expect(response.body).toHaveProperty('token');
