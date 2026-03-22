@@ -36,6 +36,8 @@
         development: {
             API_URL: 'http://localhost:3000',
             WS_URL: 'ws://localhost:3000',
+            POSTHOG_KEY: 'phc_placeholder_dev_key',
+            POSTHOG_HOST: 'https://app.posthog.com',
             ENVIRONMENT: 'development'
         },
         production: {
@@ -44,6 +46,9 @@
 
             // WebSocket com protocolo seguro (wss)
             WS_URL: 'wss://app.scopsy.com.br',
+
+            POSTHOG_KEY: 'phc_placeholder_prod_key',
+            POSTHOG_HOST: 'https://app.posthog.com',
 
             ENVIRONMENT: 'production'
         }
